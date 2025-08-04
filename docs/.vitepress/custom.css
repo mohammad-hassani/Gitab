@@ -1,0 +1,11 @@
+@font-face {
+    font-family: "Sahel";
+    src: url("../assets/Shabnam-Bold-FD.ttf") format(".ttf");
+    src: url("../assets/Shabnam-Bold-FD.woff") format(".woff");
+    src: url("../assets/Shabnam-Bold-FD.woff2") format(".woff2");
+}
+body {
+    font-family: "Shabnam", sans-serif;
+    direction: rtl;
+    text-align: right;
+}
