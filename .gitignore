@@ -2,7 +2,7 @@
 node_modules/
 
 # Build output
-docs/.vitepress/dist/
+# docs/.vitepress/dist/
 
 # Local env files
 .env*
@@ -22,5 +22,5 @@ yarn-error.log*
 pnpm-debug.log*
 
 # Local caches
-.cache/
-docs/.vitepress/cache/
+# .cache/
+# docs/.vitepress/cache/

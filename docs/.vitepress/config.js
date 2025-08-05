@@ -2,7 +2,7 @@ import { defineConfig } from "vitepress";
 
 export default defineConfig({
     lang: "fa-IR",
-    title: "parsBook",
+    title: "پارس کتاب",
     description: "مستندات ترجمه‌های فارسی",
     dir: "rtl",
     themeConfig: {
