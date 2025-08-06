@@ -1,0 +1,89 @@
+@font-face {
+    src: url(../fonts/Shabnam-FD.woff) format(".woff");
+    src: url(../fonts/Shabnam-FD.woff2) format(".woff2");
+}
+@media (max-width: 768px) {
+    .book-image-wrapper {
+        height: 200px;
+    }
+}
+@media (max-width: 480px) {
+    .book-image-wrapper {
+        height: 160px;
+    }
+}
+body {
+    font-family: "Vazir FD-WOL", "Shabnam", sans-serif;
+    direction: rtl;
+    background-color: #f8f8f8;
+    color: #333;
+    margin: 0;
+}
+header,
+footer {
+    background: #512bd4;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+main {
+    max-width: 1200px;
+    margin: auto;
+    padding: 2rem;
+}
+.book-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+.book-card {
+    background: rgb(247, 247, 247);
+    padding: 2rem 0;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease;
+}
+.book-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(68, 68, 68, 0.2);
+}
+.book-card h3 {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+}
+.book-card a {
+    display: inline-block;
+    background: #0078d4;
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    font-weight: 500;
+    transition: all 0.4s ease;
+}
+.book-card a:hover {
+    background: #0166b3;
+    color: rgb(0, 0, 0);
+}
+.book-card h3 {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+}
+.book-image-wrapper {
+    height: 300px; /* یا هر ارتفاع دلخواه مثل 240 یا 200 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.book-image-wrapper img {
+    max-height: 80%;
+    max-width: 100%;
+    object-fit: contain;
+    border-radius: 12px;
+    border: 2px solid #0078d4;
+    background: #fff;
+    padding: 8px;
+}

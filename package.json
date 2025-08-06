@@ -1,0 +1,27 @@
+{
+  "name": "my-books",
+  "version": "1.0.0",
+  "description": "+ برای همراهی در ترجمه کتاب ها می تونید هر کتابی دوست داشتید، انتخاب کنید و ما رو همراهی کنید:\r + \r   🔗  [csharp-12-in-a-nutshell-persian](https://github.com/hheydarian/csharp-12-in-a-nutshell-persian)\r +\r   🔗  [clean-code-in-csharp-persian](https://github.com/hheydarian/clean-code-in-csharp-persian)\r +\r   🔗 ادامه دارد...",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "eleventy --serve",
+    "build": "eleventy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hheydarian/my-books.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hheydarian/my-books/issues"
+  },
+  "homepage": "https://github.com/hheydarian/my-books#readme",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.2"
+  }
+}
