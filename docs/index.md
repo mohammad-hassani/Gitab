@@ -7,6 +7,7 @@
 ::: tip ![clean code](images/Cover.webp)
 [مشاهده کتاب](/book2/clean-code-in-csharp-persian)
 ::: -->
+
 <div class="books-grid">
       <HomePage />
 </div>
