@@ -6,12 +6,12 @@
   <title>{{ title or "کتابخانه من" }}</title>
   <link rel="stylesheet" href="/styles/main.css" />
 </head>
-<body>
+<body class="rtl-site">
   <header>
     <h1>📚 پارس کتاب</h1>
   </header>
 
-  <main>
+  <main class="markdown-body">
     {{ content | safe }}
   </main>
 
