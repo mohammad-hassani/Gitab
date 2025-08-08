@@ -2,7 +2,7 @@ module.exports = function (eleventyConfig) {
     // کپی استایل‌ها به فولدر خروجی
     eleventyConfig.addPassthroughCopy("src/styles");
     eleventyConfig.addPassthroughCopy("src/images");
-eleventyConfig.addPassthroughCopy("src/books/book1/assets/image");
+    eleventyConfig.addPassthroughCopy("src/books/book1/assets/image");
 
     return {
         dir: {

@@ -171,3 +171,12 @@ main {
     line-height: 2;
     font-size: 1rem;
 }
+/* //////////////////////// */
+/* دستی روی همه‌ی بلاک‌های کد اعمال کن */
+pre,
+pre > code {
+    direction: ltr !important;
+    unicode-bidi: embed !important;
+    text-align: left !important;
+    
+}
