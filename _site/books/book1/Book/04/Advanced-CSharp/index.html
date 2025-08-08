@@ -134,7 +134,7 @@ d += SomeMethod1;       // معادل (وقتی d برابر null است) d = So
 <p>دلیگیت‌ها غیرقابل تغییر (<code>immutable</code>) هستند، بنابراین وقتی <code>+=</code> یا <code>-=</code> را فراخوانی می‌کنید، در واقع یک نمونه دلیگیت جدید ایجاد کرده و آن را به متغیر موجود اختصاص می‌دهید.</p>
 <p>اگر یک دلیگیت چندپخشی دارای نوع بازگشتی nonvoid باشد، فراخواننده مقدار بازگشتی را از آخرین متدی که فراخوانی می‌شود دریافت می‌کند. متدهای قبلی همچنان فراخوانی می‌شوند، اما مقادیر بازگشتی آن‌ها دور ریخته می‌شود. در بیشتر سناریوهایی که از دلیگیت‌های چندپخشی استفاده می‌شود، آن‌ها دارای انواع بازگشتی void هستند، بنابراین این ظرافت مطرح نمی‌شود.</p>
 <p>تمام انواع دلیگیت به صورت ضمنی از <strong>System.MulticastDelegate</strong> که از <strong>System.Delegate</strong> به ارث می‌برد، مشتق می‌شوند. C# عملیات <code>+</code>, <code>-</code>, <code>+=</code>, و <code>-=</code> روی یک دلیگیت را به متدهای static Combine و Remove از کلاس <strong>System.Delegate</strong> کامپایل می‌کند.</p>
-<h4>مثال دلیگیت چندپخشی:</h4>
+<h4>مثال دلیگیت چندپخشی</h4>
 <p>فرض کنید یک متد نوشته‌اید که اجرای آن زمان زیادی می‌برد. این متد می‌تواند به طور منظم با فراخوانی یک دلیگیت، پیشرفت کار را به فراخواننده گزارش دهد. در این مثال، متد <code>HardWork</code> یک پارامتر دلیگیت <code>ProgressReporter</code> دارد که آن را برای نشان دادن پیشرفت فراخوانی می‌کند:</p>
 <pre><code class="language-C#">
 public delegate void ProgressReporter (int percentComplete);
@@ -354,7 +354,7 @@ public class Broadcaster
 </code></pre>
 <p>کد درون نوع <code>Broadcaster</code> دسترسی کامل به <code>PriceChanged</code> دارد و می‌تواند با آن به عنوان یک دلیگیت رفتار کند. اما کدی که در خارج از <code>Broadcaster</code> قرار دارد، تنها می‌تواند عملیات += و -= را روی رویداد <code>PriceChanged</code> انجام دهد.</p>
 <div align="center">
-<p><img src="../../assets/image/04/Table-2-1.jpeg" alt="Conventions-UsedThis-Book"></p>
+<p><img src="../../../assets/image/04/Table-2-1.jpeg" alt="Conventions-UsedThis-Book"></p>
 </div>
 
   </main>

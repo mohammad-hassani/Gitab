@@ -239,7 +239,7 @@
 ولی همه‌ی اون‌ها بر پایه مفاهیم CLR و BCL ساخته شده‌اند.
 <div align="center">
   
-  ![Conventions-UsedThis-Book](../../assets/image/01/Runtime-architecture.png) 
+  ![Conventions-UsedThis-Book](../../../assets/image/01/Runtime-architecture.png) 
   
 </div>
 
@@ -403,7 +403,7 @@ Runtime — که گاهی به آن فریم‌ورک (Framework) هم گفته 
 
 <div align="center">
   
-  ![Conventions-UsedThis-Book](../../assets/image/01/Introduction-02.png) 
+  ![Conventions-UsedThis-Book](../../../assets/image/01/Introduction-02.png) 
   
 </div>
 
@@ -411,7 +411,7 @@ Runtime — که گاهی به آن فریم‌ورک (Framework) هم گفته 
 
 <div align="center">
   
-  ![Conventions-UsedThis-Book](../../assets/image/01/Introduction-03.png) 
+  ![Conventions-UsedThis-Book](../../../assets/image/01/Introduction-03.png) 
   
 </div>
 

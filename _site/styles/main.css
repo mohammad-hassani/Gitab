@@ -126,7 +126,7 @@ main {
     margin-bottom: 1rem;
 }
 /* //////////////////////////////// */
-.chapter-list-page {
+/* .chapter-list-page {
     text-align: center;
     padding: 2rem;
 }
@@ -162,21 +162,74 @@ main {
 .chapter-list li a:hover {
     background-color: #0078d4;
     color: white;
-}
+} */
 
 .markdown-body {
     direction: rtl;
     text-align: right;
-    font-family: "Shabnam", "Vazir", sans-serif;
     line-height: 2;
-    font-size: 1rem;
+    font-size: 1.1rem;
 }
 /* //////////////////////// */
-/* دستی روی همه‌ی بلاک‌های کد اعمال کن */
+/*  بلاک‌های کد  */
 pre,
 pre > code {
     direction: ltr !important;
     unicode-bidi: embed !important;
     text-align: left !important;
-    
+    background-color: #ebeaea8c;
+    border-radius: 8px;
+    font-size: 16px;
+}
+/* /////////////////////// */
+.chapter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem 0;
+}
+
+.chapter-card {
+    background-color: #f5f5f5;
+    padding: 1.2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+}
+
+.chapter-card h3 {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.chapter-card a {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #0078d4;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.chapter-card a:hover {
+    background-color: #00bcf2;
+}
+
+.chapter-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.chapter-card.disabled {
+    opacity: 0.6;
+}
+
+.chapter-card.disabled a {
+    pointer-events: none;
+    background-color: gray;
 }
