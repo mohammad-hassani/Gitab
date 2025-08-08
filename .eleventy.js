@@ -3,6 +3,7 @@ module.exports = function (eleventyConfig) {
     eleventyConfig.addPassthroughCopy("src/styles");
     eleventyConfig.addPassthroughCopy("src/images");
     eleventyConfig.addPassthroughCopy("src/books/book1/assets");
+    eleventyConfig.addPassthroughCopy("src/icone");
 
     return {
         dir: {

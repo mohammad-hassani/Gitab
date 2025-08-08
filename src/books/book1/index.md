@@ -5,7 +5,7 @@ title: C# 12 in a Nutshell
 
 <p align="center">
   <a href="https://github.com/hheydarian/csharp-12-in-a-nutshell-persian">
-    <img src="../../books/book1/assets/image/Cover.jpg" alt="C# 12 in a Nutshell Book Cover" width="400"/>
+    <img src="../../books/book1/assets/image/Cover.jpg" alt="C# 12 in a Nutshell Book Cover" width="250"/>
   </a>
 </p>
 
@@ -13,7 +13,13 @@ title: C# 12 in a Nutshell
 
 <div class="center-button">
   <p>مرجع کامل و کاربردی برای توسعه‌دهندگان سی‌شارپ و دات‌نت</p>
-<a href="/books/book1/chapters/" class="start-reading-button">📖 شروع مطالعه</a>
+<a href="/books/book1/chapters/" class="start-reading-button"><i class=" icon fa-solid fa-book"></i> شروع مطالعه</a>
+
+
+
+<a href="https://github.com/hheydarian/csharp-12-in-a-nutshell-persian" class="start-reading-button" target="_blank" class="github-button">
+  <i class="icon fab fa-github"></i> گیت هاب
+</a>
 </div>
 
 ---

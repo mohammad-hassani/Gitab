@@ -113,7 +113,6 @@ LINQPad به‌طور کامل از #C 12 پشتیبانی می‌کند و تو
 <div align="center">
   
   ![Conventions](../../../assets/image/00/Preface01.jpeg)
-  ![Conventions-UsedThis-Book](../../assets/image/00/Preface01.jpeg)
 
 </div>
 
