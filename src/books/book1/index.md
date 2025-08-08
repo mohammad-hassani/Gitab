@@ -9,7 +9,7 @@ title: C# 12 in a Nutshell
   </a>
 </p>
 
-<h1 align="center">📘 ترجمه فارسی کتاب C# 12 in a Nutshell</h1>
+<h1 align="center"> ترجمه فارسی کتاب C# 12 in a Nutshell</h1>
 
 <div class="center-button">
   <p>مرجع کامل و کاربردی برای توسعه‌دهندگان سی‌شارپ و دات‌نت</p>
