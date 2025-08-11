@@ -24,9 +24,30 @@ title: لیست کتاب ها
 
   <div class="book-card">
     <div class="book-image-wrapper">
-      <img src="/../images/clean-code-csharp/Cover.webp" alt="Coming Soon" />
+      <img src="/../images/task-programming/Cover.jpg" alt="Coming Soon" />
     </div>
-    <h3>بزودی...</h3>
+    <h3>برنامه‌نویسی ناهمگام با استفاده از Task </h3>
+    <a href="#">در حال آماده‌سازی</a>
+  </div>
+  <div class="book-card">
+    <div class="book-image-wrapper">
+      <img src="/../images/asp-9-essentials/Cover.jpg" alt="Coming Soon" />
+    </div>
+    <h3>اصول و نیازمندی‌های ASP.NET Core 9.0 </h3>
+    <a href="#">در حال آماده‌سازی</a>
+  </div>
+  <div class="book-card">
+    <div class="book-image-wrapper">
+      <img src="/../images/asp-9-essentials/Cover.jpg" alt="Coming Soon" />
+    </div>
+    <h3>اصول و نیازمندی‌های ASP.NET Core 9.0 </h3>
+    <a href="#">در حال آماده‌سازی</a>
+  </div>
+  <div class="book-card">
+    <div class="book-image-wrapper">
+      <img src="/../images/asp-9-essentials/Cover.jpg" alt="Coming Soon" />
+    </div>
+    <h3>اصول و نیازمندی‌های ASP.NET Core 9.0 </h3>
     <a href="#">در حال آماده‌سازی</a>
   </div>
 </div>

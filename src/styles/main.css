@@ -1,18 +1,14 @@
+/* font */
 @font-face {
     src: url(../fonts/Vazir-FD-WOL.woff) format(".woff");
     src: url(../fonts/Vazir-FD-WOL.woff2) format(".woff2");
     font-family: "Vazir FD-WOL";
 }
-@media (max-width: 768px) {
-    .book-image-wrapper {
-        height: 200px;
-    }
-}
+
 @media (max-width: 480px) {
     .book-image-wrapper {
         height: 160px;
     }
-    /* راست‌چین کردن کل محتوا */
     .rtl-site {
         direction: rtl;
         text-align: right;
