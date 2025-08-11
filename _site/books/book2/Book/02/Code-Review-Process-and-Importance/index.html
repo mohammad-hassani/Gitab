@@ -1,4 +1,25 @@
-<h1>2</h1>
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>کتاب لایف</title>
+  <link rel="stylesheet" href="/styles/main.css"/>
+  <link rel="stylesheet" href="/icone/css/all.min.css">
+
+
+</head>
+<!-- Font Awesome JS -->
+<script src="/icone/js/all.min.js" defer></script>
+
+
+<body class="rtl-site">
+  <header>
+    <h2>کتاب لایف</h2>
+  </header>
+
+  <main class="markdown-body">
+    <h1>2</h1>
 <h1>بازبینی کد – فرآیند و اهمیت (Code Review – Process and Importance)</h1>
 <p>انگیزه اصلی پشت هر بازبینی کد (code review)، بهبود کیفیت کلی کد است. کیفیت کد (Code quality) بسیار مهم است. این تقریباً ناگفته پیداست، به خصوص اگر کد شما بخشی از یک پروژه تیمی باشد یا برای دیگران، مانند توسعه‌دهندگان متن‌باز (open source developers) و مشتریان از طریق توافق‌نامه‌های امانی (escrow agreements)، قابل دسترسی باشد.</p>
 <p>اگر هر توسعه‌دهنده‌ای آزاد بود تا هر طور که می‌خواهد کدنویسی کند، در نهایت با یک نوع کد مواجه می‌شدید که به روش‌های بسیار متفاوتی نوشته شده بود، و نهایتاً کد به یک آشفته‌بازار غیرقابل کنترل (unwieldy mess) تبدیل می‌شد. به همین دلیل مهم است که یک سیاست استانداردهای کدنویسی (coding standards policy) داشته باشیم که شیوه‌های کدنویسی شرکت و رویه بازبینی کد (code review procedures) را که باید رعایت شوند، تشریح کند.</p>
@@ -43,7 +64,7 @@
 <p>یک بازبینی‌کننده همتا (peer reviewer) سپس کد شما را بازبینی کرده و نظرات و بازخوردها را به اشتراک خواهد گذاشت. اگر کد شما از بازبینی کد عبور کند، بازبینی کد شما تکمیل شده و سپس می‌توانید شاخه کاری خود را در شاخه اصلی (main trunk) ادغام (merge) کنید. در غیر این صورت، بازبینی همتا رد خواهد شد، و از شما خواسته می‌شود که کار خود را بازبینی کرده و مسائلی را که در نظرات ارائه شده توسط بازبینی‌کننده شما مطرح شده‌اند، برطرف کنید.</p>
 <p>دیاگرام زیر فرآیند بازبینی کد همتا را نشان می‌دهد:</p>
 <div align="center">
-<p><img src="../../assets/image/02/Table%202-1.png" alt="Conventions-UsedThis-Book"></p>
+<p><img src="../../../assets/image/02/Table%202-1.png" alt="Conventions-UsedThis-Book"></p>
 </div>
 <h2>آماده‌سازی کد برای بازبینی (Preparing code for review)</h2>
 <p>گاهی اوقات آماده‌سازی برای بازبینی کد (code review) می‌تواند یک دردسر واقعی باشد، اما قطعاً به بهبود کیفیت کلی کدی که خواندن و نگهداری آن آسان است، کمک می‌کند. این قطعاً یک روش ارزشمند است که تیم‌های توسعه‌دهنده باید آن را به عنوان رویه‌های استاندارد کدنویسی انجام دهند. این یک گام مهم در فرآیند بازبینی کد است، زیرا تکمیل این مرحله می‌تواند زمان و انرژی قابل توجهی را برای بازبینی‌کننده در انجام بازبینی صرفه‌جویی کند.</p>
@@ -92,19 +113,19 @@
 <li>در صفحه پروژه گیت‌هاب خود، روی تب درخواست‌های کشیدن (Pull requests) کلیک کنید:</li>
 </ol>
 <div align="center">
-<p><img src="../../assets/image/02/Table%202-2.png" alt="Conventions-UsedThis-Book"></p>
+<p><img src="../../../assets/image/02/Table%202-2.png" alt="Conventions-UsedThis-Book"></p>
 </div>
 <ol start="2">
 <li>سپس، روی دکمه درخواست کشیدن جدید (New pull request) کلیک کنید. این کار صفحه مقایسه تغییرات (Comparing changes) را نمایش خواهد داد:</li>
 </ol>
 <div align="center">
-<p><img src="../../assets/image/02/Table%202-3.png" alt="Conventions-UsedThis-Book"></p>
+<p><img src="../../../assets/image/02/Table%202-3.png" alt="Conventions-UsedThis-Book"></p>
 </div>
 <ol start="3">
 <li>اگر راضی هستید، سپس روی دکمه ایجاد درخواست کشیدن (Create pull request) کلیک کنید تا درخواست کشیدن را آغاز کنید. سپس صفحه باز کردن یک درخواست کشیدن (Open a pull request) به شما نمایش داده خواهد شد:</li>
 </ol>
 <div align="center">
-<p><img src="../../assets/image/02/Table%202-4.png" alt="Conventions-UsedThis-Book"></p>
+<p><img src="../../../assets/image/02/Table%202-4.png" alt="Conventions-UsedThis-Book"></p>
 </div>
 <ol start="4">
 <li>درخواست کشیدن. تمام اطلاعات لازم را برای بازبینی‌کننده کد (code reviewer) فراهم کنید، اما آن را کوتاه و مفید نگه دارید. نظرات مفید (Useful comments) شامل شناسایی تغییرات ایجاد شده (what changes have been made) است. فیلدهای بازبینی‌کنندگان (Reviewers)، مسئولین (Assignees)، برچسب‌ها (Labels)، پروژه‌ها (Projects) و نقاط عطف (Milestones) را در صورت لزوم تغییر دهید. سپس، هنگامی که از جزئیات درخواست کشیدن راضی هستید، روی دکمه ایجاد درخواست کشیدن (Create pull request) کلیک کنید تا درخواست کشیدن ایجاد شود. کد شما اکنون آماده است تا توسط همتایان (peers) شما بازبینی شود.</li>
@@ -115,19 +136,19 @@
 <p>نظرات (comments) و تغییرات (changes) را در درخواست کشیدن بازبینی کنید.</p>
 <p>بررسی کنید که هیچ تضادی (conflicts) با شاخه پایه (base branch) وجود نداشته باشد. اگر وجود دارد، باید درخواست کشیدن را با نظرات لازم رد (reject) کنید. در غیر این صورت، می‌توانید تغییرات را بازبینی کنید، مطمئن شوید که کد بدون خطا بیلد (builds) می‌شود، و مطمئن شوید که هیچ هشداری در زمان کامپایل (compilation warnings) وجود ندارد. در این مرحله، همچنین به دنبال بوی کد (code smells) و هر گونه باگ احتمالی (potential bugs) خواهید بود. همچنین بررسی خواهید کرد که تست‌ها بیلد می‌شوند، اجرا می‌شوند، صحیح هستند و پوشش تست (test coverage) خوبی از ویژگی‌ای که قرار است ادغام شود، ارائه می‌دهند. هرگونه نظر لازم را اضافه کنید و درخواست کشیدن را رد کنید مگر اینکه راضی باشید. هنگامی که راضی شدید، می‌توانید نظرات خود را اضافه کرده و با کلیک بر روی دکمه ادغام درخواست کشیدن (Merge pull request)، همانطور که در اینجا نشان داده شده است، درخواست کشیدن را ادغام کنید:</p>
 <div align="center">  
-<p><img src="../../assets/image/02/Table%202-5.png" alt="Conventions-UsedThis-Book"></p>
+<p><img src="../../../assets/image/02/Table%202-5.png" alt="Conventions-UsedThis-Book"></p>
 </div>
 <ol start="4">
 <li>اکنون، ادغام (merge) را با وارد کردن یک نظر (comment) و کلیک بر روی دکمه تایید ادغام (Confirm merge)، تأیید کنید:</li>
 </ol>
 <div align="center">  
-<p><img src="../../assets/image/02/Table%202-6.png" alt="Conventions-UsedThis-Book"></p>
+<p><img src="../../../assets/image/02/Table%202-6.png" alt="Conventions-UsedThis-Book"></p>
 </div>
 <ol start="5">
 <li>ادغام (merged) شده و درخواست کشیدن (pull request) بسته شد، شاخه (branch) را می‌توان با کلیک بر روی دکمه حذف شاخه (Delete branch)، همانطور که در تصویر زیر دیده می‌شود، حذف کرد:</li>
 </ol>
 <div align="center">  
-<p><img src="../../assets/image/02/Table%202-7.png" alt="Conventions-UsedThis-Book"></p>
+<p><img src="../../../assets/image/02/Table%202-7.png" alt="Conventions-UsedThis-Book"></p>
 </div>
 <p>در بخش قبلی، دیدید که چگونه بازبینی‌شونده (reviewee) یک درخواست کشیدن (pull request) را برای بازبینی همتا (peer-reviewed) کد خود قبل از ادغام (merged) آن، مطرح می‌کند. و در این بخش، دیدید که چگونه یک درخواست کشیدن را بازبینی کرده و آن را به عنوان بخشی از بازبینی کد (code review) تکمیل کنید. اکنون، به این خواهیم پرداخت که هنگام پاسخ به یک درخواست کشیدن، چه چیزی را در بازبینی کد همتا (what to review in a peer code review) بازبینی کنیم.</p>
 <h2>تأثیر بازخورد بر بازبینی‌شوندگان (Effects of feedback on reviewees)</h2>
@@ -135,13 +156,13 @@
 <p>چنین بازخورد منفی که توسط بازبینی‌شونده دریافت می‌شود، آن‌ها را آزرده (offends) می‌کند. این امر تأثیر منفی دارد و می‌تواند باعث شود که آن‌ها به خودشان شک کنند (start doubting themselves). سپس فقدان انگیزه (lack of motivation) در بازبینی‌شونده ایجاد می‌شود و این می‌تواند به طور منفی بر تیم تأثیر بگذارد، زیرا کار به موقع یا در سطح مورد نیاز انجام نمی‌شود. احساسات بد (bad feelings) بین بازبینی‌کننده و بازبینی‌شونده نیز توسط تیم احساس خواهد شد، و یک فضای سرکوب‌گرانه (oppressive atmosphere) که به طور منفی بر همه اعضای تیم تأثیر می‌گذارد، می‌تواند به دنبال داشته باشد. این می‌تواند منجر به دلسردی (demotivated) سایر همکاران شود، و پروژه کلی در نتیجه متحمل ضرر (suffering) شود.</p>
 <p>در نهایت، کار به جایی می‌رسد که بازبینی‌شونده به ستوه آمده و برای یک موقعیت جدید در جای دیگری، برای رهایی از همه این‌ها، آنجا را ترک می‌کند. سپس پروژه از نظر زمانی (time-wise) و حتی مالی (financially) متحمل ضرر می‌شود، زیرا زمان و پول باید برای یافتن یک جایگزین (replacement) صرف شود. هر کسی که برای پر کردن موقعیت پیدا می‌شود، باید در مورد سیستم و رویه ها و دستورالعمل‌های کاری (working procedures and guidelines) آموزش ببیند. دیاگرام زیر بازخورد منفی از بازبینی‌کننده به سمت بازبینی‌شونده را نشان می‌دهد:</p>
 <div align="center">  
-<p><img src="../../assets/image/02/Table%202-8.png" alt="Conventions-UsedThis-Book"></p>
+<p><img src="../../../assets/image/02/Table%202-8.png" alt="Conventions-UsedThis-Book"></p>
 </div>
 <p>برعکس، بازخورد مثبت (positive feedback) از بازبینی‌کننده به بازبینی‌شونده تأثیر متضادی دارد. هنگامی که بازبینی‌کننده بازخورد مثبت به بازبینی‌شونده می‌دهد، آن‌ها بر مشکل (problem) و نه بر شخص تمرکز می‌کنند. آن‌ها توضیح می‌دهند که چرا کد ارسالی خوب نیست، همراه با مشکلاتی که می‌تواند ایجاد کند. سپس بازبینی‌کننده راه‌هایی را برای بهبود کد به بازبینی‌شونده پیشنهاد می‌کند. بازخورد ارائه شده توسط بازبینی‌کننده فقط برای بهبود کیفیت کد (improve the quality of the code) ارسالی توسط بازبینی‌شونده انجام می‌شود.</p>
 <p>هنگامی که بازبینی‌شونده بازخورد مثبت (سازنده) (positive (constructive) feedback) را دریافت می‌کند، به شیوه‌ای مثبت پاسخ می‌دهد. آن‌ها نظرات بازبینی‌کننده (reviewer's comments) را می‌پذیرند و به شیوه مناسب با پاسخ دادن به هر سوالی، پرسیدن هر سوال مرتبطی توسط خودشان، و سپس کد بر اساس بازخورد بازبینی‌کننده به‌روزرسانی (updated) می‌شود. کد اصلاح‌شده (amended) سپس برای بازبینی و پذیرش دوباره ارسال (resubmitted) می‌شود. این امر تأثیر مثبتی (positive impact) بر تیم دارد زیرا جو (atmosphere) مثبت باقی می‌ماند، و کار به موقع و با کیفیت مورد نیاز (required quality) انجام می‌شود.</p>
 <p>دیاگرام زیر نتایج بازخورد مثبت از بازبینی‌کننده به بازبینی‌شونده را نشان می‌دهد:</p>
 <div align="center">  
-<p><img src="../../assets/image/02/Table%202-9.png" alt="Conventions-UsedThis-Book"></p>
+<p><img src="../../../assets/image/02/Table%202-9.png" alt="Conventions-UsedThis-Book"></p>
 </div>
 <p>نکته‌ای که باید به خاطر بسپارید این است که بازخورد شما می‌تواند سازنده (constructive) یا مخرب (destructive) باشد. هدف شما به عنوان یک بازبینی‌کننده این است که سازنده باشید و نه مخرب. یک تیم شاد، یک تیم مولد (productive) است. یک تیم دلسرد (demoralized) مولد نیست و برای پروژه مضر (damaging) است. بنابراین، همیشه تلاش کنید تا از طریق بازخورد مثبت، تیمی شاد را حفظ کنید.</p>
 <p>یک تکنیک برای انتقاد مثبت (positive criticism)، تکنیک ساندویچ بازخورد (feedback sandwich technique) است. شما با تمجید (praise) از نکات خوب شروع می‌کنید، سپس انتقاد سازنده (constructive criticism) را ارائه می‌دهید، و سپس با تمجید بیشتر (further praise) به پایان می‌رسانید. این تکنیک می‌تواند بسیار مفید باشد اگر اعضایی در تیم خود دارید که به هیچ شکلی از انتقاد واکنش خوبی نشان نمی‌دهند. مهارت‌های نرم (soft skills) شما در برخورد با مردم به همان اندازه مهارت‌های نرم‌افزاری (software skills) شما در ارائه کد با کیفیت (quality code) مهم است. این را فراموش نکنید!</p>
@@ -224,7 +245,7 @@
 </ul>
 <p>بیایید ببینیم فرآیند چگونه پیش می‌رود:</p>
 <div align="center">  
-<p><img src="../../assets/image/02/Table%202-10.png" alt="Conventions-UsedThis-Book"></p>
+<p><img src="../../../assets/image/02/Table%202-10.png" alt="Conventions-UsedThis-Book"></p>
 </div>
 <p>کد تست نشده (Untested code) این پتانسیل را دارد که در طول تست‌نویسی (testing) و تولید (production)، استثنائات غیرمنتظره‌ای (unexpected exceptions) را مطرح کند. اما به همان بدی کدی که تست نشده است، تست‌هایی هستند که صحیح نیستند. این می‌تواند منجر به باگ‌هایی (bugs) شود که تشخیص آن‌ها دشوار است، می‌تواند برای مشتری آزاردهنده باشد، و در آینده کار بیشتری برای شما ایجاد کند. باگ‌ها بدهی فنی (technical debt) هستند و از نظر کسب و کار به آن‌ها منفی نگاه می‌شود. علاوه بر این، ممکن است شما کد را نوشته باشید، اما دیگران ممکن است مجبور باشند آن را بخوانند زیرا پروژه را نگهداری (maintain) و گسترش (extend) می‌دهند. همیشه ایده خوبی است که مستنداتی (documentation) برای همکاران خود ارائه دهید.</p>
 <p>اکنون، در مورد مشتری، آن‌ها چگونه قرار است بفهمند که ویژگی‌های (features) شما کجاست و چگونه از آن‌ها استفاده کنند؟ مستندات خوب و کاربرپسند (user-friendly) ایده خوبی است. و به یاد داشته باشید، همه کاربران شما ممکن است از نظر فنی با‌سواد (technically savvy) نباشند. بنابراین، به افراد کم‌مهارت‌تر که ممکن است به راهنمایی (handholding) نیاز داشته باشند، توجه کنید، اما این کار را بدون تحقیر (patronizing) انجام دهید.</p>
@@ -232,7 +253,7 @@
 <p>به عنوان یک بازبینی‌کننده، باید بررسی کنید که از آن استثنائات (exceptions) برای کنترل جریان برنامه (program flow) استفاده نمی‌شود و هر خطایی که مطرح می‌شود پیام‌های معنی‌داری (meaningful messages) دارد که برای توسعه‌دهندگان و مشتریانی که آن‌ها را دریافت خواهند کرد، مفید است.</p>
 <h2>دستورالعمل‌های معماری و الگوهای طراحی (Architectural guidelines and design patterns)</h2>
 <p>کد جدید باید بررسی شود تا مشخص شود آیا با دستورالعمل‌های معماری (architectural guidelines) پروژه مطابقت دارد یا خیر. کد باید از هرگونه پارادایم کدنویسی (coding paradigms) که شرکت به کار می‌گیرد، مانند SOLID، DRY، YAGNI، و OOP (برنامه‌نویسی شی‌گرا)، پیروی کند. علاوه بر این، در صورت امکان، کد باید از الگوهای طراحی مناسب (suitable design patterns) استفاده کند.</p>
-<p>اینجاست که الگوهای گنگ چهار نفره (Gang-of-Four (GoF) patterns) وارد عمل می‌شوند. GoF شامل چهار نویسنده کتاب C++ به نام Design Patterns: Elements of Reusable Object-Oriented Software است. نویسندگان اریش گاما، ریچارد هلم، رالف جانسون و جان ولسیدس بودند. امروزه، الگوهای طراحی آن‌ها به شدت در اکثر، اگر نگوییم تمام، زبان‌های برنامه‌نویسی شی‌گرا (object-oriented programming languages) استفاده می‌شوند. Packt کتاب‌هایی را پوشش می‌دهد که الگوهای طراحی را پوشش می‌دهند، از جمله NET Design Patterns، اثر پراسین پای و شاین خاویر. در اینجا یک منبع واقعاً خوب را توصیه می‌کنم که از آن بازدید کنید: https://www.dofactory.com/net/design-patterns. این سایت هر یک از الگوهای GoF را پوشش می‌دهد و تعریف، دیاگرام کلاس UML (UML class diagram)، شرکت‌کنندگان (participants)، کد ساختاری (structural code)، و برخی کد دنیای واقعی (real-world code) برای الگوها را ارائه می‌دهد.</p>
+<p>اینجاست که الگوهای گنگ چهار نفره (Gang-of-Four (GoF) patterns) وارد عمل می‌شوند. GoF شامل چهار نویسنده کتاب C++ به نام Design Patterns: Elements of Reusable Object-Oriented Software است. نویسندگان اریش گاما، ریچارد هلم، رالف جانسون و جان ولسیدس بودند. امروزه، الگوهای طراحی آن‌ها به شدت در اکثر، اگر نگوییم تمام، زبان‌های برنامه‌نویسی شی‌گرا (object-oriented programming languages) استفاده می‌شوند. Packt کتاب‌هایی را پوشش می‌دهد که الگوهای طراحی را پوشش می‌دهند، از جمله NET Design Patterns، اثر پراسین پای و شاین خاویر. در اینجا یک منبع واقعاً خوب را توصیه می‌کنم که از آن بازدید کنید: <a href="https://www.dofactory.com/net/design-patterns">https://www.dofactory.com/net/design-patterns</a>. این سایت هر یک از الگوهای GoF را پوشش می‌دهد و تعریف، دیاگرام کلاس UML (UML class diagram)، شرکت‌کنندگان (participants)، کد ساختاری (structural code)، و برخی کد دنیای واقعی (real-world code) برای الگوها را ارائه می‌دهد.</p>
 <p>الگوهای GoF شامل الگوهای طراحی سازنده (creational design patterns)، ساختاری (structural) و رفتاری (behavioral) هستند. الگوهای طراحی سازنده شامل کارخانه انتزاعی (Abstract Factory)، سازنده (Builder)، متد کارخانه (Factory Method)، نمونه اولیه (Prototype)، و تک‌نمونه (Singleton) هستند. الگوهای طراحی ساختاری شامل آداپتور (Adapter)، پل (Bridge)، کامپوزیت (Composite)، دکوراتور (Decorator)، نما (Façade)، فلای‌ویت (Flyweight)، و پروکسی (Proxy) هستند. الگوهای طراحی رفتاری شامل زنجیره مسئولیت (Chain of Responsibility)، دستور (Command)، مفسر (Interpreter)، تکرارکننده (Iterator)، واسطه (Mediator)، یادگار (Memento)، ناظر (Observer)، حالت (State)، استراتژی (Strategy)، متد الگو (Template Method)، و بازدیدکننده (Visitor) هستند.</p>
 <p>کد همچنین باید به درستی سازماندهی (organized) شود و در فضای نام (namespace) و ماژول (module) صحیح قرار گیرد. همچنین کد را بررسی کنید تا ببینید آیا بیش از حد ساده‌انگارانه (simplistic) است یا بیش از حد مهندسی شده (over-engineered).</p>
 <h2>عملکرد و امنیت (Performance and security)</h2>
@@ -279,7 +300,7 @@
 </ul>
 <p>هنگامی که کد شما کامل، به طور کامل مستند (documented)، و تست‌های شما کار می‌کنند، و یکپارچه‌سازی سیستم (system integration) شما بدون هیچ مشکلی کار می‌کند، آن زمان بهترین زمان برای انجام یک بازبینی کد همتا (peer code review) است. هنگامی که به نقطه‌ای رسیدید که بازبینی کد همتای شما تأیید شد، کد شما می‌تواند به بخش کنترل کیفیت (QA department) منتقل شود. دیاگرام زیر چرخه عمر توسعه نرم‌افزار (Software Development Life Cycle (SDLC)) را از توسعه کد تا پایان عمر کد نشان می‌دهد:</p>
 <div align="center">  
-<p><img src="../../assets/image/02/Table%202-11.png" alt="Conventions-UsedThis-Book"></p>
+<p><img src="../../../assets/image/02/Table%202-11.png" alt="Conventions-UsedThis-Book"></p>
 </div>
 <p>برنامه‌نویس نرم‌افزار را طبق مشخصات (specifications) کدنویسی می‌کند. آن‌ها کد منبع (source code) را به مخزن کنترل نسخه (version control repository) ارسال کرده و یک درخواست کشیدن (pull request) صادر می‌کنند. درخواست بازبینی (reviewed) می‌شود. اگر درخواست شکست بخورد (fails)، سپس درخواست با نظراتی (comments) رد (rejected) می‌شود. اگر بازبینی کد (code review) قبول شود (passes)، سپس کد به تیم تضمین کیفیت (QA team) مستقر می‌شود که تست‌های داخلی (internal testing) خود را انجام می‌دهند. هر باگ (bug) یافت شده برای توسعه‌دهندگان جهت رفع (fix)، مطرح می‌شود. اگر تست داخلی تضمین کیفیت قبول شود (passes QA)، سپس به تست پذیرش کاربر (User Acceptance Testing - UAT) مستقر می‌شود.</p>
 <p>اگر UAT شکست بخورد، سپس باگ‌ها برای تیم عملیات توسعه (DevOps team)، که می‌توانند توسعه‌دهندگان یا زیرساخت باشند، مطرح می‌شوند. اگر UAT تضمین کیفیت را قبول کند، سپس به مرحله آماده‌سازی (staging) مستقر می‌شود. مرحله آماده‌سازی، تیمی است که مسئول استقرار محصول (deploying the product) در محیط تولید (production environment) است. هنگامی که نرم‌افزار در دست مشتری است، اگر با باگی مواجه شوند، گزارش باگ (bug report) را مطرح می‌کنند. سپس توسعه‌دهندگان روی رفع باگ‌های مشتری کار می‌کنند و فرآیند دوباره آغاز می‌شود. هنگامی که محصول به پایان عمر (end of its life) خود می‌رسد، از سرویس بازنشسته (retired from service) می‌شود.</p>
@@ -287,7 +308,7 @@
 <p>شایان ذکر است که بازبینی‌های کد با هدف کیفیت کلی کد (overall quality of code) در راستای دستورالعمل‌های شرکت (company's guidelines) انجام می‌شوند. بنابراین، بازخورد (feedback) باید سازنده (constructive) باشد و به عنوان بهانه‌ای برای تحقیر (put down) یا خجالت‌زده کردن (embarrass) یک همکار استفاده نشود. به همین ترتیب، بازخورد بازبینی‌کننده نباید شخصی تلقی شود (taken personally) و پاسخ‌ها به بازبینی‌کننده باید بر اقدام مناسب (suitable action) و توضیح (explanation) تمرکز داشته باشد.</p>
 <p>دیاگرام زیر فرآیند صدور درخواست کشیدن (Pull Request - PR)، انجام بازبینی کد (code review)، و یا پذیرش (accepting) یا رد (rejecting) PR را نشان می‌دهد:</p>
 <div align="center">  
-<p><img src="../../assets/image/02/Table%202-12.png" alt="Conventions-UsedThis-Book"></p>
+<p><img src="../../../assets/image/02/Table%202-12.png" alt="Conventions-UsedThis-Book"></p>
 </div>
 <h2>ارائه بازخورد به عنوان یک بازبینی‌کننده (Providing feedback as a reviewer)</h2>
 <p>زورگویی در محل کار (Workplace bullying) می‌تواند یک مشکل باشد، و محیط‌های برنامه‌نویسی نیز از آن مصون نیستند. هیچ کس یک برنامه‌نویس خودخواه (cocky) را که فکر می‌کند خیلی مهم است، دوست ندارد. بنابراین، مهم است که بازبینی‌کننده مهارت‌های نرم (soft skills) خوبی داشته باشد و بسیار دیپلماتیک (diplomatic) باشد. به خاطر داشته باشید که برخی افراد می‌توانند به راحتی آزرده (offended) شوند و مسائل را به روش اشتباهی (wrong way) تفسیر کنند. بنابراین بدانید با چه کسی سر و کار دارید و احتمالاً چگونه واکنش نشان خواهد داد؛ این به شما کمک می‌کند تا رویکرد و کلمات خود را با دقت انتخاب کنید.</p>
@@ -341,20 +362,28 @@
 <h2>مطالعه بیشتر (Further reading)</h2>
 <ul>
 <li>
-<p>مستندات مایکروسافت در مورد کیفیت کد: https://docs.microsoft.com/en-us/visualstudio/code-quality/?view=vs2019
+<p>مستندات مایکروسافت در مورد کیفیت کد: <a href="https://docs.microsoft.com/en-us/visualstudio/code-quality/?view=vs2019">https://docs.microsoft.com/en-us/visualstudio/code-quality/?view=vs2019</a>
 این مستندات توسط مایکروسافت، اطلاعاتی در مورد ابزارهای مختلف موجود برای کمک به شما در تحلیل و بهبود کیفیت و قابلیت نگهداری کدتان ارائه می‌دهد.</p>
 </li>
 <li>
-<p>ویکی‌پدیا – بازبینی کد: https://en.wikipedia.org/wiki/Code_review
+<p>ویکی‌پدیا – بازبینی کد: <a href="https://en.wikipedia.org/wiki/Code_review">https://en.wikipedia.org/wiki/Code_review</a>
 پیوندهای مفید بسیاری در این صفحه برای افزایش دانش شما در مورد بازبینی‌های کد و ارزش آن‌ها برای کسب و کارتان وجود دارد.</p>
 </li>
 <li>
-<p>الگوهای طراحی گنگ چهار نفره: https://springframework.guru/gang-of-four-design-patterns/</p>
+<p>الگوهای طراحی گنگ چهار نفره: <a href="https://springframework.guru/gang-of-four-design-patterns/">https://springframework.guru/gang-of-four-design-patterns/</a></p>
 </li>
 <li>
-<p>.NET Design Patterns by Praseed Pai and Shine Xavier: https://www.packtpub.com/application-development/net-design-patterns</p>
+<p>.NET Design Patterns by Praseed Pai and Shine Xavier: <a href="https://www.packtpub.com/application-development/net-design-patterns">https://www.packtpub.com/application-development/net-design-patterns</a></p>
 </li>
 <li>
-<p>صفحه راهنمای گیت‌هاب: https://help.github.com/en</p>
+<p>صفحه راهنمای گیت‌هاب: <a href="https://help.github.com/en">https://help.github.com/en</a></p>
 </li>
 </ul>
+
+  </main>
+
+  <footer>
+    <p>ساخته شده با ❤️ توسط برنامه نویسان برای برنامه نویسان</p>
+  </footer>
+</body>
+</html>

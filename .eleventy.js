@@ -3,8 +3,10 @@ module.exports = function (eleventyConfig) {
     eleventyConfig.addPassthroughCopy("src/styles");
     eleventyConfig.addPassthroughCopy("src/images");
     eleventyConfig.addPassthroughCopy("src/books/book1/assets");
+    eleventyConfig.addPassthroughCopy("src/books/book2/assets");
+    
     eleventyConfig.addPassthroughCopy("src/icone");
-
+    eleventyConfig.addGlobalData("layout", "layout.njk");
     return {
         dir: {
             input: "src", // ورودی همه فایل‌ها از این پوشه

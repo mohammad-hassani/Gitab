@@ -1,15 +1,15 @@
 ---
 layout: layout.njk
-title: پارس‌کتاب
+title: کتاب لایف
 ---
 
 
 <section class="hero">
   <div class="hero-content">
-    <img src="/images/logo-parsketab.png" alt="پارس کتاب" class="hero-logo animate-slide-in" />
-    <h1 class="hero-title animate-fade-in">به <span class="highlight">پارس‌کتاب</span> خوش آمدید </h1>
+    <img src="/images/logo-parsketab.png" alt="کتاب لایف" class="hero-logo animate-slide-in" />
+    <h1 class="hero-title animate-fade-in">به <span class="highlight">کتاب لایف</span> خوش آمدید </h1>
     <p class="hero-description animate-fade-in-delay">
-      در <strong>پارس‌کتاب</strong> ما با عشق به زبان پارسی، کتاب‌های تخصصی در زمینه <span class="dotnet">دات‌نت</span>،
+      در <strong>کتاب لایف</strong> ما با عشق به زبان پارسی، کتاب‌های تخصصی در زمینه <span class="dotnet">دات‌نت</span>،
       <span class="csharp">سی‌شارپ</span> و فناوری‌های مایکروسافت را به زیبایی و دقت ترجمه می‌کنیم.
     </p>
     <div class="hero-buttons animate-slide-up">
