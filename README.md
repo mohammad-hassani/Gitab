@@ -1,3 +1,8 @@
+<div align="center">
+
+<img src="src/readme/Gitab.png">
+</div>
+
 
 # گیتاب: منابع ترجمه شده به پارسی
 
