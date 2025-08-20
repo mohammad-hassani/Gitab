@@ -16,4 +16,6 @@
 +
   🔗  [clean-code-in-csharp-persian](https://github.com/hheydarian/clean-code-in-csharp-persian)
 +
+  🔗  [task-programming-in-csharp-dotnet-persian](https://github.com/hheydarian/task-programming-in-csharp-dotnet-persian)
++
   🔗 ادامه دارد...
