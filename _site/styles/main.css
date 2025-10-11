@@ -1,46 +1,49 @@
-/* =============== فونت =============== */
+/* ---------- فونت ---------- */
 @font-face {
     font-family: "VazirFD";
     src: url("/styles/fonts/Vazir-FD-WOL.ttf") format("truetype");
     font-display: swap;
 }
+
+/* ---------- پالت تیره + روشن ---------- */
 :root {
     --font: "VazirFD", system-ui, -apple-system, Segoe UI, Roboto,
         "Noto Sans Arabic", "Vazirmatn", sans-serif;
 
-    /* پالت تیره خلاقانه */
-    --bg-0: #0a0b0e; /* پس‌زمینه‌ی اصلی (مشکی جوهری) */
-    --bg-1: #101218; /* لایه‌ی نرم‌تر */
-    --bg-2: #141823; /* کارت‌ها/نوار شیشه‌ای */
-    --text: #e8ecf3; /* متن اصلی */
-    --muted: #a8b1c1; /* متن کم‌رنگ */
-    --brand: #9b87f5; /* لهجه بنفش-آبی */
-    --brand-2: #5aa7ff; /* لهجه دوم آبی */
-    --oklab-glow: 255 0.65 0.02; /* برای glow ظریف */
-
+    --bg-0: #0a0b0e;
+    --bg-1: #101218;
+    --bg-2: #141823;
+    --text: #e8ecf3;
+    --muted: #a8b1c1;
+    --brand: #9b87f5;
+    --brand2: #5aa7ff;
     --border: color-mix(in oklab, white 8%, transparent);
-    --ring: color-mix(in oklab, var(--brand) 70%, transparent);
 
     --radius-lg: 18px;
     --radius-sm: 12px;
+    --shadow-1: 0 1px 0 color-mix(in oklab, white 4%, transparent) inset,
+        0 12px 28px rgba(0, 0, 0, 0.22);
 
     color-scheme: dark;
 }
-
-/* حالت روشن (اگر خواستی بعداً فعال کنی) */
-html[data-theme="light"] {
+html[data-theme="light"],
+html[data-theme="auto"][data-color-mode="light"] {
     --bg-0: #ffffff;
-    --bg-1: #f7f8fb;
+    --bg-1: #f6f8fb;
     --bg-2: #ffffff;
     --text: #0b0c0f;
-    --muted: #5d6676;
+    --muted: #5f6b7b;
     --brand: #6d5de6;
-    --brand-2: #2563eb;
-    --border: color-mix(in oklab, black 10%, transparent);
+    --brand2: #2563eb;
+    --border: color-mix(in oklab, black 12%, transparent);
     color-scheme: light;
 }
+html[data-theme="dark"],
+html[data-theme="auto"][data-color-mode="dark"] {
+    color-scheme: dark;
+}
 
-/* =============== پایه =============== */
+/* ---------- پایه ---------- */
 * {
     box-sizing: border-box;
 }
@@ -51,13 +54,13 @@ body {
     margin: 0;
     color: var(--text);
     background: radial-gradient(
-            1200px 600px at 120% -10%,
+            1100px 520px at 120% -10%,
             color-mix(in oklab, var(--brand) 14%, transparent),
             transparent 50%
         ),
         radial-gradient(
-            900px 500px at -10% 10%,
-            color-mix(in oklab, var(--brand-2) 12%, transparent),
+            900px 480px at -10% 10%,
+            color-mix(in oklab, var(--brand2) 12%, transparent),
             transparent 50%
         ),
         var(--bg-0);
@@ -69,7 +72,7 @@ a {
 }
 a:focus,
 button:focus {
-    outline: 2px solid var(--ring);
+    outline: 2px solid color-mix(in oklab, var(--brand) 70%, transparent);
     outline-offset: 2px;
     border-radius: 10px;
 }
@@ -79,21 +82,28 @@ button:focus {
     padding: 14px 16px;
 }
 
-/* =============== هدر (مینیمال+گلس) =============== */
+/* کاهش حرکت برای کاربرانی که ترجیح می‌دهند */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+/* ---------- هدر ---------- */
 .header {
     position: sticky;
     top: 0;
     z-index: 20;
     border-bottom: 1px solid var(--border);
-    background: color-mix(in oklab, var(--bg-0) 40%, transparent);
+    background: color-mix(in oklab, var(--bg-0) 45%, transparent);
     backdrop-filter: blur(14px) saturate(140%);
 }
 .nav-wrap {
     display: grid;
-    grid-template-columns: 1fr auto 1fr; /* برند | منو | اکشن‌ها */
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
     gap: 12px;
-    padding-block: 10px;
 }
 .brand {
     display: inline-flex;
@@ -102,10 +112,10 @@ button:focus {
     font-weight: 900;
     letter-spacing: 0.2px;
 }
-.brand svg {
-    opacity: 0.9;
-    transform: translateY(-0.5px);
+.brand img {
+    display: block;
 }
+
 .nav {
     display: flex;
     justify-content: center;
@@ -123,6 +133,9 @@ button:focus {
     font-size: 0.96rem;
     padding: 6px 10px;
     border-radius: 10px;
+}
+.nav a[aria-current="page"] {
+    color: var(--text);
 }
 .nav a:hover {
     color: var(--text);
@@ -148,32 +161,36 @@ button:focus {
         color-mix(in oklab, var(--bg-2) 85%, transparent),
         color-mix(in oklab, var(--bg-1) 60%, transparent)
     );
-    box-shadow: 0 1px 0 color-mix(in oklab, white 4%, transparent) inset,
-        0 8px 18px rgba(0, 0, 0, 0.22);
+    box-shadow: var(--shadow-1);
     transition: transform 0.16s ease, box-shadow 0.2s ease, background 0.2s ease;
-    color: var(--text);
     cursor: pointer;
 }
 .icon-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.28);
 }
-.icon-btn .moon {
+.icon-btn img {
+    filter: invert(90%) sepia(5%) saturate(200%) hue-rotate(180deg);
+    transition: filter 0.2s ease;
+}
+html[data-theme="light"] .icon-btn img,
+html[data-theme="auto"][data-color-mode="light"] .icon-btn img {
+    filter: invert(10%) sepia(20%) saturate(300%) hue-rotate(180deg);
+}
+.icon-moon {
     display: none;
 }
-.icon-btn.dark .sun {
+.icon-btn.is-dark .icon-sun {
     display: none;
 }
-.icon-btn.dark .moon {
-    display: block;
+.icon-btn.is-dark .icon-moon {
+    display: inline;
 }
 
-/* =============== هیرو =============== */
+/* ---------- هیرو ---------- */
 .hero {
     padding: 80px 16px 54px;
-    position: relative;
 }
-.hero .container {
+.hero-inner {
     text-align: center;
 }
 .hero h1 {
@@ -181,7 +198,7 @@ button:focus {
     font-size: clamp(26px, 4.5vw, 40px);
     letter-spacing: 0.2px;
 }
-.hero p {
+.lead {
     color: var(--muted);
     max-width: 62ch;
     margin: 0 auto 22px;
@@ -194,10 +211,10 @@ button:focus {
 }
 .btn {
     display: inline-block;
-    font-weight: 800;
     border: 1px solid var(--border);
     padding: 10px 18px;
     border-radius: 12px;
+    font-weight: 800;
     transition: 0.18s ease;
     white-space: nowrap;
 }
@@ -223,10 +240,10 @@ button:focus {
     font-size: 0.9rem;
 }
 
-/* =============== بخش کتاب‌ها =============== */
+/* ---------- گرید کتاب‌ها ---------- */
 .books {
-    padding: 36px 16px 70px;
-}
+    padding: 36px 16px 56px;
+} /* کمی کمتر برای تعادل با فوتر */
 .grid {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
@@ -246,25 +263,8 @@ button:focus {
     );
     padding: 18px;
     position: relative;
-    box-shadow: 0 1px 0 color-mix(in oklab, white 4%, transparent) inset,
-        0 12px 28px rgba(0, 0, 0, 0.22);
+    box-shadow: var(--shadow-1);
     isolation: isolate;
-}
-.card::after {
-    /* هایلایت ظریف بالا/چپ کارت */
-    content: "";
-    position: absolute;
-    inset: -1px;
-    border-radius: inherit;
-    background: linear-gradient(
-        120deg,
-        color-mix(in oklab, var(--brand) 14%, transparent) 0%,
-        transparent 30% 70%,
-        color-mix(in oklab, var(--brand-2) 14%, transparent) 100%
-    );
-    opacity: 0.18;
-    z-index: -1;
-    filter: blur(14px);
 }
 .card h3 {
     margin: 0 0 6px;
@@ -287,47 +287,41 @@ button:focus {
     min-width: 100px;
     text-align: center;
 }
-
 @media (min-width: 760px) {
     .card {
         grid-column: span 4;
     }
 }
 
-/* =============== فوتر =============== */
+/* ---------- فوتر (ارتفاع کمتر طبق خواسته) ---------- */
 .footer {
     border-top: 1px solid var(--border);
     color: var(--muted);
     text-align: center;
-    padding: 16px;
+    padding: 10px 16px; /* قبلاً 16px بود؛ کمتر شد */
     background: color-mix(in oklab, var(--bg-0) 70%, transparent);
 }
-
-/* =============== ریزه‌کاری RTL =============== */
-:where(html[dir="rtl"]) .cta .btn {
-    margin-inline-end: 8px;
-}
-/* آیکن‌های خارجی */
-.icon-btn img {
+.footer p {
+    margin: 0;
+} /* حذف فضای اضافی متن */
+.footer img {
+    vertical-align: middle;
     filter: invert(90%) sepia(5%) saturate(200%) hue-rotate(180deg);
-    transition: filter 0.2s ease;
 }
-.icon-btn:hover img {
-    filter: invert(100%) sepia(10%) saturate(400%) hue-rotate(200deg);
-}
-
-/* تم روشن */
-[data-theme="light"] .icon-btn img {
+html[data-theme="light"] .footer img,
+html[data-theme="auto"][data-color-mode="light"] .footer img {
     filter: invert(10%) sepia(20%) saturate(300%) hue-rotate(180deg);
 }
 
-/* حالت ماه/خورشید */
-.icon-moon {
-    display: none;
-}
-.icon-btn.dark .icon-sun {
-    display: none;
-}
-.icon-btn.dark .icon-moon {
-    display: inline;
+/* ---------- دسترسی کمکی ---------- */
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
 }
