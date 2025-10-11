@@ -1,67 +1,129 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<!doctype html>
+<html lang="fa" dir="rtl" data-theme="auto">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>گیتاب</title>
-  <link rel="stylesheet" href="/styles/main.css" />
-  <link rel="stylesheet" href="/icone/css/all.min.css">
-
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gitab | کتابخانه ترجمه‌های فارسی</title>
+  <link rel="stylesheet" href="/styles/main.css">
 </head>
-<!-- Font Awesome JS -->
-<script src="/icone/js/all.min.js" defer></script>
 
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container nav-wrap">
+      <a class="brand" href="/">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+          <path d="M3 19a2 2 0 0 1 2-2h15V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z" />
+          <path d="M3 17v2a2 2 0 0 0 2 2h15" />
+        </svg>
+        <span>Gitab</span>
+      </a>
 
-<body class="rtl-site">
-  <header>
-    <h2>گیتاب</h2>
+      <nav class="nav">
+        <a href="/">خانه</a>
+        <a href="/books/list-books">کتاب‌ها</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button id="themeToggle" class="icon-btn" aria-label="تغییر حالت">
+          <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20"
+            height="20">
+            <circle cx="12" cy="12" r="5" />
+            <path
+              d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+          </svg>
+          <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20"
+            height="20">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        </button>
+
+        <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+            <path
+              d="M12 2C6.48 2 2 6.58 2 12.26c0 4.5 2.87 8.32 6.84 9.68.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.2-3.37-1.2-.46-1.17-1.12-1.48-1.12-1.48-.92-.63.07-.62.07-.62 1.02.07 1.56 1.05 1.56 1.05.9 1.54 2.36 1.09 2.94.84.09-.66.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.26-.45-1.3.1-2.7 0 0 .85-.27 2.8 1.02a9.7 9.7 0 0 1 5.1 0c1.95-1.29 2.8-1.02 2.8-1.02.55 1.4.2 2.44.1 2.7.64.7 1.03 1.59 1.03 2.68 0 3.85-2.35 4.7-4.58 4.95.36.31.67.93.67 1.88v2.79c0 .27.18.58.69.48A10 10 0 0 0 12 2z" />
+          </svg>
+        </a>
+      </div>
+    </div>
   </header>
 
-  <main class="markdown-body">
-    <section class="hero">
-      <div class="hero-content">
-        <img src="/images/logo-parsketab.png" alt="کتاب لایف" class="hero-logo animate-slide-in" />
-        <h1 class="hero-title animate-fade-in">به <span class="highlight">کتاب لایف</span> خوش آمدید </h1>
-        <p class="hero-description animate-fade-in-delay">
-          در <strong>کتاب لایف</strong> ما با عشق به زبان پارسی، کتاب‌های تخصصی در زمینه <span
-            class="dotnet">دات‌نت</span>،
-          <span class="csharp">سی‌شارپ</span> و فناوری‌های مایکروسافت را به زیبایی و دقت ترجمه می‌کنیم.
-        </p>
-        <div class="hero-buttons animate-slide-up">
-          <a href="/books/list-books" class="start-button">
-            <i class="fas fa-book-open"></i> کتاب ها
-          </a>
-          <a href="https://github.com/hheydarian/parsBook" class="github-button" target="_blank">
-            <i class="fab fa-github"></i> سورس کد
-          </a>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1>ترجمه‌های فارسی کتاب‌های فنی</h1>
+      <p>برای توسعه‌دهندگان .NET و سی شارپ — حرفه‌ای، سبک و یک‌دست.</p>
+      <div class="cta">
+        <a class="btn primary" href="/books/list-books">مطالعه کنید</a>
+        <a class="btn ghost" href="https://github.com/hheydarian/Gitab">سورس در GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Books -->
+  <section class="books">
+    <div class="container grid">
+      <article class="card">
+        <h3>C# 12 in a Nutshell</h3>
+        <p>خلاصه‌ای فنی از جدیدترین نسخهٔ سی‌شارپ با مثال‌های کاربردی.</p>
+        <div class="card-actions">
+          <a class="btn small" href="#">نمایش</a>
+          <a class="btn small ghost" href="https://github.com/hheydarian/csharp-12-in-a-nutshell-persian">ریپو</a>
         </div>
-      </div>
-    </section>
-    <section class="features">
-      <div class="feature-box animate-fade-in">
-        <i class="fas fa-language"></i>
-        <h3>ترجمه حرفه‌ای و دقیق</h3>
-        <p>با حفظ ظرافت‌های زبانی و فنی، کتاب‌ها با کیفیت بالا ترجمه شده‌اند.</p>
-      </div>
-      <div class="feature-box animate-fade-in-delay">
-        <i class="fas fa-code"></i>
-        <h3>ویژه برنامه‌نویسان دات‌نت</h3>
-        <p>محتوا کاملاً مرتبط با دنیای .NET، C#، ASP.NET Core و تکنولوژی‌های روز مایکروسافت است.</p>
-      </div>
-      <div class="feature-box animate-fade-in-more">
-        <i class="fas fa-bullseye"></i>
-        <h3>هدف: یادگیری عمیق</h3>
-        <p>مناسب برای تمام برنامه‌نویسانی که می‌خواهند دانش فنی خود را تقویت کنند.</p>
-      </div>
-    </section>
+      </article>
 
-  </main>
+      <article class="card">
+        <h3>Clean Code in C#</h3>
+        <p>اصول کدنویسی تمیز در اکوسیستم دات‌نت.</p>
+        <div class="card-actions">
+          <a class="btn small" href="#">نمایش</a>
+          <a class="btn small ghost" href="https://github.com/hheydarian/clean-code-in-csharp-persian">ریپو</a>
+        </div>
+      </article>
 
-  <footer>
-    <p>ساخته شده با ❤️ توسط برنامه نویسان برای برنامه نویسان</p>
+      <article class="card">
+        <h3>Task Programming in C#/.NET</h3>
+        <p>درک عمیق از async/await و الگوهای موازی‌سازی.</p>
+        <div class="card-actions">
+          <a class="btn small" href="#">نمایش</a>
+          <a class="btn small ghost"
+            href="https://github.com/hheydarian/task-programming-in-csharp-dotnet-persian">ریپو</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© <span id="y"></span> Gitab — برای توسعه‌دهندگان</p>
+    </div>
   </footer>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+    const btn = document.getElementById('themeToggle');
+    const root = document.documentElement;
+    const KEY = 'gitab-theme';
+    const systemDark = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    function setTheme(mode)
+    {
+      root.dataset.theme = mode;
+      btn.classList.toggle('dark', mode === 'dark');
+      localStorage.setItem(KEY, mode);
+    }
+
+    const saved = localStorage.getItem(KEY);
+    if (saved) { setTheme(saved); }
+    else { setTheme(systemDark() ? 'dark' : 'light'); }
+
+    btn.onclick = () =>
+    {
+      const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      setTheme(next);
+    };
+  </script>
 </body>
 
 </html>
