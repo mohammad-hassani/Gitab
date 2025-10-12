@@ -1,67 +1,327 @@
+/* ---------- فونت ---------- */
+@font-face {
+    font-family: "VazirFD";
+    src: url("/styles/fonts/Vazir-FD-WOL.ttf") format("truetype");
+    font-display: swap;
+}
+
+/* ---------- پالت تیره + روشن ---------- */
+:root {
+    --font: "VazirFD", system-ui, -apple-system, Segoe UI, Roboto,
+        "Noto Sans Arabic", "Vazirmatn", sans-serif;
+
+    --bg-0: #0a0b0e;
+    --bg-1: #101218;
+    --bg-2: #141823;
+    --text: #e8ecf3;
+    --muted: #a8b1c1;
+    --brand: #9b87f5;
+    --brand2: #5aa7ff;
+    --border: color-mix(in oklab, white 8%, transparent);
+
+    --radius-lg: 18px;
+    --radius-sm: 12px;
+    --shadow-1: 0 1px 0 color-mix(in oklab, white 4%, transparent) inset,
+        0 12px 28px rgba(0, 0, 0, 0.22);
+
+    color-scheme: dark;
+}
+html[data-theme="light"],
+html[data-theme="auto"][data-color-mode="light"] {
+    --bg-0: #ffffff;
+    --bg-1: #f6f8fb;
+    --bg-2: #ffffff;
+    --text: #0b0c0f;
+    --muted: #5f6b7b;
+    --brand: #6d5de6;
+    --brand2: #2563eb;
+    --border: color-mix(in oklab, black 12%, transparent);
+    color-scheme: light;
+}
+html[data-theme="dark"],
+html[data-theme="auto"][data-color-mode="dark"] {
+    color-scheme: dark;
+}
+
+/* ---------- پایه ---------- */
+* {
+    box-sizing: border-box;
+}
+html {
+    font-family: var(--font);
+}
 body {
-    font-family: "Shabnam", sans-serif;
-    direction: rtl;
-    background-color: #f8f8f8;
-    color: #333;
     margin: 0;
+    color: var(--text);
+    background: radial-gradient(
+            1100px 520px at 120% -10%,
+            color-mix(in oklab, var(--brand) 14%, transparent),
+            transparent 50%
+        ),
+        radial-gradient(
+            900px 480px at -10% 10%,
+            color-mix(in oklab, var(--brand2) 12%, transparent),
+            transparent 50%
+        ),
+        var(--bg-0);
+    line-height: 1.75;
 }
-
-header,
-footer {
-    background: #512bd4;
-    color: white;
-    padding: 1rem;
-    text-align: center;
-}
-
-main {
-    max-width: 1200px;
-    margin: auto;
-    padding: 2rem;
-}
-
-.book-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-}
-
-.book-card {
-    background: white;
-    padding: 1rem;
-    border-radius: 16px;
-    text-align: center;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
-
-.book-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-}
-
-.book-card img {
-    width: 180px;
-    object-fit: contain;
-    border-radius: 12px;
-    margin-bottom: 1rem;
-    border: 2px solid #0078d4;
-    background: #fff;
-    padding: 5px;
-}
-
-.book-card h3 {
-    font-size: 1.1rem;
-    margin: 0.5rem 0;
-}
-
-.book-card a {
-    display: inline-block;
-    background: #0078d4;
-    color: white;
+a {
+    color: inherit;
     text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    margin-top: 0.5rem;
-    font-weight: bold;
+}
+a:focus,
+button:focus {
+    outline: 2px solid color-mix(in oklab, var(--brand) 70%, transparent);
+    outline-offset: 2px;
+    border-radius: 10px;
+}
+.container {
+    max-width: 1180px;
+    margin: auto;
+    padding: 14px 16px;
+}
+
+/* کاهش حرکت برای کاربرانی که ترجیح می‌دهند */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+/* ---------- هدر ---------- */
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    border-bottom: 1px solid var(--border);
+    background: color-mix(in oklab, var(--bg-0) 45%, transparent);
+    backdrop-filter: blur(14px) saturate(140%);
+}
+.nav-wrap {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 12px;
+}
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 900;
+    letter-spacing: 0.2px;
+}
+.brand img {
+    display: block;
+}
+
+.nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    background: color-mix(in oklab, var(--bg-2) 70%, transparent);
+    border-radius: 999px;
+    box-shadow: 0 1px 0 color-mix(in oklab, white 4%, transparent) inset;
+}
+.nav a {
+    color: var(--muted);
+    font-weight: 700;
+    font-size: 0.96rem;
+    padding: 6px 10px;
+    border-radius: 10px;
+}
+.nav a[aria-current="page"] {
+    color: var(--text);
+}
+.nav a:hover {
+    color: var(--text);
+    background: color-mix(in oklab, var(--bg-1) 80%, transparent);
+}
+
+.nav-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+}
+.icon-btn {
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: linear-gradient(
+        180deg,
+        color-mix(in oklab, var(--bg-2) 85%, transparent),
+        color-mix(in oklab, var(--bg-1) 60%, transparent)
+    );
+    box-shadow: var(--shadow-1);
+    transition: transform 0.16s ease, box-shadow 0.2s ease, background 0.2s ease;
+    cursor: pointer;
+}
+.icon-btn:hover {
+    transform: translateY(-2px);
+}
+.icon-btn img {
+    filter: invert(90%) sepia(5%) saturate(200%) hue-rotate(180deg);
+    transition: filter 0.2s ease;
+}
+html[data-theme="light"] .icon-btn img,
+html[data-theme="auto"][data-color-mode="light"] .icon-btn img {
+    filter: invert(10%) sepia(20%) saturate(300%) hue-rotate(180deg);
+}
+.icon-moon {
+    display: none;
+}
+.icon-btn.is-dark .icon-sun {
+    display: none;
+}
+.icon-btn.is-dark .icon-moon {
+    display: inline;
+}
+
+/* ---------- هیرو ---------- */
+.hero {
+    padding: 80px 16px 54px;
+}
+.hero-inner {
+    text-align: center;
+}
+.hero h1 {
+    margin: 0 0 10px;
+    font-size: clamp(26px, 4.5vw, 40px);
+    letter-spacing: 0.2px;
+}
+.lead {
+    color: var(--muted);
+    max-width: 62ch;
+    margin: 0 auto 22px;
+}
+.cta {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+.btn {
+    display: inline-block;
+    border: 1px solid var(--border);
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-weight: 800;
+    transition: 0.18s ease;
+    white-space: nowrap;
+}
+.btn:hover {
+    transform: translateY(-2px);
+}
+.btn.primary {
+    background: linear-gradient(
+        180deg,
+        color-mix(in oklab, var(--brand) 86%, transparent),
+        color-mix(in oklab, var(--brand) 66%, transparent)
+    );
+    border-color: color-mix(in oklab, var(--brand) 80%, transparent);
+    color: #fff;
+    box-shadow: 0 10px 22px rgba(155, 135, 245, 0.22);
+}
+.btn.ghost {
+    background: transparent;
+    color: var(--text);
+}
+.btn.small {
+    padding: 7px 14px;
+    font-size: 0.9rem;
+}
+
+/* ---------- گرید کتاب‌ها ---------- */
+.books {
+    padding: 36px 16px 56px;
+} /* کمی کمتر برای تعادل با فوتر */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 18px;
+    align-items: stretch;
+}
+.card {
+    grid-column: span 12;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: linear-gradient(
+        180deg,
+        color-mix(in oklab, var(--bg-2) 92%, transparent),
+        color-mix(in oklab, var(--bg-1) 70%, transparent)
+    );
+    padding: 18px;
+    position: relative;
+    box-shadow: var(--shadow-1);
+    isolation: isolate;
+}
+.card h3 {
+    margin: 0 0 6px;
+    font-size: 1.08rem;
+}
+.card p {
+    margin: 0 0 12px;
+    color: var(--muted);
+}
+.card-body {
+    flex: 1 1 auto;
+}
+.card-actions {
+    margin-top: auto;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.card-actions .btn {
+    min-width: 100px;
+    text-align: center;
+}
+@media (min-width: 760px) {
+    .card {
+        grid-column: span 4;
+    }
+}
+
+/* ---------- فوتر (ارتفاع کمتر طبق خواسته) ---------- */
+.footer {
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    text-align: center;
+    padding: 10px 16px; /* قبلاً 16px بود؛ کمتر شد */
+    background: color-mix(in oklab, var(--bg-0) 70%, transparent);
+}
+.footer p {
+    margin: 0;
+} /* حذف فضای اضافی متن */
+.footer img {
+    vertical-align: middle;
+    filter: invert(90%) sepia(5%) saturate(200%) hue-rotate(180deg);
+}
+html[data-theme="light"] .footer img,
+html[data-theme="auto"][data-color-mode="light"] .footer img {
+    filter: invert(10%) sepia(20%) saturate(300%) hue-rotate(180deg);
+}
+
+/* ---------- دسترسی کمکی ---------- */
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
 }
