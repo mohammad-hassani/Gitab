@@ -1,211 +1,64 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
-
 <head>
-  <!-- Base -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>کتاب لایف</title>
+  <link rel="stylesheet" href="/styles/main.css"/>
+  <link rel="stylesheet" href="/icone/css/all.min.css">
 
-  <title>Gitab | کتابخانهٔ ترجمه‌های دات‌نت و سی شارپ</title>
-  <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی برای دات‌نت و سی شارپ — سریع، مینیمال و قابل اتکا.">
 
-  <!-- Canonical & Social (در صورت تغییر دامین، آدرس را عوض کن) -->
-  <link rel="canonical" href="https://hheydarian.github.io/Gitab/">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Gitab">
-  <meta property="og:title" content="Gitab | کتابخانهٔ ترجمه‌های دات‌نت و سی شارپ">
-  <meta property="og:description" content="ترجمه‌های فارسی کتاب‌های فنی — یک‌دست، خوانا و آمادهٔ مطالعه.">
-  <meta property="og:url" content="https://hheydarian.github.io/Gitab/">
-  <meta property="og:locale" content="fa_IR">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Gitab | کتابخانهٔ ترجمه‌ها">
-  <meta name="twitter:description" content="ترجمه‌های فارسی کتاب‌های فنی — سبک و حرفه‌ای.">
-
-  <!-- Theme color (نزدیک به پس‌زمینهٔ تیره) -->
-  <meta name="theme-color" content="#0a0b0e">
-
-  <!-- Performance: font preload (same-origin) -->
-  <link rel="preload" as="font" type="font/ttf" href="/styles/fonts/Vazir-FD-WOL.ttf" crossorigin>
-
-  <!-- Critical: جلوگیری از فلیکر تم قبل از پینت -->
-  <script>
-    (function ()
-    {
-      const KEY = 'gitab-theme';
-      const doc = document.documentElement;
-      const m = window.matchMedia('(prefers-color-scheme: dark)');
-      const saved = localStorage.getItem(KEY) || 'auto';
-      const mode = saved === 'auto' ? (m.matches ? 'dark' : 'light') : saved;
-      doc.setAttribute('data-theme', saved);   // 'auto' | 'light' | 'dark'
-      doc.dataset.colorMode = mode;            // رنگ مؤثر
-    })();
-  </script>
-
-  <!-- Styles -->
-  <link rel="stylesheet" href="/styles/main.css">
 </head>
+<!-- Font Awesome JS -->
+<script src="/icone/js/all.min.js" defer></script>
 
-<body>
-  <!-- Header -->
-  <header class="header" role="banner">
-    <div class="container nav-wrap">
-      <!-- لوگو (ALT معنادار و بدون lazy برای CLS کمتر) -->
-      <a class="brand" href="/" aria-label="Gitab">
-        <img src="/icone/logo.svg" alt="لوگوی Gitab" width="34" height="34">
-        <span>Gitab</span>
-      </a>
 
-      <!-- منو (aria-current برای صفحهٔ فعال) -->
-      <nav class="nav" aria-label="ناوبری اصلی">
-        <a href="/" aria-current="page">خانه</a>
-        <a href="/books/list-books">کتاب‌ها</a>
-        <a href="#">همکاری</a>
-      </nav>
-
-      <!-- اکشن‌ها (دکمه‌های قابل‌دسترس) -->
-      <div class="nav-actions">
-        <button id="themeToggle" class="icon-btn" type="button" aria-label="تغییر حالت روشن/تاریک" title="تغییر حالت">
-          <img class="icon-sun" src="/icone/sun.svg" alt="روشن" width="20" height="20" loading="lazy">
-          <img class="icon-moon" src="/icone/moon.svg" alt="تاریک" width="20" height="20" loading="lazy">
-        </button>
-
-        <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" rel="noopener noreferrer"
-          aria-label="ریپوی GitHub" title="GitHub">
-          <img src="/icone/github.svg" alt="GitHub" width="20" height="20" loading="lazy">
-        </a>
-      </div>
-    </div>
+<body class="rtl-site">
+  <header>
+    <h2>کتاب لایف</h2>
   </header>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="container hero-inner">
-      <h1>ترجمه‌های فارسی کتاب‌های دات‌نت و <strong>سی شارپ</strong></h1>
-      <p class="lead">مجموعه‌ای یک‌دست، سبک و خوانا — مناسب مطالعهٔ آنلاین و ارجاع سریع.</p>
-      <div class="cta" role="group" aria-label="اقدام‌ها">
-        <a class="btn primary" href="/books/list-books">شروع مطالعه</a>
-        <a class="btn ghost" href="https://github.com/hheydarian/Gitab" target="_blank" rel="noopener noreferrer">سورس
-          در GitHub</a>
-      </div>
+  <main class="markdown-body">
+    <section class="hero">
+  <div class="hero-content">
+    <img src="/images/logo-parsketab.png" alt="کتاب لایف" class="hero-logo animate-slide-in" />
+    <h1 class="hero-title animate-fade-in">به <span class="highlight">کتاب لایف</span> خوش آمدید </h1>
+    <p class="hero-description animate-fade-in-delay">
+      در <strong>کتاب لایف</strong> ما با عشق به زبان پارسی، کتاب‌های تخصصی در زمینه <span class="dotnet">دات‌نت</span>،
+      <span class="csharp">سی‌شارپ</span> و فناوری‌های مایکروسافت را به زیبایی و دقت ترجمه می‌کنیم.
+    </p>
+    <div class="hero-buttons animate-slide-up">
+      <a href="/books/list-books" class="start-button">
+        <i class="fas fa-book-open"></i> کتاب ها
+      </a>
+      <a href="https://github.com/hheydarian/parsBook" class="github-button" target="_blank">
+        <i class="fab fa-github"></i> سورس کد
+      </a>
     </div>
-  </section>
+  </div>
+</section>
+<section class="features">
+  <div class="feature-box animate-fade-in">
+    <i class="fas fa-language"></i>
+    <h3>ترجمه حرفه‌ای و دقیق</h3>
+    <p>با حفظ ظرافت‌های زبانی و فنی، کتاب‌ها با کیفیت بالا ترجمه شده‌اند.</p>
+  </div>
+  <div class="feature-box animate-fade-in-delay">
+    <i class="fas fa-code"></i>
+    <h3>ویژه برنامه‌نویسان دات‌نت</h3>
+    <p>محتوا کاملاً مرتبط با دنیای .NET، C#، ASP.NET Core و تکنولوژی‌های روز مایکروسافت است.</p>
+  </div>
+  <div class="feature-box animate-fade-in-more">
+    <i class="fas fa-bullseye"></i>
+    <h3>هدف: یادگیری عمیق</h3>
+    <p>مناسب برای تمام برنامه‌نویسانی که می‌خواهند دانش فنی خود را تقویت کنند.</p>
+  </div>
+</section>
 
-  <!-- Books -->
-  <section class="books" aria-labelledby="books-title">
-    <div class="container">
-      <h2 id="books-title" class="visually-hidden">کتاب‌های شاخص</h2>
-      <div class="grid">
-        <article class="card">
-          <div class="card-body">
-            <h3>C# 12 in a Nutshell (Persian)</h3>
-            <p>خلاصه‌ای فنی از جدیدترین نسخهٔ سی شارپ با مثال‌های کاربردی.</p>
-          </div>
-          <div class="card-actions">
-            <a class="btn small" href="/books/list-books" aria-label="نمایش C# 12 in a Nutshell">نمایش</a>
-            <a class="btn small ghost" href="https://github.com/hheydarian/csharp-12-in-a-nutshell-persian"
-              target="_blank" rel="noopener noreferrer">ریپو</a>
-          </div>
-        </article>
+  </main>
 
-        <article class="card">
-          <div class="card-body">
-            <h3>Clean Code in C# (Persian)</h3>
-            <p>اصول کدنویسی تمیز در اکوسیستم دات‌نت با نمونه‌های عملی.</p>
-          </div>
-          <div class="card-actions">
-            <a class="btn small" href="/books/list-books" aria-label="نمایش Clean Code in C#">نمایش</a>
-            <a class="btn small ghost" href="https://github.com/hheydarian/clean-code-in-csharp-persian" target="_blank"
-              rel="noopener noreferrer">ریپو</a>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="card-body">
-            <h3>Task Programming in C#/.NET (Persian)</h3>
-            <p>درک عمیق از async/await و الگوهای موازی‌سازی مدرن.</p>
-          </div>
-          <div class="card-actions">
-            <a class="btn small" href="/books/list-books" aria-label="نمایش Task Programming in C#/.NET">نمایش</a>
-            <a class="btn small ghost" href="https://github.com/hheydarian/task-programming-in-csharp-dotnet-persian"
-              target="_blank" rel="noopener noreferrer">ریپو</a>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer (ارتفاع کمتر) -->
-  <footer class="footer" role="contentinfo">
-    <div class="container">
-      <p>
-        <img src="/icone/copyright.svg" alt="کپی‌رایت" width="20" height="20"
-          style="vertical-align:middle;margin-inline:4px">
-        <span id="y"></span> Gitab — برای توسعه‌دهندگان
-      </p>
-    </div>
+  <footer>
+    <p>ساخته شده با ❤️ توسط برنامه نویسان برای برنامه نویسان</p>
   </footer>
-
-  <!-- Structured Data (SEO) -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"WebSite",
-    "name":"Gitab",
-    "url":"https://hheydarian.github.io/Gitab/",
-    "inLanguage":"fa-IR",
-    "potentialAction":{
-      "@type":"SearchAction",
-      "target":"https://hheydarian.github.io/Gitab/books/list-books?q={query}",
-      "query-input":"required name=query"
-    }
-  }
-  </script>
-
-  <!-- Year + Theme toggle -->
-  <script>
-    // سال فوتر
-    document.getElementById('y').textContent = new Date().getFullYear();
-
-    // سوئیچ تم (هماهنگ با اسکریپت head)
-    (function ()
-    {
-      const root = document.documentElement;
-      const btn = document.getElementById('themeToggle');
-      const KEY = 'gitab-theme';
-      const prefersDark = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-      function apply(mode)
-      {
-        if (mode === 'auto')
-        {
-          root.setAttribute('data-theme', 'auto');
-          root.dataset.colorMode = prefersDark() ? 'dark' : 'light';
-        } else
-        {
-          root.setAttribute('data-theme', mode);
-          root.dataset.colorMode = mode;
-        }
-        btn.classList.toggle('is-dark', root.dataset.colorMode === 'dark');
-      }
-
-      const saved = localStorage.getItem(KEY) || 'auto';
-      apply(saved);
-
-      btn.addEventListener('click', () =>
-      {
-        const curr = localStorage.getItem(KEY) || 'auto';
-        const next = curr === 'auto' ? 'dark' : (curr === 'dark' ? 'light' : 'auto');
-        localStorage.setItem(KEY, next);
-        apply(next);
-      });
-
-      // تغییر تم سیستم در حالت auto
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () =>
-      {
-        if ((localStorage.getItem(KEY) || 'auto') === 'auto') apply('auto');
-      });
-    })();
-  </script>
 </body>
-
 </html>

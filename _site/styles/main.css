@@ -1,327 +1,354 @@
-/* ---------- فونت ---------- */
+/* font */
 @font-face {
-    font-family: "VazirFD";
-    src: url("/styles/fonts/Vazir-FD-WOL.ttf") format("truetype");
-    font-display: swap;
+    src: url(../fonts/Vazir-FD-WOL.woff) format(".woff");
+    src: url(../fonts/Vazir-FD-WOL.woff2) format(".woff2");
+    font-family: "Vazir FD-WOL";
 }
 
-/* ---------- پالت تیره + روشن ---------- */
-:root {
-    --font: "VazirFD", system-ui, -apple-system, Segoe UI, Roboto,
-        "Noto Sans Arabic", "Vazirmatn", sans-serif;
+@media (max-width: 480px) {
+    .book-image-wrapper {
+        height: 160px;
+    }
+    .rtl-site {
+        direction: rtl;
+        text-align: right;
+    }
 
-    --bg-0: #0a0b0e;
-    --bg-1: #101218;
-    --bg-2: #141823;
-    --text: #e8ecf3;
-    --muted: #a8b1c1;
-    --brand: #9b87f5;
-    --brand2: #5aa7ff;
-    --border: color-mix(in oklab, white 8%, transparent);
-
-    --radius-lg: 18px;
-    --radius-sm: 12px;
-    --shadow-1: 0 1px 0 color-mix(in oklab, white 4%, transparent) inset,
-        0 12px 28px rgba(0, 0, 0, 0.22);
-
-    color-scheme: dark;
-}
-html[data-theme="light"],
-html[data-theme="auto"][data-color-mode="light"] {
-    --bg-0: #ffffff;
-    --bg-1: #f6f8fb;
-    --bg-2: #ffffff;
-    --text: #0b0c0f;
-    --muted: #5f6b7b;
-    --brand: #6d5de6;
-    --brand2: #2563eb;
-    --border: color-mix(in oklab, black 12%, transparent);
-    color-scheme: light;
-}
-html[data-theme="dark"],
-html[data-theme="auto"][data-color-mode="dark"] {
-    color-scheme: dark;
-}
-
-/* ---------- پایه ---------- */
-* {
-    box-sizing: border-box;
-}
-html {
-    font-family: var(--font);
+    .rtl-site p,
+    .rtl-site h1,
+    .rtl-site h2,
+    .rtl-site h3,
+    .rtl-site li {
+        text-align: right;
+    }
 }
 body {
+    font-family: "Vazir FD-WOL", sans-serif;
+    direction: rtl;
+    background-color: #f8f8f8;
+    color: #333;
     margin: 0;
-    color: var(--text);
-    background: radial-gradient(
-            1100px 520px at 120% -10%,
-            color-mix(in oklab, var(--brand) 14%, transparent),
-            transparent 50%
-        ),
-        radial-gradient(
-            900px 480px at -10% 10%,
-            color-mix(in oklab, var(--brand2) 12%, transparent),
-            transparent 50%
-        ),
-        var(--bg-0);
-    line-height: 1.75;
 }
-a {
-    color: inherit;
-    text-decoration: none;
-}
-a:focus,
-button:focus {
-    outline: 2px solid color-mix(in oklab, var(--brand) 70%, transparent);
-    outline-offset: 2px;
-    border-radius: 10px;
-}
-.container {
-    max-width: 1180px;
-    margin: auto;
-    padding: 14px 16px;
-}
-
-/* کاهش حرکت برای کاربرانی که ترجیح می‌دهند */
-@media (prefers-reduced-motion: reduce) {
-    * {
-        transition: none !important;
-        animation: none !important;
-    }
-}
-
-/* ---------- هدر ---------- */
-.header {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    border-bottom: 1px solid var(--border);
-    background: color-mix(in oklab, var(--bg-0) 45%, transparent);
-    backdrop-filter: blur(14px) saturate(140%);
-}
-.nav-wrap {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    gap: 12px;
-}
-.brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 900;
-    letter-spacing: 0.2px;
-}
-.brand img {
-    display: block;
-}
-
-.nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 22px;
-    padding: 6px 12px;
-    border: 1px solid var(--border);
-    background: color-mix(in oklab, var(--bg-2) 70%, transparent);
-    border-radius: 999px;
-    box-shadow: 0 1px 0 color-mix(in oklab, white 4%, transparent) inset;
-}
-.nav a {
-    color: var(--muted);
-    font-weight: 700;
-    font-size: 0.96rem;
-    padding: 6px 10px;
-    border-radius: 10px;
-}
-.nav a[aria-current="page"] {
-    color: var(--text);
-}
-.nav a:hover {
-    color: var(--text);
-    background: color-mix(in oklab, var(--bg-1) 80%, transparent);
-}
-
-.nav-actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 10px;
-}
-.icon-btn {
-    width: 38px;
-    height: 38px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    background: linear-gradient(
-        180deg,
-        color-mix(in oklab, var(--bg-2) 85%, transparent),
-        color-mix(in oklab, var(--bg-1) 60%, transparent)
-    );
-    box-shadow: var(--shadow-1);
-    transition: transform 0.16s ease, box-shadow 0.2s ease, background 0.2s ease;
-    cursor: pointer;
-}
-.icon-btn:hover {
-    transform: translateY(-2px);
-}
-.icon-btn img {
-    filter: invert(90%) sepia(5%) saturate(200%) hue-rotate(180deg);
-    transition: filter 0.2s ease;
-}
-html[data-theme="light"] .icon-btn img,
-html[data-theme="auto"][data-color-mode="light"] .icon-btn img {
-    filter: invert(10%) sepia(20%) saturate(300%) hue-rotate(180deg);
-}
-.icon-moon {
-    display: none;
-}
-.icon-btn.is-dark .icon-sun {
-    display: none;
-}
-.icon-btn.is-dark .icon-moon {
-    display: inline;
-}
-
-/* ---------- هیرو ---------- */
-.hero {
-    padding: 80px 16px 54px;
-}
-.hero-inner {
+header,
+footer {
+    background: #512bd4;
+    color: white;
+    padding: 1rem;
     text-align: center;
 }
-.hero h1 {
-    margin: 0 0 10px;
-    font-size: clamp(26px, 4.5vw, 40px);
-    letter-spacing: 0.2px;
+main {
+    max-width: 1200px;
+    margin: auto;
+    padding: 2rem;
 }
-.lead {
-    color: var(--muted);
-    max-width: 62ch;
-    margin: 0 auto 22px;
+.book-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
 }
-.cta {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 10px;
+.book-card {
+    background: rgb(247, 247, 247);
+    padding: 2rem 0;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease;
 }
-.btn {
+.book-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(68, 68, 68, 0.2);
+}
+.book-card h3 {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+}
+.book-card a {
     display: inline-block;
-    border: 1px solid var(--border);
-    padding: 10px 18px;
+    background: #0078d4;
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    font-weight: 500;
+    transition: all 0.4s ease;
+}
+.book-card a:hover {
+    background: #0166b3;
+    color: rgb(0, 0, 0);
+}
+.book-card h3 {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+}
+.book-image-wrapper {
+    height: 300px; /* یا هر ارتفاع دلخواه مثل 240 یا 200 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.book-image-wrapper img {
+    max-height: 80%;
+    max-width: 100%;
+    object-fit: contain;
     border-radius: 12px;
-    font-weight: 800;
-    transition: 0.18s ease;
-    white-space: nowrap;
+    border: 2px solid #0078d4;
+    background: #fff;
+    padding: 8px;
 }
-.btn:hover {
-    transform: translateY(-2px);
-}
-.btn.primary {
-    background: linear-gradient(
-        180deg,
-        color-mix(in oklab, var(--brand) 86%, transparent),
-        color-mix(in oklab, var(--brand) 66%, transparent)
-    );
-    border-color: color-mix(in oklab, var(--brand) 80%, transparent);
+/* /////////////////////// */
+.start-reading-button {
+    display: inline-block;
+    margin-top: 1rem;
+    vertical-align: middle;
+    padding: 0.6rem 1.2rem;
+    background-color: #0078d4;
     color: #fff;
-    box-shadow: 0 10px 22px rgba(155, 135, 245, 0.22);
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
 }
-.btn.ghost {
-    background: transparent;
-    color: var(--text);
-}
-.btn.small {
-    padding: 7px 14px;
-    font-size: 0.9rem;
+.start-reading-button:hover {
+    background-color: #00bcf2;
+    color: #1e1e1e;
 }
 
-/* ---------- گرید کتاب‌ها ---------- */
-.books {
-    padding: 36px 16px 56px;
-} /* کمی کمتر برای تعادل با فوتر */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 18px;
-    align-items: stretch;
+.center-button {
+    text-align: center;
+    margin-top: 1rem;
 }
-.card {
-    grid-column: span 12;
+
+.center-button p {
+    margin-bottom: 1rem;
+}
+/* //////////////////////////////// */
+/* .chapter-list-page {
+    text-align: center;
+    padding: 2rem;
+}
+
+.chapter-list-page h1 {
+    font-size: 2rem;
+    color: #512bd4;
+    margin-bottom: 2rem;
+}
+
+.chapter-list {
+    list-style: none;
+    padding: 0;
     display: flex;
     flex-direction: column;
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border);
-    background: linear-gradient(
-        180deg,
-        color-mix(in oklab, var(--bg-2) 92%, transparent),
-        color-mix(in oklab, var(--bg-1) 70%, transparent)
-    );
-    padding: 18px;
-    position: relative;
-    box-shadow: var(--shadow-1);
-    isolation: isolate;
+    gap: 1rem;
+    max-width: 500px;
+    margin: 0 auto;
 }
-.card h3 {
-    margin: 0 0 6px;
-    font-size: 1.08rem;
+
+.chapter-list li a {
+    display: block;
+    padding: 1rem;
+    background-color: #ffffff;
+    color: #333;
+    border-radius: 10px;
+    text-decoration: none;
+    border: 2px solid #0078d4;
+    transition: all 0.3s ease;
+    font-weight: bold;
 }
-.card p {
-    margin: 0 0 12px;
-    color: var(--muted);
+
+.chapter-list li a:hover {
+    background-color: #0078d4;
+    color: white;
+} */
+
+.markdown-body {
+    direction: rtl;
+    text-align: right;
+    line-height: 2;
+    font-size: 1.1rem;
 }
-.card-body {
-    flex: 1 1 auto;
+/* //////////////////////// */
+/*  بلاک‌های کد  */
+pre,
+pre > code {
+    direction: ltr !important;
+    unicode-bidi: embed !important;
+    text-align: left !important;
+    background-color: #ebeaea8c;
+    border-radius: 8px;
+    font-size: 16px;
 }
-.card-actions {
-    margin-top: auto;
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
+/* /////////////////////// */
+.chapter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 2rem 0;
 }
-.card-actions .btn {
-    min-width: 100px;
+
+.chapter-card {
+    background-color: #f5f5f5;
+    padding: 1.2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
 }
-@media (min-width: 760px) {
-    .card {
-        grid-column: span 4;
+
+.chapter-card h3 {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.chapter-card a {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #0078d4;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.chapter-card a:hover {
+    background-color: #00bcf2;
+}
+
+.chapter-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.chapter-card.disabled {
+    opacity: 0.6;
+}
+
+.chapter-card.disabled a {
+    pointer-events: none;
+    background-color: gray;
+}
+/* ///////////////// */
+.hero {
+    text-align: center;
+    border-radius: 14px;
+    padding: 3rem 1rem;
+    background: linear-gradient(to top, #ffffff, #eef2f5);
+}
+
+.hero-logo {
+    width: 200px;
+    margin-bottom: 0.5rem;
+    border-radius: 14px;
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #222;
+}
+
+.hero-description {
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    color: #555;
+}
+
+.hero-buttons a {
+    display: inline-block;
+    margin: 0.5rem;
+    text-decoration: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    background: #0078d4;
+    color: white;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.hero-buttons a:hover {
+    background: #005a9e;
+}
+
+.features {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 3rem 1rem;
+    background: #f5f5f5;
+}
+
+.feature-box {
+    flex: 1 1 250px;
+    text-align: center;
+    padding: 1rem;
+    margin: 1rem;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.feature-box i {
+    font-size: 2rem;
+    color: #0078d4;
+    margin-bottom: 1rem;
+}
+
+/* انیمیشن‌ها */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
-/* ---------- فوتر (ارتفاع کمتر طبق خواسته) ---------- */
-.footer {
-    border-top: 1px solid var(--border);
-    color: var(--muted);
-    text-align: center;
-    padding: 10px 16px; /* قبلاً 16px بود؛ کمتر شد */
-    background: color-mix(in oklab, var(--bg-0) 70%, transparent);
-}
-.footer p {
-    margin: 0;
-} /* حذف فضای اضافی متن */
-.footer img {
-    vertical-align: middle;
-    filter: invert(90%) sepia(5%) saturate(200%) hue-rotate(180deg);
-}
-html[data-theme="light"] .footer img,
-html[data-theme="auto"][data-color-mode="light"] .footer img {
-    filter: invert(10%) sepia(20%) saturate(300%) hue-rotate(180deg);
+.animate-fade-in {
+    animation: fadeIn 1s ease-out;
 }
 
-/* ---------- دسترسی کمکی ---------- */
-.visually-hidden {
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    padding: 0 !important;
-    margin: -1px !important;
-    overflow: hidden !important;
-    clip: rect(0 0 0 0) !important;
-    white-space: nowrap !important;
-    border: 0 !important;
+.animate-fade-in-delay {
+    animation: fadeIn 1.5s ease-out;
 }
+
+.animate-fade-in-more {
+    animation: fadeIn 2s ease-out;
+}
+
+.animate-slide-in {
+    animation: slideIn 1s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-slide-up {
+    animation: slideInUp 1s ease-out;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* ////////////////////////// */
