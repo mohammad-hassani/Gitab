@@ -348,3 +348,143 @@ html[data-theme="auto"][data-color-mode="light"] .footer img {
     white-space: nowrap !important;
     border: 0 !important;
 }
+/* ///////////////////
+ */
+
+/* هدر داخلی صفحه لیست */
+.page-header {
+    padding: 32px 16px 12px;
+    text-align: center;
+}
+.page-header h1 {
+    margin: 0 0 8px;
+    font-size: clamp(22px, 4vw, 30px);
+}
+.page-header p {
+    margin: 0 auto;
+    color: var(--muted);
+    max-width: 60ch;
+}
+
+/* ظرف لیست کتاب‌ها */
+.books-list {
+    padding: 20px 16px 70px;
+}
+.books-list .grid {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 18px;
+    align-items: stretch;
+}
+
+/* کارت کتاب‌: هم‌استایل با کارت‌های صفحه اصلی */
+.book-card {
+    grid-column: span 12;
+    background: linear-gradient(
+        180deg,
+        color-mix(in oklab, var(--bg-2) 92%, transparent),
+        color-mix(in oklab, var(--bg-1) 72%, transparent)
+    );
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: 0 1px 0 color-mix(in oklab, #fff 4%, transparent) inset,
+        0 12px 28px rgba(0, 0, 0, 0.22);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* کاور کتاب */
+/* کاور پیش‌فرض: پرکننده و مدرن */
+.book-card .cover {
+    position: relative;
+    background: var(--bg-1);
+    aspect-ratio: 4 / 3; /* می‌تونی 3/4 هم امتحان کنی */
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+}
+.book-card .cover img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* پیش‌فرض: کراپ زیبا */
+    filter: none !important;
+}
+
+/* حالت نمایش کامل (contain) برای کتاب‌هایی که بنرشان افقی/عمودی عجیبه */
+.book-card[data-fit="contain"] .cover {
+    display: grid;
+    place-items: center;
+    background: radial-gradient(
+            120% 120% at 50% 0%,
+            color-mix(in oklab, var(--brand) 8%, transparent),
+            transparent 40%
+        ),
+        var(--bg-1);
+}
+.book-card[data-fit="contain"] .cover img {
+    position: static;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* بدون کراپ */
+}
+
+/* قاب زیباتر برای تصویر کامل: هاله و سایه لطیف */
+.book-card[data-fit="contain"] .cover::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        transparent,
+        color-mix(in oklab, var(--bg-1) 30%, transparent)
+    );
+    pointer-events: none;
+}
+
+/* بدنه و دکمه‌ها */
+.book-card .body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+}
+.book-card h3 {
+    margin: 0 0 6px;
+    font-size: 1.02rem;
+}
+.book-card p {
+    margin: 0 0 12px;
+    color: var(--muted);
+}
+.book-card .actions {
+    margin-top: auto;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.book-card .btn {
+    min-width: 100px;
+    text-align: center;
+}
+.book-card .btn.muted {
+    color: var(--muted);
+    border: 1px dashed var(--border);
+    cursor: default;
+}
+
+/* سه ستونه روی دسکتاپ */
+@media (min-width: 760px) {
+    .book-card {
+        grid-column: span 4;
+    }
+}
+
+/* فقط برای بعضی کارت‌ها (جلدهای عمودی که زیاد بالا رفته‌اند) */
+.book-card.shift-down .cover img {
+    object-position: center 20%; /* عدد کمتر = پایین‌تر */
+}
