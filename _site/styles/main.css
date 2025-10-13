@@ -806,3 +806,22 @@ html[data-theme="auto"][data-color-mode="light"] .footer img {
 .book-chapters li a:hover {
     color: color-mix(in oklab, var(--brand) 70%, white);
 }
+
+.chapter-box {
+    display: inline-block;
+    min-width: 26px;
+    text-align: center;
+    font-size: 0.85rem;
+    background: color-mix(in oklab, var(--bg-2) 85%, var(--brand) 10%);
+    border-radius: 6px;
+    padding: 2px 6px;
+    margin-left: 8px;
+    color: var(--text);
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    transition: background 0.3s ease, transform 0.15s ease;
+}
+a:hover .chapter-box {
+    background: color-mix(in oklab, var(--brand) 40%, var(--bg-2) 60%);
+    transform: translateY(-2px);
+}
