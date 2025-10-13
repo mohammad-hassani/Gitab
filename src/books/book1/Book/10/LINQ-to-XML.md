@@ -1,3 +1,7 @@
+---
+layout: layout.njk
+title: LINQ to XML
+---
 # فصل دهم:  LINQ to XML
 
 .NET تعداد زیادی API برای کار با داده‌های XML فراهم می‌کند. انتخاب اصلی برای پردازش عمومی اسناد XML، **LINQ to XML** است.

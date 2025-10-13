@@ -1,3 +1,7 @@
+---
+layout: layout.njk
+title: Regular Expressions
+---
 # فصل بیست و پنجم: Regular Expressions
 
 زبان **Regular Expressions** الگوهای کاراکتری را شناسایی می‌کند. تایپ‌های .NET که از Regular Expressions پشتیبانی می‌کنند، بر اساس **Perl 5 Regular Expressions** ساخته شده‌اند و هم قابلیت جستجو (**search**) و هم جستجو/جایگزینی (**search/replace**) را پشتیبانی می‌کنند.

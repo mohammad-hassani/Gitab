@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gitab | کتابخانهٔ ترجمه‌های دات‌نت و سی شارپ</title>
+  <title>مبانی زبان سی‌شارپ</title>
   <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
   <link rel="stylesheet" href="/styles/main.css">
 <link rel="stylesheet"
@@ -548,7 +548,7 @@ LocalMethod();
 </code></pre>
 <p>📌 شکل ۲-۱. نمونه‌ای از یک نوع مقداری در حافظه</p>
 <div align="center">
-<p><img src="../../../../assets/image/02/Figure-2-1.png" alt="Conventions-UsedThis-Book"></p>
+<p><img src="../../../assets/image/02/Figure-2-1.png" alt="Conventions-UsedThis-Book"></p>
 </div>
 <p>وقتی یک نمونه از نوع مقداری را به متغیری دیگر انتساب می‌دهید، کل داده کپی می‌شود، نه فقط یک اشاره‌گر. مثال:</p>
 <pre class="hljs"><code>Point p1 = <span class="hljs-keyword">new</span> Point();
@@ -800,15 +800,17 @@ Console.WriteLine(<span class="hljs-number">0x100000000</span>.GetType());  <spa
 <p>عملگرهای حسابی در C# برای همه نوع‌های عددی به جز نوع‌های صحیح 8 و 16 بیتی تعریف شده‌اند:</p>
 <p>عملگر توضیح</p>
 <ul>
-<li>➕ جمع (Addition)</li>
-</ul>
-<ul>
-<li>➖ تفریق (Subtraction)</li>
-</ul>
-<ul>
-<li>✖️ ضرب (Multiplication)<br>
+<li>
+<p>➕ جمع (Addition)</p>
+</li>
+<li>
+<p>➖ تفریق (Subtraction)</p>
+</li>
+<li>
+<p>✖️ ضرب (Multiplication)<br>
 / ➗ تقسیم (Division)<br>
-% باقیمانده بعد از تقسیم (Remainder)</li>
+% باقیمانده بعد از تقسیم (Remainder)</p>
+</li>
 </ul>
 <h3>عملگرهای افزایش و کاهش (Increment &amp; Decrement Operators) ⬆️⬇️</h3>
 <p>عملگر ++ مقدار متغیر را ۱ واحد افزایش و عملگر -- مقدار را ۱ واحد کاهش می‌دهد.<br>
@@ -824,9 +826,9 @@ Console.WriteLine(++y); <span class="hljs-comment">// خروجی: 1  → y قب�
 int, uint, long, ulong, short, ushort, byte, sbyte</p>
 <h4>تقسیم (Division) ➗</h4>
 <ul>
-<li>در نوع‌های صحیح، نتیجه تقسیم همیشه بخش اعشاری را حذف می‌کند (گرد کردن به صفر).</li>
-</ul>
-<ul>
+<li>
+<p>در نوع‌های صحیح، نتیجه تقسیم همیشه بخش اعشاری را حذف می‌کند (گرد کردن به صفر).</p>
+</li>
 <li>
 <p>تقسیم بر ۰ در زمان اجرا (runtime) باعث خطا (DivideByZeroException) می‌شود.</p>
 </li>

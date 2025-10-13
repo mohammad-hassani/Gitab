@@ -1,3 +1,7 @@
+---
+layout: layout.njk
+title: مدیریت Disposal و Garbage Collection
+---
 # فصل دوازدهم: مدیریت Disposal و Garbage Collection
 
 برخی از اشیاء نیازمند کدهای مخصوص برای **جمع‌کردن (tear-down)** هستند تا منابعی مثل فایل‌های باز، قفل‌ها (locks)، هندل‌های سیستم‌عامل و اشیاء **unmanaged** آزاد بشن. در اصطلاح دات‌نت، به این کار **Disposal** گفته می‌شه و از طریق اینترفیس **IDisposable** پشتیبانی می‌شه.

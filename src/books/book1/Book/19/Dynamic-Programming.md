@@ -1,3 +1,7 @@
+---
+layout: layout.njk
+title: برنامه‌نویسی پویا (Dynamic Programming)
+---
 # فصل نوزدهم:  برنامه‌نویسی پویا (Dynamic Programming)
 
 فصل ۴ توضیح داد که **dynamic binding** در زبان C# چگونه کار می‌کند.
