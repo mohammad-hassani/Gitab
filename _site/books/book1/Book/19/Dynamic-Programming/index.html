@@ -38,7 +38,574 @@
 
   <!-- محتوای صفحه -->
   <main class="site-main">
-    
+    <h1>فصل نوزدهم:  برنامه‌نویسی پویا (Dynamic Programming)</h1>
+<p>فصل ۴ توضیح داد که <strong>dynamic binding</strong> در زبان C# چگونه کار می‌کند.
+در این فصل، ابتدا به‌طور مختصر به <strong>Dynamic Language Runtime (DLR)</strong> می‌پردازیم و سپس الگوهای زیر در برنامه‌نویسی پویا را بررسی می‌کنیم:</p>
+<ul>
+<li><strong>Dynamic member overload resolution</strong></li>
+<li><strong>Custom binding (implementing dynamic objects)</strong></li>
+<li><strong>Dynamic language interoperability</strong></li>
+</ul>
+<p>در فصل ۲۴، توضیح می‌دهیم که <strong>dynamic</strong> چگونه می‌تواند <strong>COM interoperability</strong> را بهبود دهد.</p>
+<p>انواع (types) معرفی‌شده در این فصل، در <strong>System.Dynamic namespace</strong> قرار دارند، به‌جز <strong>CallSite&lt;&gt;</strong> که در <strong>System.Runtime.CompilerServices</strong> تعریف شده است.</p>
+<hr>
+<h3>🌀 Dynamic Language Runtime</h3>
+<p>زبان C# برای انجام <strong>dynamic binding</strong> به <strong>DLR</strong> متکی است.</p>
+<p>برخلاف نامش، <strong>DLR</strong> یک نسخه‌ی پویا از <strong>CLR</strong> نیست. بلکه یک <strong>کتابخانه (library)</strong> است که روی <strong>CLR</strong> قرار می‌گیرد—دقیقاً مانند هر کتابخانه‌ی دیگری مثل <strong>System.Xml.dll</strong>.</p>
+<p>وظیفه‌ی اصلی DLR ارائه‌ی سرویس‌های زمان اجرا (runtime services) برای یکپارچه‌سازی برنامه‌نویسی پویا—چه در زبان‌های <strong>statically typed</strong> و چه <strong>dynamically typed</strong>—است. بنابراین، زبان‌هایی مانند:</p>
+<ul>
+<li>C#</li>
+<li>Visual Basic</li>
+<li>IronPython</li>
+<li>IronRuby</li>
+</ul>
+<p>همگی از یک پروتکل یکسان برای <strong>dynamic function calls</strong> استفاده می‌کنند. این موضوع باعث می‌شود آن‌ها بتوانند کتابخانه‌ها را به اشتراک بگذارند و کدی را که به زبان دیگری نوشته شده اجرا کنند.</p>
+<p>DLR همچنین نوشتن زبان‌های پویا جدید در <strong>.NET</strong> را نسبتاً آسان می‌کند. به‌جای آنکه نویسندگان زبان مجبور باشند مستقیم <strong>Intermediate Language (IL)</strong> تولید کنند، می‌توانند در سطح <strong>expression trees</strong> کار کنند (همان <strong>expression trees</strong> موجود در <strong>System.Linq.Expressions</strong> که در فصل ۸ درباره‌شان صحبت کردیم).</p>
+<p>علاوه بر این، DLR تضمین می‌کند که همه‌ی مصرف‌کنندگان از مزیت <strong>call-site caching</strong> بهره‌مند شوند؛ یک بهینه‌سازی که از تکرار غیرضروری تصمیمات پرهزینه‌ی <strong>member resolution</strong> در طول dynamic binding جلوگیری می‌کند.</p>
+<hr>
+<h3>❓ Call Site چیست؟</h3>
+<p>وقتی کامپایلر با یک <strong>dynamic expression</strong> روبه‌رو می‌شود، نمی‌داند چه کسی آن عبارت را در زمان اجرا ارزیابی خواهد کرد.</p>
+<p>مثلاً متد زیر را در نظر بگیرید:</p>
+<pre><code class="language-csharp">public dynamic Foo (dynamic x, dynamic y)
+{
+  return x / y;   // Dynamic expression
+}
+</code></pre>
+<p>متغیرهای <code>x</code> و <code>y</code> می‌توانند هر چیزی باشند:</p>
+<ul>
+<li>یک شیء <strong>CLR</strong></li>
+<li>یک شیء <strong>COM</strong></li>
+<li>یا حتی یک شیء در یک زبان پویا</li>
+</ul>
+<p>به همین دلیل، کامپایلر نمی‌تواند از روش معمول استاتیک خود (یعنی صدا زدن یک متد مشخص از یک نوع مشخص) استفاده کند.
+در عوض، کامپایلر کدی تولید می‌کند که در نهایت یک <strong>expression tree</strong> می‌سازد؛ این <strong>expression tree</strong> عملیاتی را توصیف می‌کند که توسط یک <strong>call site</strong> مدیریت می‌شود و <strong>DLR</strong> آن را در زمان اجرا bind می‌کند.
+درواقع، <strong>call site</strong> مانند یک واسطه (intermediary) بین <strong>caller</strong> و <strong>callee</strong> عمل می‌کند.</p>
+<p>یک <strong>call site</strong> توسط کلاس <strong>CallSite&lt;&gt;</strong> در <strong>System.Core.dll</strong> نمایش داده می‌شود.
+با <strong>disassemble</strong> کردن متد قبلی، نتیجه تقریباً به‌شکل زیر خواهد بود:</p>
+<pre><code class="language-csharp">static CallSite&lt;Func&lt;CallSite,object,object,object&gt;&gt; divideSite;
+
+[return: Dynamic]
+public object Foo ([Dynamic] object x, [Dynamic] object y)
+{
+  if (divideSite == null)
+    divideSite =
+      CallSite&lt;Func&lt;CallSite,object,object,object&gt;&gt;.Create (
+        Microsoft.CSharp.RuntimeBinder.Binder.BinaryOperation (
+          CSharpBinderFlags.None,
+          ExpressionType.Divide,
+          /* Remaining arguments omitted for brevity */ ));
+
+  return divideSite.Target (divideSite, x, y);
+}
+</code></pre>
+<p>همان‌طور که می‌بینید، <strong>call site</strong> در یک <strong>static field</strong> ذخیره می‌شود تا هزینه‌ی ساخت مجدد آن در هر بار فراخوانی اجتناب شود.
+همچنین، DLR نتیجه‌ی <strong>binding phase</strong> و <strong>method targets</strong> واقعی را cache می‌کند. (ممکن است چندین target بسته به نوع‌های <code>x</code> و <code>y</code> وجود داشته باشد.)</p>
+<p>فراخوانی پویا (dynamic call) در عمل با صدا زدن <strong>Target</strong> (که یک <strong>delegate</strong> است) انجام می‌شود و عملوندهای <code>x</code> و <code>y</code> به آن پاس داده می‌شوند.</p>
+<p>نکته‌ی مهم: کلاس <strong>Binder</strong> مخصوص هر زبان است.
+هر زبانی که از <strong>dynamic binding</strong> پشتیبانی می‌کند، یک <strong>language-specific binder</strong> دارد تا به DLR کمک کند عبارات را مطابق منطق آن زبان تفسیر کند و رفتار غیرمنتظره برای برنامه‌نویس ایجاد نشود.</p>
+<p>مثلاً اگر متد <code>Foo</code> را با مقادیر عددی <code>5</code> و <code>2</code> صدا بزنیم:</p>
+<ul>
+<li><strong>C# binder</strong> نتیجه‌ی <code>2</code> را برمی‌گرداند.</li>
+<li>اما <strong>VB.NET binder</strong> نتیجه‌ی <code>2.5</code> را خواهد داد.</li>
+</ul>
+<hr>
+<h3>⚡ Dynamic Member Overload Resolution</h3>
+<p>فراخوانی یک متد <strong>statically known</strong> با آرگومان‌های <strong>dynamically typed</strong> باعث می‌شود که <strong>member overload resolution</strong> از زمان کامپایل به زمان اجرا منتقل شود.</p>
+<p>این ویژگی برای ساده‌سازی برخی وظایف برنامه‌نویسی مفید است—مثل ساده‌تر کردن <strong>Visitor design pattern</strong>.
+همچنین در دور زدن محدودیت‌های اعمال‌شده توسط <strong>static typing</strong> در C# بسیار کاربرد دارد.</p>
+<h3>🎯 ساده‌سازی الگوی Visitor</h3>
+<p>به‌طور خلاصه، <strong>Visitor pattern</strong> این امکان را می‌دهد که بدون تغییر در کلاس‌های موجود، یک متد به یک سلسله‌مراتب کلاسی (class hierarchy) “اضافه” کنید.</p>
+<p>اگرچه این الگو مفید است، اما نسخه‌ی <strong>استاتیک</strong> آن در مقایسه با بسیاری از الگوهای طراحی دیگر، ظریف و غیرمستقیم است. همچنین، این الگو نیاز دارد که کلاس‌هایی که قرار است بازدید شوند، “visitor-friendly” باشند؛ یعنی یک متد <strong>Accept</strong> را در اختیار قرار دهند. این موضوع زمانی غیرممکن است که کلاس‌ها تحت کنترل شما نباشند.</p>
+<p>با استفاده از <strong>dynamic binding</strong> می‌توانید به همان هدف دست پیدا کنید—اما بسیار ساده‌تر و بدون نیاز به تغییر کلاس‌های موجود.</p>
+<p>برای روشن شدن موضوع، به سلسله‌مراتب کلاس زیر دقت کنید:</p>
+<pre><code class="language-csharp">class Person
+{
+  public string FirstName { get; set; }
+  public string LastName  { get; set; }
+  // مجموعه Friends می‌تواند شامل Customers و Employees باشد:
+  public readonly IList&lt;Person&gt; Friends = new Collection&lt;Person&gt; ();
+}
+
+class Customer : Person { public decimal CreditLimit { get; set; } }
+
+class Employee : Person { public decimal Salary { get; set; } }
+</code></pre>
+<p>فرض کنید می‌خواهیم متدی بنویسیم که جزئیات یک <strong>Person</strong> را به‌صورت برنامه‌نویسی به یک <strong>XElement</strong> در XML صادر کند.
+واضح‌ترین راه این است که در کلاس <strong>Person</strong> یک متد مجازی (virtual) به نام <strong>ToXElement()</strong> تعریف کنیم که یک <strong>XElement</strong> شامل propertyهای یک <strong>Person</strong> برگرداند.
+سپس در کلاس‌های <strong>Customer</strong> و <strong>Employee</strong> آن را override کنیم تا <strong>XElement</strong> به ترتیب شامل <strong>CreditLimit</strong> و <strong>Salary</strong> هم باشد.</p>
+<p>اما این الگو می‌تواند از دو جهت مشکل‌ساز باشد:</p>
+<ol>
+<li>ممکن است مالک کلاس‌های <strong>Person</strong>، <strong>Customer</strong> و <strong>Employee</strong> نباشید و بنابراین نتوانید به آن‌ها متدی اضافه کنید. (و extension methodها هم رفتار polymorphic ارائه نمی‌دهند.)</li>
+<li>کلاس‌های <strong>Person</strong>، <strong>Customer</strong> و <strong>Employee</strong> ممکن است همین حالا هم خیلی بزرگ باشند. یک <strong>antipattern</strong> رایج، <strong>God Object</strong> است؛ جایی که یک کلاسی مثل <strong>Person</strong> آنقدر عملکردهای مختلف به خود می‌گیرد که نگهداری آن کابوس‌وار می‌شود. یک راه‌حل خوب این است که از افزودن توابعی به <strong>Person</strong> که نیازی به دسترسی به وضعیت خصوصی آن ندارند، پرهیز کنیم. متد <strong>ToXElement</strong> می‌تواند یک کاندید عالی برای بیرون کشیده شدن باشد.</li>
+</ol>
+<p>با استفاده از <strong>dynamic member overload resolution</strong> می‌توانیم قابلیت <strong>ToXElement</strong> را در یک کلاس جداگانه پیاده‌سازی کنیم، بدون آنکه مجبور شویم از switchهای زشت بر اساس نوع استفاده کنیم:</p>
+<pre><code class="language-csharp">class ToXElementPersonVisitor
+{
+  public XElement DynamicVisit (Person p) =&gt; Visit ((dynamic)p);
+
+  XElement Visit (Person p)
+  {
+    return new XElement (&quot;Person&quot;,
+      new XAttribute (&quot;Type&quot;, p.GetType().Name),
+      new XElement (&quot;FirstName&quot;, p.FirstName),
+      new XElement (&quot;LastName&quot;, p.LastName),
+      p.Friends.Select (f =&gt; DynamicVisit (f))
+    );
+  }
+
+  XElement Visit (Customer c)   // منطق اختصاصی برای Customer
+  {
+    XElement xe = Visit ((Person)c);   // صدا زدن متد &quot;base&quot;
+    xe.Add (new XElement (&quot;CreditLimit&quot;, c.CreditLimit));
+    return xe;
+  }
+
+  XElement Visit (Employee e)   // منطق اختصاصی برای Employee
+  {
+    XElement xe = Visit ((Person)e);   // صدا زدن متد &quot;base&quot;
+    xe.Add (new XElement (&quot;Salary&quot;, e.Salary));
+    return xe;
+  }
+}
+</code></pre>
+<p>متد <strong>DynamicVisit</strong> یک <strong>dynamic dispatch</strong> انجام می‌دهد—یعنی در زمان اجرا، دقیق‌ترین نسخه‌ی متد <strong>Visit</strong> را فراخوانی می‌کند.</p>
+<p>به خطی که در آن متد <strong>DynamicVisit</strong> روی هر <strong>Person</strong> در مجموعه‌ی <strong>Friends</strong> صدا زده می‌شود توجه کنید. این تضمین می‌کند که اگر یک دوست از نوع <strong>Customer</strong> یا <strong>Employee</strong> باشد، overload صحیح فراخوانی شود.</p>
+<hr>
+<h3>📌 مثال اجرا</h3>
+<pre><code class="language-csharp">var cust = new Customer
+{
+  FirstName = &quot;Joe&quot;, LastName = &quot;Bloggs&quot;, CreditLimit = 123
+};
+
+cust.Friends.Add (
+  new Employee { FirstName = &quot;Sue&quot;, LastName = &quot;Brown&quot;, Salary = 50000 }
+);
+
+Console.WriteLine (new ToXElementPersonVisitor().DynamicVisit (cust));
+</code></pre>
+<hr>
+<h3>📤 خروجی</h3>
+<pre><code class="language-xml">&lt;Person Type=&quot;Customer&quot;&gt;
+  &lt;FirstName&gt;Joe&lt;/FirstName&gt;
+  &lt;LastName&gt;Bloggs&lt;/LastName&gt;
+  &lt;Person Type=&quot;Employee&quot;&gt;
+    &lt;FirstName&gt;Sue&lt;/FirstName&gt;
+    &lt;LastName&gt;Brown&lt;/LastName&gt;
+    &lt;Salary&gt;50000&lt;/Salary&gt;
+  &lt;/Person&gt;
+  &lt;CreditLimit&gt;123&lt;/CreditLimit&gt;
+&lt;/Person&gt;
+</code></pre>
+<h3>🔀 گونه‌ها (Variations)</h3>
+<p>اگر قصد داشته باشید بیش از یک کلاس Visitor بنویسید، یک تغییر مفید این است که یک کلاس پایه‌ی انتزاعی (<strong>abstract base class</strong>) برای Visitorها تعریف کنید:</p>
+<pre><code class="language-csharp">abstract class PersonVisitor&lt;T&gt;
+{
+  public T DynamicVisit (Person p) { return Visit ((dynamic)p); }
+
+  protected abstract T Visit (Person p);
+  protected virtual T Visit (Customer c) { return Visit ((Person) c); }
+  protected virtual T Visit (Employee e) { return Visit ((Person) e); }
+}
+</code></pre>
+<p>در این حالت، کلاس‌های فرزند نیازی ندارند که متد <strong>DynamicVisit</strong> خودشان را تعریف کنند؛ تنها کاری که باید انجام دهند این است که نسخه‌های <strong>Visit</strong> را که می‌خواهند منطق اختصاصی برایشان بنویسند، override کنند.</p>
+<p>این روش دو مزیت دارد:</p>
+<ol>
+<li>متمرکز کردن متدهایی که سلسله‌مراتب <strong>Person</strong> را در بر می‌گیرند.</li>
+<li>اجازه دادن به پیاده‌سازان برای صدا زدن متدهای پایه (base methods) به شکلی طبیعی‌تر.</li>
+</ol>
+<p>نمونه:</p>
+<pre><code class="language-csharp">class ToXElementPersonVisitor : PersonVisitor&lt;XElement&gt;
+{
+  protected override XElement Visit (Person p)
+  {
+    return new XElement (&quot;Person&quot;,
+      new XAttribute (&quot;Type&quot;, p.GetType().Name),
+      new XElement (&quot;FirstName&quot;, p.FirstName),
+      new XElement (&quot;LastName&quot;, p.LastName),
+      p.Friends.Select (f =&gt; DynamicVisit (f))
+    );
+  }
+
+  protected override XElement Visit (Customer c)
+  {
+    XElement xe = base.Visit (c);
+    xe.Add (new XElement (&quot;CreditLimit&quot;, c.CreditLimit));
+    return xe;
+  }
+
+  protected override XElement Visit (Employee e)
+  {
+    XElement xe = base.Visit (e);
+    xe.Add (new XElement (&quot;Salary&quot;, e.Salary));
+    return xe;
+  }
+}
+</code></pre>
+<p>حتی می‌توانید از روی <strong>ToXElementPersonVisitor</strong> هم کلاس فرزند بسازید.</p>
+<hr>
+<h3>📌 صدا زدن ناشناس اعضای یک نوع Generic</h3>
+<p>سخت‌گیری <strong>static typing</strong> در C# یک شمشیر دو لبه است:</p>
+<ul>
+<li>از یک طرف در زمان کامپایل میزان مشخصی از صحت را تضمین می‌کند.</li>
+<li>از طرف دیگر، گاهی اوقات نوشتن برخی از انواع کد را دشوار یا غیرممکن می‌سازد، و در این مواقع باید از <strong>reflection</strong> استفاده کنید.</li>
+</ul>
+<p>در چنین شرایطی، <strong>dynamic binding</strong> یک جایگزین تمیزتر و سریع‌تر از reflection است.</p>
+<p>مثال: وقتی نیاز دارید با یک شیء از نوع <code>G&lt;T&gt;</code> کار کنید در حالی که نوع <code>T</code> ناشناخته است.</p>
+<pre><code class="language-csharp">public class Foo&lt;T&gt; { public T Value; }
+</code></pre>
+<p>فرض کنید متدی به شکل زیر داریم:</p>
+<pre><code class="language-csharp">static void Write (object obj)
+{
+  if (obj is Foo&lt;&gt;)                           // Illegal
+    Console.WriteLine ((Foo&lt;&gt;) obj).Value);   // Illegal
+}
+</code></pre>
+<p>این کد کامپایل نمی‌شود: چون نمی‌توانید اعضای یک نوع generic غیرمتحد (unbound) را فراخوانی کنید.</p>
+<hr>
+<h3>✨ راه‌حل با dynamic binding</h3>
+<p>راه اول این است که <strong>Value</strong> را به‌صورت پویا (dynamic) صدا بزنید:</p>
+<pre><code class="language-csharp">static void Write (dynamic obj)
+{
+  try { Console.WriteLine (obj.Value); }
+  catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException) {...}
+}
+</code></pre>
+<hr>
+<h3>🐾 Multiple Dispatch</h3>
+<p>زبان C# و CLR همیشه یک شکل محدود از پویایی را با <strong>virtual method calls</strong> پشتیبانی کرده‌اند.
+تفاوت آن با <strong>dynamic binding</strong> در این است که در <strong>virtual calls</strong>، کامپایلر باید در زمان کامپایل متعهد شود که کدام عضو مجازی صدا زده خواهد شد (بر اساس نام و امضای متدی که فراخوانی شده است).</p>
+<p>به این معنی که:</p>
+<ul>
+<li>عبارت فراخوانی باید کاملاً توسط کامپایلر درک شود (مثلاً باید در زمان کامپایل مشخص شود که آیا یک عضو هدف یک <strong>field</strong> است یا یک <strong>property</strong>).</li>
+<li><strong>Overload resolution</strong> باید کاملاً توسط کامپایلر و بر اساس نوع‌های زمان کامپایل آرگومان‌ها انجام شود.</li>
+</ul>
+<p>مثال:</p>
+<pre><code class="language-csharp">animal.Walk (owner);
+</code></pre>
+<p>نتیجه: توانایی انجام <strong>virtual calls</strong> به نام <strong>single dispatch</strong> شناخته می‌شود. چرا؟</p>
+<p>چون تصمیم زمان اجرا برای اینکه متد <strong>Walk</strong> سگ صدا زده شود یا متد <strong>Walk</strong> گربه، فقط به نوع دریافت‌کننده (<strong>receiver type</strong>)، یعنی <code>animal</code> بستگی دارد (به همین دلیل &quot;single&quot;).</p>
+<p>اگر چندین overload از <strong>Walk</strong> وجود داشته باشد که انواع مختلفی از <code>owner</code> را بپذیرند، انتخاب آن‌ها در زمان کامپایل و بدون توجه به نوع واقعی <code>owner</code> انجام می‌شود.</p>
+<hr>
+<h3>💡 Dynamic Multiple Dispatch</h3>
+<p>در مقابل، یک فراخوانی پویا (dynamic call) انتخاب overload را تا زمان اجرا به تأخیر می‌اندازد:</p>
+<pre><code class="language-csharp">animal.Walk ((dynamic) owner);
+</code></pre>
+<p>این بار انتخاب نهایی اینکه کدام متد <strong>Walk</strong> فراخوانی شود به نوع‌های هر دو یعنی <code>animal</code> و <code>owner</code> بستگی دارد.
+به همین دلیل به آن <strong>multiple dispatch</strong> می‌گویند: چون نوع‌های زمان اجرا (<strong>runtime types</strong>) آرگومان‌ها علاوه بر <strong>receiver type</strong>، در تصمیم‌گیری دخالت دارند.</p>
+<hr>
+<h3>⚠️ مشکلات و راه‌حل بهتر</h3>
+<p>روش قبلی این مزیت را دارد که با هر شیئی که یک <strong>Value field</strong> یا <strong>Value property</strong> داشته باشد کار می‌کند.
+اما مشکلاتی هم دارد:</p>
+<ol>
+<li>
+<p>گرفتن <strong>exception</strong> در این روش شلوغ و ناکارآمد است (و هیچ راهی نیست که از قبل از DLR بپرسیم &quot;آیا این عملیات موفق خواهد شد؟&quot;).</p>
+</li>
+<li>
+<p>اگر <strong>Foo</strong> یک <strong>interface</strong> مثل <code>IFoo&lt;T&gt;</code> باشد و یکی از شرایط زیر برقرار باشد، این روش کار نمی‌کند:</p>
+<ul>
+<li><strong>Value</strong> به‌صورت <strong>explicitly implemented</strong> تعریف شده باشد.</li>
+<li>نوعی که <strong>IFoo<T></strong> را پیاده‌سازی کرده، غیرقابل دسترسی باشد.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3>✅ راه‌حل بهتر: متد کمکی overload شده</h3>
+<pre><code class="language-csharp">static void Write (dynamic obj)
+{
+  object result = GetFooValue (obj);
+  if (result != null) Console.WriteLine (result);
+}
+
+static T GetFooValue&lt;T&gt; (Foo&lt;T&gt; foo) =&gt; foo.Value;
+static object GetFooValue (object foo) =&gt; null;
+</code></pre>
+<p>اینجا ما متد <strong>GetFooValue</strong> را overload کردیم تا یک پارامتر از نوع <code>object</code> هم بگیرد، که نقش fallback را دارد.</p>
+<p>در زمان اجرا، <strong>C# dynamic binder</strong> بهترین overload را انتخاب می‌کند. اگر شیء داده‌شده از نوع <code>Foo&lt;T&gt;</code> نباشد، نسخه‌ی <strong>object-parameter</strong> انتخاب می‌شود و به‌جای پرتاب exception مقدار null برمی‌گرداند.</p>
+<hr>
+<h3>🆚 گزینه‌ی دیگر</h3>
+<p>فقط overload اول را بنویسیم و سپس <strong>RuntimeBinderException</strong> را catch کنیم.</p>
+<ul>
+<li><strong>مزیت</strong>: می‌توانیم تمایز قائل شویم بین زمانی که <code>foo.Value</code> واقعاً null است یا اصلاً وجود ندارد.</li>
+<li><strong>عیب</strong>: هزینه‌ی کارایی به‌خاطر پرتاب و گرفتن exception.</li>
+</ul>
+<hr>
+<h3>🔎 مثال: ToStringEx با dynamic binding</h3>
+<p>در فصل ۱۸، همین مشکل را برای یک interface با استفاده از reflection حل کردیم (که تلاش بیشتری نیاز داشت).
+مثال ما طراحی نسخه‌ی قدرتمندتری از <strong>ToString()</strong> بود که می‌توانست اشیائی مانند <strong>IEnumerable</strong> و <strong>IGrouping&lt;,&gt;</strong> را درک کند.</p>
+<p>اینجا همان مثال با dynamic binding، اما زیباتر:</p>
+<pre><code class="language-csharp">static string GetGroupKey&lt;TKey,TElement&gt; (IGrouping&lt;TKey,TElement&gt; group)
+  =&gt; &quot;Group with key=&quot; + group.Key + &quot;: &quot;;
+
+static string GetGroupKey (object source) =&gt; null;
+
+public static string ToStringEx (object value)
+{
+  if (value == null) return &quot;&lt;null&gt;&quot;;
+  if (value is string s) return s;
+  if (value.GetType().IsPrimitive) return value.ToString();
+
+  StringBuilder sb = new StringBuilder();
+  string groupKey = GetGroupKey ((dynamic)value);   // Dynamic dispatch
+  if (groupKey != null) sb.Append (groupKey);
+
+  if (value is IEnumerable)
+    foreach (object element in ((IEnumerable)value))
+      sb.Append (ToStringEx (element) + &quot; &quot;);
+
+  if (sb.Length == 0) sb.Append (value.ToString());
+  return &quot;\r\n&quot; + sb.ToString();
+}
+</code></pre>
+<hr>
+<h3>▶️ اجرای کد</h3>
+<pre><code class="language-csharp">Console.WriteLine (ToStringEx (&quot;xyyzzz&quot;.GroupBy (c =&gt; c) ));
+</code></pre>
+<p>🔽 خروجی:</p>
+<pre><code>Group with key=x: x
+Group with key=y: y y
+Group with key=z: z z z
+</code></pre>
+<hr>
+<p>در اینجا از <strong>dynamic member overload resolution</strong> برای حل مسئله استفاده کردیم.</p>
+<p>اگر به‌جای آن، چنین کاری می‌کردیم:</p>
+<pre><code class="language-csharp">dynamic d = value;
+try { groupKey = d.Value; }
+catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException) {...}
+</code></pre>
+<p>این روش شکست می‌خورد. چرا؟ چون عملگر <strong>GroupBy</strong> در LINQ یک نوعی را برمی‌گرداند که <strong>IGrouping&lt;,&gt;</strong> را پیاده‌سازی می‌کند و خودش <strong>internal</strong> است:</p>
+<pre><code class="language-csharp">internal class Grouping : IGrouping&lt;TKey,TElement&gt;, ...
+{
+  public TKey Key;
+  ...
+}
+</code></pre>
+<p>حتی اگر property <strong>Key</strong> به‌صورت public تعریف شده باشد، کلاس حاوی آن <strong>internal</strong> است و بنابراین فقط از طریق <strong>IGrouping&lt;,&gt;</strong> قابل دسترسی است.
+و همان‌طور که در فصل ۴ توضیح دادیم، هیچ راهی وجود ندارد که به DLR بگوییم هنگام صدا زدن dynamic member، به آن interface bind شود.</p>
+<h3>پیاده‌سازی اشیای پویا 🦆✨</h3>
+<p>یک شیء می‌تواند با پیاده‌سازی <strong>IDynamicMetaObjectProvider</strong> معناشناسی (binding semantics) خودش را فراهم کند—یا راحت‌تر از آن، با ارث‌بری از کلاس <strong>DynamicObject</strong>، که یک پیاده‌سازی پیش‌فرض از این اینترفیس ارائه می‌دهد.</p>
+<p>این موضوع به‌طور مختصر در فصل ۴ با مثال زیر نشان داده شده است:</p>
+<pre><code class="language-csharp">dynamic d = new Duck();
+d.Quack();                  // متد Quack فراخوانی شد
+d.Waddle();                 // متد Waddle فراخوانی شد
+
+public class Duck : DynamicObject
+{
+  public override bool TryInvokeMember(
+    InvokeMemberBinder binder, object[] args, out object result)
+  {
+    Console.WriteLine (binder.Name + &quot; method was called&quot;);
+    result = null;
+    return true;
+  }
+}
+</code></pre>
+<hr>
+<h3>DynamicObject 🛠️</h3>
+<p>در مثال بالا، ما متد <strong>TryInvokeMember</strong> را بازنویسی (override) کردیم، که به مصرف‌کننده اجازه می‌دهد روی شیء پویا (dynamic object) یک متد فراخوانی کند—مثل <strong>Quack</strong> یا <strong>Waddle</strong>.</p>
+<p>کلاس <strong>DynamicObject</strong> متدهای مجازی (virtual methods) دیگری هم در اختیار قرار می‌دهد که به مصرف‌کننده اجازه می‌دهند از دیگر ساختارهای برنامه‌نویسی استفاده کند. موارد زیر متناظر با ساختارهایی هستند که در زبان C# نمایش دارند:</p>
+<div align="center">
+<p><img src="../../../assets/image/19/Table-19-1.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h3>متدهای پویا در DynamicObject ⚡</h3>
+<p>این متدها باید در صورت موفقیت، مقدار <strong>true</strong> برگردانند. اگر مقدار <strong>false</strong> برگردانده شود، <strong>DLR</strong> (Dynamic Language Runtime) به binder زبان برمی‌گردد تا به‌دنبال عضوی هم‌نام در خود شیء پویا (زیرکلاس DynamicObject) بگردد. اگر این کار هم شکست بخورد، یک استثنای <strong>RuntimeBinderException</strong> پرتاب خواهد شد. 🚨</p>
+<hr>
+<h3>نمونه با <code>TryGetMember</code> و <code>TrySetMember</code> 📝</h3>
+<p>در مثال زیر، کلاسی ساخته‌ایم که به ما امکان می‌دهد به‌صورت پویا به attributeها در یک <strong>XElement (System.Xml.Linq)</strong> دسترسی پیدا کنیم:</p>
+<pre><code class="language-csharp">static class XExtensions
+{
+  public static dynamic DynamicAttributes (this XElement e)
+    =&gt; new XWrapper (e);
+
+  class XWrapper : DynamicObject
+  {
+    XElement _element;
+    public XWrapper (XElement e) { _element = e; }
+
+    public override bool TryGetMember (GetMemberBinder binder,
+                                       out object result)
+    {
+      result = _element.Attribute (binder.Name).Value;
+      return true;
+    }
+
+    public override bool TrySetMember (SetMemberBinder binder,
+                                       object value)
+    {
+      _element.SetAttributeValue (binder.Name, value);
+      return true;
+    }
+  }
+}
+</code></pre>
+<p>📌 نحوه‌ی استفاده:</p>
+<pre><code class="language-csharp">XElement x = XElement.Parse (@&quot;&lt;Label Text=&quot;&quot;Hello&quot;&quot; Id=&quot;&quot;5&quot;&quot;/&gt;&quot;);
+dynamic da = x.DynamicAttributes();
+
+Console.WriteLine (da.Id);        // 5
+da.Text = &quot;Foo&quot;;
+Console.WriteLine (x.ToString()); // &lt;Label Text=&quot;Foo&quot; Id=&quot;5&quot; /&gt;
+</code></pre>
+<hr>
+<h3>نمونه با <code>System.Data.IDataRecord</code> 📊</h3>
+<p>در مثال بعدی، برای ساده‌تر کردن کار با <strong>data reader</strong>‌ها، از DynamicObject استفاده شده است:</p>
+<pre><code class="language-csharp">public class DynamicReader : DynamicObject
+{
+  readonly IDataRecord _dataRecord;
+  public DynamicReader (IDataRecord dr) { _dataRecord = dr; }
+
+  public override bool TryGetMember (GetMemberBinder binder,
+                                     out object result)
+  {
+    result = _dataRecord[binder.Name];
+    return true;
+  }
+}
+...
+using (IDataReader reader = someDbCommand.ExecuteReader())
+{
+  dynamic dr = new DynamicReader (reader);
+  while (reader.Read())
+  {
+    int id = dr.ID;
+    string firstName = dr.FirstName;
+    DateTime dob = dr.DateOfBirth;
+    ...
+  }
+}
+</code></pre>
+<hr>
+<h3>نمونه با <code>TryBinaryOperation</code> و <code>TryInvoke</code> ➕🔔</h3>
+<pre><code class="language-csharp">dynamic d = new Duck();
+Console.WriteLine (d + d);       // foo
+Console.WriteLine (d (78, 'x')); // 123
+
+public class Duck : DynamicObject
+{
+  public override bool TryBinaryOperation (BinaryOperationBinder binder,
+                                           object arg, out object result)
+  {
+    Console.WriteLine (binder.Operation);   // Add
+    result = &quot;foo&quot;;
+    return true;
+  }
+
+  public override bool TryInvoke (InvokeBinder binder,
+                                  object[] args, out object result)
+  {
+    Console.WriteLine (args[0]); // 78
+    result = 123;
+    return true;
+  }
+}
+</code></pre>
+<hr>
+<h3>متدهای تکمیلی برای زبان‌های پویا 🌐</h3>
+<p>کلاس <strong>DynamicObject</strong> همچنین چند متد مجازی دیگر را برای راحتی زبان‌های پویا فراهم می‌کند.</p>
+<p>🔹 به‌طور خاص، بازنویسی متد <strong>GetDynamicMemberNames</strong> این امکان را می‌دهد که لیستی از تمام نام اعضایی که شیء پویا ارائه می‌دهد، برگردانده شود.</p>
+<p>🔹 دلیل دیگر برای پیاده‌سازی <strong>GetDynamicMemberNames</strong> این است که <strong>دیباگر Visual Studio</strong> از این متد استفاده می‌کند تا نمایی از یک شیء پویا را نمایش دهد. 🖥️</p>
+<h3>ExpandoObject 🪄</h3>
+<p>یک کاربرد ساده دیگر از <strong>DynamicObject</strong> می‌تواند این باشد که یک کلاس پویا بنویسیم که اشیاء را در یک <strong>Dictionary</strong> ذخیره و بازیابی کند (کلیدها از نوع string). اما این قابلیت از قبل توسط کلاس <strong>ExpandoObject</strong> فراهم شده است:</p>
+<pre><code class="language-csharp">dynamic x = new ExpandoObject();
+x.FavoriteColor = ConsoleColor.Green;
+x.FavoriteNumber = 7;
+
+Console.WriteLine (x.FavoriteColor);   // Green
+Console.WriteLine (x.FavoriteNumber);  // 7
+</code></pre>
+<p>🔑 در واقع، <strong>ExpandoObject</strong> اینترفیس <strong>IDictionary&lt;string, object&gt;</strong> را پیاده‌سازی می‌کند. بنابراین می‌توانیم مثال بالا را این‌طور ادامه دهیم:</p>
+<pre><code class="language-csharp">var dict = (IDictionary&lt;string,object&gt;) x;
+Console.WriteLine (dict[&quot;FavoriteColor&quot;]);   // Green
+Console.WriteLine (dict[&quot;FavoriteNumber&quot;]);  // 7
+Console.WriteLine (dict.Count);              // 2
+</code></pre>
+<hr>
+<h3>تعامل با زبان‌های پویا 🌍</h3>
+<p>اگرچه C# از طریق کلمه کلیدی <strong>dynamic</strong> از <strong>dynamic binding</strong> پشتیبانی می‌کند، اما اجازه نمی‌دهد یک عبارت ذخیره‌شده به شکل رشته (string) را در زمان اجرا مستقیماً اجرا کنید:</p>
+<pre><code class="language-csharp">string expr = &quot;2 * 3&quot;;
+// نمی‌توانیم expr را اجرا کنیم
+</code></pre>
+<p>علت این است که ترجمه‌ی یک رشته به یک <strong>expression tree</strong> نیازمند یک <strong>lexical parser</strong> و <strong>semantic parser</strong> است که در کامپایلر C# وجود دارند، اما به‌صورت سرویس در زمان اجرا در دسترس نیستند. در زمان اجرا، C# فقط یک <strong>binder</strong> فراهم می‌کند که به <strong>DLR</strong> می‌گوید چگونه یک expression tree از قبل ساخته‌شده را تفسیر کند.</p>
+<p>👨‍💻 در زبان‌های واقعاً پویا مثل <strong>IronPython</strong> و <strong>IronRuby</strong>، می‌توان رشته‌ها را به‌صورت مستقیم اجرا کرد. این موضوع برای کارهایی مثل <strong>اسکریپت‌نویسی</strong>، ساخت <strong>سیستم‌های پیکربندی پویا</strong>، و پیاده‌سازی <strong>rules engine</strong> بسیار مفید است. بنابراین، اگرچه می‌توانید بیشتر برنامه را در C# بنویسید، اما ممکن است برای برخی وظایف خاص، به استفاده از یک زبان پویا نیاز داشته باشید.</p>
+<p>همچنین گاهی ممکن است بخواهید از <strong>API</strong>ای استفاده کنید که در یک زبان پویا نوشته شده و معادل آن در <strong>.NET</strong> وجود ندارد.</p>
+<hr>
+<h3>اجرای کد C# به شکل رشته با Roslyn 🧩</h3>
+<p>پکیج <strong>Microsoft.CodeAnalysis.CSharp.Scripting</strong> (از مجموعه Roslyn) این قابلیت را فراهم می‌کند که یک رشته C# را اجرا کنید. البته این کار با <strong>کامپایل</strong> رشته به یک برنامه انجام می‌شود، بنابراین سربار عملکردی بیشتری نسبت به زبان‌هایی مثل Python دارد (مگر اینکه همان عبارت بارها تکراراً اجرا شود).</p>
+<hr>
+<h3>مثال با IronPython 🐍</h3>
+<p>در مثال زیر، از <strong>IronPython</strong> برای ارزیابی یک عبارت در زمان اجرا از درون C# استفاده می‌کنیم. می‌توان از این روش برای ساخت یک ماشین حساب ساده بهره برد.</p>
+<p>📌 برای اجرای این کد، باید پکیج‌های <strong>DynamicLanguageRuntime</strong> (توجه کنید با System.Dynamic.Runtime فرق دارد) و <strong>IronPython</strong> را نصب کنید.</p>
+<pre><code class="language-csharp">using System;
+using IronPython.Hosting;
+using Microsoft.Scripting;
+using Microsoft.Scripting.Hosting;
+
+int result = (int) Calculate (&quot;2 * 3&quot;);
+Console.WriteLine (result);  // 6
+
+object Calculate (string expression)
+{
+  ScriptEngine engine = Python.CreateEngine();
+  return engine.Execute (expression);
+}
+</code></pre>
+<p>✅ توجه کنید: چون رشته به <strong>Python</strong> پاس داده می‌شود، عبارت بر اساس قوانین Python ارزیابی خواهد شد، نه C#.</p>
+<p>برای مثال، می‌توان از امکانات زبان Python مثل <strong>لیست‌ها</strong> استفاده کرد:</p>
+<pre><code class="language-csharp">var list = (IEnumerable) Calculate (&quot;[1, 2, 3] + [4, 5]&quot;);
+foreach (int n in list) Console.Write (n);  // 12345
+</code></pre>
+<hr>
+<h3>عبور وضعیت بین C# و اسکریپت 🔄</h3>
+<p>برای انتقال متغیرها از C# به Python، مراحل بیشتری نیاز است. مثال زیر این موضوع را نشان می‌دهد و می‌تواند پایه‌ای برای یک <strong>rules engine</strong> باشد:</p>
+<pre><code class="language-csharp">// این رشته می‌تواند از یک فایل یا دیتابیس بیاید:
+string auditRule = &quot;taxPaidLastYear / taxPaidThisYear &gt; 2&quot;;
+
+ScriptEngine engine = Python.CreateEngine();    
+ScriptScope scope = engine.CreateScope();       
+
+scope.SetVariable (&quot;taxPaidLastYear&quot;, 20000m);
+scope.SetVariable (&quot;taxPaidThisYear&quot;, 8000m);
+
+ScriptSource source = engine.CreateScriptSourceFromString (
+                      auditRule, SourceCodeKind.Expression);
+
+bool auditRequired = (bool) source.Execute (scope);
+Console.WriteLine (auditRequired);   // True
+</code></pre>
+<p>📥 همچنین می‌توانید متغیرها را از اسکریپت به C# برگردانید:</p>
+<pre><code class="language-csharp">string code = &quot;result = input * 3&quot;;
+
+ScriptEngine engine = Python.CreateEngine();
+ScriptScope scope = engine.CreateScope();
+scope.SetVariable (&quot;input&quot;, 2);
+
+ScriptSource source = engine.CreateScriptSourceFromString (
+                      code, SourceCodeKind.SingleStatement);
+
+source.Execute (scope);
+
+Console.WriteLine (scope.GetVariable (&quot;result&quot;));   // 6
+</code></pre>
+<p>در این مثال دوم، از <strong>SourceCodeKind.SingleStatement</strong> به‌جای <strong>Expression</strong> استفاده کردیم تا به موتور بگوییم قصد اجرای یک <strong>statement</strong> را داریم.</p>
+<hr>
+<h3>تبادل انواع بین C# و Python 🔗</h3>
+<p>🔹 نوع‌ها به‌طور خودکار بین دنیای <strong>.NET</strong> و <strong>Python</strong> منتقل (marshal) می‌شوند.
+🔹 حتی می‌توانید اعضای یک شیء .NET را از سمت اسکریپت فراخوانی کنید:</p>
+<pre><code class="language-csharp">string code = @&quot;sb.Append (&quot;&quot;World&quot;&quot;)&quot;;
+
+ScriptEngine engine = Python.CreateEngine();
+ScriptScope scope = engine.CreateScope();
+
+var sb = new StringBuilder (&quot;Hello&quot;);
+scope.SetVariable (&quot;sb&quot;, sb);
+
+ScriptSource source = engine.CreateScriptSourceFromString (
+                      code, SourceCodeKind.SingleStatement);
+
+source.Execute (scope);
+
+Console.WriteLine (sb.ToString());   // HelloWorld
+</code></pre>
+
   </main>
 
   <!-- فوتر مشترک -->

@@ -38,7 +38,864 @@
 
   <!-- محتوای صفحه -->
   <main class="site-main">
-    
+    <h1>فصل شانزدهم: شبکه‌سازی</h1>
+<p>.NET مجموعه‌ای از کلاس‌ها را در فضای نام <strong>System.Net.*</strong> برای برقراری ارتباط از طریق پروتکل‌های استاندارد شبکه مثل <strong>HTTP</strong> و <strong>TCP/IP</strong> ارائه می‌دهد. در اینجا خلاصه‌ای از اجزای کلیدی آورده شده است:</p>
+<ul>
+<li><strong>HttpClient</strong> برای مصرف APIهای وب مبتنی بر HTTP و سرویس‌های <strong>RESTful</strong></li>
+<li><strong>HttpListener</strong> برای نوشتن یک سرور <strong>HTTP</strong></li>
+<li><strong>SmtpClient</strong> برای ساخت و ارسال پیام‌های ایمیل از طریق <strong>SMTP</strong></li>
+<li><strong>Dns</strong> برای تبدیل بین نام دامنه و آدرس‌ها</li>
+<li>کلاس‌های <strong>TcpClient</strong>، <strong>UdpClient</strong>، <strong>TcpListener</strong> و <strong>Socket</strong> برای دسترسی مستقیم به لایه‌های انتقال و شبکه</li>
+</ul>
+<p>انواع (Types) موجود در این فصل از .NET در فضای نام‌های <strong>System.Net.*</strong> و <strong>System.IO</strong> قرار دارند.</p>
+<p>.NET همچنین پشتیبانی سمت کلاینت از <strong>FTP</strong> را فراهم می‌کند، اما فقط از طریق کلاس‌هایی که از نسخه‌ی .NET 6 به‌بعد به‌عنوان <strong>obsolete</strong> (منسوخ) علامت‌گذاری شده‌اند. اگر لازم باشد از <strong>FTP</strong> استفاده کنید، بهترین گزینه استفاده از یک کتابخانه‌ی <strong>NuGet</strong> مثل <strong>FluentFTP</strong> است.</p>
+<hr>
+<h3>معماری شبکه 🏗️</h3>
+<p>شکل ۱۶-۱ انواع شبکه‌ای .NET و لایه‌های ارتباطی که در آن‌ها قرار دارند را نشان می‌دهد. بیشتر انواع در <strong>لایه‌ی انتقال (Transport layer)</strong> یا <strong>لایه‌ی کاربرد (Application layer)</strong> قرار دارند.</p>
+<ul>
+<li>
+<p>لایه‌ی انتقال پروتکل‌های پایه‌ای برای ارسال و دریافت بایت‌ها را تعریف می‌کند (<strong>TCP</strong> و <strong>UDP</strong>).</p>
+</li>
+<li>
+<p>لایه‌ی کاربرد پروتکل‌های سطح بالاتر را تعریف می‌کند که برای برنامه‌های خاص طراحی شده‌اند، مثل:</p>
+<ul>
+<li>بازیابی صفحات وب (<strong>HTTP</strong>)</li>
+<li>ارسال ایمیل (<strong>SMTP</strong>)</li>
+<li>تبدیل بین نام دامنه و آدرس‌های <strong>IP</strong> (<strong>DNS</strong>)</li>
+</ul>
+</li>
+</ul>
+<div align="center">
+<p><img src="../../../assets/image/16/Table-16-1.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>معمولاً برنامه‌نویسی در <strong>لایه‌ی کاربرد (Application layer)</strong> راحت‌تر است؛ بااین‌حال، دلایلی وجود دارد که ممکن است بخواهید مستقیماً در <strong>لایه‌ی انتقال (Transport layer)</strong> کار کنید.</p>
+<ul>
+<li>یکی از دلایل این است که به یک پروتکل کاربردی نیاز داشته باشید که در .NET ارائه نشده است، مثل <strong>POP3</strong> برای دریافت ایمیل.</li>
+<li>دلیل دیگر این است که بخواهید یک پروتکل سفارشی برای یک برنامه‌ی خاص طراحی کنید، مثل یک <strong>کلاینت همتا به همتا (peer-to-peer client)</strong>.</li>
+</ul>
+<hr>
+<h3>پروتکل HTTP و اهمیت آن 🌍</h3>
+<p>در بین پروتکل‌های کاربردی، <strong>HTTP</strong> به دلیل کاربرد عمومی‌اش اهمیت ویژه‌ای دارد. حالت پایه‌ای عملکرد آن—«این صفحه‌ی وب با این URL را به من بده»—به‌خوبی با الگوهای دیگر مثل «نتیجه‌ی فراخوانی این endpoint با این آرگومان‌ها را به من بده» سازگار می‌شود.</p>
+<p>علاوه بر فعل <strong>get</strong>، افعال دیگری مثل <strong>put</strong>، <strong>post</strong> و <strong>delete</strong> هم وجود دارند که امکان ساخت سرویس‌های مبتنی بر <strong>REST</strong> را فراهم می‌کنند.</p>
+<p><strong>HTTP</strong> همچنین مجموعه‌ی گسترده‌ای از قابلیت‌ها دارد که در برنامه‌های تجاری چندلایه و معماری‌های سرویس‌محور مفید هستند، مثل:</p>
+<ul>
+<li>پروتکل‌ها برای <strong>احراز هویت (authentication)</strong> و <strong>رمزنگاری (encryption)</strong></li>
+<li><strong>قطعه‌بندی پیام‌ها (message chunking)</strong></li>
+<li><strong>هدرها و کوکی‌های قابل‌گسترش (extensible headers and cookies)</strong></li>
+<li>امکان اینکه چندین برنامه‌ی سرور یک <strong>پورت</strong> و یک <strong>آدرس IP</strong> مشترک داشته باشند</li>
+</ul>
+<p>به همین دلایل، <strong>HTTP</strong> در .NET به‌خوبی پشتیبانی می‌شود—هم به‌صورت مستقیم (همان‌طور که در این فصل توضیح داده می‌شود) و هم در سطوح بالاتر، از طریق فناوری‌هایی مثل <strong>Web API</strong> و <strong>ASP.NET Core</strong>.</p>
+<hr>
+<p>همان‌طور که از بحث‌های بالا مشخص است، حوزه‌ی شبکه‌سازی پر از <strong>اختصارنویسی‌ها (acronyms)</strong> است. متداول‌ترین آن‌ها در <strong>جدول ۱۶-۱</strong> فهرست شده‌اند. 📑</p>
+<div align="center">
+<p><img src="../../../assets/image/16/Table-16-2.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h3>آدرس‌ها و پورت‌ها</h3>
+<p>برای اینکه ارتباط برقرار شود، یک کامپیوتر یا دستگاه نیاز به یک <strong>آدرس</strong> دارد. اینترنت از دو سیستم آدرس‌دهی استفاده می‌کند:</p>
+<ul>
+<li>
+<p><strong>IPv4</strong>
+در حال حاضر سیستم غالب آدرس‌دهی است. آدرس‌های <strong>IPv4</strong> دارای عرض ۳۲ بیت هستند. وقتی به‌صورت رشته (string) قالب‌بندی می‌شوند، به شکل چهار عدد اعشاری با جداکننده‌ی نقطه نوشته می‌شوند (برای مثال: <code>101.102.103.104</code>). یک آدرس می‌تواند در کل دنیا منحصربه‌فرد باشد یا فقط در یک <strong>زیرشبکه (subnet)</strong> خاص (مثل یک شبکه‌ی شرکتی).</p>
+</li>
+<li>
+<p><strong>IPv6</strong>
+سیستم آدرس‌دهی جدیدتر است که عرض آن <strong>۱۲۸ بیت</strong> می‌باشد. آدرس‌ها در قالب رشته‌ای به شکل <strong>هگزادسیمال</strong> نوشته می‌شوند و با <strong>کولون (:)</strong> از هم جدا می‌شوند (برای مثال:
+<code>[3EA0:FFFF:198A:E4A3:4FF2:54fA:41BC:8D31]</code>).
+در .NET باید براکت‌های مربعی ([]) را دور آدرس اضافه کنید.</p>
+</li>
+</ul>
+<hr>
+<p>کلاس <strong>IPAddress</strong> در فضای نام <strong>System.Net</strong> یک آدرس را در هر یک از این دو پروتکل نمایش می‌دهد. این کلاس یک <strong>سازنده (constructor)</strong> دارد که یک آرایه‌ی بایت می‌گیرد و یک متد استاتیک به نام <strong>Parse</strong> که یک رشته‌ی قالب‌بندی‌شده‌ی صحیح را می‌گیرد:</p>
+<pre><code class="language-csharp">IPAddress a1 = new IPAddress (new byte[] { 101, 102, 103, 104 });
+IPAddress a2 = IPAddress.Parse (&quot;101.102.103.104&quot;);
+Console.WriteLine (a1.Equals (a2));       // True
+
+Console.WriteLine (a1.AddressFamily);     // InterNetwork
+
+IPAddress a3 = IPAddress.Parse(&quot;[3EA0:FFFF:198A:E4A3:4FF2:54fA:41BC:8D31]&quot;);
+Console.WriteLine (a3.AddressFamily);     // InterNetworkV6
+</code></pre>
+<hr>
+<h3>پورت‌ها 🔌</h3>
+<p>پروتکل‌های <strong>TCP</strong> و <strong>UDP</strong> هر آدرس IP را به <strong>۶۵٬۵۳۵ پورت</strong> تقسیم می‌کنند. این کار به یک کامپیوتر در یک آدرس واحد اجازه می‌دهد چندین برنامه را اجرا کند، هرکدام روی پورت خودش.</p>
+<p>بسیاری از برنامه‌ها پورت‌های پیش‌فرض استاندارد دارند؛ برای مثال:</p>
+<ul>
+<li><strong>HTTP</strong> از پورت ۸۰ استفاده می‌کند.</li>
+<li><strong>SMTP</strong> از پورت ۲۵ استفاده می‌کند.</li>
+</ul>
+<p>پورت‌های <strong>TCP</strong> و <strong>UDP</strong> از <strong>۴۹۱۵۲ تا ۶۵۵۳۵</strong> به‌طور رسمی بدون تخصیص هستند، بنابراین گزینه‌ی خوبی برای <strong>آزمایش</strong> و <strong>استقرارهای کوچک</strong> هستند.</p>
+<p>ترکیب یک آدرس IP و یک پورت در .NET توسط کلاس <strong>IPEndPoint</strong> نمایش داده می‌شود:</p>
+<pre><code class="language-csharp">IPAddress a = IPAddress.Parse (&quot;101.102.103.104&quot;);
+IPEndPoint ep = new IPEndPoint (a, 222);      // Port 222
+Console.WriteLine (ep.ToString());            // 101.102.103.104:222
+</code></pre>
+<hr>
+<h3>URI 📑</h3>
+<p><strong>فایروال‌ها (Firewalls)</strong> پورت‌ها را مسدود می‌کنند. در بسیاری از محیط‌های شرکتی، فقط تعداد کمی از پورت‌ها باز هستند—معمولاً:</p>
+<ul>
+<li>پورت ۸۰ (برای <strong>HTTP</strong> رمزگذاری‌نشده)</li>
+<li>پورت ۴۴۳ (برای <strong>HTTP</strong> امن یا HTTPS)</li>
+</ul>
+<p><strong>URI</strong> یک رشته‌ی قالب‌بندی‌شده‌ی خاص است که یک منبع (resource) در اینترنت یا یک LAN را توصیف می‌کند، مثل یک صفحه‌ی وب، فایل یا آدرس ایمیل.</p>
+<p>نمونه‌ها:</p>
+<ul>
+<li><code>http://www.ietf.org</code></li>
+<li><code>ftp://myisp/doc.txt</code></li>
+<li><code>mailto:joe@bloggs.com</code></li>
+</ul>
+<p>قالب دقیق URI توسط <strong>IETF (Internet Engineering Task Force)</strong> تعریف شده است.</p>
+<p>یک <strong>URI</strong> را می‌توان به مجموعه‌ای از عناصر تقسیم کرد—معمولاً شامل <strong>scheme</strong>، <strong>authority</strong> و <strong>path</strong>.</p>
+<p>کلاس <strong>Uri</strong> در فضای نام <strong>System</strong> دقیقاً همین تقسیم‌بندی را انجام می‌دهد و یک property برای هر عنصر در اختیار می‌گذارد (همان‌طور که در شکل ۱۶-۲ نشان داده شده است).</p>
+<div align="center">
+<p><img src="../../../assets/image/16/Table-16-3.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h3>کلاس Uri 🧭</h3>
+<p>کلاس <strong>Uri</strong> زمانی مفید است که نیاز داشته باشید قالب یک رشته‌ی <strong>URI</strong> را اعتبارسنجی کنید یا یک URI را به بخش‌های تشکیل‌دهنده‌اش تقسیم کنید. در غیر این صورت، می‌توانید URI را صرفاً مثل یک رشته در نظر بگیرید—بیشتر متدهای شبکه‌ای هم <strong>overload</strong> شده‌اند تا هم یک شیء <strong>Uri</strong> و هم یک رشته را بپذیرند.</p>
+<p>می‌توانید یک شیء <strong>Uri</strong> را با عبور دادن هرکدام از رشته‌های زیر به سازنده‌اش ایجاد کنید:</p>
+<ul>
+<li>یک رشته‌ی <strong>URI</strong>، مثل:
+<code>http://www.ebay.com</code> یا <code>file://janespc/sharedpics/dolphin.jpg</code></li>
+<li>یک مسیر مطلق به یک فایل روی هارد دیسک، مثل:
+<code>c:\myfiles\data.xlsx</code> (روی ویندوز) یا <code>/tmp/myfiles/data.xlsx</code> (روی یونیکس)</li>
+<li>یک مسیر <strong>UNC</strong> به یک فایل در شبکه LAN، مثل:
+<code>\\janespc\sharedpics\dolphin.jpg</code></li>
+</ul>
+<p>مسیرهای فایل و UNC به‌طور خودکار به URI تبدیل می‌شوند: پروتکل <code>&quot;file:&quot;</code> اضافه می‌شود و <strong>بک‌اسلش‌ها</strong> (<code>\</code>) به <strong>فوروارد اسلش‌ها</strong> (<code>/</code>) تبدیل می‌شوند. سازنده‌های <strong>Uri</strong> همچنین قبل از ساخت شیء، رشته‌ی شما را کمی پاک‌سازی می‌کنند، شامل:</p>
+<ul>
+<li>تبدیل <strong>scheme</strong> و <strong>hostname</strong> به حروف کوچک</li>
+<li>حذف پورت‌های خالی یا پیش‌فرض</li>
+</ul>
+<p>اگر رشته‌ی URI را بدون scheme (مثل <code>www.test.com</code>) بدهید، یک <strong>UriFormatException</strong> پرتاب می‌شود.</p>
+<hr>
+<p>کلاس <strong>Uri</strong> دارای propertyهای زیر است:</p>
+<ul>
+<li><strong>IsLoopback</strong> → مشخص می‌کند که آیا URI به میزبان محلی (<strong>127.0.0.1</strong>) اشاره می‌کند یا نه.</li>
+<li><strong>IsFile</strong> → مشخص می‌کند که آیا URI به یک مسیر محلی یا UNC اشاره دارد یا نه (با <strong>IsUnc</strong>).</li>
+</ul>
+<p>اگر <strong>IsFile</strong> مقدار true برگرداند، property به نام <strong>LocalPath</strong> نسخه‌ای از <strong>AbsolutePath</strong> را بازمی‌گرداند که با سیستم‌عامل محلی سازگار است (با اسلش‌ها یا بک‌اسلش‌های مناسب)، و می‌توانید روی آن متدهایی مثل <strong>File.Open</strong> را فراخوانی کنید.</p>
+<p>نمونه‌های <strong>Uri</strong> فقط propertyهای <strong>read-only</strong> دارند. برای تغییر یک URI موجود، باید یک شیء <strong>UriBuilder</strong> ایجاد کنید—این کلاس propertyهای قابل‌نوشتن دارد و می‌تواند دوباره به یک Uri از طریق property خودش به نام <strong>Uri</strong> تبدیل شود.</p>
+<hr>
+<h3>متدها و مثال‌ها 📌</h3>
+<p>کلاس <strong>Uri</strong> متدهایی برای مقایسه و تفریق مسیرها فراهم می‌کند:</p>
+<pre><code class="language-csharp">Uri info = new Uri (&quot;http://www.domain.com:80/info/&quot;);
+Uri page = new Uri (&quot;http://www.domain.com/info/page.html&quot;);
+
+Console.WriteLine (info.Host);     // www.domain.com
+Console.WriteLine (info.Port);     // 80
+Console.WriteLine (page.Port);     // 80  (Uri پورت پیش‌فرض HTTP را می‌شناسد)
+Console.WriteLine (info.IsBaseOf (page));   // True
+
+Uri relative = info.MakeRelativeUri (page);
+Console.WriteLine (relative.IsAbsoluteUri); // False
+Console.WriteLine (relative.ToString());    // page.html
+</code></pre>
+<p>یک <strong>URI نسبی (relative URI)</strong> مثل <code>page.html</code> در این مثال، اگر تقریباً هر property یا متدی به‌جز <strong>IsAbsoluteUri</strong> و <strong>ToString</strong> را فراخوانی کنید، یک exception پرتاب می‌کند. می‌توانید مستقیماً یک URI نسبی بسازید:</p>
+<pre><code class="language-csharp">Uri u = new Uri (&quot;page.html&quot;, UriKind.Relative);
+</code></pre>
+<hr>
+<h3>اهمیت اسلش انتهایی <code>/</code> ⚠️</h3>
+<p>اسلش انتهایی در یک URI مهم است و روی پردازش درخواست توسط سرور تأثیر می‌گذارد.</p>
+<p>برای مثال، در یک سرور وب سنتی:</p>
+<ul>
+<li>URI به شکل <code>http://www.albahari.com/nutshell/</code> → سرور در پوشه‌ی <code>nutshell</code> جست‌وجو می‌کند و فایل پیش‌فرض (معمولاً <code>index.html</code>) را بازمی‌گرداند.</li>
+<li>URI بدون اسلش انتهایی <code>http://www.albahari.com/nutshell</code> → سرور به دنبال فایلی به نام <code>nutshell</code> (بدون پسوند) در پوشه‌ی ریشه می‌گردد. اگر چنین فایلی وجود نداشته باشد، اغلب یک خطای <strong>301 Permanent Redirect</strong> برمی‌گرداند و پیشنهاد می‌کند که کلاینت دوباره با اسلش انتهایی درخواست بفرستد.</li>
+</ul>
+<p>کلاینت‌های HTTP در .NET به‌طور پیش‌فرض همانند مرورگرها عمل می‌کنند و به‌طور شفاف درخواست را با URI پیشنهادی دوباره ارسال می‌کنند. این یعنی اگر اسلش انتهایی را فراموش کنید، درخواست همچنان کار خواهد کرد—اما یک <strong>رفت‌و‌برگشت اضافه‌ی غیرضروری</strong> ایجاد می‌شود.</p>
+<hr>
+<h3>متدهای استاتیک مفید 🌟</h3>
+<p>کلاس <strong>Uri</strong> متدهای کمکی استاتیک نیز دارد، مثل:</p>
+<ul>
+<li><strong>EscapeUriString()</strong> → یک رشته را به یک URL معتبر تبدیل می‌کند (کاراکترهایی با مقدار ASCII بیشتر از ۱۲۷ را به نمایش هگزادسیمال تغییر می‌دهد).</li>
+<li><strong>CheckHostName()</strong> و <strong>CheckSchemeName()</strong> → بررسی می‌کنند که آیا یک رشته از نظر نحوی برای property مربوطه معتبر است یا نه (اما وجود میزبان یا URI را بررسی نمی‌کنند).</li>
+</ul>
+<hr>
+<h2>HttpClient 🚀</h2>
+<p>کلاس <strong>HttpClient</strong> یک API مدرن برای عملیات کلاینت HTTP ارائه می‌دهد و جایگزین <strong>WebClient</strong> و <strong>WebRequest/WebResponse</strong> (که اکنون <strong>obsolete</strong> شده‌اند) است.</p>
+<p>این کلاس در واکنش به رشد <strong>APIهای وب مبتنی بر HTTP</strong> و <strong>سرویس‌های REST</strong> طراحی شد و تجربه‌ی بهتری برای پروتکل‌های پیچیده‌تر از فقط دریافت یک صفحه‌ی وب ارائه می‌دهد.</p>
+<h3>قابلیت‌های کلیدی HttpClient ✅</h3>
+<ul>
+<li>یک نمونه‌ی <strong>HttpClient</strong> می‌تواند درخواست‌های هم‌زمان را مدیریت کند و به‌خوبی با قابلیت‌هایی مثل <strong>هدرهای سفارشی، کوکی‌ها و روش‌های احراز هویت</strong> کار کند.</li>
+<li>اجازه می‌دهد <strong>Message Handler</strong>های سفارشی بنویسید و اضافه کنید → برای <strong>mocking</strong> در تست‌های واحد و ایجاد <strong>pipelineهای سفارشی</strong> (مثل لاگ‌برداری، فشرده‌سازی، رمزنگاری و …).</li>
+<li>یک سیستم نوعی (type system) غنی و قابل‌گسترش برای <strong>Headers</strong> و <strong>Content</strong> دارد.</li>
+</ul>
+<p>⚠️ <strong>HttpClient از گزارش پیشرفت (progress reporting) پشتیبانی نمی‌کند</strong>. برای راه‌حل، می‌توانید به نمونه‌ی <code>HttpClient with Progress.linq</code> در سایت نویسنده یا گالری نمونه‌های LINQPad مراجعه کنید.</p>
+<hr>
+<h3>استفاده‌ی ساده از HttpClient 📝</h3>
+<p>ساده‌ترین روش: نمونه‌سازی و استفاده از متدهای <strong>Get*</strong>:</p>
+<pre><code class="language-csharp">string html = await new HttpClient().GetStringAsync (&quot;http://linqpad.net&quot;);
+</code></pre>
+<p>همچنین متدهای <strong>GetByteArrayAsync</strong> و <strong>GetStreamAsync</strong> وجود دارند. تمام متدهای I/O در <strong>HttpClient</strong> به‌صورت <strong>asynchronous</strong> هستند.</p>
+<p>💡 برخلاف WebRequest/WebResponse، برای بهترین کارایی باید از <strong>یک نمونه‌ی HttpClient</strong> استفاده‌ی مجدد کنید؛ در غیر این صورت، عملیات‌هایی مثل <strong>DNS resolution</strong> دوباره و دوباره انجام می‌شوند و <strong>ساکت‌ها</strong> (sockets) بیشتر از حد لازم باز می‌مانند.</p>
+<p>نمونه:</p>
+<pre><code class="language-csharp">var client = new HttpClient();
+var task1 = client.GetStringAsync (&quot;http://www.linqpad.net&quot;);
+var task2 = client.GetStringAsync (&quot;http://www.albahari.com&quot;);
+
+Console.WriteLine (await task1);
+Console.WriteLine (await task2);
+</code></pre>
+<hr>
+<h3>ویژگی‌ها و پیکربندی ⚙️</h3>
+<ul>
+<li><strong>Timeout</strong> → تعیین می‌کند یک درخواست چقدر می‌تواند طول بکشد.</li>
+<li><strong>BaseAddress</strong> → یک URI پایه به همه‌ی درخواست‌ها اضافه می‌کند.</li>
+</ul>
+<p>بیشتر propertyهای دیگر در کلاس <strong>HttpClientHandler</strong> تعریف شده‌اند. برای دسترسی به آن:</p>
+<pre><code class="language-csharp">var handler = new HttpClientHandler { UseProxy = false };
+var client = new HttpClient (handler);
+</code></pre>
+<p>در این مثال، <strong>پشتیبانی از Proxy</strong> غیرفعال شد تا هزینه‌ی شناسایی خودکار Proxy حذف شود و کارایی افزایش یابد.</p>
+<p>کلاس <strong>HttpClientHandler</strong> همچنین propertyهایی برای کنترل <strong>کوکی‌ها، ریدایرکت خودکار، احراز هویت</strong> و … دارد.</p>
+<hr>
+<h3>GetAsync و Response Messages 📩</h3>
+<p>متدهای <strong>GetStringAsync</strong>، <strong>GetByteArrayAsync</strong> و <strong>GetStreamAsync</strong> میانبرهایی برای متد عمومی‌تر <strong>GetAsync</strong> هستند که یک <strong>HttpResponseMessage</strong> برمی‌گرداند:</p>
+<pre><code class="language-csharp">var client = new HttpClient();
+// GetAsync همچنین یک CancellationToken می‌پذیرد
+HttpResponseMessage response = await client.GetAsync (&quot;http://...&quot;);
+
+response.EnsureSuccessStatusCode();
+string html = await response.Content.ReadAsStringAsync();
+</code></pre>
+<ul>
+<li><strong>HttpResponseMessage</strong> → دسترسی به <strong>Headers</strong> و <strong>StatusCode</strong>.</li>
+<li>اگر <strong>status code ناموفق</strong> مثل ۴۰۴ برگردد، exception پرتاب نمی‌شود مگر اینکه <strong>EnsureSuccessStatusCode</strong> را صریحاً فراخوانی کنید.</li>
+<li>خطاهای ارتباطی یا DNS → همیشه exception پرتاب می‌کنند.</li>
+</ul>
+<p>همچنین، <strong>HttpContent</strong> متدی به نام <strong>CopyToAsync</strong> دارد که می‌تواند خروجی را به یک <strong>Stream دیگر</strong> بنویسد:</p>
+<pre><code class="language-csharp">using (var fileStream = File.Create (&quot;linqpad.html&quot;))
+  await response.Content.CopyToAsync (fileStream);
+</code></pre>
+<p>متد <strong>GetAsync</strong> یکی از چهار متد متناظر با افعال HTTP است (بقیه: <strong>PostAsync، PutAsync، DeleteAsync</strong>).</p>
+<hr>
+<h3>SendAsync و Request Messages 📨</h3>
+<p>متدهای <strong>GetAsync، PostAsync، PutAsync و DeleteAsync</strong> همگی میانبرهایی برای <strong>SendAsync</strong> هستند، متد سطح‌پایین که همه چیز به آن ختم می‌شود.</p>
+<p>برای استفاده:</p>
+<pre><code class="language-csharp">var client = new HttpClient();
+var request = new HttpRequestMessage (HttpMethod.Get, &quot;http://...&quot;);
+HttpResponseMessage response = await client.SendAsync (request);
+
+response.EnsureSuccessStatusCode();
+</code></pre>
+<p>ایجاد یک <strong>HttpRequestMessage</strong> به شما امکان می‌دهد propertyهای درخواست مثل <strong>Headers</strong> و <strong>Content</strong> را شخصی‌سازی کنید، که شامل آپلود داده‌ها نیز می‌شود.</p>
+<h3>📤 آپلود داده‌ها و HttpContent</h3>
+<p>بعد از نمونه‌سازی یک شیء از نوع <code>HttpRequestMessage</code>، می‌توانید با مقداردهی به ویژگی <strong>Content</strong> داده‌ای برای آپلود مشخص کنید. نوع این ویژگی یک کلاس انتزاعی به نام <code>HttpContent</code> است. .NET چندین زیرکلاس مشخص برای انواع مختلف داده فراهم کرده است (و البته می‌توانید کلاس اختصاصی خودتان را هم بنویسید):</p>
+<ul>
+<li><code>ByteArrayContent</code></li>
+<li><code>StringContent</code></li>
+<li><code>FormUrlEncodedContent</code> (بخش <strong>Uploading Form Data</strong> در صفحه 754 را ببینید)</li>
+<li><code>StreamContent</code></li>
+</ul>
+<p>🔹 مثال:</p>
+<pre><code class="language-csharp">var client = new HttpClient (new HttpClientHandler { UseProxy = false });
+var request = new HttpRequestMessage (
+ HttpMethod.Post, &quot;http://www.albahari.com/EchoPost.aspx&quot;);
+request.Content = new StringContent (&quot;This is a test&quot;);
+HttpResponseMessage response = await client.SendAsync (request);
+response.EnsureSuccessStatusCode();
+Console.WriteLine (await response.Content.ReadAsStringAsync());
+</code></pre>
+<hr>
+<h3>⚙️ HttpMessageHandler</h3>
+<p>قبلاً گفتیم که بیشتر ویژگی‌های سفارشی‌سازی درخواست‌ها نه در <code>HttpClient</code> بلکه در <code>HttpClientHandler</code> تعریف شده‌اند. در واقع، <code>HttpClientHandler</code> زیرکلاسی از کلاس انتزاعی <code>HttpMessageHandler</code> است که به شکل زیر تعریف می‌شود:</p>
+<pre><code class="language-csharp">public abstract class HttpMessageHandler : IDisposable
+{
+  protected internal abstract Task&lt;HttpResponseMessage&gt; SendAsync
+    (HttpRequestMessage request, CancellationToken cancellationToken);
+  public void Dispose();
+  protected virtual void Dispose (bool disposing);
+}
+</code></pre>
+<p>متد <code>SendAsync</code> درون متد <code>SendAsync</code> کلاس <code>HttpClient</code> فراخوانی می‌شود.
+<code>HttpMessageHandler</code> به اندازه‌ای ساده است که بتوان به‌راحتی آن را زیرکلاس کرد و در نتیجه، یک نقطه‌ی توسعه‌پذیری برای <code>HttpClient</code> فراهم می‌کند.</p>
+<hr>
+<h3>🧪 Unit Testing و Mocking</h3>
+<p>می‌توانیم <code>HttpMessageHandler</code> را زیرکلاس کنیم تا یک <strong>Mocking Handler</strong> برای کمک به تست واحد بسازیم:</p>
+<pre><code class="language-csharp">class MockHandler : HttpMessageHandler
+{
+  Func &lt;HttpRequestMessage, HttpResponseMessage&gt; _responseGenerator;
+  public MockHandler
+    (Func &lt;HttpRequestMessage, HttpResponseMessage&gt; responseGenerator)
+  {
+    _responseGenerator = responseGenerator;
+  }
+  protected override Task &lt;HttpResponseMessage&gt; SendAsync
+    (HttpRequestMessage request, CancellationToken cancellationToken)
+  {
+    cancellationToken.ThrowIfCancellationRequested();
+    var response = _responseGenerator (request);
+    response.RequestMessage = request;
+    return Task.FromResult (response);
+  }
+}
+</code></pre>
+<p>🔹 سازنده‌ی این کلاس یک تابع دریافت می‌کند که مشخص می‌کند پاسخ از روی درخواست چگونه ساخته شود. این رویکرد بسیار انعطاف‌پذیر است زیرا همان هندلر می‌تواند چندین درخواست مختلف را تست کند.</p>
+<p>متد <code>SendAsync</code> در اینجا به‌صورت <strong>همگام</strong> عمل می‌کند چون از <code>Task.FromResult</code> استفاده کرده‌ایم. البته می‌توانستیم با برگرداندن <code>Task&lt;HttpResponseMessage&gt;</code> از تابع پاسخ‌ساز، حالت <strong>غیرهمگام</strong> را هم حفظ کنیم، اما از آنجا که تابع Mock معمولاً کوتاه و سریع است، ضرورتی ندارد.</p>
+<p>🔹 نحوه‌ی استفاده:</p>
+<pre><code class="language-csharp">var mocker = new MockHandler (request =&gt; 
+  new HttpResponseMessage (HttpStatusCode.OK)
+  {
+    Content = new StringContent (&quot;You asked for &quot; + request.RequestUri)
+  });
+var client = new HttpClient (mocker);    
+var response = await client.GetAsync (&quot;http://www.linqpad.net&quot;);
+string result = await response.Content.ReadAsStringAsync();
+Assert.AreEqual (&quot;You asked for http://www.linqpad.net/&quot;, result);
+</code></pre>
+<p>(<code>Assert.AreEqual</code> متدی است که معمولاً در فریم‌ورک‌های تست واحد مثل NUnit استفاده می‌شود.)</p>
+<hr>
+<h3>🔗 زنجیره‌سازی هندلرها با DelegatingHandler</h3>
+<p>می‌توانید یک Message Handler بسازید که یک هندلر دیگر را فراخوانی کند (و در نتیجه زنجیره‌ای از هندلرها ایجاد شود). این کار از طریق زیرکلاس کردن <code>DelegatingHandler</code> انجام می‌شود. با این روش می‌توانید پروتکل‌های سفارشی مانند <strong>احراز هویت، فشرده‌سازی و رمزگذاری</strong> را پیاده‌سازی کنید.</p>
+<p>🔹 نمونه‌ی یک هندلر لاگ ساده:</p>
+<pre><code class="language-csharp">class LoggingHandler : DelegatingHandler 
+{
+  public LoggingHandler (HttpMessageHandler nextHandler)
+  {
+     InnerHandler = nextHandler;
+  }
+  protected async override Task &lt;HttpResponseMessage&gt; SendAsync
+    (HttpRequestMessage request, CancellationToken cancellationToken)
+  {
+    Console.WriteLine (&quot;Requesting: &quot; + request.RequestUri);
+    var response = await base.SendAsync (request, cancellationToken);
+    Console.WriteLine (&quot;Got response: &quot; + response.StatusCode);
+    return response;
+  }
+}
+</code></pre>
+<p>✅ در اینجا ما <strong>غیرهمزمانی</strong> را در Override کردن <code>SendAsync</code> حفظ کرده‌ایم. استفاده از <code>async</code> در متدهایی که خروجی Task دارند هم قانونی است و هم در اینجا مطلوب.</p>
+<hr>
+<h3>🌐 پروکسی (Proxy)</h3>
+<p>یک <strong>Proxy Server</strong> واسطه‌ای است که درخواست‌های HTTP از طریق آن مسیردهی می‌شوند. سازمان‌ها معمولاً برای دسترسی کارکنان به اینترنت از طریق یک پروکسی استفاده می‌کنند چون مدیریت امنیت را ساده‌تر می‌کند. پروکسی آدرس خودش را دارد و می‌تواند احراز هویت بخواهد تا فقط کاربران انتخاب‌شده در LAN به اینترنت دسترسی داشته باشند.</p>
+<p>برای استفاده از Proxy در <code>HttpClient</code>:</p>
+<pre><code class="language-csharp">WebProxy p = new WebProxy (&quot;192.178.10.49&quot;, 808);
+p.Credentials = new NetworkCredential (&quot;username&quot;, &quot;password&quot;, &quot;domain&quot;);
+var handler = new HttpClientHandler { Proxy = p };
+var client = new HttpClient (handler);
+...
+</code></pre>
+<p>ویژگی <code>UseProxy</code> در <code>HttpClientHandler</code> را می‌توان روی <code>false</code> تنظیم کرد تا به جای null کردن <code>Proxy</code>، تشخیص خودکار غیرفعال شود.</p>
+<p>اگر هنگام ساختن <code>NetworkCredential</code> یک <strong>دامنه</strong> مشخص کنید، پروتکل‌های احراز هویت مبتنی بر ویندوز (NTLM یا Kerberos) استفاده می‌شوند. برای استفاده از کاربر فعلی ویندوز، مقدار <code>CredentialCache.DefaultNetworkCredentials</code> را به ویژگی <code>Credentials</code> پروکسی اختصاص دهید.</p>
+<p>همچنین به‌جای تنظیم Proxy در هر بار استفاده، می‌توانید مقدار پیش‌فرض سراسری را مشخص کنید:</p>
+<pre><code class="language-csharp">HttpClient.DefaultWebProxy = myWebProxy;
+</code></pre>
+<hr>
+<h3>🔐 احراز هویت (Authentication)</h3>
+<p>می‌توانید نام کاربری و رمز عبور را به این صورت به <code>HttpClient</code> بدهید:</p>
+<pre><code class="language-csharp">string username = &quot;myuser&quot;;
+string password = &quot;mypassword&quot;;
+var handler = new HttpClientHandler();
+handler.Credentials = new NetworkCredential (username, password);
+var client = new HttpClient (handler);
+...
+</code></pre>
+<p>این روش با پروتکل‌های مبتنی بر دیالوگ مثل <strong>Basic</strong> و <strong>Digest</strong> کار می‌کند و از طریق کلاس <code>AuthenticationManager</code> نیز قابل گسترش است. همچنین از <strong>Windows NTLM</strong> و <strong>Kerberos</strong> هم پشتیبانی می‌کند (اگر هنگام ساختن <code>NetworkCredential</code> دامنه وارد کرده باشید). اگر بخواهید از کاربر فعلی ویندوز استفاده کنید، کافی است ویژگی <code>Credentials</code> را مقداردهی نکنید و به‌جای آن <code>UseDefaultCredentials = true</code> تنظیم کنید.</p>
+<p>وقتی اطلاعات ورود (Credentials) را مشخص می‌کنید، <code>HttpClient</code> به‌طور خودکار پروتکل مناسب را مذاکره می‌کند. در برخی موارد گزینه‌های مختلفی وجود دارد؛ برای مثال، پاسخ اولیه‌ی یک سرور Microsoft Exchange Web Mail ممکن است شامل هدرهای زیر باشد:</p>
+<pre><code>HTTP/1.1 401 Unauthorized
+Content-Length: 83
+Content-Type: text/html
+Server: Microsoft-IIS/6.0
+WWW-Authenticate: Negotiate
+WWW-Authenticate: NTLM
+WWW-Authenticate: Basic realm=&quot;exchange.somedomain.com&quot;
+X-Powered-By: ASP.NET
+Date: Sat, 05 Aug 2006 12:37:23 GMT
+</code></pre>
+<p>کد <strong>401</strong> به معنای نیاز به احراز هویت است؛ هدرهای <code>WWW-Authenticate</code> هم نشان می‌دهند چه پروتکل‌هایی پشتیبانی می‌شوند.</p>
+<p>اگر <code>HttpClientHandler</code> را با نام کاربری و رمز درست پیکربندی کنید، این پیام را نخواهید دید چون زمان اجرا به‌طور خودکار یک پروتکل سازگار انتخاب می‌کند، درخواست اصلی را دوباره ارسال می‌کند و یک هدر اضافی اضافه می‌کند.</p>
+<p>مثال:</p>
+<pre><code>Authorization: Negotiate TlRMTVNTUAAABAAAt5II2gjACDArAAACAwACACgAAAAQ
+ATmKAAAAD0lVDRdPUksHUq9VUA==
+</code></pre>
+<p>این مکانیزم شفاف است، اما باعث می‌شود هر درخواست یک رفت‌وبرگشت اضافی ایجاد کند. برای جلوگیری از این موضوع در درخواست‌های بعدی به همان URI، می‌توانید ویژگی <code>PreAuthenticate</code> در <code>HttpClientHandler</code> را روی true قرار دهید.</p>
+<h3>🔑 CredentialCache</h3>
+<p>می‌توانید با استفاده از شیء <code>CredentialCache</code> یک <strong>پروتکل احراز هویت خاص</strong> را مجبور کنید.
+یک Credential Cache شامل یک یا چند شیء <code>NetworkCredential</code> است که هرکدام به یک پروتکل و یک <strong>URI prefix</strong> خاص متصل هستند.</p>
+<p>به‌عنوان مثال، ممکن است بخواهید در هنگام ورود به <strong>Exchange Server</strong> از پروتکل Basic استفاده نکنید (چون رمزها را به صورت <strong>متن ساده</strong> ارسال می‌کند):</p>
+<pre><code class="language-csharp">CredentialCache cache = new CredentialCache();
+Uri prefix = new Uri (&quot;http://exchange.somedomain.com&quot;);
+cache.Add (prefix, &quot;Digest&quot;,  new NetworkCredential (&quot;joe&quot;, &quot;passwd&quot;));
+cache.Add (prefix, &quot;Negotiate&quot;, new NetworkCredential (&quot;joe&quot;, &quot;passwd&quot;));
+var handler = new HttpClientHandler();
+handler.Credentials = cache;
+...
+</code></pre>
+<p>پروتکل احراز هویت به صورت رشته‌ای مشخص می‌شود. مقادیر معتبر شامل موارد زیر هستند:
+<code>Basic</code>, <code>Digest</code>, <code>NTLM</code>, <code>Kerberos</code>, <code>Negotiate</code></p>
+<p>🔹 در این مثال، پروتکل <strong>Negotiate</strong> انتخاب می‌شود چون سرور در هدرهای احراز هویت خود پشتیبانی از Digest را اعلام نکرده است.
+Negotiate یک پروتکل ویندوزی است که در عمل به <strong>Kerberos</strong> یا <strong>NTLM</strong> ترجمه می‌شود، بسته به اینکه سرور چه قابلیتی داشته باشد. این مکانیزم باعث می‌شود اپلیکیشن شما در برابر استانداردهای امنیتی آینده هم <strong>سازگار</strong> باقی بماند.</p>
+<p>برای افزودن کاربر فعلی ویندوز به Credential Cache بدون نیاز به رمز عبور، می‌توانید از ویژگی ایستا <code>CredentialCache.DefaultNetworkCredentials</code> استفاده کنید:</p>
+<pre><code class="language-csharp">cache.Add (prefix, &quot;Negotiate&quot;, CredentialCache.DefaultNetworkCredentials);
+</code></pre>
+<hr>
+<h3>📨 احراز هویت از طریق Header</h3>
+<p>راه دیگر احراز هویت، تنظیم مستقیم <strong>هدر احراز هویت</strong> است:</p>
+<pre><code class="language-csharp">var client = new HttpClient();
+client.DefaultRequestHeaders.Authorization = 
+  new AuthenticationHeaderValue (&quot;Basic&quot;,
+    Convert.ToBase64String (Encoding.UTF8.GetBytes (&quot;username:password&quot;)));
+...
+</code></pre>
+<p>این استراتژی با سیستم‌های احراز هویت سفارشی مثل <strong>OAuth</strong> هم کار می‌کند.</p>
+<hr>
+<h3>📑 هدرها (Headers)</h3>
+<p><code>HttpClient</code> به شما اجازه می‌دهد که به یک درخواست، هدرهای HTTP سفارشی اضافه کنید یا هدرهای پاسخ را مرور کنید.
+یک هدر در اصل یک جفت <strong>کلید/مقدار</strong> است که شامل <strong>متادیتا</strong> می‌شود (مثل نوع محتوای پیام یا نرم‌افزار سرور).</p>
+<ul>
+<li>ویژگی <code>DefaultRequestHeaders</code> برای هدرهایی است که روی <strong>همه‌ی درخواست‌ها</strong> اعمال می‌شوند:</li>
+</ul>
+<pre><code class="language-csharp">var client = new HttpClient (handler);
+client.DefaultRequestHeaders.UserAgent.Add (
+  new ProductInfoHeaderValue (&quot;VisualStudio&quot;, &quot;2022&quot;));
+client.DefaultRequestHeaders.Add (&quot;CustomHeader&quot;, &quot;VisualStudio/2022&quot;);
+</code></pre>
+<ul>
+<li>ویژگی <code>Headers</code> در کلاس <code>HttpRequestMessage</code> مخصوص هدرهای خاص همان درخواست است.</li>
+</ul>
+<hr>
+<h3>❓ Query Strings</h3>
+<p><strong>Query String</strong> رشته‌ای است که به URI اضافه می‌شود (بعد از علامت سؤال) و برای ارسال داده‌های ساده به سرور استفاده می‌شود.</p>
+<p>🔹 ساختار کلی:</p>
+<pre><code>?key1=value1&amp;key2=value2&amp;key3=value3...
+</code></pre>
+<p>مثال:</p>
+<pre><code class="language-csharp">string requestURI = &quot;http://www.google.com/search?q=HttpClient&amp;hl=fr&quot;;
+</code></pre>
+<p>اگر احتمال دارد Query شامل <strong>کاراکترهای خاص یا فاصله</strong> باشد، می‌توانید از متد <code>EscapeDataString</code> در کلاس <code>Uri</code> استفاده کنید تا URI معتبر تولید شود:</p>
+<pre><code class="language-csharp">string search = Uri.EscapeDataString (&quot;(HttpClient or HttpRequestMessage)&quot;);
+string language = Uri.EscapeDataString (&quot;fr&quot;);
+string requestURI = &quot;http://www.google.com/search?q=&quot; + search +
+                   &quot;&amp;hl=&quot; + language;
+</code></pre>
+<p>🔹 نتیجه:</p>
+<pre><code>http://www.google.com/search?q=(HttpClient%20OR%20HttpRequestMessage)&amp;hl=fr
+</code></pre>
+<p>(متد <code>EscapeDataString</code> شبیه <code>EscapeUriString</code> است، با این تفاوت که کاراکترهایی مثل <code>&amp;</code> و <code>=</code> را هم کدگذاری می‌کند، چون در غیر این صورت Query String را به‌هم می‌ریزد.)</p>
+<hr>
+<h3>📤 آپلود داده‌های فرم (Uploading Form Data)</h3>
+<p>برای آپلود داده‌های فرم HTML، یک شیء از نوع <code>FormUrlEncodedContent</code> بسازید و مقادیر را در آن قرار دهید. سپس می‌توانید آن را به متد <code>PostAsync</code> بدهید یا به ویژگی <code>Content</code> یک درخواست اختصاص دهید:</p>
+<pre><code class="language-csharp">string uri = &quot;http://www.albahari.com/EchoPost.aspx&quot;;
+var client = new HttpClient();
+var dict = new Dictionary&lt;string,string&gt; 
+{
+    { &quot;Name&quot;, &quot;Joe Albahari&quot; },
+    { &quot;Company&quot;, &quot;O'Reilly&quot; }
+};
+var values = new FormUrlEncodedContent (dict);
+var response = await client.PostAsync (uri, values);
+response.EnsureSuccessStatusCode();
+Console.WriteLine (await response.Content.ReadAsStringAsync());
+</code></pre>
+<hr>
+<h3>🍪 کوکی‌ها (Cookies)</h3>
+<p>یک <strong>Cookie</strong> جفت رشته <strong>نام/مقدار</strong> است که یک سرور HTTP در هدر پاسخ برای کلاینت ارسال می‌کند. مرورگرها معمولاً کوکی‌ها را ذخیره می‌کنند و در هر درخواست بعدی (به همان آدرس) دوباره به سرور می‌فرستند تا زمان انقضا.</p>
+<p>🔹 هدف کوکی: سرور بتواند بفهمد آیا همچنان با همان کلاینت قبلی در ارتباط است یا خیر (بدون نیاز به Query String‌های اضافی).</p>
+<p>به‌طور پیش‌فرض، <code>HttpClient</code> کوکی‌های دریافتی را <strong>نادیده می‌گیرد</strong>. برای پذیرش کوکی‌ها باید یک <code>CookieContainer</code> بسازید و آن را به <code>HttpClientHandler</code> اختصاص دهید:</p>
+<pre><code class="language-csharp">var cc = new CookieContainer();
+var handler = new HttpClientHandler();
+handler.CookieContainer = cc;
+var client = new HttpClient (handler);
+...
+</code></pre>
+<p>برای استفاده مجدد از کوکی‌ها در درخواست‌های بعدی، کافی است از همان <code>CookieContainer</code> دوباره استفاده کنید.
+همچنین می‌توانید یک <code>CookieContainer</code> تازه بسازید و کوکی‌ها را به‌صورت دستی اضافه کنید:</p>
+<pre><code class="language-csharp">Cookie c = new Cookie (&quot;PREF&quot;,
+                       &quot;ID=6b10df1da493a9c4:TM=1179...&quot;,
+                       &quot;/&quot;,
+                       &quot;.google.com&quot;);
+freshCookieContainer.Add (c);
+</code></pre>
+<p>آرگومان سوم و چهارم به ترتیب <strong>مسیر (Path)</strong> و <strong>دامنه (Domain)</strong> صادرکننده را مشخص می‌کنند.</p>
+<p>یک <code>CookieContainer</code> در سمت کلاینت می‌تواند کوکی‌هایی از چندین مبدا مختلف را در خود جای دهد؛ <code>HttpClient</code> فقط کوکی‌هایی را می‌فرستد که مسیر و دامنه‌شان با سرور درخواست‌شده مطابقت داشته باشند.</p>
+<h3>🖥️ نوشتن یک HTTP Server</h3>
+<p>اگر نیاز به نوشتن یک <strong>HTTP server</strong> داشته باشید، یک رویکرد سطح بالاتر (از .NET 6 به بعد) استفاده از <strong>ASP.NET Minimal API</strong> است. برای شروع فقط کافی است:</p>
+<pre><code class="language-csharp">var app = WebApplication.CreateBuilder().Build();
+app.MapGet (&quot;/&quot;, () =&gt; &quot;Hello, world!&quot;);
+app.Run();
+</code></pre>
+<p>همچنین می‌توانید با استفاده از کلاس <strong>HttpListener</strong>، سرور HTTP اختصاصی خودتان را بسازید. نمونه‌ی زیر یک سرور ساده است که روی پورت 51111 گوش می‌دهد، منتظر یک درخواست از کلاینت می‌شود و سپس یک پاسخ یک‌خطی برمی‌گرداند:</p>
+<pre><code class="language-csharp">using var server = new SimpleHttpServer();
+// ارسال یک درخواست از کلاینت:
+Console.WriteLine (await new HttpClient().GetStringAsync
+  (&quot;http://localhost:51111/MyApp/Request.txt&quot;));
+
+class SimpleHttpServer : IDisposable
+{
+  readonly HttpListener listener = new HttpListener();
+  public SimpleHttpServer() =&gt; ListenAsync();  
+
+  async void ListenAsync()
+  {
+    listener.Prefixes.Add (&quot;http://localhost:51111/MyApp/&quot;);  // گوش دادن روی پورت 51111
+    listener.Start();
+
+    // منتظر یک درخواست کلاینت:
+    HttpListenerContext context = await listener.GetContextAsync();
+
+    // پاسخ به درخواست:
+    string msg = &quot;You asked for: &quot; + context.Request.RawUrl;
+    context.Response.ContentLength64 = Encoding.UTF8.GetByteCount (msg);
+    context.Response.StatusCode = (int)HttpStatusCode.OK;
+    using (Stream s = context.Response.OutputStream)
+    using (StreamWriter writer = new StreamWriter (s))
+      await writer.WriteAsync (msg);
+  }
+
+  public void Dispose() =&gt; listener.Close();
+}
+</code></pre>
+<p>📤 <strong>خروجی:</strong></p>
+<pre><code>You asked for: /MyApp/Request.txt
+</code></pre>
+<p>روی ویندوز، <code>HttpListener</code> به صورت داخلی از <strong>.NET Socket</strong> استفاده نمی‌کند، بلکه از <strong>Windows HTTP Server API</strong> کمک می‌گیرد. این موضوع باعث می‌شود چندین برنامه روی یک IP و پورت یکسان گوش بدهند، به شرطی که هر کدام پیشوندهای متفاوتی ثبت کنند (مثلاً <code>/myapp</code> یا <code>/anotherapp</code>).</p>
+<p>ویژگی‌های اصلی:</p>
+<ul>
+<li>درخواست‌های کلاینت از طریق متد <code>GetContext</code> گرفته می‌شود.</li>
+<li>شما می‌توانید هدرها، کوکی‌ها و وضعیت پاسخ را تنظیم کنید.</li>
+<li>حداقل باید <strong>ContentLength</strong> و <strong>StatusCode</strong> را مشخص کنید.</li>
+</ul>
+<p>مثال یک <strong>وب‌سرور ساده و ناهمزمان</strong> برای ارائه‌ی فایل‌ها:</p>
+<pre><code class="language-csharp">class WebServer
+{
+  HttpListener _listener;
+  string _baseFolder;  // پوشه‌ی وب‌پیج‌ها
+  public WebServer (string uriPrefix, string baseFolder)
+  {
+    _listener = new HttpListener();
+    _listener.Prefixes.Add (uriPrefix);
+    _baseFolder = baseFolder;
+  }
+
+  public async void Start()
+  {
+    _listener.Start();
+    while (true)
+      try 
+      {
+        var context = await _listener.GetContextAsync();
+        Task.Run (() =&gt; ProcessRequestAsync (context));
+      }
+      catch (HttpListenerException)     { break; }
+      catch (InvalidOperationException) { break; }
+  }
+
+  public void Stop() =&gt; _listener.Stop();
+
+  async void ProcessRequestAsync (HttpListenerContext context)
+  {
+    try
+    {
+      string filename = Path.GetFileName (context.Request.RawUrl);
+      string path = Path.Combine (_baseFolder, filename);
+      byte[] msg;
+
+      if (!File.Exists (path))
+      {
+        Console.WriteLine (&quot;Resource not found: &quot; + path);
+        context.Response.StatusCode = (int) HttpStatusCode.NotFound;
+        msg = Encoding.UTF8.GetBytes (&quot;Sorry, that page does not exist&quot;);
+      }
+      else
+      {
+        context.Response.StatusCode = (int) HttpStatusCode.OK;
+        msg = File.ReadAllBytes (path);
+      }
+
+      context.Response.ContentLength64 = msg.Length;
+      using (Stream s = context.Response.OutputStream)
+        await s.WriteAsync (msg, 0, msg.Length);
+    }
+    catch (Exception ex) { Console.WriteLine (&quot;Request error: &quot; + ex); }
+  }
+}
+</code></pre>
+<p>📌 راه‌اندازی:</p>
+<pre><code class="language-csharp">var server = new WebServer (&quot;http://localhost:51111/&quot;, @&quot;d:\webroot&quot;);
+try
+{
+  server.Start();
+  Console.WriteLine (&quot;Server running... press Enter to stop&quot;);
+  Console.ReadLine();
+}
+finally { server.Stop(); }
+</code></pre>
+<p>حالا می‌توانید با هر مرورگری این سرور را تست کنید.</p>
+<hr>
+<h3>🌐 استفاده از DNS</h3>
+<p>کلاس استاتیک <strong>Dns</strong> عملیات <strong>Domain Name System</strong> را کپسوله می‌کند.</p>
+<p>🔹 تبدیل نام دامنه به IP:</p>
+<pre><code class="language-csharp">foreach (IPAddress a in Dns.GetHostAddresses (&quot;albahari.com&quot;))
+  Console.WriteLine (a.ToString());  // 205.210.42.167
+</code></pre>
+<p>🔹 تبدیل IP به نام دامنه:</p>
+<pre><code class="language-csharp">IPHostEntry entry = Dns.GetHostEntry (&quot;205.210.42.167&quot;);
+Console.WriteLine (entry.HostName);  // albahari.com
+</code></pre>
+<p>🔹 روش ناهمزمان:</p>
+<pre><code class="language-csharp">foreach (IPAddress a in await Dns.GetHostAddressesAsync (&quot;albahari.com&quot;))
+  Console.WriteLine (a.ToString());
+</code></pre>
+<hr>
+<h3>📧 ارسال ایمیل با SmtpClient</h3>
+<p>کلاس <strong>SmtpClient</strong> در فضای نام <code>System.Net.Mail</code> برای ارسال ایمیل با پروتکل <strong>SMTP</strong> استفاده می‌شود.</p>
+<p>مثال ساده:</p>
+<pre><code class="language-csharp">SmtpClient client = new SmtpClient();
+client.Host = &quot;mail.myserver.com&quot;;
+client.Send (&quot;from@adomain.com&quot;, &quot;to@adomain.com&quot;, &quot;subject&quot;, &quot;body&quot;);
+</code></pre>
+<p>📎 افزودن پیوست‌ها:</p>
+<pre><code class="language-csharp">SmtpClient client = new SmtpClient();
+client.Host = &quot;mail.myisp.net&quot;;
+MailMessage mm = new MailMessage();
+mm.Sender = new MailAddress (&quot;kay@domain.com&quot;, &quot;Kay&quot;);
+mm.From   = new MailAddress (&quot;kay@domain.com&quot;, &quot;Kay&quot;);
+mm.To.Add  (new MailAddress (&quot;bob@domain.com&quot;, &quot;Bob&quot;));
+mm.CC.Add  (new MailAddress (&quot;dan@domain.com&quot;, &quot;Dan&quot;));
+mm.Subject = &quot;Hello!&quot;;
+mm.Body = &quot;Hi there. Here's the photo!&quot;;
+mm.IsBodyHtml = false;
+mm.Priority = MailPriority.High;
+Attachment a = new Attachment (&quot;photo.jpg&quot;,
+                               System.Net.Mime.MediaTypeNames.Image.Jpeg);
+mm.Attachments.Add (a);
+client.Send (mm);
+</code></pre>
+<p>🔐 بیشتر سرورهای SMTP فقط ارتباط‌های <strong>احراز هویت‌شده و امن (SSL/TLS)</strong> را قبول می‌کنند:</p>
+<pre><code class="language-csharp">var client = new SmtpClient (&quot;smtp.myisp.com&quot;, 587)
+{
+  Credentials = new NetworkCredential (&quot;me@myisp.com&quot;, &quot;MySecurePass&quot;),
+  EnableSsl = true
+};
+client.Send (&quot;me@myisp.com&quot;, &quot;someone@somewhere.com&quot;, &quot;Subject&quot;, &quot;Body&quot;);
+Console.WriteLine (&quot;Sent&quot;);
+</code></pre>
+<p>📂 در زمان توسعه، می‌توانید ایمیل‌ها را به جای ارسال، در یک پوشه ذخیره کنید:</p>
+<pre><code class="language-csharp">SmtpClient client = new SmtpClient();
+client.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
+client.PickupDirectoryLocation = @&quot;c:\mail&quot;;
+</code></pre>
+<hr>
+<p>✨ در این بخش یاد گرفتیم چطور در .NET یک <strong>HTTP server</strong> ساده بنویسیم، با <strong>DNS</strong> کار کنیم و با استفاده از <strong>SMTP</strong> ایمیل ارسال کنیم.</p>
+<h2>استفاده از TCP 🌐</h2>
+<p>TCP و UDP پروتکل‌های لایه‌ی <strong>Transport</strong> هستند که بیشتر سرویس‌های اینترنت و شبکه‌های محلی (LAN) بر پایه‌ی آن‌ها ساخته شده‌اند. به‌عنوان نمونه:</p>
+<ul>
+<li>پروتکل‌های HTTP (نسخه‌ی ۲ و پایین‌تر)، FTP و SMTP از <strong>TCP</strong> استفاده می‌کنند.</li>
+<li>پروتکل‌های DNS و HTTP نسخه‌ی ۳ از <strong>UDP</strong> استفاده می‌کنند.</li>
+</ul>
+<p>TCP یک پروتکل <strong>Connection-Oriented</strong> است و مکانیزم‌های اطمینان (Reliability) دارد، در حالی که UDP <strong>Connectionless</strong> بوده، سربار (Overhead) کمتری دارد و از <strong>Broadcasting</strong> پشتیبانی می‌کند. برای نمونه، <strong>BitTorrent</strong> و <strong>Voice over IP (VoIP)</strong> از UDP بهره می‌برند. ⚡</p>
+<p>لایه‌ی Transport نسبت به لایه‌های بالاتر انعطاف‌پذیری بیشتری فراهم می‌کند و می‌تواند کارایی بهتری هم داشته باشد، اما باید کارهایی مثل <strong>Authentication</strong> و <strong>Encryption</strong> را خودتان مدیریت کنید.</p>
+<hr>
+<h3>TCP در .NET</h3>
+<p>در .NET دو انتخاب اصلی وجود دارد:</p>
+<ol>
+<li>استفاده از کلاس‌های ساده‌تر <strong>TcpClient</strong> و <strong>TcpListener</strong></li>
+<li>یا استفاده از کلاس پیشرفته‌تر و پرامکانات‌تر <strong>Socket</strong></li>
+</ol>
+<p>در واقع می‌توان این دو را با هم ترکیب کرد، زیرا <strong>TcpClient</strong> از طریق ویژگی <strong>Client</strong>، شیء اصلی <strong>Socket</strong> را در اختیار می‌گذارد. کلاس <strong>Socket</strong> تنظیمات بیشتری را برای دسترسی مستقیم به لایه‌ی شبکه (IP) و حتی پروتکل‌های غیراینترنتی مثل <strong>Novell SPX/IPX</strong> فراهم می‌کند.</p>
+<p>مثل سایر پروتکل‌ها، TCP هم بین <strong>Client</strong> و <strong>Server</strong> تفاوت قائل می‌شود:</p>
+<ul>
+<li>Client درخواست را آغاز می‌کند.</li>
+<li>Server منتظر دریافت درخواست می‌ماند.</li>
+</ul>
+<p>نمونه‌ی یک <strong>Client همگام (Synchronous TCP Client)</strong>:</p>
+<pre><code class="language-csharp">using (TcpClient client = new TcpClient())
+{
+    client.Connect(&quot;address&quot;, port);
+    using (NetworkStream n = client.GetStream())
+    {
+        // Read and write to the network stream...
+    }
+}
+</code></pre>
+<ul>
+<li>متد <strong>Connect</strong> در TcpClient بلوکه می‌شود تا اتصال برقرار گردد (نسخه‌ی غیرهمگام آن <strong>ConnectAsync</strong> است).</li>
+<li>پس از آن، <strong>NetworkStream</strong> امکان ارتباط دوطرفه (ارسال و دریافت داده‌های باینری) با سرور را فراهم می‌کند.</li>
+</ul>
+<hr>
+<h3>یک سرور ساده‌ی TCP</h3>
+<pre><code class="language-csharp">TcpListener listener = new TcpListener(&lt;ip address&gt;, port);
+listener.Start();
+while (keepProcessingRequests)
+    using (TcpClient c = listener.AcceptTcpClient())
+    using (NetworkStream n = c.GetStream())
+    {
+        // Read and write to the network stream...
+    }
+listener.Stop();
+</code></pre>
+<ul>
+<li>برای <strong>TcpListener</strong> باید آدرس IP محلی تعیین شود (یک کامپیوتر با دو کارت شبکه می‌تواند دو آدرس داشته باشد).</li>
+<li>می‌توان از <strong>IPAddress.Any</strong> استفاده کرد تا روی تمام آدرس‌های IP محلی گوش دهد.</li>
+<li>متد <strong>AcceptTcpClient</strong> تا دریافت درخواست از یک Client بلوکه می‌ماند (نسخه‌ی غیرهمگام آن نیز وجود دارد).</li>
+<li>پس از دریافت اتصال، مشابه Client، از <strong>GetStream</strong> برای ارتباط استفاده می‌کنیم.</li>
+</ul>
+<p>⚠️ هنگام کار در لایه‌ی Transport باید یک <strong>پروتکل مکالمه</strong> تعریف کنید (چه کسی چه زمانی صحبت کند و چه زمانی گوش دهد). اگر هر دو طرف هم‌زمان صحبت یا هم‌زمان گوش کنند، ارتباط از کار می‌افتد—مثل واکی‌تاکی! 🎙️</p>
+<hr>
+<h3>نمونه پروتکل ساده (Hello ↔ Hello right back!)</h3>
+<pre><code class="language-csharp">using System;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading;
+
+new Thread(Server).Start();   // اجرای متد سرور به‌طور موازی
+Thread.Sleep(500);            // کمی مکث برای راه‌اندازی سرور
+Client();
+
+void Client()
+{
+    using (TcpClient client = new TcpClient(&quot;localhost&quot;, 51111))
+    using (NetworkStream n = client.GetStream())
+    {
+        BinaryWriter w = new BinaryWriter(n);
+        w.Write(&quot;Hello&quot;);
+        w.Flush();
+        Console.WriteLine(new BinaryReader(n).ReadString());
+    }
+}
+
+void Server()   // فقط یک درخواست را پردازش می‌کند
+{
+    TcpListener listener = new TcpListener(IPAddress.Any, 51111);
+    listener.Start();
+    using (TcpClient c = listener.AcceptTcpClient())
+    using (NetworkStream n = c.GetStream())
+    {
+        string msg = new BinaryReader(n).ReadString();
+        BinaryWriter w = new BinaryWriter(n);
+        w.Write(msg + &quot; right back!&quot;);
+        w.Flush();   // حتما باید Flush شود چون Writer آزاد نمی‌شود
+    }
+    listener.Stop();
+}
+
+// OUTPUT: Hello right back!
+</code></pre>
+<ul>
+<li>در این مثال از <strong>localhost loopback</strong> استفاده شده تا Client و Server روی همان سیستم اجرا شوند.</li>
+<li>پورتی در بازه‌ی آزاد (بالاتر از ۴۹۱۵۲) انتخاب شده است.</li>
+<li>برای ارسال و دریافت متن‌ها از <strong>BinaryWriter</strong> و <strong>BinaryReader</strong> استفاده کرده‌ایم.</li>
+<li>این ابزارها برخلاف <strong>StreamReader/StreamWriter</strong> رشته‌ها را با یک عدد طول (Length Prefix) ذخیره می‌کنند، بنابراین <strong>BinaryReader</strong> دقیقاً می‌داند چند بایت باید بخواند.</li>
+</ul>
+<p>اگر از <strong>StreamReader.ReadToEnd</strong> استفاده کنید، ممکن است اتصال هیچ‌وقت تمام نشود و عملیات خواندن برای همیشه بلوکه شود، چون <strong>NetworkStream</strong> انتهای مشخصی ندارد. ⚠️
+همچنین <strong>StreamReader</strong> به دلیل داشتن <strong>Read-Ahead Buffer</strong>، ممکن است بیش از حد نیاز بخواند و باعث بلوکه شدن شود. اما <strong>FileStream</strong> چنین مشکلی ندارد چون انتهای مشخصی دارد و متد <strong>Read</strong> در پایان مقدار <code>0</code> بازمی‌گرداند.</p>
+<hr>
+<h3>هم‌زمانی (Concurrency) با TCP ⚡</h3>
+<p>کلاس‌های <strong>TcpClient</strong> و <strong>TcpListener</strong> متدهای <strong>Asynchronous</strong> دارند که برای مقیاس‌پذیری بهتر استفاده می‌شوند. کافی است متدهای بلوکه‌شونده را با نسخه‌ی Async جایگزین کرده و نتیجه را <strong>await</strong> کنید.</p>
+<p>نمونه‌ی یک سرور <strong>Async</strong>:</p>
+<pre><code class="language-csharp">async void RunServerAsync()
+{
+    var listener = new TcpListener(IPAddress.Any, 51111);
+    listener.Start();
+    try
+    {
+        while (true)
+            Accept(await listener.AcceptTcpClientAsync());
+    }
+    finally { listener.Stop(); }
+}
+
+async Task Accept(TcpClient client)
+{
+    await Task.Yield();
+    try
+    {
+        using (client)
+        using (NetworkStream n = client.GetStream())
+        {
+            byte[] data = new byte[5000];
+            int bytesRead = 0; int chunkSize = 1;
+            while (bytesRead &lt; data.Length &amp;&amp; chunkSize &gt; 0)
+                bytesRead += chunkSize =
+                    await n.ReadAsync(data, bytesRead, data.Length - bytesRead);
+            Array.Reverse(data);   // معکوس کردن آرایه‌ی بایت‌ها
+            await n.WriteAsync(data, 0, data.Length);
+        }
+    }
+    catch (Exception ex) { Console.WriteLine(ex.Message); }
+}
+</code></pre>
+<p>این برنامه <strong>Scalable</strong> است چون برای کل مدت درخواست یک Thread اشغال نمی‌کند.
+مثلاً اگر ۱۰۰۰ Client هم‌زمان متصل شوند و هرکدام چند ثانیه طول بکشد، این راهکار نیازی به ۱۰۰۰ Thread ندارد. فقط در بازه‌های کوتاه قبل و بعد از عبارت‌های <code>await</code> از Thread استفاده می‌کند. ✅</p>
+<hr>
+<h3>دریافت ایمیل POP3 با TCP 📧</h3>
+<p>در .NET پشتیبانی در سطح <strong>Application Layer</strong> برای پروتکل <strong>POP3</strong> وجود ندارد. بنابراین باید در <strong>TCP Layer</strong> کدنویسی کنید. خوشبختانه، پروتکل POP3 ساده است و گفتگوی آن به‌صورت زیر پیش می‌رود:</p>
+<div align="center">
+<p><img src="../../../assets/image/16/Table-16-4.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h2>دریافت ایمیل POP3 با TCP 📧</h2>
+<p>هر دستور و پاسخ در پروتکل <strong>POP3</strong> با یک خط جدید (<strong>CR + LF</strong>) پایان می‌یابد، به‌جز دستورات چندخطی مثل <strong>LIST</strong> و <strong>RETR</strong> که با یک نقطه (<code>.</code>) در یک خط جداگانه تمام می‌شوند.
+از آن‌جا که نمی‌توانیم از <strong>StreamReader</strong> با <strong>NetworkStream</strong> استفاده کنیم، ابتدا یک متد کمکی برای خواندن یک خط متن به‌صورت <strong>بدون بافر (Nonbuffered)</strong> می‌نویسیم:</p>
+<pre><code class="language-csharp">string ReadLine (Stream s)
+{
+    List&lt;byte&gt; lineBuffer = new List&lt;byte&gt;();
+    while (true)
+    {
+        int b = s.ReadByte();
+        if (b == 10 || b &lt; 0) break;
+        if (b != 13) lineBuffer.Add((byte)b);
+    }
+    return Encoding.UTF8.GetString(lineBuffer.ToArray());
+}
+</code></pre>
+<hr>
+<h3>متد کمکی برای ارسال دستور ✉️</h3>
+<p>همچنین یک متد کمکی برای ارسال دستور نیاز داریم. چون همیشه انتظار داریم پاسخ با <strong>+OK</strong> شروع شود، می‌توانیم پاسخ را در همان لحظه بخوانیم و اعتبارسنجی کنیم:</p>
+<pre><code class="language-csharp">void SendCommand (Stream stream, string line)
+{
+    byte[] data = Encoding.UTF8.GetBytes(line + &quot;\r\n&quot;);
+    stream.Write(data, 0, data.Length);
+    string response = ReadLine(stream);
+    if (!response.StartsWith(&quot;+OK&quot;))
+        throw new Exception(&quot;POP Error: &quot; + response);
+}
+</code></pre>
+<hr>
+<h3>دریافت ایمیل‌ها از سرور 📬</h3>
+<p>با داشتن این متدها، کار دریافت ایمیل ساده می‌شود. کافی است یک اتصال TCP روی پورت <strong>۱۱۰</strong> (پورت پیش‌فرض POP3) برقرار کنیم و با سرور گفتگو را آغاز کنیم. در این مثال، هر پیام ایمیل در یک فایل تصادفی با پسوند <strong>.eml</strong> ذخیره می‌شود و سپس از روی سرور حذف می‌گردد:</p>
+<pre><code class="language-csharp">using (TcpClient client = new TcpClient(&quot;mail.isp.com&quot;, 110))
+using (NetworkStream n = client.GetStream())
+{
+    ReadLine(n);                           // خواندن پیام خوش‌آمدگویی
+    SendCommand(n, &quot;USER username&quot;);
+    SendCommand(n, &quot;PASS password&quot;);
+    SendCommand(n, &quot;LIST&quot;);                // دریافت شناسه‌های پیام‌ها
+
+    List&lt;int&gt; messageIDs = new List&lt;int&gt;();
+    while (true)
+    {
+        string line = ReadLine(n);         // مثلا: &quot;1 1876&quot;
+        if (line == &quot;.&quot;) break;
+        messageIDs.Add(int.Parse(line.Split(' ')[0]));   // شناسه پیام
+    }
+
+    foreach (int id in messageIDs)         // دریافت هر پیام
+    {
+        SendCommand(n, &quot;RETR &quot; + id);
+        string randomFile = Guid.NewGuid().ToString() + &quot;.eml&quot;;
+        using (StreamWriter writer = File.CreateText(randomFile))
+            while (true)
+            {
+                string line = ReadLine(n); // خواندن خط بعدی پیام
+                if (line == &quot;.&quot;) break;    // نقطه = پایان پیام
+                if (line == &quot;..&quot;) line = &quot;.&quot;; // جایگزینی نقطه‌ی دوتایی
+                writer.WriteLine(line);    // نوشتن در فایل خروجی
+            }
+        SendCommand(n, &quot;DELE &quot; + id);      // حذف پیام از سرور
+    }
+
+    SendCommand(n, &quot;QUIT&quot;);
+}
+</code></pre>
+<hr>
+<h3>نکته 💡</h3>
+<p>در <strong>NuGet</strong> کتابخانه‌های متن‌باز (<strong>Open Source</strong>) برای POP3 وجود دارد که قابلیت‌هایی مثل:</p>
+<ul>
+<li>پشتیبانی از <strong>Authentication</strong></li>
+<li>برقراری ارتباط امن <strong>TLS/SSL</strong></li>
+<li>و پردازش پیام‌ها با <strong>MIME Parsing</strong></li>
+</ul>
+<p>را در اختیار شما قرار می‌دهند. ✅</p>
+
   </main>
 
   <!-- فوتر مشترک -->

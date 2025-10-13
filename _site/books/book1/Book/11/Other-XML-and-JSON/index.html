@@ -38,7 +38,1208 @@
 
   <!-- محتوای صفحه -->
   <main class="site-main">
+    <h1>فصل یازدهم: سایر تکنولوژی‌های XML و JSON</h1>
+<p>در <strong>فصل ۱۰</strong>، ما API مربوط به <strong>LINQ-to-XML</strong> و به‌طور کلی XML را بررسی کردیم.
+در این فصل، به سراغ <strong>کلاس‌های سطح پایین XmlReader/XmlWriter</strong> و همچنین <strong>انواع داده‌هایی برای کار با JSON (JavaScript Object Notation)</strong> می‌رویم، که به‌عنوان یک جایگزین محبوب برای XML شناخته می‌شود.</p>
+<p>در ضمیمه‌ی آنلاین 📎، ابزارهایی برای کار با <strong>XML Schema</strong> و <strong>Stylesheet</strong>‌ها توضیح داده شده‌اند.</p>
+<hr>
+<h3>XmlReader ⚡</h3>
+<p><strong>XmlReader</strong> یک کلاس با کارایی بالا است که برای خواندن یک جریان (Stream) از XML به‌صورت سطح پایین و فقط رو به جلو استفاده می‌شود.</p>
+<p>به مثال زیر از یک فایل XML به نام <code>customer.xml</code> توجه کنید:</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;yes&quot;?&gt;
+&lt;customer id=&quot;123&quot; status=&quot;archived&quot;&gt;
+  &lt;firstname&gt;Jim&lt;/firstname&gt;
+  &lt;lastname&gt;Bo&lt;/lastname&gt;
+&lt;/customer&gt;
+</code></pre>
+<p>برای ساختن یک شیء از نوع <code>XmlReader</code>، کافی است متد استاتیک <code>XmlReader.Create</code> را صدا بزنید و یک <code>Stream</code>، یا یک <code>TextReader</code>، یا یک رشته‌ی URI به آن بدهید:</p>
+<pre><code class="language-csharp">using XmlReader reader = XmlReader.Create(&quot;customer.xml&quot;);
+...
+</code></pre>
+<p>از آن‌جایی که <strong>XmlReader</strong> می‌تواند داده‌ها را از منابعی کند (مثل <code>Stream</code>‌ها و URIها) بخواند، نسخه‌های <strong>asynchronous</strong> برای بیشتر متدهای خود ارائه می‌دهد تا بتوانید به‌سادگی کدهای <strong>nonblocking</strong> بنویسید.
+(ما موضوع <strong>asynchrony</strong> را به‌طور کامل در فصل ۱۴ بررسی می‌کنیم.)</p>
+<hr>
+<p>برای ساختن یک <code>XmlReader</code> که از <strong>رشته (string)</strong> بخواند:</p>
+<pre><code class="language-csharp">using XmlReader reader = XmlReader.Create(
+    new System.IO.StringReader(myString));
+</code></pre>
+<p>شما همچنین می‌توانید یک شیء از نوع <code>XmlReaderSettings</code> ارسال کنید تا گزینه‌های <strong>Parsing</strong> و <strong>Validation</strong> را کنترل کنید.</p>
+<p>سه ویژگی مهم این کلاس که برای پرش از محتوای اضافی بسیار مفید هستند:</p>
+<pre><code class="language-csharp">bool IgnoreComments                  // پرش از روی nodeهای توضیحی؟
+bool IgnoreProcessingInstructions    // پرش از روی دستورهای پردازشی؟
+bool IgnoreWhitespace                // پرش از روی فضاهای خالی؟
+</code></pre>
+<p>در مثال زیر، به Reader می‌گوییم که nodeهای فضای خالی را <strong>نادیده بگیرد</strong>، چون معمولاً در سناریوهای رایج مزاحم هستند:</p>
+<pre><code class="language-csharp">XmlReaderSettings settings = new XmlReaderSettings();
+settings.IgnoreWhitespace = true;
+using XmlReader reader = XmlReader.Create(&quot;customer.xml&quot;, settings);
+...
+</code></pre>
+<hr>
+<p>ویژگی مفید دیگر در <code>XmlReaderSettings</code>، گزینه‌ی <strong>ConformanceLevel</strong> است.
+مقدار پیش‌فرض آن <strong>Document</strong> است؛ یعنی به Reader می‌گوید انتظار یک <strong>سند XML معتبر با یک ریشه‌ی واحد</strong> را داشته باشد.</p>
+<p>اما این موضوع مشکل‌ساز می‌شود اگر بخواهید فقط یک بخش داخلی از XML را بخوانید که شامل چندین node است:</p>
+<pre><code class="language-xml">&lt;firstname&gt;Jim&lt;/firstname&gt;
+&lt;lastname&gt;Bo&lt;/lastname&gt;
+</code></pre>
+<p>برای اینکه این قطعه بدون خطا خوانده شود، باید مقدار <code>ConformanceLevel</code> را روی <strong>Fragment</strong> قرار دهید.</p>
+<p>همچنین ویژگی دیگری به نام <strong>CloseInput</strong> در <code>XmlReaderSettings</code> وجود دارد که مشخص می‌کند وقتی Reader بسته می‌شود، آیا باید <strong>Stream زیربنایی</strong> هم بسته شود یا نه. (در <code>XmlWriterSettings</code> نیز ویژگی مشابهی به نام <strong>CloseOutput</strong> وجود دارد.)
+مقدار پیش‌فرض <code>CloseInput</code> و <code>CloseOutput</code> برابر <strong>false</strong> است.</p>
+<hr>
+<h3>خواندن Nodeها 📌</h3>
+<p>واحدهای یک جریان XML، <strong>Nodeها</strong> هستند.
+Reader جریان XML را به‌ترتیب متنی (به‌صورت <strong>Depth-First</strong>) پیمایش می‌کند.
+ویژگی <code>Depth</code> در Reader، عمق فعلی مکان‌نما (Cursor) را بازمی‌گرداند.</p>
+<p>اولیه‌ترین روش برای خواندن از <code>XmlReader</code>، استفاده از متد <strong>Read</strong> است.
+این متد مکان‌نما را به node بعدی در جریان XML می‌برد، تقریباً مشابه با متد <code>MoveNext</code> در <code>IEnumerator</code>.</p>
+<ul>
+<li>اولین فراخوانی به <code>Read</code> مکان‌نما را روی اولین node قرار می‌دهد.</li>
+<li>زمانی که <code>Read</code> مقدار <strong>false</strong> بازمی‌گرداند، یعنی مکان‌نما از آخرین node عبور کرده و در این نقطه باید Reader بسته و کنار گذاشته شود.</li>
+</ul>
+<hr>
+<p>دو ویژگی متنی (string) در <code>XmlReader</code> برای دسترسی به محتوای یک node وجود دارند:</p>
+<ul>
+<li><strong>Name</strong></li>
+<li><strong>Value</strong></li>
+</ul>
+<p>بسته به نوع node، یکی از این دو یا هر دوی آن‌ها مقداردهی می‌شوند.</p>
+<hr>
+<h3>مثال: خواندن همه Nodeها 👇</h3>
+<p>در این مثال، ما هر node موجود در جریان XML را می‌خوانیم و نوع هر node را چاپ می‌کنیم:</p>
+<pre><code class="language-csharp">XmlReaderSettings settings = new XmlReaderSettings();
+settings.IgnoreWhitespace = true;
+using XmlReader reader = XmlReader.Create(&quot;customer.xml&quot;, settings);
+
+while (reader.Read())
+{
+    Console.Write(new string(' ', reader.Depth * 2));  // چاپ فاصله برای تورفتگی
+    Console.Write(reader.NodeType.ToString());
+
+    if (reader.NodeType == XmlNodeType.Element ||
+        reader.NodeType == XmlNodeType.EndElement)
+    {
+        Console.Write(&quot; Name=&quot; + reader.Name);
+    }
+    else if (reader.NodeType == XmlNodeType.Text)
+    {
+        Console.Write(&quot; Value=&quot; + reader.Value);
+    }
+
+    Console.WriteLine();
+}
+</code></pre>
+<p>خروجی:</p>
+<pre><code>XmlDeclaration
+Element Name=customer
+  Element Name=firstname
+    Text Value=Jim
+  EndElement Name=firstname
+  Element Name=lastname
+    Text Value=Bo
+  EndElement Name=lastname
+EndElement Name=customer
+</code></pre>
+<p>🔎 توجه کنید که <strong>Attributes</strong> (ویژگی‌ها) در پیمایش مبتنی بر <code>Read</code> لحاظ نمی‌شوند. (برای این موضوع به بخش <strong>Reading Attributes</strong> در صفحه‌ی ۵۵۹ مراجعه کنید.)</p>
+<hr>
+<h3>XmlNodeType 🏷️</h3>
+<p>ویژگی <code>NodeType</code> از نوع <code>XmlNodeType</code> است که یک <strong>enum</strong> می‌باشد و شامل اعضای زیر است:</p>
+<ul>
+<li>None</li>
+<li>XmlDeclaration</li>
+<li>Element</li>
+<li>EndElement</li>
+<li>Text</li>
+<li>Attribute</li>
+<li>Comment</li>
+<li>Entity</li>
+<li>EndEntity</li>
+<li>EntityReference</li>
+<li>ProcessingInstruction</li>
+<li>CDATA</li>
+<li>Document</li>
+<li>DocumentType</li>
+<li>DocumentFragment</li>
+<li>Notation</li>
+<li>Whitespace</li>
+<li>SignificantWhitespace</li>
+</ul>
+<h3>خواندن Elementها در XML 🏷️📖</h3>
+<p>اغلب اوقات شما از قبل ساختار سند XML که می‌خواهید بخوانید را می‌دانید. برای ساده‌تر کردن این کار، <strong>XmlReader</strong> مجموعه‌ای از متدها را فراهم کرده است که هنگام خواندن، فرض می‌کنند ساختار مشخصی وجود دارد. این متدها هم کد شما را ساده‌تر می‌کنند و هم به‌طور هم‌زمان بخشی از <strong>Validation</strong> را انجام می‌دهند ✅.</p>
+<p>اگر هرگونه Validation شکست بخورد، <code>XmlReader</code> یک <strong>XmlException</strong> پرتاب می‌کند.
+این استثنا ویژگی‌های <strong>LineNumber</strong> و <strong>LinePosition</strong> را دارد که نشان می‌دهد خطا در کجا رخ داده است—ثبت (Log کردن) این اطلاعات برای فایل‌های بزرگ XML بسیار ضروری است ⚠️.</p>
+<hr>
+<h3>متدهای پایه‌ای برای خواندن عناصر</h3>
+<ul>
+<li><code>ReadStartElement</code> بررسی می‌کند که <code>NodeType</code> فعلی از نوع <strong>Element</strong> باشد و سپس متد <code>Read</code> را صدا می‌زند. اگر یک نام مشخص کنید، بررسی می‌کند که با نام Element فعلی مطابقت دارد.</li>
+<li><code>ReadEndElement</code> بررسی می‌کند که <code>NodeType</code> فعلی از نوع <strong>EndElement</strong> باشد و سپس متد <code>Read</code> را صدا می‌زند.</li>
+</ul>
+<p>به‌عنوان مثال، برای خواندن:</p>
+<pre><code class="language-xml">&lt;firstname&gt;Jim&lt;/firstname&gt;
+</code></pre>
+<p>می‌توانیم کد زیر را بنویسیم:</p>
+<pre><code class="language-csharp">reader.ReadStartElement(&quot;firstname&quot;);
+Console.WriteLine(reader.Value);
+reader.Read();
+reader.ReadEndElement();
+</code></pre>
+<hr>
+<h3>متدهای خلاصه‌تر 🛠️</h3>
+<p>متد <code>ReadElementContentAsString</code> همه‌ی مراحل بالا را یک‌جا انجام می‌دهد:</p>
+<ul>
+<li>یک <strong>start element</strong></li>
+<li>یک <strong>text node</strong></li>
+<li>و یک <strong>end element</strong></li>
+</ul>
+<p>سپس محتوای داخلی را به‌صورت یک رشته بازمی‌گرداند:</p>
+<pre><code class="language-csharp">string firstName = reader.ReadElementContentAsString(&quot;firstname&quot;, &quot;&quot;);
+</code></pre>
+<p>آرگومان دوم به <strong>namespace</strong> اشاره دارد که در این مثال خالی است.</p>
+<p>همچنین نسخه‌های تایپ‌شده‌ای از این متد وجود دارد، مثل <code>ReadElementContentAsInt</code>، که خروجی را مستقیماً به نوع موردنظر Parse می‌کنند.</p>
+<hr>
+<h3>مثال کامل‌تر 📝</h3>
+<p>بیایید به سند XML زیر برگردیم:</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;yes&quot;?&gt;
+&lt;customer id=&quot;123&quot; status=&quot;archived&quot;&gt;
+  &lt;firstname&gt;Jim&lt;/firstname&gt;
+  &lt;lastname&gt;Bo&lt;/lastname&gt;
+  &lt;creditlimit&gt;500.00&lt;/creditlimit&gt;    &lt;!-- OK, we sneaked this in! --&gt;
+&lt;/customer&gt;
+</code></pre>
+<p>و آن را این‌طور بخوانیم:</p>
+<pre><code class="language-csharp">XmlReaderSettings settings = new XmlReaderSettings();
+settings.IgnoreWhitespace = true;
+
+using XmlReader r = XmlReader.Create(&quot;customer.xml&quot;, settings);
+r.MoveToContent();                // پرش از روی XML declaration
+r.ReadStartElement(&quot;customer&quot;);
+
+string firstName    = r.ReadElementContentAsString(&quot;firstname&quot;, &quot;&quot;);
+string lastName     = r.ReadElementContentAsString(&quot;lastname&quot;, &quot;&quot;);
+decimal creditLimit = r.ReadElementContentAsDecimal(&quot;creditlimit&quot;, &quot;&quot;);
+
+r.MoveToContent();      // پرش از روی کامنت
+r.ReadEndElement();     // خواندن تگ پایانی customer
+</code></pre>
+<hr>
+<h3>متد MoveToContent ⚡</h3>
+<p>متد <code>MoveToContent</code> بسیار کاربردی است. این متد از روی تمام بخش‌های اضافی پرش می‌کند:</p>
+<ul>
+<li><strong>XML declaration</strong></li>
+<li><strong>Whitespace</strong></li>
+<li><strong>Commentها</strong></li>
+<li><strong>Processing instructionها</strong></li>
+</ul>
+<p>همچنین می‌توانید به Reader دستور دهید اکثر این کارها را به‌صورت خودکار از طریق ویژگی‌های موجود در <code>XmlReaderSettings</code> انجام دهد.</p>
+<hr>
+<h3>Elementهای اختیاری 🌀</h3>
+<p>در مثال قبلی، فرض کنید که <code>&lt;lastname&gt;</code> اختیاری باشد. راه‌حل ساده است:</p>
+<pre><code class="language-csharp">r.ReadStartElement(&quot;customer&quot;);
+string firstName    = r.ReadElementContentAsString(&quot;firstname&quot;, &quot;&quot;);
+string lastName     = r.Name == &quot;lastname&quot;
+                     ? r.ReadElementContentAsString() : null;
+decimal creditLimit = r.ReadElementContentAsDecimal(&quot;creditlimit&quot;, &quot;&quot;);
+</code></pre>
+<hr>
+<h3>ترتیب تصادفی Elementها 🔀</h3>
+<p>مثال‌های این بخش فرض می‌کنند که عناصر در فایل XML به‌ترتیب مشخصی قرار گرفته‌اند.
+اگر نیاز دارید با عناصری که به ترتیب‌های مختلف می‌آیند کار کنید، ساده‌ترین راه این است که آن بخش از XML را به‌صورت یک <strong>X-DOM</strong> بخوانید. ما نحوه‌ی این کار را در بخش <strong>Patterns for Using XmlReader/XmlWriter</strong> در صفحه‌ی ۵۶۳ توضیح می‌دهیم.</p>
+<hr>
+<h3>Elementهای خالی ⬜</h3>
+<p>نحوه‌ی برخورد <code>XmlReader</code> با Elementهای خالی می‌تواند یک <strong>دام خطرناک</strong> باشد 😅.</p>
+<p>به این مثال توجه کنید:</p>
+<pre><code class="language-xml">&lt;customerList&gt;&lt;/customerList&gt;
+</code></pre>
+<p>در XML، این معادل است با:</p>
+<pre><code class="language-xml">&lt;customerList/&gt;
+</code></pre>
+<p>اما <code>XmlReader</code> این دو را متفاوت تفسیر می‌کند.</p>
+<ul>
+<li>در حالت اول، کد زیر به‌خوبی کار می‌کند:</li>
+</ul>
+<pre><code class="language-csharp">reader.ReadStartElement(&quot;customerList&quot;);
+reader.ReadEndElement();
+</code></pre>
+<ul>
+<li>اما در حالت دوم، <code>ReadEndElement</code> یک استثنا پرتاب می‌کند چون از نظر XmlReader هیچ <strong>end element</strong> مجزایی وجود ندارد.</li>
+</ul>
+<p>راه‌حل: بررسی کنید که آیا Element خالی است یا خیر:</p>
+<pre><code class="language-csharp">bool isEmpty = reader.IsEmptyElement;
+reader.ReadStartElement(&quot;customerList&quot;);
+if (!isEmpty) reader.ReadEndElement();
+</code></pre>
+<p>در عمل، این مشکل فقط زمانی آزاردهنده است که Element موردنظر قرار است <strong>child element</strong>‌ها داشته باشد (مثل یک customer list).
+برای Elementهایی که تنها متن ساده دارند (مثل firstname)، می‌توانید کل این موضوع را با استفاده از متدهایی مثل <code>ReadElementContentAsString</code> نادیده بگیرید.
+متدهای <code>ReadElementXXX</code> هر دو نوع <strong>Elementهای خالی</strong> را به‌درستی مدیریت می‌کنند ✅.</p>
+<hr>
+<h3>سایر متدهای ReadXXX 📚</h3>
+<p>جدول <strong>۱۱-۱</strong> تمام متدهای <code>ReadXXX</code> در <strong>XmlReader</strong> را خلاصه می‌کند.
+بیشتر این متدها برای کار با <strong>Elementها</strong> طراحی شده‌اند. در این جدول، بخش <strong>Bold</strong> شده از XML نمونه، قسمت خوانده‌شده توسط متد توضیح داده‌شده را نشان می‌دهد.</p>
+<div align="center">
+<p><img src="../../../assets/image/11/Table-11-1.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h3>حرکت بین Siblingها ➡️</h3>
+<p>متد <strong>NextSibling</strong> مکان‌نما (Cursor) را به ابتدای <strong>اولین Node هم‌سطح (Sibling)</strong> با نام/namespace مشخص‌شده منتقل می‌کند.</p>
+<hr>
+<h3>متدهای قدیمی (Legacy Methods) ⚠️</h3>
+<p>دو متد قدیمی وجود دارند:</p>
+<ul>
+<li><code>ReadString</code></li>
+<li><code>ReadElementString</code></li>
+</ul>
+<p>این‌ها شبیه به <code>ReadContentAsString</code> و <code>ReadElementContentAsString</code> عمل می‌کنند، اما اگر داخل Element بیش از <strong>یک Text Node</strong> وجود داشته باشد، <strong>استثنا</strong> پرتاب می‌کنند.</p>
+<p>🔴 مشکل دیگر: اگر یک <strong>Comment</strong> در Element باشد، این متدها هم استثنا پرتاب می‌کنند.
+بنابراین باید از استفاده‌ی آن‌ها خودداری کنید.</p>
+<hr>
+<h2>خواندن Attributes 🏷️</h2>
+<p>کلاس <strong>XmlReader</strong> یک <strong>Indexer</strong> فراهم می‌کند که به شما دسترسی مستقیم (Random Access) به Attributeهای یک Element می‌دهد—چه از طریق <strong>نام</strong> و چه از طریق <strong>موقعیت (Index)</strong>.</p>
+<p>استفاده از Indexer معادل با صدا زدن متد <code>GetAttribute</code> است.</p>
+<p>به مثال زیر توجه کنید:</p>
+<pre><code class="language-xml">&lt;customer id=&quot;123&quot; status=&quot;archived&quot;/&gt;
+</code></pre>
+<p>می‌توانیم Attributeهای آن را این‌طور بخوانیم:</p>
+<pre><code class="language-csharp">Console.WriteLine(reader[&quot;id&quot;]);              // 123
+Console.WriteLine(reader[&quot;status&quot;]);          // archived
+Console.WriteLine(reader[&quot;bogus&quot;] == null);   // True
+</code></pre>
+<p>⚠️ نکته: <code>XmlReader</code> باید <strong>روی یک Start Element</strong> قرار داشته باشد تا بتوان Attributeها را خواند.
+بعد از اینکه <code>ReadStartElement</code> فراخوانی شد، Attributeها برای همیشه از دست می‌روند!</p>
+<hr>
+<h3>دسترسی بر اساس موقعیت (Ordinal Position) 🔢</h3>
+<p>اگرچه ترتیب Attributeها از نظر معنایی بی‌اهمیت است، شما می‌توانید آن‌ها را با شماره‌ی Index بخوانید:</p>
+<pre><code class="language-csharp">Console.WriteLine(reader[0]);   // 123
+Console.WriteLine(reader[1]);   // archived
+</code></pre>
+<p>همچنین Indexer این امکان را می‌دهد که <strong>Namespace</strong> مربوط به یک Attribute (اگر وجود داشته باشد) را مشخص کنید.</p>
+<p>ویژگی <code>AttributeCount</code> تعداد Attributeهای Node فعلی را بازمی‌گرداند.</p>
+<hr>
+<h2>Attribute Nodeها 🧩</h2>
+<p>برای پیمایش مستقیم در Attribute Nodeها، باید از مسیر معمولی خواندن با <code>Read</code> کمی <strong>منحرف شوید</strong>.
+این کار زمانی مفید است که بخواهید مقدار Attribute را به انواع دیگر تبدیل کنید (با استفاده از متدهای <code>ReadContentAsXXX</code>).</p>
+<p>این تغییر مسیر باید از یک <strong>Start Element</strong> آغاز شود.
+برای راحتی کار، در حین پیمایش Attributeها، قانون <strong>Forward-Only</strong> کمی منعطف‌تر می‌شود: شما می‌توانید به هر Attribute (چه جلو چه عقب) با متد <code>MoveToAttribute</code> بروید.</p>
+<p>برای بازگشت به Start Element، از متد <code>MoveToElement</code> استفاده می‌شود.</p>
+<hr>
+<h3>مثال عملی 📝</h3>
+<p>بازگردیم به مثال قبلی:</p>
+<pre><code class="language-xml">&lt;customer id=&quot;123&quot; status=&quot;archived&quot;/&gt;
+</code></pre>
+<p>می‌توانیم این‌طور عمل کنیم:</p>
+<pre><code class="language-csharp">reader.MoveToAttribute(&quot;status&quot;);
+string status = reader.ReadContentAsString();
+
+reader.MoveToAttribute(&quot;id&quot;);
+int id = reader.ReadContentAsInt();
+</code></pre>
+<p>🔍 اگر Attribute مشخص‌شده وجود نداشته باشد، <code>MoveToAttribute</code> مقدار <strong>false</strong> برمی‌گرداند.</p>
+<hr>
+<h3>پیمایش همه Attributeها 🔄</h3>
+<p>می‌توانید هر Attribute را به‌ترتیب پیمایش کنید:</p>
+<pre><code class="language-csharp">if (reader.MoveToFirstAttribute())
+    do
+    {
+        Console.WriteLine(reader.Name + &quot;=&quot; + reader.Value);
+    }
+    while (reader.MoveToNextAttribute());
+</code></pre>
+<p>🔽 خروجی:</p>
+<pre><code>id=123
+status=archived
+</code></pre>
+<hr>
+<h2>Namespaces و Prefixes 🌐</h2>
+<p>کلاس <strong>XmlReader</strong> دو سیستم موازی برای ارجاع به نام عناصر و Attributeها فراهم می‌کند:</p>
+<ul>
+<li><strong>Name</strong></li>
+<li><strong>NamespaceURI و LocalName</strong></li>
+</ul>
+<p>هر وقت خاصیت <strong>Name</strong> را از یک Element بخوانید یا متدی فراخوانی کنید که یک <strong>نام منفرد</strong> می‌پذیرد، در حال استفاده از سیستم اول هستید.</p>
+<p>این روش زمانی خوب عمل می‌کند که <strong>Namespace</strong> یا <strong>Prefix</strong> وجود نداشته باشد. در غیر این صورت، عملکرد آن <strong>ساده و سطحی</strong> است:</p>
+<ul>
+<li><strong>Namespace</strong>‌ها نادیده گرفته می‌شوند.</li>
+<li><strong>Prefix</strong>‌ها دقیقاً همان‌طور که نوشته شده‌اند، بازگردانده می‌شوند.</li>
+</ul>
+<div align="center">
+<p><img src="../../../assets/image/11/Table-11-2.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h3>📝 نام‌فضاها (Namespaces) و پیشوندها (Prefixes)</h3>
+<p>کد زیر با دو حالت اول کار می‌کند:</p>
+<pre><code class="language-csharp">reader.ReadStartElement(&quot;customer&quot;);
+</code></pre>
+<p>اما برای رسیدگی به حالت سوم باید از کد زیر استفاده کنیم:</p>
+<pre><code class="language-csharp">reader.ReadStartElement(&quot;x:customer&quot;);
+</code></pre>
+<p>سیستم دوم از دو ویژگی حساس به نام‌فضا استفاده می‌کند: <strong>NamespaceURI</strong> و <strong>LocalName</strong>. این ویژگی‌ها پیشوندها و نام‌فضاهای پیش‌فرضی که توسط عناصر والد تعریف شده‌اند را در نظر می‌گیرند. پیشوندها به‌طور خودکار گسترش می‌یابند. این یعنی:</p>
+<ul>
+<li><strong>NamespaceURI</strong> همیشه نام‌فضای درست و معنایی عنصر جاری را بازتاب می‌دهد.</li>
+<li><strong>LocalName</strong> همیشه بدون هیچ پیشوندی نمایش داده می‌شود.</li>
+</ul>
+<p>وقتی دو آرگومان نام به متدی مثل <code>ReadStartElement</code> می‌دهید، درواقع از همین سیستم دوم استفاده می‌کنید.</p>
+<p>به‌عنوان مثال، کد XML زیر را در نظر بگیرید:</p>
+<pre><code class="language-xml">&lt;customer xmlns=&quot;DefaultNamespace&quot; xmlns:other=&quot;OtherNamespace&quot;&gt;
+  &lt;address&gt;
+    &lt;other:city&gt;
+    ...
+</code></pre>
+<p>می‌توانیم آن را این‌طور بخوانیم:</p>
+<pre><code class="language-csharp">reader.ReadStartElement(&quot;customer&quot;, &quot;DefaultNamespace&quot;);
+reader.ReadStartElement(&quot;address&quot;,  &quot;DefaultNamespace&quot;);
+reader.ReadStartElement(&quot;city&quot;,     &quot;OtherNamespace&quot;);
+</code></pre>
+<p>✅ انتزاع پیشوندها معمولاً همان چیزی است که می‌خواهید. اما اگر لازم باشد، می‌توانید ببینید چه پیشوندی استفاده شده است (از طریق ویژگی <strong>Prefix</strong>) و سپس آن را به یک نام‌فضا تبدیل کنید (با فراخوانی <strong>LookupNamespace</strong>).</p>
+<hr>
+<h3>✍️ XmlWriter</h3>
+<p><strong>XmlWriter</strong> یک نویسنده‌ی فقط-رو‌به-جلو (forward-only) برای جریان XML است. طراحی XmlWriter به‌طور متقارن شبیه <strong>XmlReader</strong> است.</p>
+<p>مانند <strong>XmlTextReader</strong>، یک XmlWriter را با فراخوانی <strong>Create</strong> (با یک شیء تنظیمات اختیاری) می‌سازید.</p>
+<p>در مثال زیر، ما <strong>تورفتگی (Indenting)</strong> را فعال می‌کنیم تا خروجی برای انسان خواناتر شود و سپس یک فایل XML ساده می‌نویسیم:</p>
+<pre><code class="language-csharp">XmlWriterSettings settings = new XmlWriterSettings();
+settings.Indent = true;
+using XmlWriter writer = XmlWriter.Create(&quot;foo.xml&quot;, settings);
+writer.WriteStartElement(&quot;customer&quot;);
+writer.WriteElementString(&quot;firstname&quot;, &quot;Jim&quot;);
+writer.WriteElementString(&quot;lastname&quot;, &quot;Bo&quot;);
+writer.WriteEndElement();
+</code></pre>
+<p>این کد سند زیر را تولید می‌کند (همان فایلی که در اولین مثال XmlReader خواندیم):</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;customer&gt;
+  &lt;firstname&gt;Jim&lt;/firstname&gt;
+  &lt;lastname&gt;Bo&lt;/lastname&gt;
+&lt;/customer&gt;
+</code></pre>
+<hr>
+<h3>⚙️ تنظیمات XmlWriter</h3>
+<ul>
+<li>به‌طور پیش‌فرض، <strong>XmlWriter</strong> اعلان (declaration) بالا را می‌نویسد.</li>
+<li>اگر نمی‌خواهید این اعلان نوشته شود، باید در <strong>XmlWriterSettings</strong> ویژگی <strong>OmitXmlDeclaration = true</strong> یا <strong>ConformanceLevel = Fragment</strong> را تنظیم کنید.</li>
+<li>مقدار <strong>Fragment</strong> همچنین اجازه می‌دهد چندین گره‌ی ریشه بنویسید؛ چیزی که در غیر این صورت باعث Exception می‌شود.</li>
+</ul>
+<hr>
+<h3>🔡 نوشتن مقادیر</h3>
+<ul>
+<li>متد <strong>WriteValue</strong> یک گره متنی منفرد می‌نویسد. این متد هم رشته‌ها و هم انواع غیررشته‌ای مثل <code>bool</code> و <code>DateTime</code> را می‌پذیرد و به‌طور داخلی از <strong>XmlConvert</strong> برای تبدیل رشته‌های سازگار با XML استفاده می‌کند:</li>
+</ul>
+<pre><code class="language-csharp">writer.WriteStartElement(&quot;birthdate&quot;);
+writer.WriteValue(DateTime.Now);
+writer.WriteEndElement();
+</code></pre>
+<ul>
+<li>در مقابل، اگر این‌طور بنویسیم:</li>
+</ul>
+<pre><code class="language-csharp">WriteElementString(&quot;birthdate&quot;, DateTime.Now.ToString());
+</code></pre>
+<p>خروجی ناسازگار با XML خواهد بود و امکان تفسیر نادرست دارد.</p>
+<ul>
+<li><strong>WriteString</strong> معادل فراخوانی <strong>WriteValue</strong> با یک رشته است.</li>
+<li><strong>XmlWriter</strong> به‌طور خودکار کاراکترهایی را که در Attribute یا Element غیرقانونی هستند (مثل <code>&amp;</code>, <code>&lt;</code>, <code>&gt;</code> و کاراکترهای Unicode توسعه‌یافته) فرار می‌دهد (escape می‌کند).</li>
+</ul>
+<hr>
+<h3>🏷️ نوشتن Attributeها</h3>
+<p>می‌توانید درست بعد از نوشتن یک StartElement، Attributeها را بنویسید:</p>
+<pre><code class="language-csharp">writer.WriteStartElement(&quot;customer&quot;);
+writer.WriteAttributeString(&quot;id&quot;, &quot;1&quot;);
+writer.WriteAttributeString(&quot;status&quot;, &quot;archived&quot;);
+</code></pre>
+<p>برای نوشتن مقادیر غیررشته‌ای، از این الگو استفاده کنید:</p>
+<pre><code class="language-csharp">WriteStartAttribute();
+WriteValue(...);
+WriteEndAttribute();
+</code></pre>
+<hr>
+<h3>🧩 نوشتن انواع دیگر Node</h3>
+<p>XmlWriter متدهایی برای نوشتن انواع دیگر گره‌ها نیز دارد:</p>
+<ul>
+<li>
+<p><strong>WriteBase64</strong> → برای داده‌های باینری</p>
+</li>
+<li>
+<p><strong>WriteBinHex</strong> → برای داده‌های باینری</p>
+</li>
+<li>
+<p><strong>WriteCData</strong></p>
+</li>
+<li>
+<p><strong>WriteComment</strong></p>
+</li>
+<li>
+<p><strong>WriteDocType</strong></p>
+</li>
+<li>
+<p><strong>WriteEntityRef</strong></p>
+</li>
+<li>
+<p><strong>WriteProcessingInstruction</strong></p>
+</li>
+<li>
+<p><strong>WriteRaw</strong></p>
+</li>
+<li>
+<p><strong>WriteWhitespace</strong></p>
+</li>
+<li>
+<p>متد <strong>WriteRaw</strong> یک رشته را مستقیماً به جریان خروجی تزریق می‌کند.</p>
+</li>
+<li>
+<p>همچنین متد <strong>WriteNode</strong> وجود دارد که یک <strong>XmlReader</strong> را می‌پذیرد و هر چیزی را که از آن می‌خواند، تکرار (Echo) می‌کند.</p>
+</li>
+</ul>
+<hr>
+<h3>🌐 نام‌فضاها و پیشوندها در XmlWriter</h3>
+<p>نسخه‌های Overload متدهای Write* به شما امکان می‌دهند یک عنصر یا Attribute را به یک نام‌فضا متصل کنید.</p>
+<p>بیایید محتوای فایل XML قبلی را بازنویسی کنیم و این بار همه عناصر را به نام‌فضای <code>http://oreilly.com</code> متصل کنیم، و در عنصر <code>customer</code> پیشوند <code>o</code> را تعریف کنیم:</p>
+<pre><code class="language-csharp">writer.WriteStartElement(&quot;o&quot;, &quot;customer&quot;, &quot;http://oreilly.com&quot;);
+writer.WriteElementString(&quot;o&quot;, &quot;firstname&quot;, &quot;http://oreilly.com&quot;, &quot;Jim&quot;);
+writer.WriteElementString(&quot;o&quot;, &quot;lastname&quot;, &quot;http://oreilly.com&quot;, &quot;Bo&quot;);
+writer.WriteEndElement();
+</code></pre>
+<p>خروجی این خواهد بود:</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;o:customer xmlns:o='http://oreilly.com'&gt;
+  &lt;o:firstname&gt;Jim&lt;/o:firstname&gt;
+  &lt;o:lastname&gt;Bo&lt;/o:lastname&gt;
+&lt;/o:customer&gt;
+</code></pre>
+<p>🔍 توجه کنید که برای اختصار، <strong>XmlWriter</strong> اعلام نام‌فضای عناصر فرزند را حذف می‌کند چون قبلاً توسط عنصر والد تعریف شده‌اند.</p>
+<h3>📌 الگوها برای استفاده از XmlReader/XmlWriter</h3>
+<hr>
+<h3>📂 کار با داده‌های سلسله‌مراتبی (Hierarchical Data)</h3>
+<p>در نظر بگیرید کلاس‌های زیر را داریم:</p>
+<pre><code class="language-csharp">public class Contacts
+{
+  public IList&lt;Customer&gt; Customers = new List&lt;Customer&gt;();
+  public IList&lt;Supplier&gt; Suppliers = new List&lt;Supplier&gt;();
+}
+public class Customer { public string FirstName, LastName; }
+public class Supplier { public string Name; }
+</code></pre>
+<p>فرض کنید می‌خواهیم از <strong>XmlReader</strong> و <strong>XmlWriter</strong> برای <strong>سریال‌سازی (Serialization)</strong> یک شیء <code>Contacts</code> به XML استفاده کنیم. خروجی مدنظر به این صورت است:</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;contacts&gt;
+  &lt;customer id=&quot;1&quot;&gt;
+    &lt;firstname&gt;Jay&lt;/firstname&gt;
+    &lt;lastname&gt;Dee&lt;/lastname&gt;
+  &lt;/customer&gt;
+  &lt;customer&gt;                     &lt;!-- فرض می‌کنیم id اختیاری است --&gt;
+    &lt;firstname&gt;Kay&lt;/firstname&gt;
+    &lt;lastname&gt;Gee&lt;/lastname&gt;
+  &lt;/customer&gt;
+  &lt;supplier&gt;
+    &lt;name&gt;X Technologies Ltd&lt;/name&gt;
+  &lt;/supplier&gt;
+&lt;/contacts&gt;
+</code></pre>
+<hr>
+<h3>✨ بهترین روش</h3>
+<p>بهترین راه این نیست که یک متد بزرگ بنویسیم، بلکه این است که قابلیت‌های XML را داخل خود کلاس‌های <code>Customer</code> و <code>Supplier</code> کپسوله کنیم. این کار با نوشتن متدهای <code>ReadXml</code> و <code>WriteXml</code> روی این کلاس‌ها انجام می‌شود.</p>
+<p>🔑 الگوی کار به این صورت است:</p>
+<ul>
+<li>متدهای <strong>ReadXml</strong> و <strong>WriteXml</strong> هنگام خروج در همان عمق (Depth) Reader/Writer را ترک می‌کنند.</li>
+<li><strong>ReadXml</strong> عنصر بیرونی (Outer Element) را می‌خواند، درحالی‌که <strong>WriteXml</strong> فقط محتوای داخلی (Inner Content) را می‌نویسد.</li>
+</ul>
+<hr>
+<h3>👤 کلاس Customer</h3>
+<pre><code class="language-csharp">public class Customer
+{
+  public const string XmlName = &quot;customer&quot;;
+  public int? ID;
+  public string FirstName, LastName;
+  public Customer () { }
+  public Customer (XmlReader r) { ReadXml(r); }
+
+  public void ReadXml (XmlReader r)
+  {
+    if (r.MoveToAttribute(&quot;id&quot;)) ID = r.ReadContentAsInt();
+    r.ReadStartElement();
+    FirstName = r.ReadElementContentAsString(&quot;firstname&quot;, &quot;&quot;);
+    LastName  = r.ReadElementContentAsString(&quot;lastname&quot;, &quot;&quot;);
+    r.ReadEndElement();
+  }
+
+  public void WriteXml (XmlWriter w)
+  {
+    if (ID.HasValue) w.WriteAttributeString(&quot;id&quot;, &quot;&quot;, ID.ToString());
+    w.WriteElementString(&quot;firstname&quot;, FirstName);
+    w.WriteElementString(&quot;lastname&quot;, LastName);
+  }
+}
+</code></pre>
+<p>🔍 دقت کنید:</p>
+<ul>
+<li>
+<p><code>ReadXml</code> عناصر شروع و پایان بیرونی را می‌خواند. اگر این کار توسط Caller انجام می‌شد، کلاس Customer نمی‌توانست Attributeهای خودش را بخواند.</p>
+</li>
+<li>
+<p><code>WriteXml</code> متقارن (Symmetrical) نوشته نشده چون:</p>
+<ol>
+<li>Caller ممکن است بخواهد نام عنصر بیرونی را تعیین کند.</li>
+<li>Caller ممکن است نیاز داشته باشد Attributeهای اضافی مثل نوع (Subtype) را بنویسد.</li>
+</ol>
+</li>
+</ul>
+<p>مزیت دیگر این الگو این است که پیاده‌سازی شما با <strong>IXmlSerializable</strong> سازگار می‌شود.</p>
+<hr>
+<h3>🏢 کلاس Supplier</h3>
+<pre><code class="language-csharp">public class Supplier
+{
+  public const string XmlName = &quot;supplier&quot;;
+  public string Name;
+  public Supplier () { }
+  public Supplier (XmlReader r) { ReadXml(r); }
+
+  public void ReadXml (XmlReader r)
+  {
+    r.ReadStartElement();
+    Name = r.ReadElementContentAsString(&quot;name&quot;, &quot;&quot;);
+    r.ReadEndElement();
+  }
+
+  public void WriteXml (XmlWriter w) =&gt;
+    w.WriteElementString(&quot;name&quot;, Name);
+}
+</code></pre>
+<hr>
+<h3>📒 کلاس Contacts</h3>
+<p>در کلاس <code>Contacts</code>، باید در <code>ReadXml</code> عناصر را پیمایش کنیم و بررسی کنیم که هر زیرعنصر یک <code>customer</code> است یا یک <code>supplier</code>. همچنین باید حالت عنصر خالی <code>&lt;contacts/&gt;</code> را مدیریت کنیم:</p>
+<pre><code class="language-csharp">public void ReadXml (XmlReader r)
+{
+  bool isEmpty = r.IsEmptyElement;  // برای جلوگیری از گیر افتادن در عنصر خالی
+  r.ReadStartElement();
+  if (isEmpty) return;
+
+  while (r.NodeType == XmlNodeType.Element)
+  {
+    if (r.Name == Customer.XmlName) 
+        Customers.Add(new Customer(r));
+    else if (r.Name == Supplier.XmlName) 
+        Suppliers.Add(new Supplier(r));
+    else
+        throw new XmlException(&quot;Unexpected node: &quot; + r.Name);
+  }
+  r.ReadEndElement();
+}
+
+public void WriteXml (XmlWriter w)
+{
+  foreach (Customer c in Customers)
+  {
+    w.WriteStartElement(Customer.XmlName);
+    c.WriteXml(w);
+    w.WriteEndElement();
+  }
+  foreach (Supplier s in Suppliers)
+  {
+    w.WriteStartElement(Supplier.XmlName);
+    s.WriteXml(w);
+    w.WriteEndElement();
+  }
+}
+</code></pre>
+<hr>
+<h3>📤 سریال‌سازی Contacts به XML</h3>
+<pre><code class="language-csharp">var settings = new XmlWriterSettings();
+settings.Indent = true;  // برای خوانایی بیشتر
+using XmlWriter writer = XmlWriter.Create(&quot;contacts.xml&quot;, settings);
+var cts = new Contacts();
+// افزودن Customers و Suppliers...
+writer.WriteStartElement(&quot;contacts&quot;);
+cts.WriteXml(writer);
+writer.WriteEndElement();
+</code></pre>
+<hr>
+<h3>📥 دسریال‌سازی از همان فایل</h3>
+<pre><code class="language-csharp">var settings = new XmlReaderSettings();
+settings.IgnoreWhitespace = true;
+settings.IgnoreComments = true;
+settings.IgnoreProcessingInstructions = true;
+
+using XmlReader reader = XmlReader.Create(&quot;contacts.xml&quot;, settings);
+reader.MoveToContent();
+var cts = new Contacts();
+cts.ReadXml(reader);
+</code></pre>
+<hr>
+<h3>🔄 ترکیب XmlReader/XmlWriter با X-DOM</h3>
+<p>در هر نقطه از درخت XML که کار با XmlReader یا XmlWriter سخت شد، می‌توانید از <strong>X-DOM</strong> وارد شوید.
+این کار اجازه می‌دهد مزیت راحتی X-DOM را با مصرف کم حافظه‌ی XmlReader/XmlWriter ترکیب کنید.</p>
+<hr>
+<h3>📖 استفاده از XmlReader همراه با XElement</h3>
+<p>برای خواندن یک عنصر جاری به یک <strong>X-DOM</strong>، از متد:</p>
+<pre><code class="language-csharp">XNode.ReadFrom(XmlReader)
+</code></pre>
+<p>استفاده می‌کنیم. این متد فقط بخش جاری از زیردرخت را می‌خواند، نه کل سند را.</p>
+<p>مثال:</p>
+<pre><code class="language-xml">&lt;log&gt;
+  &lt;logentry id=&quot;1&quot;&gt;
+    &lt;date&gt;...&lt;/date&gt;
+    &lt;source&gt;...&lt;/source&gt;
+    ...
+  &lt;/logentry&gt;
+  ...
+&lt;/log&gt;
+</code></pre>
+<p>اگر یک میلیون عنصر <code>&lt;logentry&gt;</code> داشته باشیم، بارگذاری کل آن در X-DOM حافظه زیادی مصرف می‌کند. راه‌حل بهتر: پیمایش تک‌به‌تک با XmlReader و پردازش هر عنصر به‌وسیله XElement:</p>
+<pre><code class="language-csharp">XmlReaderSettings settings = new XmlReaderSettings();
+settings.IgnoreWhitespace = true;
+using XmlReader r = XmlReader.Create(&quot;logfile.xml&quot;, settings);
+r.ReadStartElement(&quot;log&quot;);
+while (r.Name == &quot;logentry&quot;)
+{
+  XElement logEntry = (XElement) XNode.ReadFrom(r);
+  int id = (int) logEntry.Attribute(&quot;id&quot;);
+  DateTime date = (DateTime) logEntry.Element(&quot;date&quot;);
+  string source = (string) logEntry.Element(&quot;source&quot;);
+  ...
+}
+r.ReadEndElement();
+</code></pre>
+<hr>
+<h3>🧩 استفاده از XElement در ReadXml</h3>
+<p>اگر الگوی بالا را دنبال کنید، می‌توانید XElement را مستقیماً در متدهای <code>ReadXml</code> یا <code>WriteXml</code> استفاده کنید، بدون اینکه Caller متوجه شود.</p>
+<p>مثال بازنویسی متد <code>ReadXml</code> برای Customer:</p>
+<pre><code class="language-csharp">public void ReadXml (XmlReader r)
+{
+  XElement x = (XElement) XNode.ReadFrom(r);
+  ID = (int) x.Attribute(&quot;id&quot;);
+  FirstName = (string) x.Element(&quot;firstname&quot;);
+  LastName  = (string) x.Element(&quot;lastname&quot;);
+}
+</code></pre>
+<hr>
+<h3>🌐 مدیریت نام‌فضاها در XElement</h3>
+<p><strong>XElement</strong> با XmlReader همکاری می‌کند تا نام‌فضاها را حفظ کند و پیشوندها را درست گسترش دهد—even اگر در سطح بیرونی تعریف شده باشند.</p>
+<p>مثال XML:</p>
+<pre><code class="language-xml">&lt;log xmlns=&quot;http://loggingspace&quot;&gt;
+  &lt;logentry id=&quot;1&quot;&gt;
+  ...
+</code></pre>
+<p>در این حالت، <code>XElement</code>هایی که در سطح <code>logentry</code> ساخته می‌شوند، نام‌فضای بیرونی را به‌درستی به ارث می‌برند. ✅</p>
+<h3>📄 استفاده از XmlWriter همراه با XElement</h3>
+<p>شما می‌توانید از <strong>XElement</strong> فقط برای نوشتن المنت‌های داخلی در یک <strong>XmlWriter</strong> استفاده کنید. کد زیر یک میلیون المنت <strong>logentry</strong> را داخل یک فایل XML می‌نویسد، بدون اینکه کل فایل در حافظه ذخیره شود:</p>
+<pre><code class="language-csharp">using XmlWriter w = XmlWriter.Create (&quot;logfile.xml&quot;);
+w.WriteStartElement (&quot;log&quot;);
+for (int i = 0; i &lt; 1000000; i++)
+{
+    XElement e = new XElement (&quot;logentry&quot;,
+                   new XAttribute (&quot;id&quot;, i),
+                   new XElement (&quot;date&quot;, DateTime.Today.AddDays (-1)),
+                   new XElement (&quot;source&quot;, &quot;test&quot;));
+    e.WriteTo (w);
+}
+w.WriteEndElement ();
+</code></pre>
+<p>استفاده از <strong>XElement</strong> فقط اندکی سربار در اجرا ایجاد می‌کند. اگر همین مثال را طوری تغییر دهیم که در همه‌جا از <strong>XmlWriter</strong> استفاده کنیم، هیچ تفاوت محسوسی در زمان اجرا دیده نمی‌شود.</p>
+<hr>
+<h3>🌐 کار با JSON</h3>
+<p><strong>JSON</strong> به یک جایگزین محبوب برای <strong>XML</strong> تبدیل شده است. گرچه JSON امکانات پیشرفته XML (مثل <strong>namespaces</strong>، <strong>prefixes</strong> و <strong>schemas</strong>) را ندارد، اما به دلیل سادگی و خوانایی بیشتر، محبوبیت زیادی دارد. قالب آن هم شبیه چیزی است که وقتی یک شیء <strong>JavaScript</strong> را به رشته تبدیل کنید به دست می‌آید.</p>
+<p>📌 به‌صورت تاریخی، .NET هیچ پشتیبانی داخلی برای JSON نداشت و مجبور بودید از کتابخانه‌های شخص ثالث مثل <strong>Json.NET</strong> استفاده کنید. هرچند این موضوع دیگر صادق نیست، ولی کتابخانه <strong>Json.NET</strong> همچنان به دلایل زیر محبوب باقی مانده است:</p>
+<ul>
+<li>📅 از سال ۲۰۱۱ تاکنون وجود دارد.</li>
+<li>🔄 همان API روی نسخه‌های قدیمی‌تر .NET هم اجرا می‌شود.</li>
+<li>⚙️ از نظر قابلیت‌ها (حداقل در گذشته) کاربردی‌تر از APIهای JSON مایکروسافت در نظر گرفته می‌شد.</li>
+</ul>
+<p>APIهای JSON مایکروسافت اما این مزیت را دارند که از پایه طراحی شده‌اند تا <strong>بسیار ساده و فوق‌العاده سریع</strong> باشند. همچنین، از .NET 6 به بعد، قابلیت‌های آن‌ها بسیار به Json.NET نزدیک شده است.</p>
+<p>در این بخش به موضوعات زیر می‌پردازیم:</p>
+<ul>
+<li>📖 <strong>Utf8JsonReader</strong> و <strong>Utf8JsonWriter</strong> (خواننده و نویسنده رو به جلو)</li>
+<li>📖 <strong>JsonDocument</strong> (خواننده DOM فقط-خواندنی)</li>
+<li>📖 <strong>JsonNode</strong> (خواننده/نویسنده DOM با قابلیت خواندن و نوشتن)</li>
+</ul>
+<p>در بخش &quot;Serialization&quot; در مکمل آنلاین به آدرس: <a href="http://www.albahari.com/nutshell">http://www.albahari.com/nutshell</a>، موضوع <strong>JsonSerializer</strong> بررسی می‌شود که به‌طور خودکار JSON را به کلاس‌ها <strong>سریالایز</strong> و <strong>دسریالایز</strong> می‌کند.</p>
+<hr>
+<h3>⚡ Utf8JsonReader</h3>
+<p>کلاس <strong>System.Text.Json.Utf8JsonReader</strong> یک <strong>خواننده بهینه‌شده رو به جلو</strong> برای متن JSON با <strong>کدگذاری UTF-8</strong> است. از نظر مفهومی، بسیار شبیه <strong>XmlReader</strong> است که پیش‌تر در این فصل معرفی شد و تقریباً به همان شکل استفاده می‌شود.</p>
+<p>فایل JSON زیر را در نظر بگیرید (با نام people.json):</p>
+<pre><code class="language-json">{
+  &quot;FirstName&quot;:&quot;Sara&quot;,
+  &quot;LastName&quot;:&quot;Wells&quot;,
+  &quot;Age&quot;:35,
+  &quot;Friends&quot;:[&quot;Dylan&quot;,&quot;Ian&quot;]
+}
+</code></pre>
+<ul>
+<li>آکولادها <code>{}</code> یک <strong>شیء JSON</strong> را نشان می‌دهند (که شامل propertyهایی مثل <code>&quot;FirstName&quot;</code> و <code>&quot;LastName&quot;</code> است).</li>
+<li>براکت‌ها <code>[]</code> یک <strong>آرایه JSON</strong> را نشان می‌دهند (که شامل مقادیر تکراری است). در اینجا مقادیر تکراری رشته هستند، اما می‌توانند اشیاء یا حتی آرایه‌های دیگر هم باشند.</li>
+</ul>
+<hr>
+<h3>🧩 پیمایش JSON با Utf8JsonReader</h3>
+<p>کد زیر فایل بالا را با شمارش <strong>tokenهای JSON</strong> تجزیه می‌کند. هر <strong>token</strong> می‌تواند شامل موارد زیر باشد:</p>
+<ul>
+<li>شروع یا پایان یک شیء</li>
+<li>شروع یا پایان یک آرایه</li>
+<li>نام یک property</li>
+<li>مقدار یک property یا یک آرایه (رشته، عدد، true، false یا null)</li>
+</ul>
+<pre><code class="language-csharp">byte[] data = File.ReadAllBytes (&quot;people.json&quot;);
+Utf8JsonReader reader = new Utf8JsonReader (data);
+while (reader.Read())
+{
+    switch (reader.TokenType)
+    {
+        case JsonTokenType.StartObject:
+            Console.WriteLine ($&quot;Start of object&quot;);
+            break;
+        case JsonTokenType.EndObject:
+            Console.WriteLine ($&quot;End of object&quot;);
+            break;
+        case JsonTokenType.StartArray:
+            Console.WriteLine();
+            Console.WriteLine ($&quot;Start of array&quot;);
+            break;
+        case JsonTokenType.EndArray:
+            Console.WriteLine ($&quot;End of array&quot;);
+            break;
+        case JsonTokenType.PropertyName:
+            Console.Write ($&quot;Property: {reader.GetString()}&quot;);
+            break;
+        case JsonTokenType.String:
+            Console.WriteLine ($&quot; Value: {reader.GetString()}&quot;);
+            break;
+        case JsonTokenType.Number:
+            Console.WriteLine ($&quot; Value: {reader.GetInt32()}&quot;);
+            break;
+        default:
+            Console.WriteLine ($&quot;No support for {reader.TokenType}&quot;);
+            break;
+    }
+}
+</code></pre>
+<hr>
+<h3>📊 خروجی برنامه</h3>
+<pre><code>Start of object
+Property: FirstName Value: Sara
+Property: LastName Value: Wells
+Property: Age Value: 35
+Property: Friends
+Start of array
+Value: Dylan
+Value: Ian
+End of array
+End of object
+</code></pre>
+<p>✅ از آنجایی که <strong>Utf8JsonReader</strong> مستقیماً با UTF-8 کار می‌کند، می‌تواند <strong>گام‌به‌گام tokenها</strong> را بدون تبدیل ورودی به UTF-16 (فرمت رشته‌های .NET) بخواند. تبدیل به UTF-16 فقط وقتی انجام می‌شود که متدی مثل <strong>GetString()</strong> فراخوانی شود.</p>
+<p>جالب است بدانید که سازنده <strong>Utf8JsonReader</strong> مستقیماً یک <strong>آرایه بایت</strong> نمی‌پذیرد، بلکه یک <strong>ReadOnlySpan<byte></strong> دریافت می‌کند (به همین دلیل Utf8JsonReader به‌صورت یک <strong>ref struct</strong> تعریف شده است). شما می‌توانید یک آرایه بایت پاس دهید چون یک <strong>تبدیل ضمنی</strong> از <code>T[]</code> به <code>ReadOnlySpan&lt;T&gt;</code> وجود دارد.</p>
+<p>📌 در فصل ۲۳ توضیح داده خواهد شد که <strong>Spanها</strong> چگونه کار می‌کنند و چطور می‌توانند عملکرد را با کمینه کردن تخصیص حافظه بهبود دهند.</p>
+<hr>
+<h3>⚙️ JsonReaderOptions</h3>
+<p>به‌طور پیش‌فرض، <strong>Utf8JsonReader</strong> الزام می‌کند که JSON دقیقاً مطابق استاندارد <strong>RFC 8259</strong> باشد. اما شما می‌توانید با پاس دادن یک نمونه از <strong>JsonReaderOptions</strong> به سازنده Utf8JsonReader، آن را انعطاف‌پذیرتر کنید.</p>
+<p>گزینه‌ها شامل موارد زیر هستند:</p>
+<ul>
+<li>
+<p><strong>توضیحات (C-Style comments)</strong>
+به‌طور پیش‌فرض، وجود توضیحات در JSON یک <strong>JsonException</strong> ایجاد می‌کند. با تنظیم property به <strong>JsonCommentHandling.Skip</strong>، توضیحات نادیده گرفته می‌شوند. با مقدار <strong>JsonCommentHandling.Allow</strong>، خواننده آن‌ها را تشخیص داده و tokenهایی از نوع <strong>JsonTokenType.Comment</strong> تولید می‌کند. (توضیحات نمی‌توانند وسط tokenهای دیگر ظاهر شوند.)</p>
+</li>
+<li>
+<p><strong>ویرگول‌های انتهایی (Trailing commas)</strong>
+بر اساس استاندارد، آخرین property یک شیء و آخرین عنصر یک آرایه نباید ویرگول انتهایی داشته باشند. با تنظیم <strong>AllowTrailingCommas = true</strong> این محدودیت برداشته می‌شود.</p>
+</li>
+<li>
+<p><strong>کنترل حداکثر عمق تو در تو شدن (Maximum nesting depth)</strong>
+به‌طور پیش‌فرض، اشیاء و آرایه‌ها می‌توانند تا <strong>۶۴ سطح</strong> تو در تو شوند. با تنظیم <strong>MaxDepth</strong> می‌توانید این مقدار را تغییر دهید.</p>
+</li>
+</ul>
+<h3>✍️ Utf8JsonWriter</h3>
+<p>کلاس <strong>System.Text.Json.Utf8JsonWriter</strong> یک <strong>نویسنده JSON رو به جلو</strong> است. این کلاس از انواع زیر پشتیبانی می‌کند:</p>
+<ul>
+<li>📝 <strong>String</strong> و <strong>DateTime</strong> (که به‌صورت یک رشته JSON نوشته می‌شوند)</li>
+<li>🔢 انواع عددی: <strong>Int32، UInt32، Int64، UInt64، Single، Double و Decimal</strong> (که به‌صورت اعداد JSON نوشته می‌شوند)</li>
+<li>✅ <strong>bool</strong> (که به‌صورت مقادیر true/false در JSON ذخیره می‌شود)</li>
+<li>🚫 <strong>null</strong> در JSON</li>
+<li>📦 <strong>آرایه‌ها (Arrays)</strong></li>
+</ul>
+<p>شما می‌توانید این داده‌ها را مطابق استاندارد JSON در قالب <strong>object</strong> سازمان‌دهی کنید. همچنین امکان نوشتن <strong>comment</strong> وجود دارد، هرچند که توضیحات بخشی از استاندارد JSON نیستند، اما اغلب توسط <strong>JSON parserها</strong> پشتیبانی می‌شوند.</p>
+<hr>
+<h3>🖥️ نمونه کد استفاده از Utf8JsonWriter</h3>
+<pre><code class="language-csharp">var options = new JsonWriterOptions { Indented = true };
+using (var stream = File.Create (&quot;MyFile.json&quot;))
+using (var writer = new Utf8JsonWriter (stream, options))
+{
+    writer.WriteStartObject();
+    // Property name and value specified in one call
+    writer.WriteString (&quot;FirstName&quot;, &quot;Dylan&quot;);
+    writer.WriteString (&quot;LastName&quot;, &quot;Lockwood&quot;);
     
+    // Property name and value specified in separate calls
+    writer.WritePropertyName (&quot;Age&quot;);
+    writer.WriteNumberValue (46);
+
+    writer.WriteCommentValue (&quot;This is a (non-standard) comment&quot;);
+    writer.WriteEndObject();
+}
+</code></pre>
+<p>📄 خروجی فایل تولیدشده به این صورت خواهد بود:</p>
+<pre><code class="language-json">{
+  &quot;FirstName&quot;: &quot;Dylan&quot;,
+  &quot;LastName&quot;: &quot;Lockwood&quot;,
+  &quot;Age&quot;: 46
+  /*This is a (non-standard) comment*/
+}
+</code></pre>
+<p>از .NET 6 به بعد، متد <strong>WriteRawValue</strong> اضافه شد که به شما اجازه می‌دهد <strong>یک رشته یا آرایه بایت</strong> را مستقیماً داخل جریان JSON بنویسید. این قابلیت در موارد خاص مفید است؛ مثلاً وقتی می‌خواهید عددی همیشه همراه با <strong>اعشار</strong> ذخیره شود (مثل <code>1.0</code> به‌جای <code>1</code>).</p>
+<hr>
+<h3>📐 تنظیمات JsonWriterOptions</h3>
+<p>در مثال بالا، ویژگی <strong>Indented = true</strong> تنظیم شده بود تا خروجی خواناتر شود. اگر این کار انجام نمی‌شد، خروجی به این شکل فشرده می‌بود:</p>
+<pre><code class="language-json">{&quot;FirstName&quot;:&quot;Dylan&quot;,&quot;LastName&quot;:&quot;Lockwood&quot;,&quot;Age&quot;:46...}
+</code></pre>
+<p>گزینه‌های <strong>JsonWriterOptions</strong> همچنین شامل موارد زیر هستند:</p>
+<ul>
+<li><strong>Encoder</strong> → کنترل escape شدن رشته‌ها</li>
+<li><strong>SkipValidation</strong> → عبور از بررسی‌های اعتبارسنجی ساختاری (که اجازه می‌دهد JSON نامعتبر تولید شود)</li>
+</ul>
+<hr>
+<h3>📖 JsonDocument</h3>
+<p>کلاس <strong>System.Text.Json.JsonDocument</strong> داده‌های JSON را به یک <strong>DOM فقط-خواندنی</strong> تجزیه می‌کند که از نمونه‌های <strong>JsonElement</strong> ساخته می‌شوند. این نمونه‌ها در صورت نیاز (on demand) ایجاد می‌شوند.</p>
+<p>برخلاف <strong>Utf8JsonReader</strong> که فقط به‌صورت ترتیبی (forward-only) کار می‌کند، <strong>JsonDocument</strong> به شما اجازه می‌دهد به المنت‌ها به‌طور تصادفی (random access) دسترسی داشته باشید.</p>
+<p><strong>JsonDocument</strong> یکی از دو API مبتنی بر DOM برای کار با JSON است. دیگری <strong>JsonNode</strong> است (که در بخش بعد توضیح داده می‌شود).</p>
+<ul>
+<li>🆕 <strong>JsonNode</strong> در .NET 6 معرفی شد، عمدتاً برای پشتیبانی از <strong>DOM قابل‌نوشتن (writable DOM)</strong>.</li>
+<li>البته <strong>JsonNode</strong> در حالت فقط‌خواندنی هم مناسب است و رابط برنامه‌نویسی (API) روان‌تری را ارائه می‌دهد که از یک DOM سنتی مبتنی بر کلاس‌ها برای مقادیر، آرایه‌ها و اشیاء استفاده می‌کند.</li>
+<li>در مقابل، <strong>JsonDocument</strong> بسیار سبک است و فقط شامل یک کلاس اصلی (<strong>JsonDocument</strong>) و دو ساختار سبک (<strong>JsonElement</strong> و <strong>JsonProperty</strong>) می‌شود که داده‌های زیربنایی را به‌صورت آنی تجزیه می‌کنند.</li>
+</ul>
+<p>📊 تفاوت این دو API در <strong>شکل 11-1</strong> نشان داده شده است.</p>
+<hr>
+<p>✅ در بیشتر سناریوهای واقعی، <strong>تفاوت عملکردی JsonDocument و JsonNode ناچیز است</strong>. بنابراین اگر ترجیح می‌دهید فقط یکی از این دو را یاد بگیرید، می‌توانید مستقیماً به سراغ <strong>JsonNode</strong> بروید.</p>
+<div align="center">
+<p><img src="../../../assets/image/11/Table-11-3.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h3>📘 JsonDocument و مدیریت حافظه</h3>
+<p>کلاس <strong>JsonDocument</strong> کارایی خود را با استفاده از <strong>حافظه اشتراکی (pooled memory)</strong> افزایش می‌دهد تا نیاز به <strong>garbage collection</strong> کمتر شود.
+این به این معناست که شما <strong>بعد از اتمام استفاده، باید JsonDocument را Dispose کنید</strong>؛ در غیر این صورت، حافظه آن به استخر بازگردانده نمی‌شود.</p>
+<p>👉 بنابراین، اگر یک کلاس بخواهد <strong>JsonDocument</strong> را در یک <strong>field</strong> نگه دارد، باید رابط <strong>IDisposable</strong> را هم پیاده‌سازی کند.
+اگر این کار برایتان سنگین و دست‌وپاگیر است، بهتر است به جای آن از <strong>JsonNode</strong> استفاده کنید.</p>
+<hr>
+<h3>🏗️ ایجاد یک JsonDocument</h3>
+<p>متد <strong>Parse</strong> به‌صورت استاتیک یک <strong>JsonDocument</strong> را از <strong>stream</strong>، <strong>string</strong> یا <strong>memory buffer</strong> می‌سازد:</p>
+<pre><code class="language-csharp">using JsonDocument document = JsonDocument.Parse (jsonString);
+...
+</code></pre>
+<p>هنگام فراخوانی <code>Parse</code> می‌توانید یک <strong>JsonDocumentOptions</strong> هم بدهید تا نحوه مدیریت <strong>کاماهای اضافی</strong>، <strong>کامنت‌ها</strong> و <strong>حداکثر عمق تو در تو شدن (nesting depth)</strong> کنترل شود (این موارد در بخش <strong>JsonReaderOptions</strong> صفحه 570 توضیح داده شدند).</p>
+<hr>
+<h3>🌳 دسترسی به RootElement</h3>
+<p>پس از ساخت، می‌توانید از طریق ویژگی <strong>RootElement</strong> به DOM دسترسی داشته باشید:</p>
+<pre><code class="language-csharp">using JsonDocument document = JsonDocument.Parse (&quot;123&quot;);
+JsonElement root = document.RootElement;
+Console.WriteLine (root.ValueKind);   // Number
+</code></pre>
+<p>یک <strong>JsonElement</strong> می‌تواند یک <strong>مقدار JSON</strong> (رشته، عدد، true/false، null)، یا یک <strong>آرایه</strong> یا یک <strong>شیء</strong> را نمایش دهد.
+ویژگی <strong>ValueKind</strong> مشخص می‌کند که نوع آن چیست.</p>
+<p>⚠️ متدهایی که در ادامه معرفی می‌شوند <strong>اگر نوع المنت مطابق انتظار نباشد، استثنا (Exception) پرتاب می‌کنند</strong>.
+اگر از <strong>schema</strong> فایل JSON مطمئن نیستید، می‌توانید ابتدا <strong>ValueKind</strong> را بررسی کنید یا از نسخه‌های <strong>TryGet</strong>* استفاده کنید.</p>
+<p>همچنین، <strong>JsonElement</strong> دو متد عمومی برای هر نوع المنت دارد:</p>
+<ul>
+<li><code>GetRawText()</code> → متن JSON داخلی را برمی‌گرداند.</li>
+<li><code>WriteTo</code> → المنت را به یک <strong>Utf8JsonWriter</strong> می‌نویسد.</li>
+</ul>
+<hr>
+<h3>🔢 خواندن مقادیر ساده</h3>
+<p>اگر المنت یک مقدار JSON باشد، می‌توانید مقدار آن را با متدهایی مثل <code>GetString()</code>، <code>GetInt32()</code>، <code>GetBoolean()</code> و غیره بگیرید:</p>
+<pre><code class="language-csharp">using JsonDocument document = JsonDocument.Parse (&quot;123&quot;);
+int number = document.RootElement.GetInt32();
+</code></pre>
+<p>همچنین متدهایی برای تبدیل رشته‌های JSON به انواع رایج CLR مثل <strong>DateTime</strong> (و حتی داده‌های دودویی base-64) وجود دارد.
+نسخه‌های <strong>TryGet</strong>* این متدها هم هستند که در صورت خطا، <strong>استثنا پرتاب نمی‌کنند</strong>.</p>
+<hr>
+<h3>📦 خواندن آرایه‌های JSON</h3>
+<p>اگر <strong>JsonElement</strong> نماینده یک <strong>آرایه</strong> باشد، می‌توانید از متدهای زیر استفاده کنید:</p>
+<ul>
+<li><code>EnumerateArray()</code> → تمام زیرآیتم‌ها را به‌صورت <strong>JsonElement</strong> برمی‌گرداند.</li>
+<li><code>GetArrayLength()</code> → تعداد عناصر آرایه را برمی‌گرداند.</li>
+</ul>
+<p>همچنین می‌توانید با ایندکس به المنت خاصی دسترسی داشته باشید:</p>
+<pre><code class="language-csharp">using JsonDocument document = JsonDocument.Parse (@&quot;[1, 2, 3, 4, 5]&quot;);
+int length = document.RootElement.GetArrayLength();   // 5
+int value  = document.RootElement[3].GetInt32();      // 4
+</code></pre>
+<hr>
+<h3>🗂️ خواندن اشیاء JSON</h3>
+<p>اگر المنت یک <strong>شیء JSON</strong> باشد، متدهای زیر در دسترس هستند:</p>
+<ul>
+<li><code>EnumerateObject()</code> → همه ویژگی‌ها (property) و مقادیرشان را برمی‌گرداند.</li>
+<li><code>GetProperty(string propertyName)</code> → ویژگی خاص را برمی‌گرداند (و اگر وجود نداشته باشد، استثنا پرتاب می‌کند).</li>
+<li><code>TryGetProperty(string propertyName, out JsonElement value)</code> → ویژگی را فقط در صورت وجود برمی‌گرداند.</li>
+</ul>
+<p>مثال:</p>
+<pre><code class="language-csharp">using JsonDocument document = JsonDocument.Parse (@&quot;{ &quot;&quot;Age&quot;&quot;: 32}&quot;);
+JsonElement root = document.RootElement;
+int age = root.GetProperty (&quot;Age&quot;).GetInt32();
+</code></pre>
+<p>یا کشف ویژگی‌ها به‌صورت پویا:</p>
+<pre><code class="language-csharp">JsonProperty ageProp = root.EnumerateObject().First();
+string name = ageProp.Name;             // Age
+JsonElement value = ageProp.Value;
+Console.WriteLine (value.ValueKind);    // Number
+Console.WriteLine (value.GetInt32());   // 32
+</code></pre>
+<h3>🔎 JsonDocument و LINQ</h3>
+<p>کلاس <strong>JsonDocument</strong> به‌خوبی با <strong>LINQ</strong> سازگار است. فرض کنید فایل JSON زیر را داریم:</p>
+<pre><code class="language-json">[
+  {
+    &quot;FirstName&quot;:&quot;Sara&quot;,
+    &quot;LastName&quot;:&quot;Wells&quot;,
+    &quot;Age&quot;:35,
+    &quot;Friends&quot;:[&quot;Ian&quot;]
+  },
+  {
+    &quot;FirstName&quot;:&quot;Ian&quot;,
+    &quot;LastName&quot;:&quot;Weems&quot;,
+    &quot;Age&quot;:42,
+    &quot;Friends&quot;:[&quot;Joe&quot;,&quot;Eric&quot;,&quot;Li&quot;]
+  },
+  {
+    &quot;FirstName&quot;:&quot;Dylan&quot;,
+    &quot;LastName&quot;:&quot;Lockwood&quot;,
+    &quot;Age&quot;:46,
+    &quot;Friends&quot;:[&quot;Sara&quot;,&quot;Ian&quot;]
+  }
+]
+</code></pre>
+<p>می‌توانیم با استفاده از <strong>JsonDocument</strong> و <strong>LINQ</strong> داده‌ها را کوئری کنیم:</p>
+<pre><code class="language-csharp">using var stream = File.OpenRead (jsonPath);
+using JsonDocument document = JsonDocument.Parse (json);
+
+var query =
+  from person in document.RootElement.EnumerateArray()
+  select new
+  {
+    FirstName = person.GetProperty (&quot;FirstName&quot;).GetString(),
+    Age = person.GetProperty (&quot;Age&quot;).GetInt32(),
+    Friends =
+      from friend in person.GetProperty (&quot;Friends&quot;).EnumerateArray()
+      select friend.GetString()
+  };
+</code></pre>
+<p>⚠️ توجه کنید: از آنجا که کوئری‌های <strong>LINQ</strong> به‌صورت <strong>Lazy</strong> اجرا می‌شوند، باید قبل از خارج شدن محدوده (scope) و <strong>Dispose شدن JsonDocument</strong> (که به دلیل استفاده از دستور <code>using</code> به‌طور خودکار اتفاق می‌افتد)، کوئری را پیمایش (enumerate) کنید.</p>
+<hr>
+<h3>✍️ ایجاد تغییر با JSON Writer</h3>
+<p>کلاس <strong>JsonDocument</strong> فقط خواندنی (read-only) است، اما می‌توانید محتوای یک <strong>JsonElement</strong> را با متد <strong>WriteTo</strong> به یک <strong>Utf8JsonWriter</strong> بفرستید.
+این روش امکانی برای تولید نسخه‌ای تغییر یافته از JSON فراهم می‌کند.</p>
+<p>برای نمونه، در این مثال، JSON قبلی را به یک فایل جدید می‌نویسیم که فقط شامل افرادی است که <strong>دو یا بیشتر دوست دارند</strong>:</p>
+<pre><code class="language-csharp">using var json = File.OpenRead (jsonPath);
+using JsonDocument document = JsonDocument.Parse (json);
+
+var options = new JsonWriterOptions { Indented = true };
+
+using (var outputStream = File.Create (&quot;NewFile.json&quot;))
+using (var writer = new Utf8JsonWriter (outputStream, options))
+{
+  writer.WriteStartArray();
+  foreach (var person in document.RootElement.EnumerateArray())
+  {
+    int friendCount = person.GetProperty (&quot;Friends&quot;).GetArrayLength();
+    if (friendCount &gt;= 2)
+      person.WriteTo (writer);
+  }
+}
+</code></pre>
+<p>👉 اما اگر به <strong>قابلیت به‌روزرسانی مستقیم DOM</strong> نیاز دارید، بهتر است از <strong>JsonNode</strong> استفاده کنید.</p>
+<hr>
+<h3>🌐 JsonNode</h3>
+<p>کلاس <strong>JsonNode</strong> (در فضای نام <code>System.Text.Json.Nodes</code>) در <strong>.NET 6</strong> معرفی شد.
+هدف اصلی آن، پاسخ به نیاز یک <strong>DOM قابل ویرایش (writable DOM)</strong> بود.
+البته در سناریوهای فقط‌خواندنی هم مناسب است و یک رابط <strong>روان‌تر و شی‌گرا</strong> ارائه می‌دهد.</p>
+<ul>
+<li>در اینجا، مقادیر JSON، آرایه‌ها و اشیاء هرکدام با <strong>کلاس‌ها</strong> نمایش داده می‌شوند (تصویر 11-1 در کتاب).</li>
+<li>چون کلاس‌ها هستند، هزینه‌ی <strong>Garbage Collection</strong> را تحمیل می‌کنند، اما این هزینه در اغلب سناریوهای واقعی ناچیز است.</li>
+<li><strong>JsonNode</strong> همچنان بسیار بهینه است و حتی در مواقعی که گره‌های مشابه چند بار خوانده شوند، <strong>سریع‌تر از JsonDocument</strong> عمل می‌کند، چون نتایج <strong>Parse</strong> را کش می‌کند.</li>
+</ul>
+<hr>
+<h3>🛠️ ساخت JsonNode</h3>
+<p>متد استاتیک <strong>Parse</strong> یک <strong>JsonNode</strong> را از <strong>stream</strong>، <strong>string</strong>، <strong>memory buffer</strong> یا <strong>Utf8JsonReader</strong> می‌سازد:</p>
+<pre><code class="language-csharp">JsonNode node = JsonNode.Parse (jsonString);
+</code></pre>
+<p>هنگام فراخوانی <code>Parse</code> می‌توانید مثل JsonDocument یک <strong>JsonDocumentOptions</strong> هم بدهید تا نحوه مدیریت <strong>کاماهای اضافی</strong>، <strong>کامنت‌ها</strong> و <strong>حداکثر عمق</strong> کنترل شود.</p>
+<p>🔑 برخلاف <strong>JsonDocument</strong>، اینجا دیگر نیازی به <strong>Dispose کردن</strong> وجود ندارد.</p>
+<hr>
+<h3>📜 رشته‌سازی (Stringify) در JsonNode</h3>
+<ul>
+<li>متد <code>ToString()</code> → خروجی JSON با فرمت <strong>خوانا و تو‌دار (indented)</strong> برمی‌گرداند.</li>
+<li>متد <code>ToJsonString()</code> → خروجی JSON <strong>فشرده و بدون فاصله‌های اضافی</strong> برمی‌گرداند.</li>
+</ul>
+<p>از <strong>.NET 8</strong>، ویژگی‌های زیر هم اضافه شده‌اند:</p>
+<ul>
+<li><code>DeepEquals</code> → مقایسه‌ی دو <strong>JsonNode</strong> بدون نیاز به تبدیل به رشته JSON.</li>
+<li><code>DeepClone</code> → گرفتن یک کپی عمیق از JsonNode.</li>
+</ul>
+<hr>
+<h3>🧩 انواع JsonNode</h3>
+<p>متد <code>Parse</code> یکی از زیردسته‌های <strong>JsonNode</strong> را برمی‌گرداند:</p>
+<ul>
+<li><strong>JsonValue</strong></li>
+<li><strong>JsonObject</strong></li>
+<li><strong>JsonArray</strong></li>
+</ul>
+<p>برای جلوگیری از <strong>Downcast دستی</strong>، متدهای کمکی وجود دارند:</p>
+<ul>
+<li><code>AsValue()</code></li>
+<li><code>AsObject()</code></li>
+<li><code>AsArray()</code></li>
+</ul>
+<p>مثال:</p>
+<pre><code class="language-csharp">var node = JsonNode.Parse (&quot;123&quot;);  // Parses to a JsonValue
+int number = node.AsValue().GetValue&lt;int&gt;();
+// همانند ((JsonValue)node).GetValue&lt;int&gt;();
+</code></pre>
+<p>اما معمولاً لازم نیست این متدها را صدا بزنید، چون اعضای پرکاربرد مستقیماً روی خود کلاس <strong>JsonNode</strong> در دسترس‌اند:</p>
+<pre><code class="language-csharp">var node = JsonNode.Parse (&quot;123&quot;);
+int number = node.GetValue&lt;int&gt;();
+// همانند node.AsValue().GetValue&lt;int&gt;();
+</code></pre>
+<h3>خواندن مقادیر ساده 🔹</h3>
+<p>همان‌طور که دیدیم، می‌توانید یک مقدار ساده را با استفاده از متد <strong>GetValue</strong> و مشخص کردن نوع، استخراج یا تبدیل کنید. برای آسان‌تر کردن این کار، <strong>JsonNode</strong> عملگرهای تبدیل صریح (<strong>explicit cast operators</strong>) در C# را بازتعریف کرده است، که امکان استفاده از میانبر زیر را فراهم می‌کند:</p>
+<pre><code class="language-csharp">var node = JsonNode.Parse(&quot;123&quot;);
+int number = (int)node;
+</code></pre>
+<p>این روش برای انواع استاندارد عددی، از جمله <code>char</code>، <code>bool</code>، <code>DateTime</code>، <code>DateTimeOffset</code>، <code>Guid</code> (و نسخه‌های nullable آن‌ها) و همچنین <code>string</code> کار می‌کند.</p>
+<p>اگر مطمئن نیستید که تبدیل موفق خواهد بود، باید از الگوی زیر استفاده کنید:</p>
+<pre><code class="language-csharp">if (node.AsValue().TryGetValue&lt;int&gt;(out var number))
+    Console.WriteLine(number);
+</code></pre>
+<p>از <strong>.NET 8</strong> به بعد، با فراخوانی <code>node.GetValueKind()</code> می‌توانید تشخیص دهید که نود یک رشته، عدد، آرایه، شیء یا مقدار true/false است.</p>
+<p>نودهایی که از متن JSON استخراج شده‌اند، به صورت داخلی توسط یک <strong>JsonElement</strong> پشتیبانی می‌شوند (که بخشی از API خواندنی <strong>JsonDocument</strong> است). می‌توانید <strong>JsonElement</strong> زیرین را به این شکل استخراج کنید:</p>
+<pre><code class="language-csharp">JsonElement je = node.GetValue&lt;JsonElement&gt;();
+</code></pre>
+<p>با این حال، این روش زمانی که نود به صورت صریح ایجاد شده باشد (مثلاً هنگام به‌روزرسانی DOM) کار نمی‌کند. چنین نودهایی به جای <strong>JsonElement</strong> توسط مقدار واقعی تجزیه‌شده پشتیبانی می‌شوند (رجوع کنید به بخش «Making updates with JsonNode» در صفحه 579).</p>
+<hr>
+<h3>خواندن آرایه‌های JSON 📦</h3>
+<p>یک <strong>JsonNode</strong> که نماینده یک آرایه JSON است، از نوع <strong>JsonArray</strong> خواهد بود.
+<strong>JsonArray</strong> رابط <code>IList&lt;JsonNode&gt;</code> را پیاده‌سازی می‌کند، بنابراین می‌توانید روی آن پیمایش کنید و عناصر را مانند یک آرایه یا لیست دسترسی داشته باشید:</p>
+<pre><code class="language-csharp">var node = JsonNode.Parse(@&quot;[1, 2, 3, 4, 5]&quot;);
+Console.WriteLine(node.AsArray().Count);  // 5
+foreach (JsonNode child in node.AsArray())
+{
+    ...
+}
+</code></pre>
+<p>به عنوان یک میانبر، می‌توانید از اندیس‌دهنده (<strong>indexer</strong>) مستقیماً از کلاس <strong>JsonNode</strong> استفاده کنید:</p>
+<pre><code class="language-csharp">Console.WriteLine((int)node[0]);   // 1
+</code></pre>
+<p>از <strong>.NET 8</strong> به بعد، می‌توانید با متد <strong>GetValues<T></strong> داده‌ها را به صورت <code>IEnumerable&lt;T&gt;</code> دریافت کنید:</p>
+<pre><code class="language-csharp">int[] values = node.AsArray().GetValues&lt;int&gt;().ToArray();
+</code></pre>
+<hr>
+<h3>خواندن اشیاء JSON 🗂️</h3>
+<p>یک <strong>JsonNode</strong> که نماینده یک شیء JSON است، از نوع <strong>JsonObject</strong> خواهد بود.
+<strong>JsonObject</strong> رابط <code>IDictionary&lt;string, JsonNode&gt;</code> را پیاده‌سازی می‌کند، بنابراین می‌توانید یک عضو را با اندیس‌دهنده دریافت کنید و همچنین روی کلید/مقدارهای دیکشنری پیمایش کنید.</p>
+<p>همانند <strong>JsonArray</strong>، می‌توانید اندیس‌دهنده را مستقیماً از کلاس <strong>JsonNode</strong> استفاده کنید:</p>
+<pre><code class="language-csharp">var node = JsonNode.Parse(@&quot;{ &quot;&quot;Name&quot;&quot;:&quot;&quot;Alice&quot;&quot;, &quot;&quot;Age&quot;&quot;: 32}&quot;);
+string name = (string)node[&quot;Name&quot;];  // Alice
+int age = (int)node[&quot;Age&quot;];           // 32
+</code></pre>
+<p>برای «کشف» ویژگی‌ها می‌توانیم از این الگو استفاده کنیم:</p>
+<pre><code class="language-csharp">foreach (KeyValuePair&lt;string, JsonNode&gt; keyValuePair in node.AsObject())
+{
+    string propertyName = keyValuePair.Key;   // &quot;Name&quot; سپس &quot;Age&quot;
+    JsonNode value = keyValuePair.Value;
+}
+</code></pre>
+<p>اگر مطمئن نیستید که یک ویژگی تعریف شده است، الگوی زیر نیز کاربردی است:</p>
+<pre><code class="language-csharp">if (node.AsObject().TryGetPropertyValue(&quot;Name&quot;, out JsonNode nameNode))
+{
+    ...
+}
+</code></pre>
+<hr>
+<h3>پیمایش Fluent و LINQ 🔍</h3>
+<p>می‌توانید با استفاده از اندیس‌دهنده‌ها، به عمق ساختار JSON دسترسی پیدا کنید. به عنوان مثال، با داشتن فایل JSON زیر:</p>
+<pre><code class="language-json">[
+  {
+    &quot;FirstName&quot;:&quot;Sara&quot;,
+    &quot;LastName&quot;:&quot;Wells&quot;,
+    &quot;Age&quot;:35,
+    &quot;Friends&quot;:[&quot;Ian&quot;]
+  },
+  {
+    &quot;FirstName&quot;:&quot;Ian&quot;,
+    &quot;LastName&quot;:&quot;Weems&quot;,
+    &quot;Age&quot;:42,
+    &quot;Friends&quot;:[&quot;Joe&quot;,&quot;Eric&quot;,&quot;Li&quot;]
+  },
+  {
+    &quot;FirstName&quot;:&quot;Dylan&quot;,
+    &quot;LastName&quot;:&quot;Lockwood&quot;,
+    &quot;Age&quot;:46,
+    &quot;Friends&quot;:[&quot;Sara&quot;,&quot;Ian&quot;]
+  }
+]
+</code></pre>
+<p>می‌توانیم سومین دوست نفر دوم را این‌گونه استخراج کنیم:</p>
+<pre><code class="language-csharp">string li = (string)node[1][&quot;Friends&quot;][2];
+</code></pre>
+<p>همچنین این فایل به راحتی قابل پرس‌وجو با <strong>LINQ</strong> است:</p>
+<pre><code class="language-csharp">JsonNode node = JsonNode.Parse(File.ReadAllText(jsonPath));
+var query =
+    from person in node.AsArray()
+    select new
+    {
+        FirstName = (string)person[&quot;FirstName&quot;],
+        Age = (int)person[&quot;Age&quot;],
+        Friends =
+            from friend in person[&quot;Friends&quot;].AsArray()
+            select (string)friend
+    };
+</code></pre>
+<p>برخلاف <strong>JsonDocument</strong>، <strong>JsonNode</strong> نیازی به Dispose ندارد، بنابراین نگرانی از بابت آزادسازی حافظه هنگام پیمایش تنبل وجود ندارد.</p>
+<hr>
+<h3>به‌روزرسانی با JsonNode ✏️</h3>
+<p><strong>JsonObject</strong> و <strong>JsonArray</strong> قابل تغییر هستند، بنابراین می‌توانید محتوای آن‌ها را به‌روزرسانی کنید.
+ساده‌ترین روش برای جایگزینی یا افزودن ویژگی به یک <strong>JsonObject</strong>، استفاده از اندیس‌دهنده است:</p>
+<pre><code class="language-csharp">var node = JsonNode.Parse(@&quot;{ &quot;&quot;Color&quot;&quot;: &quot;&quot;Red&quot;&quot; }&quot;);
+node[&quot;Color&quot;] = &quot;White&quot;;
+node[&quot;Valid&quot;] = true;
+Console.WriteLine(node.ToJsonString());  // {&quot;Color&quot;:&quot;White&quot;,&quot;Valid&quot;:true}
+</code></pre>
+<p>خط دوم میانبری برای این دستور است:</p>
+<pre><code class="language-csharp">node[&quot;Color&quot;] = JsonValue.Create(&quot;White&quot;);
+</code></pre>
+<p>به جای اختصاص یک مقدار ساده، می‌توانید یک <strong>JsonArray</strong> یا <strong>JsonObject</strong> اختصاص دهید.
+برای حذف یک ویژگی، ابتدا به <strong>JsonObject</strong> تبدیل کنید (یا <strong>AsObject</strong> را فراخوانی کنید) و سپس متد <strong>Remove</strong> را فراخوانی کنید:</p>
+<pre><code class="language-csharp">node.AsObject().Remove(&quot;Valid&quot;);
+</code></pre>
+<p>(همچنین <strong>JsonObject</strong> متد <strong>Add</strong> دارد که در صورت وجود ویژگی، استثناء ایجاد می‌کند.)</p>
+<p><strong>JsonArray</strong> نیز امکان استفاده از اندیس‌دهنده برای جایگزینی عناصر را دارد:</p>
+<pre><code class="language-csharp">var node = JsonNode.Parse(&quot;[1, 2, 3]&quot;);
+node[0] = 10;
+</code></pre>
+<p>فراخوانی <strong>AsArray</strong>، متدهای <strong>Add/Insert/Remove/RemoveAt</strong> را در اختیار شما می‌گذارد. برای مثال، حذف اولین عنصر و اضافه کردن یک عنصر به انتها:</p>
+<pre><code class="language-csharp">var arrayNode = JsonNode.Parse(&quot;[1, 2, 3]&quot;);
+arrayNode.AsArray().RemoveAt(0);
+arrayNode.AsArray().Add(4);
+Console.WriteLine(arrayNode.ToJsonString());  // [2,3,4]
+</code></pre>
+<p>از <strong>.NET 8</strong> به بعد، می‌توانید یک <strong>JsonNode</strong> را با فراخوانی <strong>ReplaceWith</strong> نیز به‌روزرسانی کنید:</p>
+<pre><code class="language-csharp">var node = JsonNode.Parse(@&quot;{ &quot;&quot;Color&quot;&quot;: &quot;&quot;Red&quot;&quot; }&quot;);
+var color = node[&quot;Color&quot;];
+color.ReplaceWith(&quot;Blue&quot;);
+</code></pre>
+<h3>ساخت DOM برای JsonNode به صورت برنامه‌نویسی 🏗️</h3>
+<p><strong>JsonArray</strong> و <strong>JsonObject</strong> سازندگانی دارند که از <strong>object initialization syntax</strong> پشتیبانی می‌کنند، و این امکان را می‌دهند که کل DOM یک <strong>JsonNode</strong> را در یک عبارت بسازید:</p>
+<pre><code class="language-csharp">var node = new JsonArray
+{
+    new JsonObject {
+        [&quot;Name&quot;] = &quot;Tracy&quot;,
+        [&quot;Age&quot;] = 30,
+        [&quot;Friends&quot;] = new JsonArray(&quot;Lisa&quot;, &quot;Joe&quot;)
+    },
+    new JsonObject {
+        [&quot;Name&quot;] = &quot;Jordyn&quot;,
+        [&quot;Age&quot;] = 25,
+        [&quot;Friends&quot;] = new JsonArray(&quot;Tracy&quot;, &quot;Li&quot;)
+    }
+};
+</code></pre>
+<p>نتیجه این ساختار، JSON زیر خواهد بود:</p>
+<pre><code class="language-json">[
+  {
+    &quot;Name&quot;: &quot;Tracy&quot;,
+    &quot;Age&quot;: 30,
+    &quot;Friends&quot;: [&quot;Lisa&quot;, &quot;Joe&quot;]
+  },
+  {
+    &quot;Name&quot;: &quot;Jordyn&quot;,
+    &quot;Age&quot;: 25,
+    &quot;Friends&quot;: [&quot;Tracy&quot;, &quot;Li&quot;]
+  }
+]
+</code></pre>
+
   </main>
 
   <!-- فوتر مشترک -->

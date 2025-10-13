@@ -38,7 +38,1295 @@
 
   <!-- محتوای صفحه -->
   <main class="site-main">
-    
+    <h1>فصل دهم:  LINQ to XML</h1>
+<p>.NET تعداد زیادی API برای کار با داده‌های XML فراهم می‌کند. انتخاب اصلی برای پردازش عمومی اسناد XML، <strong>LINQ to XML</strong> است.
+LINQ to XML شامل یک مدل شیء سند XML (<strong>DOM</strong>) سبک و سازگار با LINQ است، به‌علاوه مجموعه‌ای از عملگرهای پرس‌وجوی تکمیلی.</p>
+<p>در این فصل، ما به‌طور کامل روی LINQ to XML تمرکز می‌کنیم. در فصل ۱۱، به <strong>خواننده/نویسنده XML</strong> یک‌طرفه (forward-only) می‌پردازیم و در ضمیمه‌ی آنلاین، نوع‌هایی برای کار با <strong>schemaها</strong> و <strong>stylesheetها</strong> را پوشش می‌دهیم. .NET همچنین شامل DOM قدیمی مبتنی بر <strong>XmlDocument</strong> است که ما آن را پوشش نمی‌دهیم.</p>
+<p>DOM مربوط به LINQ to XML بسیار خوب طراحی شده و از نظر کارایی بسیار قوی است. حتی بدون LINQ، این DOM به‌عنوان یک لایه‌ی سبک روی کلاس‌های سطح پایین <strong>XmlReader</strong> و <strong>XmlWriter</strong> ارزشمند است.</p>
+<p>تمام نوع‌های LINQ to XML در فضای نام <strong>System.Xml.Linq</strong> تعریف شده‌اند.</p>
+<hr>
+<h2>🏛 نمای کلی معماری (Architectural Overview)</h2>
+<p>این بخش با معرفی بسیار کوتاهی از مفهوم <strong>DOM</strong> شروع می‌شود و سپس منطق پشت DOM در LINQ to XML را توضیح می‌دهد.</p>
+<hr>
+<h3>❓ DOM چیست؟ (What Is a DOM?)</h3>
+<p>به فایل XML زیر توجه کنید:</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;customer id=&quot;123&quot; status=&quot;archived&quot;&gt;
+  &lt;firstname&gt;Joe&lt;/firstname&gt;
+  &lt;lastname&gt;Bloggs&lt;/lastname&gt;
+&lt;/customer&gt;
+</code></pre>
+<p>همان‌طور که در همه‌ی فایل‌های XML وجود دارد، ما با یک <strong>اعلان (declaration)</strong> شروع می‌کنیم و سپس یک عنصر ریشه (<strong>root element</strong>) داریم که نام آن <code>customer</code> است.
+عنصر <code>customer</code> دو ویژگی (<strong>attribute</strong>) دارد، هرکدام با یک نام (id و status) و مقدار (&quot;123&quot; و &quot;archived&quot;).
+درون <code>customer</code>، دو عنصر فرزند (<strong>child element</strong>) وجود دارد: <code>firstname</code> و <code>lastname</code>، که هرکدام محتوای متنی ساده‌ای (&quot;Joe&quot; و &quot;Bloggs&quot;) دارند.</p>
+<p>هرکدام از این ساختارها—اعلان، عنصر، ویژگی، مقدار، و محتوای متنی—می‌توانند با یک <strong>کلاس (class)</strong> نمایش داده شوند. و اگر چنین کلاس‌هایی خصوصیت‌های مجموعه‌ای (<strong>collection properties</strong>) برای ذخیره‌ی محتوای فرزند داشته باشند، می‌توانیم یک <strong>درخت از اشیاء</strong> بسازیم که یک سند را به‌طور کامل توصیف کند.
+به این مدل، <strong>Document Object Model</strong> یا <strong>DOM</strong> گفته می‌شود.</p>
+<hr>
+<h3>🧩 DOM در LINQ to XML</h3>
+<p>LINQ to XML از دو بخش تشکیل شده است:</p>
+<ul>
+<li>یک DOM مربوط به XML که آن را <strong>X-DOM</strong> می‌نامیم.</li>
+<li>مجموعه‌ای از حدود ۱۰ عملگر پرس‌وجوی تکمیلی.</li>
+</ul>
+<p>همان‌طور که انتظار می‌رود، <strong>X-DOM</strong> شامل نوع‌هایی مثل <strong>XDocument</strong>، <strong>XElement</strong> و <strong>XAttribute</strong> است.
+نکته‌ی جالب این است که نوع‌های X-DOM به LINQ وابسته نیستند—شما می‌توانید یک X-DOM را بارگذاری (load)، نمونه‌سازی (instantiate)، به‌روزرسانی (update) و ذخیره (save) کنید بدون آنکه هیچ پرس‌وجوی LINQ بنویسید.</p>
+<p>برعکس، شما می‌توانید از LINQ برای پرس‌وجو در یک DOM که با نوع‌های قدیمی و سازگار با <strong>W3C</strong> ساخته شده، استفاده کنید. با این حال، این کار محدودکننده و آزاردهنده خواهد بود.
+ویژگی متمایز <strong>X-DOM</strong> این است که سازگار با LINQ (<strong>LINQ-friendly</strong>) است، یعنی:</p>
+<ul>
+<li>متدهایی دارد که توالی‌های <strong>IEnumerable</strong> مفیدی تولید می‌کنند که می‌توانید روی آن‌ها پرس‌وجو کنید.</li>
+<li>سازنده‌های آن به‌گونه‌ای طراحی شده‌اند که می‌توانید یک درخت X-DOM را از طریق یک <strong>LINQ projection</strong> بسازید.</li>
+</ul>
+<hr>
+<h3>📊 نمای کلی X-DOM</h3>
+<p>شکل ۱۰-۱ نوع‌های اصلی X-DOM را نشان می‌دهد.
+پرکاربردترین این نوع‌ها <strong>XElement</strong> است.
+<strong>XObject</strong> ریشه‌ی سلسله‌مراتب وراثت است؛ و <strong>XElement</strong> و <strong>XDocument</strong> ریشه‌های سلسله‌مراتب دربرگیری (<strong>containership hierarchy</strong>) هستند.</p>
+<div align="center">
+<p><img src="../../../assets/image/10/Table-10-1.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>شکل ۱۰-۲ درخت X-DOM ساخته‌شده از کد زیر را نشان می‌دهد:</p>
+<pre><code class="language-csharp">string xml = @&quot;&lt;customer id='123' status='archived'&gt;
+                 &lt;firstname&gt;Joe&lt;/firstname&gt;
+                 &lt;lastname&gt;Bloggs&lt;!--nice name--&gt;&lt;/lastname&gt;
+               &lt;/customer&gt;&quot;;
+XElement customer = XElement.Parse (xml);
+</code></pre>
+<div align="center">
+<p><img src="../../../assets/image/10/Table-10-2.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h3>🧩 XObject</h3>
+<p><strong>XObject</strong> کلاس پایه‌ی انتزاعی برای تمام محتوای XML است. این کلاس یک پیوند به عنصر <strong>Parent</strong> (والد) در درخت دربرگیری (containership tree) تعریف می‌کند و همچنین می‌تواند یک <strong>XDocument</strong> اختیاری داشته باشد.</p>
+<hr>
+<h3>🧩 XNode</h3>
+<p><strong>XNode</strong> کلاس پایه برای بیشتر محتوای XML (به‌جز attributeها) است. ویژگی متمایز XNode این است که می‌تواند در یک مجموعه‌ی مرتب‌شده از XNodeهای چندنوعی قرار بگیرد.</p>
+<p>برای مثال، به XML زیر توجه کنید:</p>
+<pre><code class="language-xml">&lt;data&gt;
+ Hello world
+ &lt;subelement1/&gt;
+ &lt;!--comment--&gt;
+ &lt;subelement2/&gt;
+&lt;/data&gt;
+</code></pre>
+<p>درون عنصر والد <code>&lt;data&gt;</code>، ابتدا یک <strong>XText node</strong> (&quot;Hello world&quot;) قرار دارد، سپس یک <strong>XElement node</strong>، بعد یک <strong>XComment node</strong>، و در پایان یک <strong>XElement node</strong> دیگر.
+در مقابل، یک <strong>XAttribute</strong> تنها سایر XAttributeها را به‌عنوان هم‌سطح (peer) می‌پذیرد.</p>
+<p>با اینکه یک <strong>XNode</strong> می‌تواند به عنصر والد خود (<strong>XElement</strong>) دسترسی داشته باشد، اما هیچ مفهومی از <strong>child node</strong> ندارد؛ این وظیفه‌ی زیرکلاس آن یعنی <strong>XContainer</strong> است.</p>
+<hr>
+<h3>🧩 XContainer</h3>
+<p><strong>XContainer</strong> اعضایی برای کار با فرزندان تعریف می‌کند و کلاس پایه‌ی انتزاعی برای <strong>XElement</strong> و <strong>XDocument</strong> است.</p>
+<hr>
+<h3>🧩 XElement</h3>
+<p><strong>XElement</strong> اعضایی برای مدیریت attributeها معرفی می‌کند—و همچنین خصوصیت‌های <strong>Name</strong> و <strong>Value</strong> را.
+در حالتی که یک عنصر تنها یک فرزند از نوع <strong>XText</strong> داشته باشد (که حالت نسبتاً رایجی است)، خصوصیت <strong>Value</strong> در XElement محتوای این فرزند را هم برای عملیات <strong>get</strong> و هم برای <strong>set</strong> دربرمی‌گیرد و نیاز به پیمایش غیرضروری را حذف می‌کند.
+به لطف <strong>Value</strong>، معمولاً نیازی به کار مستقیم با <strong>XText nodeها</strong> ندارید.</p>
+<hr>
+<h3>🧩 XDocument</h3>
+<p><strong>XDocument</strong> ریشه‌ی یک درخت XML را نمایش می‌دهد. به‌طور دقیق‌تر، این کلاس عنصر ریشه (<strong>root XElement</strong>) را دربر می‌گیرد و یک <strong>XDeclaration</strong>، دستورالعمل‌های پردازش (processing instructions) و سایر موارد سطح ریشه را اضافه می‌کند.</p>
+<p>برخلاف DOM در استاندارد <strong>W3C</strong>، استفاده از XDocument اختیاری است: شما می‌توانید یک X-DOM را بارگذاری، دست‌کاری و ذخیره کنید بدون اینکه هیچ‌وقت یک XDocument بسازید!
+همچنین مستقل بودن از XDocument باعث می‌شود بتوانید یک زیر‌درخت node را به‌طور کارآمد و آسان به سلسله‌مراتب X-DOM دیگری منتقل کنید.</p>
+<hr>
+<h2>📥 بارگذاری و تجزیه (Loading and Parsing)</h2>
+<p>هم <strong>XElement</strong> و هم <strong>XDocument</strong> متدهای ایستای (<strong>static</strong>) <strong>Load</strong> و <strong>Parse</strong> را برای ساختن یک درخت X-DOM از یک منبع موجود ارائه می‌دهند:</p>
+<ul>
+<li><strong>Load</strong> یک X-DOM را از فایل، URI، Stream، TextReader یا XmlReader می‌سازد.</li>
+<li><strong>Parse</strong> یک X-DOM را از یک رشته (string) می‌سازد.</li>
+</ul>
+<p>مثال:</p>
+<pre><code class="language-csharp">XDocument fromWeb = XDocument.Load (&quot;http://albahari.com/sample.xml&quot;);
+XElement fromFile = XElement.Load (@&quot;e:\media\somefile.xml&quot;);
+XElement config = XElement.Parse (
+ @&quot;&lt;configuration&gt;
+    &lt;client enabled='true'&gt;
+      &lt;timeout&gt;30&lt;/timeout&gt;
+    &lt;/client&gt;
+  &lt;/configuration&gt;&quot;);
+</code></pre>
+<p>در بخش‌های بعدی، روش پیمایش و به‌روزرسانی یک X-DOM را توضیح می‌دهیم.
+به‌عنوان یک پیش‌نمایش سریع، در اینجا نحوه‌ی دست‌کاری عنصر <code>config</code> که همین الان ساختیم آمده است:</p>
+<pre><code class="language-csharp">foreach (XElement child in config.Elements())
+  Console.WriteLine (child.Name);                     // client
+
+XElement client = config.Element (&quot;client&quot;);
+bool enabled = (bool) client.Attribute (&quot;enabled&quot;);   // Read attribute
+Console.WriteLine (enabled);                          // True
+
+client.Attribute (&quot;enabled&quot;).SetValue (!enabled);     // Update attribute
+
+int timeout = (int) client.Element (&quot;timeout&quot;);       // Read element
+Console.WriteLine (timeout);                          // 30
+
+client.Element (&quot;timeout&quot;).SetValue (timeout * 2);    // Update element
+
+client.Add (new XElement (&quot;retries&quot;, 3));             // Add new element
+
+Console.WriteLine (config);   // Implicitly call config.ToString()
+</code></pre>
+<p>نتیجه‌ی آخرین دستور <code>Console.WriteLine</code> به‌شکل زیر خواهد بود:</p>
+<pre><code class="language-xml">&lt;configuration&gt;
+  &lt;client enabled=&quot;false&quot;&gt;
+    &lt;timeout&gt;60&lt;/timeout&gt;
+    &lt;retries&gt;3&lt;/retries&gt;
+  &lt;/client&gt;
+&lt;/configuration&gt;
+</code></pre>
+<hr>
+<h3>🧩 XNode.ReadFrom</h3>
+<p><strong>XNode</strong> همچنین یک متد ایستای <strong>ReadFrom</strong> دارد که هر نوع node را از یک <strong>XmlReader</strong> نمونه‌سازی و مقداردهی می‌کند.
+برخلاف <strong>Load</strong>، این متد پس از خواندن یک node کامل متوقف می‌شود، بنابراین شما می‌توانید به‌طور دستی از همان XmlReader ادامه‌ی خواندن را انجام دهید.</p>
+<p>همچنین می‌توانید برعکس عمل کنید و با استفاده از متدهای <strong>CreateReader</strong> و <strong>CreateWriter</strong>، از یک XmlReader یا XmlWriter برای خواندن یا نوشتن یک XNode استفاده کنید.</p>
+<p>ما در فصل ۱۱ خواننده‌ها و نویسنده‌های XML و نحوه‌ی استفاده از آن‌ها با X-DOM را توضیح خواهیم داد.</p>
+<hr>
+<h2>💾 ذخیره‌سازی و سریال‌سازی (Saving and Serializing)</h2>
+<p>فراخوانی <strong>ToString</strong> روی هر node، محتوای آن را به یک رشته‌ی XML تبدیل می‌کند—با قالب‌بندی شامل شکست خط و تورفتگی، همان‌طور که دیدیم.
+(می‌توانید شکست خط و تورفتگی را غیرفعال کنید، با مشخص کردن <strong>SaveOptions.DisableFormatting</strong> هنگام فراخوانی ToString.)</p>
+<p><strong>XElement</strong> و <strong>XDocument</strong> همچنین متد <strong>Save</strong> دارند که یک X-DOM را در فایل، Stream، TextWriter یا XmlWriter می‌نویسد. اگر یک فایل مشخص کنید، به‌طور خودکار یک <strong>XML declaration</strong> نوشته می‌شود.</p>
+<p>همچنین متد <strong>WriteTo</strong> در کلاس <strong>XNode</strong> تعریف شده است که فقط یک <strong>XmlWriter</strong> می‌پذیرد.</p>
+<p>ما جزئیات بیشتری درباره‌ی نحوه‌ی مدیریت اعلان‌های XML هنگام ذخیره‌سازی را در بخش <strong>“Documents and Declarations”</strong> در صفحه‌ی ۵۳۹ توضیح خواهیم داد.
+نمونه‌سازی یک X-DOM
+به‌جای استفاده از متدهای <strong>Load</strong> یا <strong>Parse</strong>، می‌توانید یک درخت X-DOM را با نمونه‌سازی دستی اشیاء و افزودن آن‌ها به یک والد از طریق متد <strong>Add</strong> در کلاس <strong>XContainer</strong> بسازید.</p>
+<p>برای ساختن یک <strong>XElement</strong> و <strong>XAttribute</strong> کافی است یک نام و مقدار مشخص کنید:</p>
+<pre><code class="language-csharp">XElement lastName = new XElement(&quot;lastname&quot;, &quot;Bloggs&quot;);
+lastName.Add(new XComment(&quot;nice name&quot;));
+XElement customer = new XElement(&quot;customer&quot;);
+customer.Add(new XAttribute(&quot;id&quot;, 123));
+customer.Add(new XElement(&quot;firstname&quot;, &quot;Joe&quot;));
+customer.Add(lastName);
+Console.WriteLine(customer.ToString());
+</code></pre>
+<p>خروجی به این صورت است:</p>
+<pre><code class="language-xml">&lt;customer id=&quot;123&quot;&gt;
+  &lt;firstname&gt;Joe&lt;/firstname&gt;
+  &lt;lastname&gt;Bloggs&lt;!--nice name--&gt;&lt;/lastname&gt;
+&lt;/customer&gt;
+</code></pre>
+<p>وقتی یک <strong>XElement</strong> می‌سازید، مقدار (value) اختیاری است — می‌توانید فقط نام عنصر را بدهید و بعداً محتوا اضافه کنید. توجه کنید که وقتی مقداری تعیین کردیم، یک رشته‌ی ساده کافی بود؛ لازم نبود که به‌طور صریح یک <strong>XText</strong> بسازیم و اضافه کنیم. X-DOM این کار را به‌طور خودکار انجام می‌دهد، بنابراین شما فقط با &quot;مقدار&quot; سروکار دارید.</p>
+<hr>
+<h3>ساختار تابعی (Functional Construction)</h3>
+<p>در مثال قبل، خواندن ساختار XML از روی کد کمی دشوار است. X-DOM یک حالت دیگر نمونه‌سازی به نام <strong>ساختار تابعی</strong> (از برنامه‌نویسی تابعی) پشتیبانی می‌کند. در این حالت، می‌توانید کل درخت را در یک عبارت واحد بسازید:</p>
+<pre><code class="language-csharp">XElement customer =
+  new XElement(&quot;customer&quot;, new XAttribute(&quot;id&quot;, 123),
+    new XElement(&quot;firstname&quot;, &quot;joe&quot;),
+    new XElement(&quot;lastname&quot;, &quot;bloggs&quot;,
+      new XComment(&quot;nice name&quot;)
+    )
+  );
+</code></pre>
+<p>این روش دو مزیت دارد:</p>
+<ol>
+<li>کد شبیه ساختار XML می‌شود.</li>
+<li>می‌توان آن را در عبارت <strong>select</strong> یک کوئری LINQ استفاده کرد.</li>
+</ol>
+<p>مثلاً، کوئری زیر از یک کلاس موجودیت EF Core به یک X-DOM پروجکت می‌کند:</p>
+<pre><code class="language-csharp">XElement query =
+  new XElement(&quot;customers&quot;,
+    from c in dbContext.Customers.AsEnumerable()
+    select
+      new XElement(&quot;customer&quot;, new XAttribute(&quot;id&quot;, c.ID),
+        new XElement(&quot;firstname&quot;, c.FirstName),
+        new XElement(&quot;lastname&quot;, c.LastName,
+          new XComment(&quot;nice name&quot;)
+        )
+      )
+  );
+</code></pre>
+<p>(این موضوع را بعداً در همین فصل در بخش «پروجکت کردن به داخل یک X-DOM» بررسی می‌کنیم.)</p>
+<hr>
+<h3>تعیین محتوا (Specifying Content)</h3>
+<p>ساختار تابعی امکان‌پذیر است چون سازنده‌های <strong>XElement</strong> (و <strong>XDocument</strong>) طوری overload شده‌اند که یک <code>params object[]</code> را بپذیرند:</p>
+<pre><code class="language-csharp">public XElement (XName name, params object[] content)
+</code></pre>
+<p>همین موضوع برای متد <strong>Add</strong> در <strong>XContainer</strong> نیز صدق می‌کند:</p>
+<pre><code class="language-csharp">public void Add (params object[] content)
+</code></pre>
+<p>بنابراین، هنگام ساخت یا اضافه کردن به یک X-DOM می‌توانید هر تعداد شیء با هر نوعی را به‌عنوان فرزند مشخص کنید. دلیل این کار این است که هر چیزی می‌تواند محتوای قانونی باشد. در اینجا تصمیماتی که <strong>XContainer</strong> برای پردازش هر شیء می‌گیرد آمده است:</p>
+<ol>
+<li>اگر شیء <strong>null</strong> باشد، نادیده گرفته می‌شود.</li>
+<li>اگر شیء از نوع <strong>XNode</strong> یا <strong>XStreamingElement</strong> باشد، مستقیماً به کالکشن <strong>Nodes</strong> اضافه می‌شود.</li>
+<li>اگر شیء یک <strong>XAttribute</strong> باشد، به کالکشن <strong>Attributes</strong> اضافه می‌شود.</li>
+<li>اگر شیء یک <strong>string</strong> باشد، در یک <strong>XText</strong> قرار گرفته و به <strong>Nodes</strong> افزوده می‌شود.</li>
+<li>اگر شیء از <strong>IEnumerable</strong> پیروی کند، اعضای آن پیمایش شده و همین قوانین روی هر عضو اعمال می‌شود.</li>
+<li>در غیر این صورت، شیء به رشته تبدیل شده، در یک <strong>XText</strong> قرار گرفته و به <strong>Nodes</strong> اضافه می‌شود.</li>
+</ol>
+<blockquote>
+<p>نکته: X-DOM این مرحله را بهینه‌سازی می‌کند و محتوای متنی ساده را در یک <strong>string</strong> ذخیره می‌کند. نود <strong>XText</strong> واقعاً ساخته نمی‌شود تا وقتی که متد <strong>Nodes()</strong> را روی XContainer فراخوانی کنید.</p>
+</blockquote>
+<p>در نهایت، همه چیز یا در <strong>Nodes</strong> قرار می‌گیرد یا در <strong>Attributes</strong>.</p>
+<p>پیش از صدا زدن <strong>ToString</strong> روی یک نوع دلخواه، <strong>XContainer</strong> بررسی می‌کند که آیا از انواع زیر هست یا خیر:</p>
+<ul>
+<li><code>float, double, decimal, bool, DateTime, DateTimeOffset, TimeSpan</code></li>
+</ul>
+<p>اگر چنین باشد، به‌جای <strong>ToString</strong> معمولی، متد مناسب <strong>XmlConvert</strong> فراخوانی می‌شود تا داده‌ها قابلیت <strong>round-trip</strong> داشته باشند و با قوانین استاندارد XML سازگار باشند.</p>
+<hr>
+<h3>کلون‌گیری عمیق خودکار (Automatic Deep Cloning)</h3>
+<p>وقتی یک نود یا attribute به یک element اضافه می‌شود (چه از طریق ساختار تابعی یا متد <strong>Add</strong>)، خاصیت <strong>Parent</strong> آن نود یا attribute به آن عنصر تنظیم می‌شود.
+از آنجا که هر نود فقط می‌تواند یک والد داشته باشد، اگر یک نودِ والددار را به والد دیگری اضافه کنید، آن نود به‌طور خودکار <strong>کلون عمیق (deep clone)</strong> می‌شود.</p>
+<p>مثال:</p>
+<pre><code class="language-csharp">var address = new XElement(&quot;address&quot;,
+                 new XElement(&quot;street&quot;, &quot;Lawley St&quot;),
+                 new XElement(&quot;town&quot;, &quot;North Beach&quot;)
+             );
+
+var customer1 = new XElement(&quot;customer1&quot;, address);
+var customer2 = new XElement(&quot;customer2&quot;, address);
+
+customer1.Element(&quot;address&quot;).Element(&quot;street&quot;).Value = &quot;Another St&quot;;
+
+Console.WriteLine(
+  customer2.Element(&quot;address&quot;).Element(&quot;street&quot;).Value);   // Lawley St
+</code></pre>
+<p>این تکثیر خودکار باعث می‌شود نمونه‌سازی X-DOM بدون <strong>side effect</strong> باشد — که یکی دیگر از ویژگی‌های کلیدی برنامه‌نویسی تابعی است. ✅</p>
+<p>پیمایش و کوئری‌گیری (Navigating and Querying)
+همان‌طور که انتظار دارید، کلاس‌های <strong>XNode</strong> و <strong>XContainer</strong> متدها و ویژگی‌هایی برای پیمایش درخت X-DOM تعریف می‌کنند. اما برخلاف یک DOM سنتی، این توابع مجموعه‌ای که <strong>IList<T></strong> را پیاده‌سازی کند برنمی‌گردانند. در عوض، یا یک مقدار منفرد یا یک دنباله (sequence) که <strong>IEnumerable<T></strong> را پیاده‌سازی می‌کند برمی‌گردانند — و شما انتظار می‌رود که روی آن یا یک کوئری LINQ اجرا کنید یا با یک <strong>foreach</strong> پیمایش کنید.</p>
+<p>این موضوع امکان اجرای کوئری‌های پیشرفته را در کنار وظایف ساده‌ی پیمایش، با استفاده از همان سینتکس آشنای LINQ، فراهم می‌کند. ✅</p>
+<hr>
+<blockquote>
+<p><strong>نکته:</strong> همانند XML، در X-DOM نام عناصر (Element) و صفات (Attribute) <strong>حساس به حروف کوچک و بزرگ</strong> هستند.</p>
+</blockquote>
+<hr>
+<h3>پیمایش نودهای فرزند (Child Node Navigation)</h3>
+<div align="center">
+<p><img src="../../../assets/image/10/Table-10-3.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>تابع‌هایی که در ستون سوم جدول (اینجا و در جدول‌های دیگر) با یک ستاره (*) علامت‌گذاری شده‌اند، روی دنباله‌هایی از همان نوع هم عمل می‌کنند.
+برای مثال، می‌توانید متد <strong>Nodes</strong> را هم روی یک شیء <strong>XContainer</strong> و هم روی یک دنباله از اشیاء <strong>XContainer</strong> فراخوانی کنید. این قابلیت به لطف <strong>extension method</strong>هایی است که در فضای نام <strong>System.Xml.Linq</strong> تعریف شده‌اند—یعنی همان <strong>عملگرهای کمکی کوئری</strong> که در بخش مروری (overview) درباره‌شان صحبت کردیم.</p>
+<hr>
+<h3>🟢 FirstNode، LastNode و Nodes</h3>
+<ul>
+<li><strong>FirstNode</strong> و <strong>LastNode</strong> دسترسی مستقیم به اولین یا آخرین نود فرزند می‌دهند.</li>
+<li><strong>Nodes</strong> همه‌ی فرزندها را به صورت یک دنباله (sequence) برمی‌گرداند.</li>
+</ul>
+<p>هر سه این تابع‌ها فقط فرزندان مستقیم (direct descendants) را در نظر می‌گیرند:</p>
+<pre><code class="language-csharp">var bench = new XElement (&quot;bench&quot;,
+              new XElement (&quot;toolbox&quot;,
+                new XElement (&quot;handtool&quot;, &quot;Hammer&quot;),
+                new XElement (&quot;handtool&quot;, &quot;Rasp&quot;)
+              ),
+              new XElement (&quot;toolbox&quot;,
+                new XElement (&quot;handtool&quot;, &quot;Saw&quot;),
+                new XElement (&quot;powertool&quot;, &quot;Nailgun&quot;)
+              ),
+              new XComment (&quot;Be careful with the nailgun&quot;)
+            );
+
+foreach (XNode node in bench.Nodes())
+  Console.WriteLine (node.ToString (SaveOptions.DisableFormatting) + &quot;.&quot;);
+</code></pre>
+<p>🔹 خروجی کد بالا:</p>
+<pre><code>&lt;toolbox&gt;&lt;handtool&gt;Hammer&lt;/handtool&gt;&lt;handtool&gt;Rasp&lt;/handtool&gt;&lt;/toolbox&gt;.
+&lt;toolbox&gt;&lt;handtool&gt;Saw&lt;/handtool&gt;&lt;powertool&gt;Nailgun&lt;/powertool&gt;&lt;/toolbox&gt;.
+&lt;!--Be careful with the nailgun--&gt;.
+</code></pre>
+<hr>
+<h3>🟢 بازیابی عناصر (Retrieving elements)</h3>
+<p>متد <strong>Elements</strong> فقط نودهای فرزند از نوع <strong>XElement</strong> را برمی‌گرداند:</p>
+<pre><code class="language-csharp">foreach (XElement e in bench.Elements())
+  Console.WriteLine (e.Name + &quot;=&quot; + e.Value);
+// toolbox=HammerRasp
+// toolbox=SawNailgun
+</code></pre>
+<p>🔹 کوئری زیر جعبه‌ابزاری (<strong>toolbox</strong>) را پیدا می‌کند که درونش ابزار <strong>Nailgun</strong> وجود دارد:</p>
+<pre><code class="language-csharp">IEnumerable&lt;string&gt; query =
+  from toolbox in bench.Elements()
+  where toolbox.Elements().Any (tool =&gt; tool.Value == &quot;Nailgun&quot;)
+  select toolbox.Value;
+
+// RESULT: { &quot;SawNailgun&quot; }
+</code></pre>
+<p>🔹 در مثال بعدی از <strong>SelectMany</strong> استفاده می‌کنیم تا ابزارهای دستی (<strong>handtool</strong>) همه‌ی جعبه‌ابزارها را به‌دست بیاوریم:</p>
+<pre><code class="language-csharp">IEnumerable&lt;string&gt; query =
+  from toolbox in bench.Elements()
+  from tool in toolbox.Elements()
+  where tool.Name == &quot;handtool&quot;
+  select tool.Value;
+
+// RESULT: { &quot;Hammer&quot;, &quot;Rasp&quot;, &quot;Saw&quot; }
+</code></pre>
+<hr>
+<h3>🟢 نکته درباره Elements</h3>
+<ul>
+<li>متد <strong>Elements</strong> معادل یک کوئری LINQ روی <strong>Nodes</strong> است.
+مثلاً کوئری قبل می‌توانست این‌طور شروع شود:</li>
+</ul>
+<pre><code class="language-csharp">from toolbox in bench.Nodes().OfType&lt;XElement&gt;()
+where ...
+</code></pre>
+<ul>
+<li>متد <strong>Elements</strong> می‌تواند فقط عناصر با یک نام مشخص را هم برگرداند:</li>
+</ul>
+<pre><code class="language-csharp">int x = bench.Elements(&quot;toolbox&quot;).Count();    // 2
+</code></pre>
+<p>این کد معادل است با:</p>
+<pre><code class="language-csharp">int x = bench.Elements().Where (e =&gt; e.Name == &quot;toolbox&quot;).Count();  // 2
+</code></pre>
+<ul>
+<li>متد <strong>Elements</strong> به‌عنوان یک <strong>extension method</strong> هم تعریف شده که یک <strong>IEnumerable<XContainer></strong> (یا دقیق‌تر: <code>IEnumerable&lt;T&gt; where T : XContainer</code>) می‌پذیرد.
+به همین دلیل، می‌تواند روی دنباله‌ای از عناصر هم کار کند.</li>
+</ul>
+<p>مثال بازنویسی‌شده برای یافتن ابزارهای دستی:</p>
+<pre><code class="language-csharp">from tool in bench.Elements(&quot;toolbox&quot;).Elements(&quot;handtool&quot;)
+select tool.Value;
+</code></pre>
+<p>🔹 در اینجا:</p>
+<ul>
+<li>فراخوانی اول <strong>Elements</strong> به متد نمونه‌ای (instance method) در <strong>XContainer</strong> متصل می‌شود.</li>
+<li>فراخوانی دوم <strong>Elements</strong> به متد توسعه‌ای (extension method) متصل می‌شود.</li>
+</ul>
+<h3>بازیابی یک عنصر منفرد (Retrieving a Single Element)</h3>
+<p>متد <strong>Element</strong> (تک‌جمع) اولین عنصر مطابق با نام داده‌شده را برمی‌گرداند.
+این متد برای پیمایش ساده مفید است، مانند مثال زیر:</p>
+<pre><code class="language-csharp">XElement settings = XElement.Load(&quot;databaseSettings.xml&quot;);
+string cx = settings.Element(&quot;database&quot;).Element(&quot;connectString&quot;).Value;
+</code></pre>
+<p>متد <strong>Element</strong> معادل فراخوانی <strong>Elements()</strong> و سپس اعمال <strong>FirstOrDefault</strong> با یک predicate برای مطابقت نام است.
+اگر عنصر درخواست‌شده وجود نداشته باشد، <strong>Element</strong> مقدار <strong>null</strong> برمی‌گرداند.</p>
+<blockquote>
+<p>توجه: فراخوانی <code>Element(&quot;xyz&quot;).Value</code> زمانی که عنصر <code>xyz</code> وجود نداشته باشد، باعث <strong>NullReferenceException</strong> می‌شود.
+برای جلوگیری از استثنا می‌توانید از <strong>null-conditional operator</strong> استفاده کنید:</p>
+</blockquote>
+<pre><code class="language-csharp">Element(&quot;xyz&quot;)?.Value
+</code></pre>
+<p>یا عنصر <strong>XElement</strong> را مستقیماً به <strong>string</strong> تبدیل کنید:</p>
+<pre><code class="language-csharp">string xyz = (string)settings.Element(&quot;xyz&quot;);
+</code></pre>
+<p>این کار امکان‌پذیر است چون <strong>XElement</strong> یک تبدیل صریح به رشته (explicit string conversion) تعریف کرده است. ✅</p>
+<hr>
+<h3>بازیابی فرزندان و نوه‌ها (Retrieving Descendants)</h3>
+<p>کلاس <strong>XContainer</strong> همچنین متدهای <strong>Descendants</strong> و <strong>DescendantNodes</strong> را ارائه می‌دهد که عناصر یا نودهای فرزند و تمامی فرزندان آن‌ها (کل درخت) را برمی‌گردانند.
+متد <strong>Descendants</strong> یک نام عنصر اختیاری هم می‌پذیرد.</p>
+<p>مثال:</p>
+<pre><code class="language-csharp">Console.WriteLine(bench.Descendants(&quot;handtool&quot;).Count());  // 3
+</code></pre>
+<p>هم والدها و هم برگ‌ها شامل می‌شوند، همان‌طور که مثال زیر نشان می‌دهد:</p>
+<pre><code class="language-csharp">foreach (XNode node in bench.DescendantNodes())
+  Console.WriteLine(node.ToString(SaveOptions.DisableFormatting));
+</code></pre>
+<p>🔹 خروجی:</p>
+<pre><code>&lt;toolbox&gt;&lt;handtool&gt;Hammer&lt;/handtool&gt;&lt;handtool&gt;Rasp&lt;/handtool&gt;&lt;/toolbox&gt;
+&lt;handtool&gt;Hammer&lt;/handtool&gt;
+Hammer
+&lt;handtool&gt;Rasp&lt;/handtool&gt;
+Rasp
+&lt;toolbox&gt;&lt;handtool&gt;Saw&lt;/handtool&gt;&lt;powertool&gt;Nailgun&lt;/powertool&gt;&lt;/toolbox&gt;
+&lt;handtool&gt;Saw&lt;/handtool&gt;
+Saw
+&lt;powertool&gt;Nailgun&lt;/powertool&gt;
+Nailgun
+&lt;!--Be careful with the nailgun--&gt;
+</code></pre>
+<p>کوئری بعدی تمام <strong>comment</strong>های داخل X-DOM که شامل کلمه‌ی &quot;careful&quot; هستند را استخراج می‌کند:</p>
+<pre><code class="language-csharp">IEnumerable&lt;string&gt; query =
+  from c in bench.DescendantNodes().OfType&lt;XComment&gt;()
+  where c.Value.Contains(&quot;careful&quot;)
+  orderby c.Value
+  select c.Value;
+</code></pre>
+<hr>
+<h3>پیمایش والدین (Parent Navigation)</h3>
+<p>تمام <strong>XNode</strong>ها دارای خصوصیت <strong>Parent</strong> و متدهای <strong>AncestorXXX</strong> برای پیمایش والدین هستند.
+یک والد همیشه از نوع <strong>XElement</strong> است.</p>
+<div align="center">
+<p><img src="../../../assets/image/10/Table-10-4.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>اگر <strong>x</strong> یک <strong>XElement</strong> باشد، کد زیر همیشه مقدار <strong>true</strong> چاپ می‌کند:</p>
+<pre><code class="language-csharp">foreach (XNode child in x.Nodes())
+  Console.WriteLine(child.Parent == x);
+</code></pre>
+<p>با این حال، این موضوع در مورد <strong>XDocument</strong> صادق نیست. <strong>XDocument</strong> کمی متفاوت است: می‌تواند فرزند داشته باشد اما هرگز نمی‌تواند والد هیچ نودی باشد!</p>
+<p>برای دسترسی به <strong>XDocument</strong>، باید از خصوصیت <strong>Document</strong> استفاده کنید؛ این ویژگی روی هر شیء در درخت X-DOM کار می‌کند.</p>
+<hr>
+<h3>پیمایش والدین (Ancestors)</h3>
+<ul>
+<li>متد <strong>Ancestors</strong> یک دنباله برمی‌گرداند که اولین عنصر آن <strong>Parent</strong> است، عنصر بعدی <strong>Parent.Parent</strong> و به همین ترتیب تا رسیدن به عنصر ریشه ادامه دارد.</li>
+<li>می‌توانید با کوئری LINQ زیر به عنصر ریشه دسترسی پیدا کنید:</li>
+</ul>
+<pre><code class="language-csharp">AncestorsAndSelf().Last();
+</code></pre>
+<ul>
+<li>روش دیگر برای رسیدن به عنصر ریشه این است که از <strong>Document.Root</strong> استفاده کنید، البته این فقط زمانی کار می‌کند که یک <strong>XDocument</strong> موجود باشد.</li>
+</ul>
+<hr>
+<h3>پیمایش نودهای هم‌سطح (Peer Node Navigation)</h3>
+<div align="center">
+<p><img src="../../../assets/image/10/Table-10-5.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>با <strong>PreviousNode</strong> و <strong>NextNode</strong> (و همچنین <strong>FirstNode</strong> و <strong>LastNode</strong>) می‌توانید نودها را مانند یک <strong>لیست پیوندی (linked list)</strong> پیمایش کنید.
+این اتفاق تصادفی نیست: در سطح داخلی، نودها در یک <strong>لیست پیوندی</strong> ذخیره می‌شوند.</p>
+<blockquote>
+<p>توجه: <strong>XNode</strong> از یک لیست پیوندی تک‌جهته استفاده می‌کند، بنابراین <strong>PreviousNode</strong> عملکرد چندان بهینه‌ای ندارد.</p>
+</blockquote>
+<hr>
+<h3>پیمایش صفات (Attribute Navigation)</h3>
+<div align="center">
+<p><img src="../../../assets/image/10/Table-10-6.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>علاوه بر این، <strong>XAttribute</strong> خصوصیات <strong>PreviousAttribute</strong> و <strong>NextAttribute</strong> را تعریف می‌کند و همچنین <strong>Parent</strong> را دارد.</p>
+<p>متد <strong>Attributes</strong> که یک نام را می‌پذیرد، یک دنباله با صفر یا یک عنصر برمی‌گرداند؛ زیرا یک عنصر نمی‌تواند در XML صفات با نام‌های تکراری داشته باشد. ✅</p>
+<hr>
+<h3>به‌روزرسانی X-DOM (Updating an X-DOM)</h3>
+<p>می‌توانید عناصر و صفات را به روش‌های زیر به‌روزرسانی کنید:</p>
+<ul>
+<li>فراخوانی <strong>SetValue</strong> یا اختصاص دوباره به خصوصیت <strong>Value</strong>.</li>
+<li>فراخوانی <strong>SetElementValue</strong> یا <strong>SetAttributeValue</strong>.</li>
+<li>فراخوانی یکی از متدهای <strong>RemoveXXX</strong>.</li>
+<li>فراخوانی یکی از متدهای <strong>AddXXX</strong> یا <strong>ReplaceXXX</strong> و مشخص کردن محتوای جدید.</li>
+</ul>
+<p>همچنین می‌توانید خصوصیت <strong>Name</strong> را روی اشیاء <strong>XElement</strong> دوباره اختصاص دهید.</p>
+<hr>
+<h3>به‌روزرسانی ساده مقادیر (Simple Value Updates)</h3>
+<div align="center">
+<p><img src="../../../assets/image/10/Table-10-7.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>متد <strong>SetValue</strong> محتوای یک عنصر یا صفت را با یک مقدار ساده جایگزین می‌کند.
+اختصاص مقدار به خصوصیت <strong>Value</strong> نیز همین کار را انجام می‌دهد، اما فقط داده‌های رشته‌ای (<strong>string</strong>) را می‌پذیرد.
+هر دوی این توابع به‌طور دقیق‌تر در بخش «Working with Values» در صفحه 537 توضیح داده شده‌اند. ✅</p>
+<p>یکی از اثرات فراخوانی <strong>SetValue</strong> (یا اختصاص دوباره به <strong>Value</strong>) این است که <strong>تمام نودهای فرزند را جایگزین می‌کند</strong>:</p>
+<pre><code class="language-csharp">XElement settings = new XElement(&quot;settings&quot;,
+                      new XElement(&quot;timeout&quot;, 30)
+                    );
+
+settings.SetValue(&quot;blah&quot;);
+Console.WriteLine(settings.ToString());  // &lt;settings&gt;blah&lt;/settings&gt;
+</code></pre>
+<hr>
+<h3>به‌روزرسانی نودهای فرزند و صفات (Updating Child Nodes and Attributes)</h3>
+<div align="center">
+<p><img src="../../../assets/image/10/Table-10-8.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>راحت‌ترین متدها در این گروه، دو متد آخر یعنی <strong>SetElementValue</strong> و <strong>SetAttributeValue</strong> هستند.
+این متدها به‌عنوان <strong>میان‌بر</strong> برای ایجاد یک <strong>XElement</strong> یا <strong>XAttribute</strong> و سپس <strong>افزودن آن به والد</strong> عمل می‌کنند، و در صورت وجود عنصر یا صفتی با همان نام، آن را جایگزین می‌کنند:</p>
+<pre><code class="language-csharp">XElement settings = new XElement(&quot;settings&quot;);
+
+settings.SetElementValue(&quot;timeout&quot;, 30);  // افزودن نود فرزند
+settings.SetElementValue(&quot;timeout&quot;, 60);  // به‌روزرسانی به 60
+</code></pre>
+<ul>
+<li>
+<p>متد <strong>Add</strong> یک نود فرزند به یک عنصر یا سند اضافه می‌کند.</p>
+</li>
+<li>
+<p>متد <strong>AddFirst</strong> همین کار را انجام می‌دهد اما در ابتدای مجموعه اضافه می‌کند، نه در انتها.</p>
+</li>
+<li>
+<p>می‌توانید تمام نودهای فرزند یا صفات را یکجا با <strong>RemoveNodes</strong> یا <strong>RemoveAttributes</strong> حذف کنید.</p>
+</li>
+<li>
+<p><strong>RemoveAll</strong> معادل فراخوانی هر دو متد است.</p>
+</li>
+<li>
+<p>متدهای <strong>ReplaceXXX</strong> معادل حذف و سپس افزودن هستند. این متدها از ورودی <strong>snapshot</strong> می‌گیرند، بنابراین فراخوانی‌ای مانند:</p>
+</li>
+</ul>
+<pre><code class="language-csharp">e.ReplaceNodes(e.Nodes())
+</code></pre>
+<p>به‌طور مورد انتظار عمل می‌کند.</p>
+<hr>
+<h3>به‌روزرسانی از طریق والد (Updating Through the Parent)</h3>
+<div align="center">
+<p><img src="../../../assets/image/10/Table-10-9.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>متدهای <strong>AddBeforeSelf</strong>، <strong>AddAfterSelf</strong>، <strong>Remove</strong> و <strong>ReplaceWith</strong> روی فرزندان نود عمل نمی‌کنند.
+در عوض، این متدها روی <strong>مجموعه‌ای که خود نود در آن قرار دارد</strong> عمل می‌کنند.
+برای این کار، نود باید دارای <strong>والد (Parent)</strong> باشد؛ در غیر این صورت، یک استثنا (exception) ایجاد می‌شود.</p>
+<ul>
+<li><strong>AddBeforeSelf</strong> و <strong>AddAfterSelf</strong> برای درج یک نود در <strong>موقعیت دلخواه</strong> مفید هستند:</li>
+</ul>
+<pre><code class="language-csharp">XElement items = new XElement(&quot;items&quot;,
+                   new XElement(&quot;one&quot;),
+                   new XElement(&quot;three&quot;)
+                 );
+
+items.FirstNode.AddAfterSelf(new XElement(&quot;two&quot;));
+</code></pre>
+<p>🔹 نتیجه:</p>
+<pre><code class="language-xml">&lt;items&gt;&lt;one /&gt;&lt;two /&gt;&lt;three /&gt;&lt;/items&gt;
+</code></pre>
+<p>درج در یک موقعیت دلخواه در یک دنباله طولانی از عناصر <strong>کارآمد</strong> است زیرا نودها به‌صورت داخلی در یک <strong>لیست پیوندی</strong> ذخیره شده‌اند.</p>
+<ul>
+<li>متد <strong>Remove</strong> نود جاری را از والد خود حذف می‌کند.</li>
+<li>متد <strong>ReplaceWith</strong> همین کار را انجام می‌دهد و سپس محتوای دیگری را در همان موقعیت درج می‌کند:</li>
+</ul>
+<pre><code class="language-csharp">XElement items = XElement.Parse(&quot;&lt;items&gt;&lt;one/&gt;&lt;two/&gt;&lt;three/&gt;&lt;/items&gt;&quot;);
+items.FirstNode.ReplaceWith(new XComment(&quot;One was here&quot;));
+</code></pre>
+<p>🔹 نتیجه:</p>
+<pre><code class="language-xml">&lt;items&gt;&lt;!--One was here--&gt;&lt;two /&gt;&lt;three /&gt;&lt;/items&gt;
+</code></pre>
+<hr>
+<h3>حذف یک دنباله از نودها یا صفات (Removing a Sequence of Nodes or Attributes)</h3>
+<p>به لطف <strong>extension method</strong>های موجود در <strong>System.Xml.Linq</strong>، می‌توانید متد <strong>Remove</strong> را روی یک دنباله از نودها یا صفات هم فراخوانی کنید.</p>
+<p>مثال X-DOM:</p>
+<pre><code class="language-csharp">XElement contacts = XElement.Parse(
+@&quot;&lt;contacts&gt;
+    &lt;customer name='Mary'/&gt;
+    &lt;customer name='Chris' archived='true'/&gt;
+    &lt;supplier name='Susan'&gt;
+      &lt;phone archived='true'&gt;012345678&lt;!--confidential--&gt;&lt;/phone&gt;
+    &lt;/supplier&gt;
+&lt;/contacts&gt;&quot;);
+</code></pre>
+<ul>
+<li>حذف تمام مشتریان:</li>
+</ul>
+<pre><code class="language-csharp">contacts.Elements(&quot;customer&quot;).Remove();
+</code></pre>
+<ul>
+<li>حذف تمام عناصر آرشیو شده (Chris حذف می‌شود):</li>
+</ul>
+<pre><code class="language-csharp">contacts.Elements()
+        .Where(e =&gt; (bool?) e.Attribute(&quot;archived&quot;) == true)
+        .Remove();
+</code></pre>
+<ul>
+<li>اگر <strong>Elements()</strong> را با <strong>Descendants()</strong> جایگزین کنیم، تمام عناصر آرشیو شده در کل DOM حذف می‌شوند، و نتیجه این خواهد بود:</li>
+</ul>
+<pre><code class="language-xml">&lt;contacts&gt;
+  &lt;customer name=&quot;Mary&quot; /&gt;
+  &lt;supplier name=&quot;Susan&quot; /&gt;
+&lt;/contacts&gt;
+</code></pre>
+<ul>
+<li>مثال بعدی، حذف تمام تماس‌هایی که در هر جای درخت کامنت &quot;confidential&quot; دارند:</li>
+</ul>
+<pre><code class="language-csharp">contacts.Elements()
+        .Where(e =&gt; e.DescendantNodes()
+                     .OfType&lt;XComment&gt;()
+                     .Any(c =&gt; c.Value == &quot;confidential&quot;))
+        .Remove();
+</code></pre>
+<p>🔹 نتیجه:</p>
+<pre><code class="language-xml">&lt;contacts&gt;
+  &lt;customer name=&quot;Mary&quot; /&gt;
+  &lt;customer name=&quot;Chris&quot; archived=&quot;true&quot; /&gt;
+&lt;/contacts&gt;
+</code></pre>
+<ul>
+<li>مقایسه با کوئری ساده‌تر که تمام نودهای کامنت را از درخت حذف می‌کند:</li>
+</ul>
+<pre><code class="language-csharp">contacts.DescendantNodes().OfType&lt;XComment&gt;().Remove();
+</code></pre>
+<blockquote>
+<p>در سطح داخلی، متد <strong>Remove</strong> ابتدا همه عناصر مطابق را در یک لیست موقت می‌خواند و سپس روی همان لیست موقت پیمایش کرده و حذف را انجام می‌دهد.
+این کار از خطاهایی جلوگیری می‌کند که ممکن است هنگام <strong>حذف و پرس‌وجو همزمان</strong> رخ دهند.</p>
+</blockquote>
+<h3>کار با مقادیر (Working with Values)</h3>
+<p>هم <strong>XElement</strong> و هم <strong>XAttribute</strong> دارای خصوصیت <strong>Value</strong> از نوع <strong>string</strong> هستند.</p>
+<ul>
+<li>اگر یک عنصر تنها یک نود فرزند <strong>XText</strong> داشته باشد، خصوصیت <strong>Value</strong> در <strong>XElement</strong> به‌عنوان یک <strong>میان‌بر مناسب</strong> برای محتوای آن نود عمل می‌کند.</li>
+<li>در <strong>XAttribute</strong>، خصوصیت <strong>Value</strong> صرفاً مقدار صفت را نگه می‌دارد.</li>
+</ul>
+<p>با وجود تفاوت‌های ذخیره‌سازی، <strong>X-DOM</strong> مجموعه‌ای یکنواخت از عملیات برای کار با مقادیر عناصر و صفات ارائه می‌دهد. ✅</p>
+<hr>
+<h3>اختصاص مقادیر (Setting Values)</h3>
+<p>دو روش برای اختصاص مقدار وجود دارد: فراخوانی <strong>SetValue</strong> یا اختصاص به خصوصیت <strong>Value</strong>.</p>
+<ul>
+<li><strong>SetValue</strong> انعطاف‌پذیری بیشتری دارد، زیرا فقط رشته را نمی‌پذیرد بلکه انواع داده ساده دیگر را نیز قبول می‌کند:</li>
+</ul>
+<pre><code class="language-csharp">var e = new XElement(&quot;date&quot;, DateTime.Now);
+e.SetValue(DateTime.Now.AddDays(1));
+Console.Write(e.Value);  // 2019-10-02T16:39:10.734375+09:00
+</code></pre>
+<p>می‌توانستیم به جای آن، مستقیماً <strong>Value</strong> را اختصاص دهیم، اما در این صورت مجبور بودیم <strong>DateTime</strong> را دستی به رشته تبدیل کنیم که پیچیده‌تر است و نیاز به استفاده از <strong>XmlConvert</strong> برای نتیجه سازگار با XML دارد.</p>
+<ul>
+<li>
+<p>هنگام ارسال مقدار به سازنده <strong>XElement</strong> یا <strong>XAttribute</strong>، تبدیل خودکار برای انواع غیررشته‌ای نیز انجام می‌شود. این اطمینان می‌دهد که:</p>
+<ul>
+<li><strong>DateTime</strong> به‌درستی فرمت می‌شود</li>
+<li><strong>true</strong> با حروف کوچک نوشته می‌شود</li>
+<li><strong>double.NegativeInfinity</strong> به صورت &quot;-INF&quot; نوشته می‌شود</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3>بازیابی مقادیر (Getting Values)</h3>
+<p>برای برعکس کردن، یعنی تبدیل <strong>Value</strong> به نوع پایه، کافی است <strong>XElement</strong> یا <strong>XAttribute</strong> را به نوع مورد نظر <strong>cast</strong> کنید:</p>
+<pre><code class="language-csharp">XElement e = new XElement(&quot;now&quot;, DateTime.Now);
+DateTime dt = (DateTime)e;
+
+XAttribute a = new XAttribute(&quot;resolution&quot;, 1.234);
+double res = (double)a;
+</code></pre>
+<ul>
+<li>عناصر یا صفات به‌طور بومی <strong>DateTime</strong> یا اعداد را ذخیره نمی‌کنند؛ همیشه به‌صورت متن ذخیره و در صورت نیاز تجزیه می‌شوند.</li>
+<li>نوع اصلی ذخیره شده «به یاد نمی‌ماند»، بنابراین باید <strong>cast</strong> را به‌درستی انجام دهید تا از خطای زمان اجرا جلوگیری شود.</li>
+<li>برای ایجاد کد مقاوم، می‌توانید <strong>cast</strong> را در بلوک <strong>try/catch</strong> قرار دهید و <strong>FormatException</strong> را مدیریت کنید.</li>
+</ul>
+<hr>
+<h3>انواع پشتیبانی شده برای cast صریح</h3>
+<p><strong>XElement</strong> و <strong>XAttribute</strong> می‌توانند به انواع زیر cast شوند:</p>
+<ul>
+<li>
+<p>تمام انواع عددی استاندارد</p>
+</li>
+<li>
+<p><strong>string</strong>، <strong>bool</strong>، <strong>DateTime</strong>، <strong>DateTimeOffset</strong>، <strong>TimeSpan</strong>، و <strong>Guid</strong></p>
+</li>
+<li>
+<p>نسخه‌های <strong>Nullable&lt;&gt;</strong> از انواع بالا</p>
+</li>
+<li>
+<p>استفاده از <strong>nullable</strong> مفید است هنگام استفاده از متدهای <strong>Element</strong> و <strong>Attribute</strong>، زیرا اگر نام مورد نظر وجود نداشته باشد، cast هنوز کار می‌کند:</p>
+</li>
+</ul>
+<pre><code class="language-csharp">int timeout = (int)x.Element(&quot;timeout&quot;);      // خطا
+int? timeout = (int?)x.Element(&quot;timeout&quot;);    // درست؛ timeout = null
+</code></pre>
+<ul>
+<li>می‌توانید مقدار پیش‌فرض را با عملگر <strong>??</strong> مشخص کنید:</li>
+</ul>
+<pre><code class="language-csharp">double resolution = (double?)x.Attribute(&quot;resolution&quot;) ?? 1.0;
+</code></pre>
+<blockquote>
+<p>توجه: cast به nullable شما را از خطا در صورتی که مقدار عنصر یا صفت خالی یا با فرمت نادرست باشد، نجات نمی‌دهد. در این موارد باید <strong>FormatException</strong> را مدیریت کنید.</p>
+</blockquote>
+<hr>
+<h3>استفاده از cast در کوئری‌های LINQ</h3>
+<p>مثال: بازگرداندن نام مشتریانی که اعتبار بالای 100 دارند:</p>
+<pre><code class="language-csharp">var data = XElement.Parse(
+@&quot;&lt;data&gt;
+      &lt;customer id='1' name='Mary' credit='100' /&gt;
+      &lt;customer id='2' name='John' credit='150' /&gt;
+      &lt;customer id='3' name='Anne' /&gt;
+&lt;/data&gt;&quot;);
+
+IEnumerable&lt;string&gt; query = from cust in data.Elements()
+                            where (int?)cust.Attribute(&quot;credit&quot;) &gt; 100
+                            select cust.Attribute(&quot;name&quot;).Value;
+</code></pre>
+<ul>
+<li>استفاده از <strong>nullable int</strong> از بروز <strong>NullReferenceException</strong> برای مشتری‌ای مثل Anne که صفت credit ندارد جلوگیری می‌کند.</li>
+<li>اصول مشابه برای پرس‌وجو روی مقادیر عناصر نیز اعمال می‌شود.</li>
+</ul>
+<hr>
+<h3>مقادیر و نودهای محتوای ترکیبی (Values and Mixed Content Nodes)</h3>
+<p>زمانی که محتوا <strong>مختلط</strong> است، ممکن است نیاز باشد مستقیماً با <strong>XText</strong> کار کنید:</p>
+<pre><code class="language-xml">&lt;summary&gt;An XAttribute is &lt;bold&gt;not&lt;/bold&gt; an XNode&lt;/summary&gt;
+</code></pre>
+<ul>
+<li>عنصر <strong>summary</strong> سه فرزند دارد: <strong>XText</strong>، سپس <strong>XElement</strong>، سپس دوباره <strong>XText</strong>.</li>
+</ul>
+<p>ساخت آن:</p>
+<pre><code class="language-csharp">XElement summary = new XElement(&quot;summary&quot;,
+                      new XText(&quot;An XAttribute is &quot;),
+                      new XElement(&quot;bold&quot;, &quot;not&quot;),
+                      new XText(&quot; an XNode&quot;));
+</code></pre>
+<ul>
+<li>جالب اینجاست که می‌توانیم هنوز <strong>summary.Value</strong> را کوئری کنیم بدون ایجاد استثنا؛ حاصل <strong>ترکیب مقادیر همه فرزندان</strong> است:</li>
+</ul>
+<pre><code>An XAttribute is not an XNode
+</code></pre>
+<ul>
+<li>می‌توان مقدار <strong>Value</strong> را دوباره اختصاص داد، اما همه فرزندان قبلی با یک نود <strong>XText</strong> جدید جایگزین می‌شوند.</li>
+</ul>
+<hr>
+<h3>ترکیب خودکار XText</h3>
+<ul>
+<li>وقتی محتوای ساده‌ای به یک <strong>XElement</strong> اضافه می‌کنید، <strong>X-DOM</strong> به جای ایجاد نود جدید، به <strong>XText</strong> موجود اضافه می‌کند.</li>
+</ul>
+<p>مثال‌ها:</p>
+<pre><code class="language-csharp">var e1 = new XElement(&quot;test&quot;, &quot;Hello&quot;); e1.Add(&quot;World&quot;);
+var e2 = new XElement(&quot;test&quot;, &quot;Hello&quot;, &quot;World&quot;);
+</code></pre>
+<ul>
+<li>
+<p>هر دو <strong>e1</strong> و <strong>e2</strong> فقط یک فرزند <strong>XText</strong> دارند با مقدار <code>&quot;HelloWorld&quot;</code>.</p>
+</li>
+<li>
+<p>اگر صریحاً چند نود <strong>XText</strong> بسازید، چند فرزند خواهید داشت:</p>
+</li>
+</ul>
+<pre><code class="language-csharp">var e = new XElement(&quot;test&quot;, new XText(&quot;Hello&quot;), new XText(&quot;World&quot;));
+Console.WriteLine(e.Value);           // HelloWorld
+Console.WriteLine(e.Nodes().Count()); // 2
+</code></pre>
+<ul>
+<li><strong>XElement</strong> نودهای <strong>XText</strong> را به هم متصل نمی‌کند، بنابراین <strong>هویت اشیاء نودها حفظ می‌شود</strong>.</li>
+</ul>
+<h3>اسناد و اعلان‌ها (Documents and Declarations)</h3>
+<h4>XDocument</h4>
+<p>همانطور که قبلاً گفتیم، <strong>XDocument</strong> یک عنصر ریشه <strong>XElement</strong> را بسته‌بندی می‌کند و امکان اضافه کردن موارد زیر را فراهم می‌کند:</p>
+<ul>
+<li><strong>XDeclaration</strong> (اعلان XML)</li>
+<li>دستورات پردازشی (<strong>Processing Instructions</strong>)</li>
+<li>نوع سند (<strong>XDocumentType</strong>)</li>
+<li>نظرات در سطح ریشه (<strong>XComment</strong>)</li>
+</ul>
+<blockquote>
+<p><strong>نکته مهم:</strong> وجود <strong>XDocument</strong> اختیاری است و می‌توان آن را نادیده گرفت یا حذف کرد. برخلاف <strong>W3C DOM</strong>، XDocument به‌عنوان «چسب» برای نگه داشتن همه چیز کنار هم عمل نمی‌کند.</p>
+</blockquote>
+<hr>
+<h4>محتویات مجاز XDocument</h4>
+<p>XDocument می‌تواند فقط انواع محدودی از محتوا را بپذیرد:</p>
+<ul>
+<li>یک <strong>XElement</strong> (عنصر ریشه) – اجباری برای داشتن XDocument معتبر</li>
+<li>یک <strong>XDeclaration</strong> – اختیاری، اگر حذف شود، مقادیر پیش‌فرض هنگام سریال‌سازی اعمال می‌شوند</li>
+<li>یک <strong>XDocumentType</strong> (برای ارجاع به DTD)</li>
+<li>هر تعداد <strong>XProcessingInstruction</strong></li>
+<li>هر تعداد <strong>XComment</strong></li>
+</ul>
+<hr>
+<h4>نمونه ساده از XDocument معتبر</h4>
+<pre><code class="language-csharp">var doc = new XDocument(
+    new XElement(&quot;test&quot;, &quot;data&quot;)
+);
+</code></pre>
+<ul>
+<li>در مثال بالا <strong>XDeclaration</strong> وارد نشده است، اما هنگام فراخوانی <strong>doc.Save</strong>، یک اعلان XML به‌صورت پیش‌فرض تولید می‌شود.</li>
+</ul>
+<hr>
+<h4>نمونه ایجاد یک فایل XHTML</h4>
+<pre><code class="language-csharp">var styleInstruction = new XProcessingInstruction(
+    &quot;xml-stylesheet&quot;, &quot;href='styles.css' type='text/css'&quot;
+);
+var docType = new XDocumentType(
+    &quot;html&quot;,
+    &quot;-//W3C//DTD XHTML 1.0 Strict//EN&quot;,
+    &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&quot;,
+    null
+);
+
+XNamespace ns = &quot;http://www.w3.org/1999/xhtml&quot;;
+
+var root = new XElement(ns + &quot;html&quot;,
+    new XElement(ns + &quot;head&quot;,
+        new XElement(ns + &quot;title&quot;, &quot;An XHTML page&quot;)
+    ),
+    new XElement(ns + &quot;body&quot;,
+        new XElement(ns + &quot;p&quot;, &quot;This is the content&quot;)
+    )
+);
+
+var doc = new XDocument(
+    new XDeclaration(&quot;1.0&quot;, &quot;utf-8&quot;, &quot;no&quot;),
+    new XComment(&quot;Reference a stylesheet&quot;),
+    styleInstruction,
+    docType,
+    root
+);
+
+doc.Save(&quot;test.html&quot;);
+</code></pre>
+<ul>
+<li>محتوای <strong>test.html</strong> تولید شده:</li>
+</ul>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;no&quot;?&gt;
+&lt;!--Reference a stylesheet--&gt;
+&lt;?xml-stylesheet href='styles.css' type='text/css'?&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Strict//EN&quot;
+                      &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&quot;&gt;
+&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+  &lt;head&gt;
+    &lt;title&gt;An XHTML page&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;p&gt;This is the content&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<hr>
+<h4>دسترسی به ریشه و ارتباطات</h4>
+<ul>
+<li>خصوصیت <strong>Root</strong> در <strong>XDocument</strong> یک میان‌بر برای دسترسی به عنصر ریشه است.</li>
+<li>لینک معکوس از هر شیء در درخت با خصوصیت <strong>Document</strong> از <strong>XObject</strong> ارائه می‌شود:</li>
+</ul>
+<pre><code class="language-csharp">Console.WriteLine(doc.Root.Name.LocalName);          // html
+XElement bodyNode = doc.Root.Element(ns + &quot;body&quot;);
+Console.WriteLine(bodyNode.Document == doc);         // True
+</code></pre>
+<ul>
+<li>فرزندان یک سند هیچ والد (Parent) ندارند:</li>
+</ul>
+<pre><code class="language-csharp">Console.WriteLine(doc.Root.Parent == null);          // True
+foreach (XNode node in doc.Nodes())
+    Console.Write(node.Parent == null);              // TrueTrueTrueTrue
+</code></pre>
+<blockquote>
+<p>توجه: <strong>XDeclaration</strong> یک <strong>XNode</strong> نیست و در مجموعه <strong>Nodes</strong> سند ظاهر نمی‌شود. فقط به خصوصیت <strong>Declaration</strong> اختصاص داده می‌شود. به همین دلیل در مثال بالا، مقدار &quot;True&quot; چهار بار تکرار شد و نه پنج بار.</p>
+</blockquote>
+<h3>اعلان‌های XML (XML Declarations)</h3>
+<p>یک فایل XML استاندارد با یک اعلان شروع می‌شود، مانند:</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;yes&quot;?&gt;
+</code></pre>
+<ul>
+<li>اعلان XML تضمین می‌کند که فایل به درستی توسط خواننده (Reader) پردازش و درک شود.</li>
+</ul>
+<h4>رفتار XElement و XDocument هنگام تولید اعلان XML</h4>
+<ul>
+<li><strong>Save با نام فایل</strong> → همیشه یک اعلان می‌نویسد.</li>
+<li><strong>Save با XmlWriter</strong> → اعلان می‌نویسد مگر اینکه XmlWriter به نحوی تنظیم شود که اعلان تولید نکند.</li>
+<li><strong>ToString</strong> → هیچ‌گاه اعلان XML تولید نمی‌کند.</li>
+</ul>
+<blockquote>
+<p>برای جلوگیری از تولید اعلان، می‌توان <strong>OmitXmlDeclaration</strong> و <strong>ConformanceLevel</strong> را در <strong>XmlWriterSettings</strong> هنگام ساخت XmlWriter تنظیم کرد.</p>
+</blockquote>
+<hr>
+<h4>نقش XDeclaration</h4>
+<p>وجود یا عدم وجود <strong>XDeclaration</strong> بر نوشتن اعلان تأثیری ندارد. هدف اصلی XDeclaration این است که به سریال‌سازی XML راهنمایی کند:</p>
+<ul>
+<li>چه <strong>کدگذاری متنی</strong> (encoding) استفاده شود</li>
+<li>چه مقادیری در <strong>ویژگی‌های encoding و standalone</strong> اعلان XML نوشته شوند</li>
+</ul>
+<h4>نمونه ایجاد XDeclaration و XDocument با UTF-16</h4>
+<pre><code class="language-csharp">var doc = new XDocument(
+    new XDeclaration(&quot;1.0&quot;, &quot;utf-16&quot;, &quot;yes&quot;),
+    new XElement(&quot;test&quot;, &quot;data&quot;)
+);
+doc.Save(&quot;test.xml&quot;);
+</code></pre>
+<ul>
+<li>توجه: نسخه (version) همیشه به &quot;1.0&quot; نوشته می‌شود.</li>
+<li>encoding باید یک کد IETF مانند <code>&quot;utf-16&quot;</code> باشد.</li>
+</ul>
+<hr>
+<h4>نوشتن اعلان به رشته (String)</h4>
+<ul>
+<li><strong>ToString</strong> اعلان تولید نمی‌کند، بنابراین باید از <strong>XmlWriter</strong> استفاده کرد:</li>
+</ul>
+<pre><code class="language-csharp">var doc = new XDocument(
+    new XDeclaration(&quot;1.0&quot;, &quot;utf-8&quot;, &quot;yes&quot;),
+    new XElement(&quot;test&quot;, &quot;data&quot;)
+);
+
+var output = new StringBuilder();
+var settings = new XmlWriterSettings { Indent = true };
+
+using (XmlWriter xw = XmlWriter.Create(output, settings))
+    doc.Save(xw);
+
+Console.WriteLine(output.ToString());
+</code></pre>
+<ul>
+<li>خروجی:</li>
+</ul>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-16&quot; standalone=&quot;yes&quot;?&gt;
+&lt;test&gt;data&lt;/test&gt;
+</code></pre>
+<blockquote>
+<p>دلیل UTF-16: رشته‌ها در حافظه داخلی به صورت UTF-16 ذخیره می‌شوند، بنابراین XmlWriter به‌درستی &quot;utf-16&quot; می‌نویسد تا اطلاعات نادرست تولید نشود.</p>
+</blockquote>
+<hr>
+<h4>نکته مهم درباره ToString</h4>
+<p>اگر بجای Save، از کد زیر استفاده کنید:</p>
+<pre><code class="language-csharp">File.WriteAllText(&quot;data.xml&quot;, doc.ToString());
+</code></pre>
+<ul>
+<li>فایل <strong>data.xml</strong> بدون اعلان XML ذخیره می‌شود.</li>
+<li>اگر ToString اعلان تولید می‌کرد، encoding نادرست (UTF-16) درج می‌شد که ممکن بود باعث عدم خوانده شدن فایل شود.</li>
+</ul>
+<hr>
+<h3>نام‌ها و فضای نام‌ها (Names and Namespaces)</h3>
+<ul>
+<li>
+<p>همان‌طور که نوع‌ها در .NET می‌توانند namespace داشته باشند، عناصر و attributes در XML نیز می‌توانند namespace داشته باشند.</p>
+</li>
+<li>
+<p><strong>کاربرد namespace در XML:</strong></p>
+<ol>
+<li>جلوگیری از برخورد نام‌ها هنگام ترکیب داده‌ها از فایل‌های مختلف</li>
+<li>دادن معنای دقیق به یک نام</li>
+</ol>
+</li>
+</ul>
+<h4>نمونه تعریف namespace پیش‌فرض</h4>
+<pre><code class="language-xml">&lt;customer xmlns=&quot;OReilly.Nutshell.CSharp&quot;/&gt;
+</code></pre>
+<ul>
+<li>
+<p><code>xmlns</code> نامعتبر است و دو کار انجام می‌دهد:</p>
+<ol>
+<li>namespace عنصر جاری را مشخص می‌کند</li>
+<li>namespace پیش‌فرض برای تمام عناصر فرزند تعیین می‌کند</li>
+</ol>
+</li>
+</ul>
+<p>مثال با عناصر فرزند:</p>
+<pre><code class="language-xml">&lt;customer xmlns=&quot;OReilly.Nutshell.CSharp&quot;&gt;
+  &lt;address&gt;
+    &lt;postcode&gt;02138&lt;/postcode&gt;
+  &lt;/address&gt;
+&lt;/customer&gt;
+</code></pre>
+<ul>
+<li>عناصر <code>address</code> و <code>postcode</code> به طور پیش‌فرض در namespace <code>OReilly.Nutshell.CSharp</code> قرار دارند.</li>
+</ul>
+<h4>حذف namespace برای عناصر فرزند</h4>
+<pre><code class="language-xml">&lt;customer xmlns=&quot;OReilly.Nutshell.CSharp&quot;&gt;
+  &lt;address xmlns=&quot;&quot;&gt;
+    &lt;postcode&gt;02138&lt;/postcode&gt;  &lt;!-- اکنون postcode در namespace خالی است --&gt;
+  &lt;/address&gt;
+&lt;/customer&gt;
+</code></pre>
+<h3>پیشوندها (Prefixes)</h3>
+<p>یکی دیگر از روش‌های تعیین namespace استفاده از <strong>پیشوند (prefix)</strong> است.</p>
+<ul>
+<li><strong>پیشوند</strong> یک نام مستعار برای namespace است که به شما اجازه می‌دهد کمتر تایپ کنید.</li>
+<li>دو مرحله دارد: تعریف پیشوند و استفاده از آن.</li>
+</ul>
+<h4>تعریف و استفاده همزمان از پیشوند</h4>
+<pre><code class="language-xml">&lt;nut:customer xmlns:nut=&quot;OReilly.Nutshell.CSharp&quot;/&gt;
+</code></pre>
+<ul>
+<li>سمت راست: <code>xmlns:nut=&quot;...&quot;</code> → پیشوند <code>nut</code> را تعریف می‌کند.</li>
+<li>سمت چپ: <code>nut:customer</code> → پیشوند تعریف شده را به عنصر <code>customer</code> نسبت می‌دهد.</li>
+</ul>
+<hr>
+<h4>نکته‌ها درباره پیشوندها</h4>
+<ul>
+<li><strong>عنصر دارای پیشوند، فضای نام پیش‌فرض برای فرزندان ایجاد نمی‌کند.</strong></li>
+<li>برای اینکه فرزند هم همان پیشوند را داشته باشد، باید صراحتاً از آن استفاده کنید:</li>
+</ul>
+<pre><code class="language-xml">&lt;nut:customer xmlns:nut=&quot;OReilly.Nutshell.CSharp&quot;&gt;
+  &lt;nut:firstname&gt;Joe&lt;/nut:firstname&gt;
+&lt;/nut:customer&gt;
+</code></pre>
+<ul>
+<li>می‌توانید پیشوند تعریف کنید بدون اینکه آن را به عنصر جاری اختصاص دهید، برای راحتی فرزندان:</li>
+</ul>
+<pre><code class="language-xml">&lt;customer xmlns:i=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+          xmlns:z=&quot;http://schemas.microsoft.com/2003/10/Serialization/&quot;&gt;
+  ...
+&lt;/customer&gt;
+</code></pre>
+<ul>
+<li>پیشوندها مخصوصاً زمانی مفید هستند که عناصر از چند namespace استفاده کنند.</li>
+<li><strong>همیشه از URIهای معتبر برای namespace استفاده کنید</strong> تا یکتا باشند:</li>
+</ul>
+<pre><code class="language-xml">&lt;customer xmlns=&quot;http://oreilly.com/schemas/nutshell/csharp&quot;/&gt;
+&lt;nut:customer xmlns:nut=&quot;http://oreilly.com/schemas/nutshell/csharp&quot;/&gt;
+</code></pre>
+<hr>
+<h3>namespace برای Attributes</h3>
+<ul>
+<li>یک Attribute همیشه برای داشتن namespace نیاز به <strong>پیشوند</strong> دارد:</li>
+</ul>
+<pre><code class="language-xml">&lt;customer xmlns:nut=&quot;OReilly.Nutshell.CSharp&quot; nut:id=&quot;123&quot; /&gt;
+</code></pre>
+<ul>
+<li>Attribute بدون پیشوند همیشه در <strong>namespace خالی</strong> است و فضای نام والد را به ارث نمی‌برد.</li>
+<li>معمولاً Attributes نیازی به namespace ندارند مگر برای metadata یا کاربرد عمومی:</li>
+</ul>
+<pre><code class="language-xml">&lt;customer xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+  &lt;firstname&gt;Joe&lt;/firstname&gt;
+  &lt;lastname xsi:nil=&quot;true&quot;/&gt;
+&lt;/customer&gt;
+</code></pre>
+<hr>
+<h3>تعیین namespace در X-DOM</h3>
+<ul>
+<li>تا به حال از <strong>رشته ساده</strong> برای نام XElement و XAttribute استفاده کردیم که معادل <strong>namespace خالی</strong> است.</li>
+<li>برای تعیین namespace، دو روش داریم:</li>
+</ul>
+<ol>
+<li><strong>استفاده از آکولاد در نام رشته‌ای:</strong></li>
+</ol>
+<pre><code class="language-csharp">var e = new XElement(&quot;{http://domain.com/xmlspace}customer&quot;, &quot;Bloggs&quot;);
+Console.WriteLine(e.ToString());
+</code></pre>
+<p>خروجی:</p>
+<pre><code class="language-xml">&lt;customer xmlns=&quot;http://domain.com/xmlspace&quot;&gt;Bloggs&lt;/customer&gt;
+</code></pre>
+<ol start="2">
+<li><strong>استفاده از XNamespace و XName (روش بهینه‌تر):</strong></li>
+</ol>
+<pre><code class="language-csharp">XNamespace ns = &quot;http://domain.com/xmlspace&quot;;
+XName fullName = ns + &quot;customer&quot;;
+
+var data = new XElement(ns + &quot;data&quot;,
+              new XAttribute(ns + &quot;id&quot;, 123)
+           );
+</code></pre>
+<ul>
+<li>
+<p><strong>XNamespace</strong> و <strong>XName</strong> کلاس‌هایی هستند که namespace و نام محلی (local name) را مدیریت می‌کنند.</p>
+</li>
+<li>
+<p>همه متدها و سازنده‌های X-DOM، XName می‌پذیرند، ولی می‌توان رشته ساده نیز استفاده کرد به دلیل <strong>تبدیل ضمنی (implicit cast)</strong>.</p>
+</li>
+<li>
+<p>نتیجه استفاده از namespace در عناصر و attributes یکسان است و تنها با استفاده از <code>+</code> یا آکولاد مشخص می‌شود.</p>
+</li>
+</ul>
+<h3>X-DOM و فضای نام پیش‌فرض (Default Namespaces)</h3>
+<p>در <strong>X-DOM</strong>، مفهوم <strong>فضای نام پیش‌فرض</strong> تا زمان <strong>تبدیل به XML واقعی</strong> نادیده گرفته می‌شود.</p>
+<ul>
+<li>یعنی وقتی یک عنصر فرزند (XElement) می‌سازید، <strong>فضای نام والد به طور خودکار به آن منتقل نمی‌شود</strong>.</li>
+<li>شما باید <strong>explicit</strong> namespace را مشخص کنید:</li>
+</ul>
+<pre><code class="language-csharp">XNamespace ns = &quot;http://domain.com/xmlspace&quot;;
+var data = new XElement(ns + &quot;data&quot;,
+            new XElement(ns + &quot;customer&quot;, &quot;Bloggs&quot;),
+            new XElement(ns + &quot;purchase&quot;, &quot;Bicycle&quot;)
+          );
+Console.WriteLine(data.ToString());
+</code></pre>
+<p><strong>خروجی:</strong></p>
+<pre><code class="language-xml">&lt;data xmlns=&quot;http://domain.com/xmlspace&quot;&gt;
+  &lt;customer&gt;Bloggs&lt;/customer&gt;
+  &lt;purchase&gt;Bicycle&lt;/purchase&gt;
+&lt;/data&gt;
+</code></pre>
+<ul>
+<li>اگر فرزندان بدون namespace ساخته شوند، فضای نام خالی (<code>xmlns=&quot;&quot;</code>) به آن‌ها اعمال می‌شود:</li>
+</ul>
+<pre><code class="language-csharp">var data2 = new XElement(ns + &quot;data&quot;,
+            new XElement(&quot;customer&quot;, &quot;Bloggs&quot;),
+            new XElement(&quot;purchase&quot;, &quot;Bicycle&quot;)
+          );
+Console.WriteLine(data2.ToString());
+</code></pre>
+<p>خروجی:</p>
+<pre><code class="language-xml">&lt;data xmlns=&quot;http://domain.com/xmlspace&quot;&gt;
+  &lt;customer xmlns=&quot;&quot;&gt;Bloggs&lt;/customer&gt;
+  &lt;purchase xmlns=&quot;&quot;&gt;Bicycle&lt;/purchase&gt;
+&lt;/data&gt;
+</code></pre>
+<hr>
+<h3>هشدار در ناوبری X-DOM</h3>
+<ul>
+<li>هنگام استفاده از <code>Element()</code> یا سایر متدهای جستجو، <strong>فراموش کردن namespace باعث بازگشت null می‌شود</strong>:</li>
+</ul>
+<pre><code class="language-csharp">XNamespace ns = &quot;http://domain.com/xmlspace&quot;;
+var data = new XElement(ns + &quot;data&quot;,
+            new XElement(ns + &quot;customer&quot;, &quot;Bloggs&quot;)
+          );
+
+XElement x = data.Element(ns + &quot;customer&quot;); // درست
+XElement y = data.Element(&quot;customer&quot;);      // null
+</code></pre>
+<ul>
+<li>اگر X-DOM بدون namespace ساخته شد، می‌توانید بعداً همه عناصر را به یک namespace واحد اختصاص دهید:</li>
+</ul>
+<pre><code class="language-csharp">foreach (XElement e in data.DescendantsAndSelf())
+  if (e.Name.Namespace == &quot;&quot;)
+    e.Name = ns + e.Name.LocalName;
+</code></pre>
+<hr>
+<h3>پیشوندها (Prefixes) در X-DOM</h3>
+<ul>
+<li>X-DOM پیشوندها را فقط برای <strong>serialization</strong> استفاده می‌کند.</li>
+<li>در عملیات ساخت، جستجو و بروزرسانی X-DOM <strong>می‌توان پیشوندها را نادیده گرفت</strong>.</li>
+</ul>
+<p>مثال:</p>
+<pre><code class="language-csharp">XNamespace ns1 = &quot;http://domain.com/space1&quot;;
+XNamespace ns2 = &quot;http://domain.com/space2&quot;;
+var mix = new XElement(ns1 + &quot;data&quot;,
+            new XElement(ns2 + &quot;element&quot;, &quot;value&quot;),
+            new XElement(ns2 + &quot;element&quot;, &quot;value&quot;),
+            new XElement(ns2 + &quot;element&quot;, &quot;value&quot;)
+          );
+Console.WriteLine(mix.ToString());
+</code></pre>
+<p>خروجی بدون پیشوند:</p>
+<pre><code class="language-xml">&lt;data xmlns=&quot;http://domain.com/space1&quot;&gt;
+  &lt;element xmlns=&quot;http://domain.com/space2&quot;&gt;value&lt;/element&gt;
+  &lt;element xmlns=&quot;http://domain.com/space2&quot;&gt;value&lt;/element&gt;
+  &lt;element xmlns=&quot;http://domain.com/space2&quot;&gt;value&lt;/element&gt;
+&lt;/data&gt;
+</code></pre>
+<ul>
+<li>برای کاهش تکرار، می‌توان پیشوندها را به root اضافه کرد:</li>
+</ul>
+<pre><code class="language-csharp">mix.SetAttributeValue(XNamespace.Xmlns + &quot;ns1&quot;, ns1);
+mix.SetAttributeValue(XNamespace.Xmlns + &quot;ns2&quot;, ns2);
+</code></pre>
+<p>خروجی بهینه:</p>
+<pre><code class="language-xml">&lt;ns1:data xmlns:ns1=&quot;http://domain.com/space1&quot;
+          xmlns:ns2=&quot;http://domain.com/space2&quot;&gt;
+  &lt;ns2:element&gt;value&lt;/ns2:element&gt;
+  &lt;ns2:element&gt;value&lt;/ns2:element&gt;
+  &lt;ns2:element&gt;value&lt;/ns2:element&gt;
+&lt;/ns1:data&gt;
+</code></pre>
+<hr>
+<h3>پیشوندها برای Attributes</h3>
+<ul>
+<li>پیشوندها در زمان <strong>serializing attributes</strong> هم اعمال می‌شوند.</li>
+<li>مثال استفاده از namespace استاندارد W3C برای نشان دادن nil:</li>
+</ul>
+<pre><code class="language-csharp">XNamespace xsi = &quot;http://www.w3.org/2001/XMLSchema-instance&quot;;
+var nil = new XAttribute(xsi + &quot;nil&quot;, true);
+
+var cust = new XElement(&quot;customers&quot;,
+              new XAttribute(XNamespace.Xmlns + &quot;xsi&quot;, xsi),
+              new XElement(&quot;customer&quot;,
+                new XElement(&quot;lastname&quot;, &quot;Bloggs&quot;),
+                new XElement(&quot;dob&quot;, nil),
+                new XElement(&quot;credit&quot;, nil)
+              )
+            );
+</code></pre>
+<p>خروجی:</p>
+<pre><code class="language-xml">&lt;customers xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+  &lt;customer&gt;
+    &lt;lastname&gt;Bloggs&lt;/lastname&gt;
+    &lt;dob xsi:nil=&quot;true&quot; /&gt;
+    &lt;credit xsi:nil=&quot;true&quot; /&gt;
+  &lt;/customer&gt;
+&lt;/customers&gt;
+</code></pre>
+<ul>
+<li>یک attribute می‌تواند چند بار در X-DOM استفاده شود؛ X-DOM به طور خودکار آن را duplicate می‌کند.</li>
+</ul>
+<h3>Annotations در LINQ to XML</h3>
+<p>در <strong>LINQ to XML</strong> می‌توانید داده‌های دلخواه خود را به هر <strong>XObject</strong> (مثل <code>XElement</code> یا <code>XAttribute</code>) بچسبانید. این داده‌ها به عنوان <strong>Annotations</strong> شناخته می‌شوند و X-DOM آن‌ها را <strong>به صورت یک جعبه سیاه (black box)</strong> مدیریت می‌کند.</p>
+<ul>
+<li>مفهومی مشابه <code>Tag</code> در Windows Forms یا WPF، با این تفاوت که <strong>چندین annotation</strong> می‌توانید اضافه کنید و هر کدام می‌توانند <strong>خصوصی و غیرقابل مشاهده توسط دیگران</strong> باشند.</li>
+</ul>
+<hr>
+<h4>اضافه کردن و حذف Annotations</h4>
+<pre><code class="language-csharp">public void AddAnnotation(object annotation)
+public void RemoveAnnotations&lt;T&gt;() where T : class
+</code></pre>
+<h4>بازیابی Annotations</h4>
+<pre><code class="language-csharp">public T Annotation&lt;T&gt;() where T : class
+public IEnumerable&lt;T&gt; Annotations&lt;T&gt;() where T : class
+</code></pre>
+<ul>
+<li>کلید هر annotation نوع داده‌ای آن است و باید <strong>Reference Type</strong> باشد.</li>
+</ul>
+<p><strong>مثال ساده با string:</strong></p>
+<pre><code class="language-csharp">XElement e = new XElement(&quot;test&quot;);
+e.AddAnnotation(&quot;Hello&quot;);
+Console.WriteLine(e.Annotation&lt;string&gt;());   // Hello
+</code></pre>
+<ul>
+<li>می‌توانید چند annotation از یک نوع اضافه کنید و با <code>Annotations&lt;T&gt;()</code> همه را دریافت کنید.</li>
+</ul>
+<hr>
+<h4>استفاده از کلاس خصوصی برای ایمنی</h4>
+<p>برای جلوگیری از تداخل دیگر کدها:</p>
+<pre><code class="language-csharp">class X
+{
+    class CustomData { internal string Message; }   // Private nested type
+
+    static void Test()
+    {
+        XElement e = new XElement(&quot;test&quot;);
+        e.AddAnnotation(new CustomData { Message = &quot;Hello&quot; });
+        Console.WriteLine(e.Annotations&lt;CustomData&gt;().First().Message);  // Hello
+    }
+}
+</code></pre>
+<ul>
+<li>برای حذف annotation، باید به نوع آن دسترسی داشته باشید:</li>
+</ul>
+<pre><code class="language-csharp">e.RemoveAnnotations&lt;CustomData&gt;();
+</code></pre>
+<hr>
+<h3>Projection به X-DOM با LINQ</h3>
+<ul>
+<li>
+<p>علاوه بر <strong>استخراج داده</strong>، می‌توانید با LINQ <strong>داده‌ها را به X-DOM تبدیل کنید</strong>.</p>
+</li>
+<li>
+<p>منابع (sources) می‌توانند:</p>
+<ul>
+<li>EF Core entities</li>
+<li>یک Collection محلی</li>
+<li>یا حتی یک X-DOM دیگر باشند</li>
+</ul>
+</li>
+</ul>
+<h4>مثال: ساخت XML از پایگاه داده</h4>
+<pre><code class="language-csharp">var customers =
+  new XElement(&quot;customers&quot;,
+    from c in dbContext.Customers.AsEnumerable()  // توجه به AsEnumerable به دلیل bug در EF Core
+    select new XElement(&quot;customer&quot;, new XAttribute(&quot;id&quot;, c.ID),
+        new XElement(&quot;name&quot;, c.Name),
+        new XElement(&quot;buys&quot;, c.Purchases.Count)
+    )
+  );
+</code></pre>
+<p><strong>خروجی نمونه:</strong></p>
+<pre><code class="language-xml">&lt;customers&gt;
+  &lt;customer id=&quot;1&quot;&gt;
+    &lt;name&gt;Tom&lt;/name&gt;
+    &lt;buys&gt;3&lt;/buys&gt;
+  &lt;/customer&gt;
+  &lt;customer id=&quot;2&quot;&gt;
+    &lt;name&gt;Harry&lt;/name&gt;
+    &lt;buys&gt;2&lt;/buys&gt;
+  &lt;/customer&gt;
+&lt;/customers&gt;
+</code></pre>
+<h4>توضیح دو مرحله‌ای</h4>
+<ol>
+<li>ابتدا projection به <code>XElement</code>:</li>
+</ol>
+<pre><code class="language-csharp">IEnumerable&lt;XElement&gt; sqlQuery =
+  from c in dbContext.Customers.AsEnumerable()
+  select new XElement(&quot;customer&quot;, new XAttribute(&quot;id&quot;, c.ID),
+      new XElement(&quot;name&quot;, c.Name),
+      new XElement(&quot;buys&quot;, c.Purchases.Count)
+  );
+</code></pre>
+<ol start="2">
+<li>سپس ریشه را می‌سازیم:</li>
+</ol>
+<pre><code class="language-csharp">var customers = new XElement(&quot;customers&quot;, sqlQuery);
+</code></pre>
+<ul>
+<li><code>sqlQuery</code> یک <code>IEnumerable&lt;XElement&gt;</code> است، بنابراین هر عنصر به طور خودکار به عنوان child اضافه می‌شود.</li>
+</ul>
+<hr>
+<p>این قابلیت باعث می‌شود که <strong>LINQ به X-DOM</strong> هم <strong>خواندن</strong> و هم <strong>ساختن XML</strong> به صورت کاملاً تابعی و انعطاف‌پذیر امکان‌پذیر باشد.</p>
+<h3>حذف عناصر خالی و استفاده از XStreamingElement در LINQ to XML</h3>
+<h4>1️⃣ حذف عناصر خالی</h4>
+<p>گاهی در <strong>پروژه کردن داده‌ها به X-DOM</strong>، می‌خواهیم <strong>عناصری که مقدار ندارند</strong> یا داده‌ای برای آن‌ها موجود نیست، تولید نشوند.</p>
+<p>مثال: اضافه کردن آخرین خرید با ارزش بالا برای هر مشتری</p>
+<pre><code class="language-csharp">var customers =
+  new XElement(&quot;customers&quot;,
+    from c in dbContext.Customers.AsEnumerable()
+    let lastBigBuy = (from p in c.Purchases
+                      where p.Price &gt; 1000
+                      orderby p.Date descending
+                      select p).FirstOrDefault()
+    select new XElement(&quot;customer&quot;, new XAttribute(&quot;id&quot;, c.ID),
+        new XElement(&quot;name&quot;, c.Name),
+        new XElement(&quot;buys&quot;, c.Purchases.Count),
+        lastBigBuy == null ? null :                     // ❌ شرط حذف عنصر خالی
+        new XElement(&quot;lastBigBuy&quot;,
+            new XElement(&quot;description&quot;, lastBigBuy.Description),
+            new XElement(&quot;price&quot;, lastBigBuy.Price)
+        )
+    )
+  );
+</code></pre>
+<ul>
+<li>اگر مشتری <strong>خرید با ارزش بالا نداشته باشد</strong>، به جای تولید یک <code>XElement</code> خالی، <strong>null</strong> قرار داده می‌شود.</li>
+<li>X-DOM هنگام ساختن XML، محتوای <strong>null را نادیده می‌گیرد</strong> و عنصر تولید نمی‌شود. ✅</li>
+</ul>
+<hr>
+<h4>2️⃣ افزایش کارایی با XStreamingElement</h4>
+<ul>
+<li>
+<p>اگر هدف فقط <strong>ذخیره یا نمایش XML</strong> باشد، می‌توان از <strong>XStreamingElement</strong> استفاده کرد تا حافظه بهتر مدیریت شود.</p>
+</li>
+<li>
+<p><strong>XStreamingElement</strong> شبیه XElement است اما:</p>
+<ul>
+<li>محتوای child را <strong>تنبل (deferred)</strong> بارگذاری می‌کند.</li>
+<li>روش‌های traversal مثل <code>Elements()</code> یا <code>Attributes()</code> ندارد.</li>
+<li>فقط می‌توان <code>Save</code>, <code>ToString</code>, <code>WriteTo</code> یا <code>Add</code> را روی آن استفاده کرد.</li>
+</ul>
+</li>
+</ul>
+<p>مثال:</p>
+<pre><code class="language-csharp">var customers =
+  new XStreamingElement(&quot;customers&quot;,
+    from c in dbContext.Customers
+    select new XStreamingElement(&quot;customer&quot;, new XAttribute(&quot;id&quot;, c.ID),
+        new XElement(&quot;name&quot;, c.Name),
+        new XElement(&quot;buys&quot;, c.Purchases.Count)
+    )
+  );
+
+customers.Save(&quot;data.xml&quot;);
+</code></pre>
+<ul>
+<li>پرس‌وجوها <strong>تا زمان فراخوانی Save یا ToString</strong> ارزیابی نمی‌شوند؛ بنابراین کل X-DOM به حافظه بارگذاری نمی‌شود.</li>
+<li>توجه: XStreamingElement قابلیت پیمایش ندارد و فقط برای <strong>تولید خروجی XML</strong> مناسب است.</li>
+</ul>
+
   </main>
 
   <!-- فوتر مشترک -->

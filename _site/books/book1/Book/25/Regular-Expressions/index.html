@@ -38,7 +38,684 @@
 
   <!-- محتوای صفحه -->
   <main class="site-main">
-    
+    <h1>فصل بیست و پنجم: Regular Expressions</h1>
+<p>زبان <strong>Regular Expressions</strong> الگوهای کاراکتری را شناسایی می‌کند. تایپ‌های .NET که از Regular Expressions پشتیبانی می‌کنند، بر اساس <strong>Perl 5 Regular Expressions</strong> ساخته شده‌اند و هم قابلیت جستجو (<strong>search</strong>) و هم جستجو/جایگزینی (<strong>search/replace</strong>) را پشتیبانی می‌کنند.</p>
+<p>Regular Expressions برای کارهایی مثل موارد زیر استفاده می‌شوند:</p>
+<ul>
+<li>✅ اعتبارسنجی ورودی متنی مثل رمز عبور یا شماره تلفن</li>
+<li>✅ تجزیه داده‌های متنی به فرم‌های ساختارمندتر (مثلاً یک رشته نسخه NuGet)</li>
+<li>✅ جایگزینی الگوهای متنی در یک سند (برای مثال فقط کلمات کامل)</li>
+</ul>
+<p>این فصل به دو بخش تقسیم شده است:</p>
+<ol>
+<li>بخش‌های مفهومی برای آموزش مبانی Regular Expressions در .NET.</li>
+<li>بخش‌های مرجع که زبان Regular Expressions را توضیح می‌دهد.</li>
+</ol>
+<p>تمام تایپ‌های Regular Expression در فضای نام <strong>System.Text.RegularExpressions</strong> تعریف شده‌اند.</p>
+<p>📌 نمونه‌های این فصل از قبل در <strong>LINQPad</strong> بارگذاری شده‌اند. این ابزار همچنین یک ابزار تعاملی برای Regular Expressions دارد (کلیدهای <code>Ctrl+Shift+F1</code>). یک ابزار آنلاین هم در دسترس است: 🌐 <a href="http://regexstorm.net/tester">http://regexstorm.net/tester</a>.</p>
+<hr>
+<h2>🧩 مبانی Regular Expression</h2>
+<p>یکی از رایج‌ترین عملگرهای Regular Expression چیزی است به نام <strong>Quantifier</strong> (تکرارگر).
+علامت <code>?</code> یک Quantifier است که آیتم قبلی را <strong>۰ یا ۱ بار</strong> تطبیق می‌دهد. به عبارت دیگر <code>?</code> به معنای «اختیاری بودن» است.</p>
+<p>🔹 یک آیتم می‌تواند یک کاراکتر ساده یا یک ساختار پیچیده از کاراکترها داخل کروشه‌ها <code>[]</code> باشد.</p>
+<p>مثال: عبارت <code>&quot;colou?r&quot;</code> می‌تواند <strong>color</strong> و <strong>colour</strong> را تطبیق دهد، اما <strong>colouur</strong> را نه:</p>
+<pre><code class="language-csharp">Console.WriteLine (Regex.Match (&quot;color&quot;,   @&quot;colou?r&quot;).Success);  // True
+Console.WriteLine (Regex.Match (&quot;colour&quot;,  @&quot;colou?r&quot;).Success);  // True
+Console.WriteLine (Regex.Match (&quot;colouur&quot;, @&quot;colou?r&quot;).Success);  // False
+</code></pre>
+<p>متد <strong>Regex.Match</strong> در یک رشته بزرگ‌تر جستجو می‌کند. شیء برگردانده‌شده ویژگی‌هایی مثل <strong>Index</strong> (مکان شروع تطبیق)، <strong>Length</strong> (طول تطبیق)، و <strong>Value</strong> (رشته واقعی تطبیق داده‌شده) دارد:</p>
+<pre><code class="language-csharp">Match m = Regex.Match (&quot;any colour you like&quot;, @&quot;colou?r&quot;);
+Console.WriteLine (m.Success);     // True
+Console.WriteLine (m.Index);       // 4
+Console.WriteLine (m.Length);      // 6
+Console.WriteLine (m.Value);       // colour
+Console.WriteLine (m.ToString());  // colour
+</code></pre>
+<p>می‌توانید به <strong>Regex.Match</strong> مثل نسخه قوی‌تر متد <strong>IndexOf</strong> در رشته نگاه کنید. تفاوت این است که <strong>Regex.Match</strong> به‌جای رشته‌ی ثابت، یک <strong>الگو</strong> را جستجو می‌کند.</p>
+<p>متد <strong>IsMatch</strong> یک میانبر است برای صدا زدن Match و سپس بررسی ویژگی Success.</p>
+<p>🔸 موتور Regular Expressions به صورت پیش‌فرض از <strong>چپ به راست</strong> کار می‌کند، بنابراین فقط اولین تطبیق بازگردانده می‌شود.
+با متد <strong>NextMatch</strong> می‌توان تطبیق‌های بعدی را گرفت:</p>
+<pre><code class="language-csharp">Match m1 = Regex.Match (&quot;One color? There are two colours in my head!&quot;,
+                        @&quot;colou?rs?&quot;);
+Match m2 = m1.NextMatch();
+Console.WriteLine (m1);         // color
+Console.WriteLine (m2);         // colours
+</code></pre>
+<p>متد <strong>Matches</strong> همه تطبیق‌ها را در یک آرایه برمی‌گرداند. پس می‌توان مثال قبلی را به شکل زیر بازنویسی کرد:</p>
+<pre><code class="language-csharp">foreach (Match m in Regex.Matches
+          (&quot;One color? There are two colours in my head!&quot;, @&quot;colou?rs?&quot;))
+  Console.WriteLine (m);
+</code></pre>
+<hr>
+<h2>🔀 عملگر Alternator</h2>
+<p>یکی دیگر از عملگرهای متداول در Regular Expressions چیزی است به نام <strong>Alternator</strong> که با خط عمودی <code>|</code> نمایش داده می‌شود. این عملگر نشان‌دهنده <strong>گزینه‌های جایگزین</strong> است.</p>
+<p>مثال: الگوی زیر <strong>Jen</strong>، <strong>Jenny</strong> و <strong>Jennifer</strong> را تطبیق می‌دهد:</p>
+<pre><code class="language-csharp">Console.WriteLine (Regex.IsMatch (&quot;Jenny&quot;, &quot;Jen(ny|nifer)?&quot;));  // True
+</code></pre>
+<p>🔹 پرانتزها در اطراف Alternator باعث می‌شوند این گزینه‌ها از بقیه عبارت جدا شوند.</p>
+<hr>
+<h2>⏳ Timeout در Regular Expressions</h2>
+<p>شما می‌توانید هنگام تطبیق Regular Expressions یک <strong>Timeout</strong> تعیین کنید.</p>
+<p>اگر یک عملیات تطبیق بیشتر از <strong>TimeSpan</strong> مشخص‌شده طول بکشد، یک استثنای <strong>RegexMatchTimeoutException</strong> رخ می‌دهد.</p>
+<p>این ویژگی مخصوصاً زمانی مفید است که برنامه شما Regular Expressions را از کاربر دریافت می‌کند، چون از اجرای بی‌پایان الگوهای خراب یا مخرب جلوگیری می‌کند.</p>
+<hr>
+<h1>⚡ Compiled Regular Expressions</h1>
+<p>در بعضی از مثال‌های قبلی، بارها یک متد استاتیک <strong>Regex</strong> را با همان الگو صدا زدیم. یک روش جایگزین این است که یک شیء <strong>Regex</strong> با الگو و گزینه <strong>RegexOptions.Compiled</strong> ایجاد کرده و سپس متدهای نمونه را صدا بزنیم:</p>
+<pre><code class="language-csharp">Regex r = new Regex (@&quot;sausages?&quot;, RegexOptions.Compiled);
+Console.WriteLine (r.Match (&quot;sausage&quot;));   // sausage
+Console.WriteLine (r.Match (&quot;sausages&quot;));  // sausages
+</code></pre>
+<p>گزینه <strong>RegexOptions.Compiled</strong> به نمونه Regex می‌گوید از <strong>تولید کد سبک‌وزن</strong> (با استفاده از DynamicMethod در Reflection.Emit) برای ساخت و کامپایل پویا کدی که مخصوص همان Regular Expression است استفاده کند.</p>
+<p>🔹 نتیجه این کار: تطبیق سریع‌تر، اما با هزینه اولیه‌ی کامپایل.</p>
+<p>همچنین می‌توانید یک شیء Regex بدون استفاده از <strong>RegexOptions.Compiled</strong> بسازید. شیء Regex <strong>تغییرناپذیر (Immutable)</strong> است.</p>
+<hr>
+<h1>⚙️ RegexOptions</h1>
+<p>موتور Regular Expressions سریع است. حتی بدون کامپایل، یک تطبیق ساده معمولاً کمتر از یک میکروثانیه طول می‌کشد.</p>
+<p>🔸 <strong>RegexOptions</strong> یک enum از نوع flags است که به شما امکان می‌دهد رفتار تطبیق را تنظیم کنید.</p>
+<p>یکی از استفاده‌های رایج آن انجام جستجوی <strong>Case-Insensitive</strong> (غیرحساس به بزرگی/کوچکی حروف) است:</p>
+<pre><code class="language-csharp">Console.WriteLine (Regex.Match (&quot;a&quot;, &quot;A&quot;, RegexOptions.IgnoreCase)); // a
+</code></pre>
+<p>این کار قوانین فرهنگ (Culture) فعلی را برای معادل‌سازی حروف اعمال می‌کند. اگر بخواهید از <strong>Invariant Culture</strong> استفاده کنید، می‌توانید از گزینه <strong>CultureInvariant</strong> کمک بگیرید:</p>
+<pre><code class="language-csharp">Console.WriteLine (Regex.Match (&quot;a&quot;, &quot;A&quot;, RegexOptions.IgnoreCase
+                                        | RegexOptions.CultureInvariant));
+</code></pre>
+<p>🔹 بیشتر گزینه‌های RegexOptions را می‌توان داخل خود عبارت Regular Expression با کد تک‌حرفی فعال کرد:</p>
+<pre><code class="language-csharp">Console.WriteLine (Regex.Match (&quot;a&quot;, @&quot;(?i)A&quot;));                     // a
+</code></pre>
+<p>می‌توانید گزینه‌ها را در طول یک عبارت روشن و خاموش کنید:</p>
+<pre><code class="language-csharp">Console.WriteLine (Regex.Match (&quot;AAAa&quot;, @&quot;(?i)a(?-i)a&quot;));            // Aa
+</code></pre>
+<p>یک گزینه مفید دیگر <strong>IgnorePatternWhitespace</strong> یا <code>(?x)</code> است. این گزینه به شما اجازه می‌دهد برای خوانایی بهتر، فاصله (Whitespace) داخل عبارت قرار دهید—بدون اینکه آن فاصله به‌عنوان بخشی از الگو در نظر گرفته شود.</p>
+<p>🔸 گزینه <strong>NonBacktracking</strong> (از .NET 7) به موتور Regex می‌گوید فقط از الگوریتم تطبیق رو‌به‌جلو استفاده کند. این کار معمولاً سرعت را کمتر می‌کند و بعضی قابلیت‌های پیشرفته مثل Lookahead یا Lookbehind را غیرفعال می‌کند. اما از اجرای تقریباً بی‌نهایت الگوهای خراب یا مخرب جلوگیری کرده و جلوی حمله‌های <strong>ReDOS</strong> (Regular Expression Denial of Service) را می‌گیرد. در این شرایط تعیین Timeout هم بسیار مفید است.</p>
+<p>📊 جدول <strong>25-1</strong> تمام مقادیر <strong>RegexOptions</strong> را همراه با کد تک‌حرفی آن‌ها فهرست می‌کند.</p>
+ <div align="center">
+<p><img src="../../../assets/image/25/Table-25-1.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h2>🔤 Character Escapes</h2>
+<p>در <strong>Regular Expressions</strong> تعدادی <strong>متاکاراکتر (Metacharacter)</strong> وجود دارند که معنای ویژه‌ای دارند و به صورت <strong>لیترال (literal)</strong> تفسیر نمی‌شوند:</p>
+<pre><code>\   *   +   ?   |   {   [   (   )   ^   $   .   #
+</code></pre>
+<p>برای اینکه یک متاکاراکتر را به صورت <strong>لیترال</strong> (یعنی دقیقاً همان کاراکتر) استفاده کنیم، باید قبل از آن یک <strong>بک‌اسلش</strong> (<code>\</code>) قرار دهیم (اصطلاحاً Escape کنیم).</p>
+<p>مثال: در کد زیر، علامت <code>?</code> را Escape می‌کنیم تا بتوانیم دقیقاً رشته <code>&quot;what?&quot;</code> را تطبیق دهیم:</p>
+<pre><code class="language-csharp">Console.WriteLine (Regex.Match (&quot;what?&quot;, @&quot;what\?&quot;)); // what? (درست)
+Console.WriteLine (Regex.Match (&quot;what?&quot;, @&quot;what?&quot;));  // what  (نادرست)
+</code></pre>
+<p>📌 نکته: اگر کاراکتر داخل یک <strong>مجموعه (Set)</strong> باشد (یعنی داخل براکت‌های <code>[]</code> نوشته شده باشد)، این قانون اعمال نمی‌شود و متاکاراکترها همان‌طور که هستند به صورت <strong>لیترال</strong> در نظر گرفته می‌شوند. (مجموعه‌ها را در بخش بعدی بررسی می‌کنیم).</p>
+<hr>
+<h2>🛠️ متدهای Escape و Unescape در Regex</h2>
+<p>کلاس <strong>Regex</strong> دو متد مهم دارد:</p>
+<ul>
+<li><strong>Escape</strong> → رشته‌ای را که شامل متاکاراکترهای Regular Expression است، گرفته و آن‌ها را به معادل Escape‌شده تبدیل می‌کند.</li>
+<li><strong>Unescape</strong> → دقیقاً برعکس کار بالا را انجام می‌دهد (Escapeها را حذف می‌کند).</li>
+</ul>
+<p>مثال:</p>
+<pre><code class="language-csharp">Console.WriteLine (Regex.Escape   (@&quot;?&quot;));     // \?
+Console.WriteLine (Regex.Unescape (@&quot;\?&quot;));    // ?&gt;
+</code></pre>
+<hr>
+<h2>💡 نکته درباره @ در رشته‌های C</h2>
+<p>تمام رشته‌های Regular Expression در این فصل با پیشوند <strong>@</strong> در C# نوشته شده‌اند. دلیلش این است که مکانیزم Escape خود زبان C# هم از <strong>بک‌اسلش</strong> استفاده می‌کند.</p>
+<p>اگر <code>@</code> استفاده نشود، برای نمایش یک بک‌اسلش ساده باید چهار تا بک‌اسلش بنویسید! 😅</p>
+<p>مثال:</p>
+<pre><code class="language-csharp">Console.WriteLine (Regex.Match (&quot;\\&quot;, &quot;\\\\&quot;));    // \
+</code></pre>
+<hr>
+<h2>⚠️ فاصله‌ها در Regular Expressions</h2>
+<p>مگر اینکه گزینه <code>(?x)</code> فعال باشد، فاصله‌ها (Space) در Regular Expressions <strong>به صورت لیترال</strong> در نظر گرفته می‌شوند.</p>
+<p>مثال:</p>
+<pre><code class="language-csharp">Console.Write (Regex.IsMatch (&quot;hello world&quot;, @&quot;hello world&quot;));  // True
+</code></pre>
+<hr>
+<h2>🎭 Character Sets</h2>
+<p><strong>Character Sets</strong> (مجموعه کاراکترها) مثل <strong>Wildcards</strong> عمل می‌کنند، با این تفاوت که فقط برای یک مجموعه خاص از کاراکترها استفاده می‌شوند.</p>
+ <div align="center">
+<p><img src="../../../assets/image/25/Table-25-2.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h2>🎭 Character Sets (مجموعه کاراکترها)</h2>
+<p>برای تطبیق دقیقاً یکی از کاراکترهای یک مجموعه، باید آن مجموعه را داخل براکت‌های مربعی <code>[]</code> قرار دهید:</p>
+<pre><code class="language-csharp">Console.Write (Regex.Matches (&quot;That is that.&quot;, &quot;[Tt]hat&quot;).Count);   // 2
+</code></pre>
+<p>🔹 در مثال بالا، الگو <code>[Tt]hat</code> هم کلمه <strong>That</strong> (با T بزرگ) و هم <strong>that</strong> (با t کوچک) را پیدا می‌کند. نتیجه برابر <strong>۲</strong> خواهد بود.</p>
+<hr>
+<h3>❌ مجموعه‌های منفی</h3>
+<p>برای تطبیق هر کاراکتری به‌جز آن‌هایی که در یک مجموعه هستند، کافیست علامت <code>^</code> را در ابتدای مجموعه قرار دهید:</p>
+<pre><code class="language-csharp">Console.Write (Regex.Match (&quot;quiz qwerty&quot;, &quot;q[^aeiou]&quot;).Index);    // 5
+</code></pre>
+<p>🔹 در اینجا الگو <code>q[^aeiou]</code> به دنبال یک حرف <code>q</code> است که بعد از آن <strong>هیچ‌کدام از حروف صدادار a, e, i, o, u</strong> نیاید. نتیجه این است که تطبیق از ایندکس ۵ پیدا می‌شود.</p>
+<hr>
+<h3>🔡 محدوده کاراکترها</h3>
+<p>شما می‌توانید یک محدوده از کاراکترها را با استفاده از <strong>خط فاصله (hyphen)</strong> مشخص کنید. مثال زیر یک حرکت شطرنج را تطبیق می‌دهد:</p>
+<pre><code class="language-csharp">Console.Write (Regex.Match (&quot;b1-c4&quot;, @&quot;[a-h]\d-[a-h]\d&quot;).Success);  // True
+</code></pre>
+<p>🔹 در اینجا <code>[a-h]</code> یعنی هر حرفی بین <strong>a تا h</strong>، و <code>\d</code> یعنی یک عدد (رقم). بنابراین عبارت کل حرکت شطرنج <strong>b1-c4</strong> را شناسایی می‌کند ✅.</p>
+<hr>
+<h2>🔢 شورتکات‌های پرکاربرد در Regular Expressions</h2>
+<ul>
+<li>
+<p><code>\d</code> → نشان‌دهنده یک کاراکتر <strong>رقم (Digit)</strong> است.
+🔹 پس <code>\d</code> هر عددی را تطبیق می‌دهد.</p>
+</li>
+<li>
+<p><code>\D</code> → نشان‌دهنده هر کاراکتری است که <strong>عدد نباشد</strong>.</p>
+</li>
+</ul>
+<hr>
+<ul>
+<li>
+<p><code>\w</code> → نشان‌دهنده یک کاراکتر <strong>کلمه‌ای (Word character)</strong> است، یعنی:
+<strong>حروف (Letters)</strong> + <strong>اعداد (Numbers)</strong> + <strong>زیرخط (_) یا Underscore</strong>.</p>
+</li>
+<li>
+<p><code>\W</code> → نشان‌دهنده هر کاراکتری است که <strong>کلمه‌ای نباشد</strong>.</p>
+</li>
+</ul>
+<p>📌 این‌ها برای حروف غیرانگلیسی (مثل الفبای سیریلیک) هم همان‌طور که انتظار می‌رود عمل می‌کنند.</p>
+<hr>
+<ul>
+<li><code>.</code> → هر کاراکتری به جز <code>\n</code> (خط جدید) را تطبیق می‌دهد.
+🔹 البته <code>\r</code> (Carriage return) را مجاز می‌داند.</li>
+</ul>
+<hr>
+<ul>
+<li><code>\p{Category}</code> → یک کاراکتر را بر اساس <strong>دسته‌بندی (Category)</strong> مشخص‌شده تطبیق می‌دهد.</li>
+</ul>
+<p>مثلاً:</p>
+<ul>
+<li><code>{Lu}</code> = حرف بزرگ (Uppercase letter)</li>
+<li><code>{P}</code> = علائم نگارشی (Punctuation)</li>
+</ul>
+<pre><code class="language-csharp">Console.Write (Regex.IsMatch (&quot;Yes, please&quot;, @&quot;\p{P}&quot;));   // True
+</code></pre>
+<p>🔹 در اینجا چون رشته <code>&quot;Yes, please&quot;</code> شامل علامت ویرگول (,) است، نتیجه <code>True</code> خواهد بود.</p>
+<hr>
+<p>💡 ما در ادامه، وقتی این موارد (<code>\d</code>, <code>\w</code>, <code>.</code>) را با <strong>Quantifiers</strong> (تکرارگرها) ترکیب کنیم، استفاده‌های بیشتری از آن‌ها خواهیم دید.</p>
+<hr>
+<h2>🔁 Quantifiers (تکرارگرها)</h2>
+<p><strong>Quantifiers</strong> مشخص می‌کنند که یک آیتم چند بار باید تطبیق داده شود.</p>
+ <div align="center">
+<p><img src="../../../assets/image/25/Table-25-3.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h2>🔢 Quantifiers (تکرارگرها)</h2>
+<p>تکرارگر <code>*</code> کاراکتر یا گروه قبلی را <strong>صفر بار یا بیشتر</strong> تطبیق می‌دهد. مثال زیر <code>cv.docx</code> را تطبیق می‌دهد، همراه با هر نسخه‌ی شماره‌گذاری‌شده‌ی همان فایل (مثلاً <code>cv2.docx</code>، <code>cv15.docx</code>):</p>
+<pre><code class="language-csharp">Console.Write (Regex.Match (&quot;cv15.docx&quot;, @&quot;cv\d*\.docx&quot;).Success);  // True
+</code></pre>
+<p>توجه کنید که باید نقطه را در پسوند فایل با <code>\</code> فرار (escape) بدهیم.</p>
+<p>مثال زیر هر چیزی بین <code>cv</code> و <code>.docx</code> را مجاز می‌داند و معادل دستور زیر است:
+<code>dir cv*.docx</code></p>
+<pre><code class="language-csharp">Console.Write (Regex.Match (&quot;cvjoint.docx&quot;, @&quot;cv.*\.docx&quot;).Success); // True
+</code></pre>
+<p>تکرارگر <code>+</code> کاراکتر یا گروه قبلی را <strong>یک بار یا بیشتر</strong> تطبیق می‌دهد. برای نمونه:</p>
+<pre><code class="language-csharp">Console.Write (Regex.Matches (&quot;slow! yeah slooow!&quot;, &quot;slo+w&quot;).Count);  // 2
+</code></pre>
+<hr>
+<p>تکرارگر <code>{}</code> یک <strong>تعداد مشخص (یا بازه‌ای)</strong> از تکرارها را تطبیق می‌دهد. مثال زیر یک فشار خون را تطبیق می‌دهد:</p>
+<pre><code class="language-csharp">Regex bp = new Regex (@&quot;\d{2,3}/\d{2,3}&quot;);
+Console.WriteLine (bp.Match (&quot;It used to be 160/110&quot;));  // 160/110
+Console.WriteLine (bp.Match (&quot;Now it's only 115/75&quot;));   // 115/75
+</code></pre>
+<hr>
+<h2>⚖️ Greedy در مقابل Lazy Quantifiers</h2>
+<p>به‌طور پیش‌فرض، تکرارگرها <strong>Greedy (حریص)</strong> هستند، نه <strong>Lazy (تنبل)</strong>.</p>
+<ul>
+<li>یک <strong>Greedy quantifier</strong> تا جایی که می‌تواند تکرار می‌شود قبل از اینکه جلو برود.</li>
+<li>یک <strong>Lazy quantifier</strong> تا حداقل تعداد ممکن تکرار می‌شود قبل از اینکه جلو برود.</li>
+</ul>
+<p>شما می‌توانید هر تکرارگری را با اضافه کردن نماد <code>?</code> به حالت Lazy تبدیل کنید.</p>
+<p>برای نشان دادن تفاوت، این قطعه‌ی HTML را در نظر بگیرید:</p>
+<pre><code class="language-csharp">string html = &quot;&lt;i&gt;By default&lt;/i&gt; quantifiers are &lt;i&gt;greedy&lt;/i&gt; creatures&quot;;
+</code></pre>
+<p>فرض کنید می‌خواهیم دو عبارت ایتالیک را استخراج کنیم. اگر کد زیر را اجرا کنیم:</p>
+<pre><code class="language-csharp">foreach (Match m in Regex.Matches (html, @&quot;&lt;i&gt;.*&lt;/i&gt;&quot;))
+  Console.WriteLine (m);
+</code></pre>
+<p>نتیجه دو تطبیق نیست، بلکه <strong>یک تطبیق</strong> است:</p>
+<pre><code>&lt;i&gt;By default&lt;/i&gt; quantifiers are &lt;i&gt;greedy&lt;/i&gt;
+</code></pre>
+<p>مشکل اینجاست که <code>*</code> به‌صورت greedy تا جایی که می‌تواند تکرار می‌شود قبل از اینکه به <code>&lt;/i&gt;</code> برسد. بنابراین از اولین <code>&lt;/i&gt;</code> عبور می‌کند و فقط در آخرین <code>&lt;/i&gt;</code> متوقف می‌شود.</p>
+<p>اگر تکرارگر را Lazy کنیم، <code>*</code> در همان اولین جایی که بقیه‌ی عبارت می‌تواند تطبیق پیدا کند متوقف می‌شود:</p>
+<pre><code class="language-csharp">foreach (Match m in Regex.Matches (html, @&quot;&lt;i&gt;.*?&lt;/i&gt;&quot;))
+  Console.WriteLine (m);
+</code></pre>
+<p>نتیجه:</p>
+<pre><code>&lt;i&gt;By default&lt;/i&gt;
+&lt;i&gt;greedy&lt;/i&gt;
+</code></pre>
+<hr>
+<h2>🪝 Zero-Width Assertions</h2>
+<p>زبان Regular Expressions اجازه می‌دهد شرط‌هایی روی آنچه قبل یا بعد از یک تطبیق رخ می‌دهد اعمال کنیم، از طریق <strong>lookbehind</strong>، <strong>lookahead</strong>، <strong>anchors</strong> و <strong>word boundaries</strong>.
+به این‌ها <strong>zero-width assertions</strong> گفته می‌شود، چون طول (یا اندازه) تطبیق را افزایش نمی‌دهند.</p>
+<hr>
+<h3>🔮 Lookahead و Lookbehind</h3>
+<p>ساختار <code>(?=expr)</code> بررسی می‌کند که آیا متن بعدی با <code>expr</code> مطابقت دارد، بدون اینکه <code>expr</code> را در نتیجه برگرداند. این را <strong>positive lookahead</strong> می‌نامند.</p>
+<p>در مثال زیر، به دنبال عددی هستیم که بعد از آن کلمه‌ی <code>&quot;miles&quot;</code> بیاید:</p>
+<pre><code class="language-csharp">Console.WriteLine (Regex.Match (&quot;say 25 miles more&quot;, @&quot;\d+\s(?=miles)&quot;));
+</code></pre>
+<p>📤 خروجی:</p>
+<pre><code>25
+</code></pre>
+<p>دقت کنید که کلمه‌ی <code>&quot;miles&quot;</code> در نتیجه برگردانده نشد، حتی اگر برای تطبیق لازم بود.</p>
+<p>پس از یک lookahead موفق، تطبیق ادامه پیدا می‌کند، انگار که این پیش‌نمایش اصلاً اتفاق نیفتاده است. پس اگر عبارت را این‌طور بنویسیم:</p>
+<pre><code class="language-csharp">Console.WriteLine (Regex.Match (&quot;say 25 miles more&quot;, @&quot;\d+\s(?=miles).*&quot;));
+</code></pre>
+<p>📤 خروجی:</p>
+<pre><code>25 miles more
+</code></pre>
+<hr>
+<p>✅ Lookahead می‌تواند برای اعمال قوانین روی پسوردهای قوی مفید باشد. فرض کنید پسورد باید حداقل ۶ کاراکتر باشد و حداقل یک عدد داشته باشد. با یک lookahead می‌توانیم این شرط را برقرار کنیم:</p>
+<pre><code class="language-csharp">string password = &quot;...&quot;;
+bool ok = Regex.IsMatch (password, @&quot;(?=.*\d).{6,}&quot;);
+</code></pre>
+<p>این ابتدا یک lookahead انجام می‌دهد تا مطمئن شود که حداقل یک رقم در رشته وجود دارد. اگر برقرار بود، به جای قبلی خود برمی‌گردد و سپس حداقل ۶ کاراکتر را تطبیق می‌دهد.</p>
+<hr>
+<p>ساختار مخالف آن، <strong>negative lookahead</strong> یعنی <code>(?!expr)</code> است. این می‌گوید تطبیق نباید با <code>expr</code> دنبال شود.</p>
+<p>عبارت زیر <code>&quot;good&quot;</code> را تطبیق می‌دهد—مگر اینکه <code>&quot;however&quot;</code> یا <code>&quot;but&quot;</code> بعداً در رشته بیاید:</p>
+<pre><code class="language-csharp">string regex = &quot;(?i)good(?!.*(however|but))&quot;;
+Console.WriteLine (Regex.IsMatch (&quot;Good work! But...&quot;,  regex));  // False
+Console.WriteLine (Regex.IsMatch (&quot;Good work! Thanks!&quot;, regex));  // True
+</code></pre>
+<hr>
+<p>ساختار <code>(?&lt;=expr)</code> به معنای <strong>positive lookbehind</strong> است و نیاز دارد که تطبیق با یک عبارت خاص <strong>قبل از آن</strong> باشد.
+ساختار مخالفش، <code>(?&lt;!expr)</code>، یعنی <strong>negative lookbehind</strong> است و نیاز دارد که تطبیق قبل از یک عبارت مشخص <strong>نباشد</strong>.</p>
+<p>برای مثال، عبارت زیر <code>&quot;good&quot;</code> را تطبیق می‌دهد—مگر اینکه <code>&quot;however&quot;</code> قبل از آن آمده باشد:</p>
+<pre><code class="language-csharp">string regex = &quot;(?i)(?&lt;!however.*)good&quot;;
+Console.WriteLine (Regex.IsMatch (&quot;However good, we...&quot;, regex)); // False
+Console.WriteLine (Regex.IsMatch (&quot;Very good, thanks!&quot;, regex));  // True
+</code></pre>
+<hr>
+<p>🔖 ما می‌توانیم این مثال‌ها را با اضافه کردن <strong>word boundary assertions</strong> (که به‌زودی معرفی می‌کنیم) بهبود دهیم.</p>
+<h2>⚓ Anchors (لنگرها)</h2>
+<p>لنگرهای <code>^</code> و <code>$</code> یک موقعیت خاص را تطبیق می‌دهند. به‌طور پیش‌فرض:</p>
+<ul>
+<li><code>^</code> تطبیق ابتدای رشته</li>
+<li><code>$</code> تطبیق انتهای رشته</li>
+</ul>
+<p>برای نمونه:</p>
+<pre><code class="language-csharp">Console.WriteLine (Regex.Match (&quot;Not now&quot;, &quot;^[Nn]o&quot;));   // No
+Console.WriteLine (Regex.Match (&quot;f = 0.2F&quot;, &quot;[Ff]$&quot;));   // F
+</code></pre>
+<p>🔹 <code>^</code> دو معنای وابسته به متن دارد: <strong>یک لنگر</strong> و <strong>علامت نفی در کلاس کاراکتر</strong>.
+🔹 <code>$</code> هم دو معنای وابسته به متن دارد: <strong>یک لنگر</strong> و <strong>نشانه‌ی گروه جایگزین (replacement group denoter)</strong>.</p>
+<hr>
+<p>وقتی <code>RegexOptions.Multiline</code> را مشخص کنید یا <code>(?m)</code> را در عبارت بیاورید:</p>
+<ul>
+<li><code>^</code> ابتدای رشته یا ابتدای خط (بلافاصله بعد از <code>\n</code>) را تطبیق می‌دهد.</li>
+<li><code>$</code> انتهای رشته یا انتهای خط (بلافاصله قبل از <code>\n</code>) را تطبیق می‌دهد.</li>
+</ul>
+<p>اما یک نکته وجود دارد ⚠️: در ویندوز، پایان خط معمولاً با <code>\r\n</code> مشخص می‌شود نه فقط <code>\n</code>. بنابراین برای اینکه <code>$</code> در حالت چندخطی مفید باشد، باید معمولاً <code>\r</code> را هم با یک <strong>positive lookahead</strong> تطبیق دهید:</p>
+<pre><code>(?=\r?$)
+</code></pre>
+<p>این <strong>positive lookahead</strong> تضمین می‌کند که <code>\r</code> جزئی از نتیجه نشود.</p>
+<p>مثال زیر خطوطی را که به &quot;.txt&quot; ختم می‌شوند، تطبیق می‌دهد:</p>
+<pre><code class="language-csharp">string fileNames = &quot;a.txt&quot; + &quot;\r\n&quot; + &quot;b.docx&quot; + &quot;\r\n&quot; + &quot;c.txt&quot;;
+string r = @&quot;.+\.txt(?=\r?$)&quot;;
+foreach (Match m in Regex.Matches (fileNames, r, RegexOptions.Multiline))
+  Console.Write (m + &quot; &quot;);
+</code></pre>
+<p>📤 خروجی:</p>
+<pre><code>a.txt c.txt
+</code></pre>
+<hr>
+<p>مثال بعدی همه‌ی خطوط خالی را در رشته‌ی <code>s</code> پیدا می‌کند:</p>
+<pre><code class="language-csharp">MatchCollection emptyLines = Regex.Matches (s, &quot;^(?=\r?$)&quot;,
+                                            RegexOptions.Multiline);
+</code></pre>
+<p>و این یکی همه‌ی خطوطی را که خالی هستند یا فقط شامل فاصله یا tab می‌باشند:</p>
+<pre><code class="language-csharp">MatchCollection blankLines = Regex.Matches (s, &quot;^[ \t]*(?=\r?$)&quot;,
+                                            RegexOptions.Multiline);
+</code></pre>
+<p>از آنجا که یک anchor یک <strong>موقعیت</strong> را تطبیق می‌دهد و نه یک کاراکتر، مشخص کردن یک anchor به‌تنهایی باعث تطبیق با یک رشته‌ی خالی می‌شود:</p>
+<pre><code class="language-csharp">Console.WriteLine (Regex.Match (&quot;x&quot;, &quot;$&quot;).Length);   // 0
+</code></pre>
+<hr>
+<h2>🔠 Word Boundaries (مرزهای کلمه)</h2>
+<p>عبارت <code>\b</code> جایی را تطبیق می‌دهد که کاراکترهای کلمه (<code>\w</code>) در کنار یکی از این موارد باشند:</p>
+<ul>
+<li>کاراکترهای غیرکلمه (<code>\W</code>)</li>
+<li>ابتدای یا انتهای رشته (<code>^</code> و <code>$</code>)</li>
+</ul>
+<p><code>\b</code> اغلب برای تطبیق کل کلمات استفاده می‌شود:</p>
+<pre><code class="language-csharp">foreach (Match m in Regex.Matches (&quot;Wedding in Sarajevo&quot;, @&quot;\b\w+\b&quot;))
+  Console.WriteLine (m);
+</code></pre>
+<p>📤 خروجی:</p>
+<pre><code>Wedding
+in
+Sarajevo
+</code></pre>
+<hr>
+<p>این دستورات اثر <code>\b</code> را روشن‌تر می‌کنند:</p>
+<pre><code class="language-csharp">int one = Regex.Matches (&quot;Wedding in Sarajevo&quot;, @&quot;\bin\b&quot;).Count; // 1
+int two = Regex.Matches (&quot;Wedding in Sarajevo&quot;, @&quot;in&quot;).Count;     // 2
+</code></pre>
+<hr>
+<p>در این مثال، یک <strong>positive lookahead</strong> استفاده شده تا کلماتی را برگرداند که بعد از آن‌ها &quot;(sic)&quot; آمده است:</p>
+<pre><code class="language-csharp">string text = &quot;Don't loose (sic) your cool&quot;;
+Console.Write (Regex.Match (text, @&quot;\b\w+\b\s(?=\(sic\))&quot;));  // loose
+</code></pre>
+<hr>
+<h2>🧩 Groups (گروه‌ها)</h2>
+<p>گاهی مفید است که یک عبارت باقاعده را به مجموعه‌ای از زیربخش‌ها یا <strong>گروه‌ها</strong> تقسیم کنیم.</p>
+<p>برای مثال، این عبارت یک شماره تلفن در آمریکا مانند <code>206-465-1918</code> را نشان می‌دهد:</p>
+<pre><code>\d{3}-\d{3}-\d{4}
+</code></pre>
+<p>فرض کنید می‌خواهیم آن را به دو گروه تقسیم کنیم: <strong>کد منطقه</strong> و <strong>شماره محلی</strong>.
+می‌توانیم با استفاده از پرانتزها این کار را انجام دهیم:</p>
+<pre><code>(\d{3})-(\d{3}-\d{4})
+</code></pre>
+<p>سپس گروه‌ها را به‌صورت برنامه‌نویسی بازیابی می‌کنیم:</p>
+<pre><code class="language-csharp">Match m = Regex.Match (&quot;206-465-1918&quot;, @&quot;(\d{3})-(\d{3}-\d{4})&quot;);
+Console.WriteLine (m.Groups[1]);   // 206
+Console.WriteLine (m.Groups[2]);   // 465-1918
+</code></pre>
+<p>🔹 گروه صفر، کل تطبیق را نمایش می‌دهد. یعنی همان مقداری که در <code>Value</code> وجود دارد:</p>
+<pre><code class="language-csharp">Console.WriteLine (m.Groups[0]);   // 206-465-1918
+Console.WriteLine (m);             // 206-465-1918
+</code></pre>
+<hr>
+<p>گروه‌ها بخشی از خود زبان Regular Expressions هستند. این یعنی می‌توانید به یک گروه در داخل یک عبارت اشاره کنید.</p>
+<p>سینتکس <code>\n</code> اجازه می‌دهد یک گروه را با شماره‌ی آن در داخل عبارت فراخوانی کنید.</p>
+<p>برای نمونه، عبارت <code>(\w)ee\1</code> کلمات <code>deed</code> و <code>peep</code> را تطبیق می‌دهد.</p>
+<p>مثال زیر همه‌ی کلماتی را پیدا می‌کند که با همان حرف شروع و تمام می‌شوند:</p>
+<pre><code class="language-csharp">foreach (Match m in Regex.Matches (&quot;pop pope peep&quot;, @&quot;\b(\w)\w+\1\b&quot;))
+  Console.Write (m + &quot; &quot;);  // pop peep
+</code></pre>
+<p>🔎 پرانتزهای اطراف <code>\w</code> به موتور Regular Expressions می‌گویند که این زیربخش (در اینجا یک حرف) را در یک گروه ذخیره کند تا بعداً استفاده شود.
+ما بعداً با <code>\1</code> به آن گروه اشاره می‌کنیم، یعنی گروه اول در عبارت.</p>
+<h2>🏷 Named Groups (گروه‌های نام‌گذاری‌شده)</h2>
+<p>در یک عبارت طولانی یا پیچیده، کار با گروه‌ها با <strong>نام</strong> به جای اندیس می‌تواند راحت‌تر باشد.
+در مثال زیر، نسخه‌ی قبلی با یک گروه به نام <code>'letter'</code> بازنویسی شده است:</p>
+<pre><code class="language-csharp">string regEx =
+ @&quot;\b&quot;             +  // word boundary
+ @&quot;(?'letter'\w)&quot;  +  // تطبیق اولین حرف و نامگذاری آن به 'letter'
+ @&quot;\w+&quot;            +  // تطبیق حروف میانی
+ @&quot;\k'letter'&quot;     +  // تطبیق حرف آخر مطابق با 'letter'
+ @&quot;\b&quot;;               // word boundary
+
+foreach (Match m in Regex.Matches (&quot;bob pope peep&quot;, regEx))
+  Console.Write (m + &quot; &quot;);  // bob peep
+</code></pre>
+<h3>چگونگی نامگذاری گروه‌ها</h3>
+<pre><code>(?'group-name'group-expr)  یا  (?&lt;group-name&gt;group-expr)
+</code></pre>
+<h3>چگونگی ارجاع به یک گروه</h3>
+<pre><code>\k'group-name'  یا  \k&lt;group-name&gt;
+</code></pre>
+<hr>
+<p>مثال بعدی، تطبیق یک عنصر ساده‌ی XML/HTML (غیرتو درتو) با جستجوی تگ آغاز و پایان با نام مشابه است:</p>
+<pre><code class="language-csharp">string regFind =
+ @&quot;&lt;(?'tag'\w+?).*&gt;&quot; +  // تطبیق lazy اولین تگ و نامگذاری آن به 'tag'
+ @&quot;(?'text'.*?)&quot;     +  // تطبیق lazy محتوای متن، نامگذاری به 'text'
+ @&quot;&lt;/\k'tag'&gt;&quot;;         // تطبیق تگ پایانی مطابق با 'tag'
+
+Match m = Regex.Match (&quot;&lt;h1&gt;hello&lt;/h1&gt;&quot;, regFind);
+Console.WriteLine (m.Groups [&quot;tag&quot;]);          // h1
+Console.WriteLine (m.Groups [&quot;text&quot;]);         // hello
+</code></pre>
+<p>📌 توجه: تطبیق تمام حالات ممکن در ساختار XML، مانند عناصر تو در تو، پیچیده‌تر است. موتور Regular Expressions در .NET از ویژگی پیشرفته‌ای به نام <strong>matched balanced constructs</strong> پشتیبانی می‌کند که می‌تواند در این موارد کمک کند.</p>
+<hr>
+<h2>🔄 Replacing and Splitting Text (جایگزینی و تقسیم متن)</h2>
+<h3>جایگزینی متن</h3>
+<p><code>RegEx.Replace</code> مشابه <code>string.Replace</code> عمل می‌کند، اما از <strong>عبارت منظم</strong> استفاده می‌کند.</p>
+<p>مثال زیر، <code>&quot;cat&quot;</code> را با <code>&quot;dog&quot;</code> جایگزین می‌کند. برخلاف <code>string.Replace</code>، <code>&quot;catapult&quot;</code> به <code>&quot;dogapult&quot;</code> تبدیل نمی‌شود، زیرا ما از <strong>word boundaries</strong> استفاده کرده‌ایم:</p>
+<pre><code class="language-csharp">string find = @&quot;\bcat\b&quot;;
+string replace = &quot;dog&quot;;
+Console.WriteLine (Regex.Replace (&quot;catapult the cat&quot;, find, replace));
+</code></pre>
+<p>📤 خروجی:</p>
+<pre><code>catapult the dog
+</code></pre>
+<hr>
+<p>می‌توان از <code>$0</code> برای ارجاع به تطبیق اصلی استفاده کرد. مثال زیر اعداد داخل رشته را در <code>&lt; &gt;</code> قرار می‌دهد:</p>
+<pre><code class="language-csharp">string text = &quot;10 plus 20 makes 30&quot;;
+Console.WriteLine (Regex.Replace (text, @&quot;\d+&quot;, @&quot;&lt;$0&gt;&quot;));
+</code></pre>
+<p>📤 خروجی:</p>
+<pre><code>&lt;10&gt; plus &lt;20&gt; makes &lt;30&gt;
+</code></pre>
+<p>🔹 می‌توان به گروه‌های گرفته‌شده با <code>$1, $2, $3</code> یا <code>${name}</code> برای گروه‌های نام‌گذاری‌شده دسترسی داشت.</p>
+<p>مثال قبل با XML ساده را می‌توان با جابه‌جایی گروه‌ها جایگزین کرد تا محتوای عنصر به یک <strong>attribute</strong> منتقل شود:</p>
+<pre><code class="language-csharp">string regReplace =
+ @&quot;&lt;${tag}&quot;         +  // &lt;tag
+ @&quot;value=&quot;&quot;&quot;        +  // value=&quot;
+ @&quot;${text}&quot;         +  // محتوای متن
+ @&quot;&quot;&quot;/&gt;&quot;;              // &quot;/&gt;
+
+Console.Write (Regex.Replace (&quot;&lt;msg&gt;hello&lt;/msg&gt;&quot;, regFind, regReplace));
+</code></pre>
+<p>📤 خروجی:</p>
+<pre><code>&lt;msg value=&quot;hello&quot;/&gt;
+</code></pre>
+<hr>
+<h3>MatchEvaluator Delegate</h3>
+<p><code>Replace</code> یک overload دارد که یک <strong>delegate از نوع MatchEvaluator</strong> می‌گیرد و برای هر تطبیق فراخوانی می‌شود. این امکان را می‌دهد که محتوای رشته‌ی جایگزین توسط <strong>کد C#</strong> تعیین شود:</p>
+<pre><code class="language-csharp">Console.WriteLine (Regex.Replace (&quot;5 is less than 10&quot;, @&quot;\d+&quot;,
+                   m =&gt; (int.Parse (m.Value) * 10).ToString()) );
+</code></pre>
+<p>📤 خروجی:</p>
+<pre><code>50 is less than 100
+</code></pre>
+<p>در کتاب <strong>Cookbook Regular Expressions</strong> صفحه 1023، نمونه‌ای از استفاده‌ی MatchEvaluator برای <strong>Escape کردن کاراکترهای Unicode مناسب HTML</strong> ارائه شده است.</p>
+<hr>
+<h3>تقسیم متن (Splitting Text)</h3>
+<p>متد <code>Regex.Split</code> نسخه‌ی قدرتمندتری از <code>string.Split</code> است که <strong>الگوی جداکننده</strong> توسط یک عبارت منظم تعیین می‌شود.</p>
+<p>مثال:</p>
+<pre><code class="language-csharp">foreach (string s in Regex.Split (&quot;a5b7c&quot;, @&quot;\d&quot;))
+  Console.Write (s + &quot; &quot;);     // a b c
+</code></pre>
+<p>در اینجا جداکننده‌ها در خروجی نیستند. برای شامل کردن جداکننده‌ها، می‌توان از <strong>positive lookahead</strong> استفاده کرد:</p>
+<pre><code class="language-csharp">foreach (string s in Regex.Split (&quot;oneTwoThree&quot;, @&quot;(?=[A-Z])&quot;))
+  Console.Write (s + &quot; &quot;);    // one Two Three
+</code></pre>
+<hr>
+<h2>📖 Cookbook Regular Expressions (دستورالعمل‌ها)</h2>
+<h3>تطبیق شماره SSN / شماره تلفن آمریکا</h3>
+<pre><code class="language-csharp">string ssNum = @&quot;\d{3}-\d{2}-\d{4}&quot;;
+Console.WriteLine (Regex.IsMatch (&quot;123-45-6789&quot;, ssNum));      // True
+
+string phone = @&quot;(?x)
+  ( \d{3}[-\s] | \(\d{3}\)\s? )
+    \d{3}[-\s]?
+    \d{4}&quot;;
+
+Console.WriteLine (Regex.IsMatch (&quot;123-456-7890&quot;,   phone));   // True
+Console.WriteLine (Regex.IsMatch (&quot;(123) 456-7890&quot;, phone));   // True
+</code></pre>
+<h2>🔹 استخراج زوج‌های &quot;name = value&quot; (یک مورد در هر خط)</h2>
+<p>توجه داشته باشید که این مثال با <strong>multiline directive</strong> شروع می‌شود:</p>
+<pre><code class="language-csharp">string r = @&quot;(?m)^\s*(?'name'\w+)\s*=\s*(?'value'.*)\s*(?=\r?$)&quot;;
+string text =
+ @&quot;id = 3
+   secure = true
+   timeout = 30&quot;;
+
+foreach (Match m in Regex.Matches (text, r))
+  Console.WriteLine (m.Groups[&quot;name&quot;] + &quot; is &quot; + m.Groups[&quot;value&quot;]);
+</code></pre>
+<p>📤 خروجی:</p>
+<pre><code>id is 3
+secure is true
+timeout is 30
+</code></pre>
+<hr>
+<h2>🔐 اعتبارسنجی پسورد قوی</h2>
+<p>این مثال بررسی می‌کند که آیا یک پسورد حداقل <strong>شش کاراکتر</strong> دارد و حداقل یک <strong>عدد، نماد یا علامت نگارشی</strong> شامل می‌شود:</p>
+<pre><code class="language-csharp">string r = @&quot;(?x)^(?=.*(\d|\p{P}|\p{S})).{6,}&quot;;
+Console.WriteLine (Regex.IsMatch (&quot;abc12&quot;, r));     // False
+Console.WriteLine (Regex.IsMatch (&quot;abcdef&quot;, r));    // False
+Console.WriteLine (Regex.IsMatch (&quot;ab88yz&quot;, r));    // True
+</code></pre>
+<hr>
+<h2>📏 خطوط حداقل ۸۰ کاراکتری</h2>
+<pre><code class="language-csharp">string r = @&quot;(?m)^.{80,}(?=\r?$)&quot;;
+string fifty = new string ('x', 50);
+string eighty = new string ('x', 80);
+string text = eighty + &quot;\r\n&quot; + fifty + &quot;\r\n&quot; + eighty;
+Console.WriteLine (Regex.Matches (text, r).Count);   // 2
+</code></pre>
+<hr>
+<h2>📅 تجزیه تاریخ/زمان (N/N/N H:M:S AM/PM)</h2>
+<p>این عبارت از فرمت‌های مختلف عددی تاریخ پشتیبانی می‌کند و فرقی نمی‌کند که سال اول باشد یا آخر.</p>
+<ul>
+<li><code>(?x)</code> باعث خواناتر شدن عبارت می‌شود (فضای خالی نادیده گرفته می‌شود)</li>
+<li><code>(?i)</code> حساسیت به حروف را خاموش می‌کند (برای AM/PM اختیاری)</li>
+</ul>
+<pre><code class="language-csharp">string r = @&quot;(?x)(?i)
+ (\d{1,4}) [./-]
+ (\d{1,2}) [./-]
+ (\d{1,4}) [\sT]
+ (\d+):(\d+):(\d+) \s? (A\.?M\.?|P\.?M\.?)?&quot;;
+string text = &quot;01/02/2008 5:20:50 PM&quot;;
+
+foreach (Group g in Regex.Match (text, r).Groups)
+  Console.WriteLine (g.Value + &quot; &quot;);
+</code></pre>
+<p>📤 خروجی:</p>
+<pre><code>01/02/2008 5:20:50 PM 01 02 2008 5 20 50 PM
+</code></pre>
+<p><em>(البته این بررسی نمی‌کند که تاریخ/زمان درست باشد)</em></p>
+<hr>
+<h2>🏛 تطبیق اعداد رومی</h2>
+<pre><code class="language-csharp">string r =
+ @&quot;(?i)\bm*&quot;         +
+ @&quot;(d?c{0,3}|c[dm])&quot; +
+ @&quot;(l?x{0,3}|x[lc])&quot; +
+ @&quot;(v?i{0,3}|i[vx])&quot; +
+ @&quot;\b&quot;;
+
+Console.WriteLine (Regex.IsMatch (&quot;MCMLXXXIV&quot;, r));   // True
+</code></pre>
+<hr>
+<h2>🔁 حذف کلمات تکراری</h2>
+<p>در این مثال، یک گروه نامگذاری‌شده به نام <code>dupe</code> گرفته می‌شود:</p>
+<pre><code class="language-csharp">string r = @&quot;(?'dupe'\w+)\W\k'dupe'&quot;;
+string text = &quot;In the the beginning...&quot;;
+Console.WriteLine (Regex.Replace (text, r, &quot;${dupe}&quot;));
+</code></pre>
+<p>📤 خروجی:</p>
+<pre><code>In the beginning
+</code></pre>
+<hr>
+<h2>🔢 شمارش کلمات</h2>
+<pre><code class="language-csharp">string r = @&quot;\b(\w|[-'])+\b&quot;;
+string text = &quot;It's all mumbo-jumbo to me&quot;;
+Console.WriteLine (Regex.Matches (text, r).Count);   // 5
+</code></pre>
+<hr>
+<h2>🧩 تطبیق GUID</h2>
+<pre><code class="language-csharp">string r =
+ @&quot;(?i)\b&quot;           +
+ @&quot;[0-9a-fA-F]{8}\-&quot; +
+ @&quot;[0-9a-fA-F]{4}\-&quot; +
+ @&quot;[0-9a-fA-F]{4}\-&quot; +
+ @&quot;[0-9a-fA-F]{4}\-&quot; +
+ @&quot;[0-9a-fA-F]{12}&quot;  +
+ @&quot;\b&quot;;
+
+string text = &quot;Its key is {3F2504E0-4F89-11D3-9A0C-0305E82C3301}.&quot;;
+Console.WriteLine (Regex.Match (text, r).Index);                    // 12
+</code></pre>
+<hr>
+<h2>🏷 تجزیه تگ XML/HTML</h2>
+<p>عبارت منظم می‌تواند برای تجزیه <strong>HTML fragments</strong> مفید باشد، مخصوصاً وقتی سند ناقص باشد:</p>
+<pre><code class="language-csharp">string r =
+ @&quot;&lt;(?'tag'\w+?).*&gt;&quot;  +  // lazy-match اولین تگ، نامگذاری به 'tag'
+ @&quot;(?'text'.*?)&quot;      +  // lazy-match محتوای متن، نامگذاری به 'text'
+ @&quot;&lt;/\k'tag'&gt;&quot;;          // تطبیق تگ پایانی مطابق با 'tag'
+
+string text = &quot;&lt;h1&gt;hello&lt;/h1&gt;&quot;;
+Match m = Regex.Match (text, r);
+Console.WriteLine (m.Groups [&quot;tag&quot;]);       // h1
+Console.WriteLine (m.Groups [&quot;text&quot;]);      // hello
+</code></pre>
+<hr>
+<h2>🐫 تقسیم کلمات CamelCase</h2>
+<p>برای شامل کردن جداکننده‌های بزرگ، نیاز به <strong>positive lookahead</strong> داریم:</p>
+<pre><code class="language-csharp">string r = @&quot;(?=[A-Z])&quot;;
+foreach (string s in Regex.Split (&quot;oneTwoThree&quot;, r))
+  Console.Write (s + &quot; &quot;);    // one Two Three
+</code></pre>
+<hr>
+<h2>🗂 به‌دست آوردن نام فایل معتبر</h2>
+<pre><code class="language-csharp">string input = &quot;My \&quot;good\&quot; &lt;recipes&gt;.txt&quot;;
+char[] invalidChars = System.IO.Path.GetInvalidFileNameChars();
+string invalidString = Regex.Escape (new string (invalidChars));
+string valid = Regex.Replace (input, &quot;[&quot; + invalidString + &quot;]&quot;, &quot;&quot;);
+Console.WriteLine (valid);
+</code></pre>
+<p>📤 خروجی:</p>
+<pre><code>My good recipes.txt
+</code></pre>
+<hr>
+<h2>🌐 Escape کردن کاراکترهای Unicode برای HTML</h2>
+<pre><code class="language-csharp">string htmlFragment = &quot;© 2007&quot;;
+string result = Regex.Replace (htmlFragment, @&quot;[\u0080-\uFFFF]&quot;,
+               m =&gt; @&quot;&amp;#&quot; + ((int)m.Value[0]).ToString() + &quot;;&quot;);
+Console.WriteLine (result);        // &amp;#169; 2007
+</code></pre>
+<h2>🔓 تبدیل کاراکترهای Escape شده در یک <strong>HTTP query string</strong></h2>
+<pre><code class="language-csharp">string sample = &quot;C%23 rocks&quot;;
+string result = Regex.Replace (
+   sample,
+   @&quot;%[0-9a-f][0-9a-f]&quot;, 
+   m =&gt; ((char) Convert.ToByte (m.Value.Substring (1), 16)).ToString(),
+   RegexOptions.IgnoreCase
+);
+Console.WriteLine (result);   // C# rocks
+</code></pre>
+<hr>
+<h2>🔍 استخراج عبارت‌های جستجوی Google از یک <strong>web stats log</strong></h2>
+<p>این مثال معمولاً همراه با نمونه‌ی قبلی استفاده می‌شود تا کاراکترهای Escape شده در <strong>query string</strong> بازگردانده شوند:</p>
+<pre><code class="language-csharp">string sample = 
+ &quot;http://google.com/search?hl=en&amp;q=greedy+quantifiers+regex&amp;btnG=Search&quot;;
+
+Match m = Regex.Match (sample, @&quot;(?&lt;=google\..+search\?.*q=).+?(?=(&amp;|$))&quot;);
+string[] keywords = m.Value.Split (
+ new[] { '+' }, StringSplitOptions.RemoveEmptyEntries);
+
+foreach (string keyword in keywords)
+  Console.Write (keyword + &quot; &quot;);       // greedy quantifiers regex
+</code></pre>
+<hr>
+<h2>📚 مرجع زبان <strong>Regular Expressions</strong></h2>
+<p>جداول <strong>25-2 تا 25-12</strong> دستور زبان و سینتکس <strong>regular expressions</strong> پشتیبانی شده در پیاده‌سازی <strong>.NET</strong> را خلاصه می‌کنند.</p>
+ <div align="center">
+<p><img src="../../../assets/image/25/Table-25-4.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>💡 <strong>حالت ویژه</strong></p>
+<p>در یک <strong>regular expression</strong>، <code>\b</code> به معنای <strong>word boundary</strong> است، <strong>به جز زمانی که داخل یک مجموعه <code>[ ]</code> قرار گیرد</strong>، که در آن صورت <code>\b</code> به معنای <strong>کاراکتر backspace</strong> است.</p>
+ <div align="center">
+<p><img src="../../../assets/image/25/Table-25-5.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+ <div align="center">
+<p><img src="../../../assets/image/25/Table-25-6.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+ <div align="center">
+<p><img src="../../../assets/image/25/Table-25-7.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>❓ پسوند <code>?</code> می‌تواند به هر یک از <strong>quantifierها</strong> اعمال شود تا آن‌ها را <strong>lazy</strong> کند، به جای اینکه <strong>greedy</strong> باشند.</p>
+ <div align="center">
+<p><img src="../../../assets/image/25/Table-25-8.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>🔄 <strong>Substitutions</strong> تنها درون <strong>replacement pattern</strong> مشخص می‌شوند.</p>
+ <div align="center">
+<p><img src="../../../assets/image/25/Table-25-9.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+ <div align="center">
+<p><img src="../../../assets/image/25/Table-25-10.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+ <div align="center">
+<p><img src="../../../assets/image/25/Table-25-11.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+ <div align="center">
+<p><img src="../../../assets/image/25/Table-25-12.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+ <div align="center">
+<p><img src="../../../assets/image/25/Table-25-13.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+ <div align="center">
+<p><img src="../../../assets/image/25/Table-25-14.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+
   </main>
 
   <!-- فوتر مشترک -->
