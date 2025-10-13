@@ -1,44 +1,4 @@
-<!doctype html>
-<html lang="fa" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gitab | کتابخانهٔ ترجمه‌های دات‌نت و سی شارپ</title>
-  <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
-  <link rel="stylesheet" href="/styles/main.css">
-</head>
-<body>
-  <!-- هدر مشترک -->
-  <header class="header">
-    <div class="container nav-wrap">
-      <a class="brand" href="/">
-        <img src="/icone/logo.svg" alt="Gitab" width="28" height="28">
-        <span>Gitab</span>
-      </a>
-
-      <nav class="nav">
-        <a href="/">خانه</a>
-        <a href="/books/list-books">کتاب‌ها</a>
-        <a href="#">همکاری</a>
-        <a href="#">درباره‌ما</a>
-      </nav>
-
-     <div class="nav-actions">
-  <button id="themeToggle" class="icon-btn theme-btn" aria-label="تغییر حالت">
-    <img class="icon-sun" src="/icone/sun.svg" alt="روشن">
-    <img class="icon-moon" src="/icone/moon.svg" alt="تاریک">
-  </button>
-
-  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
-    <img src="/icone/github.svg" alt="GitHub">
-  </a>
-</div>
-
-  </header>
-
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل پانزدهم:  استریم‌ها و ورودی/خروجی (Streams and I/O)</h1>
+<h1>فصل پانزدهم:  استریم‌ها و ورودی/خروجی (Streams and I/O)</h1>
 <p>این فصل، انواع بنیادی برای <strong>ورودی (Input)</strong> و <strong>خروجی (Output)</strong> در .NET را توضیح می‌دهد، با تمرکز ویژه روی موضوعات زیر:</p>
 <ul>
 <li>معماری <strong>Stream</strong> در .NET و این‌که چطور یک رابط برنامه‌نویسی (Programming Interface) یکپارچه برای <strong>خواندن</strong> و <strong>نوشتن</strong> روی انواع مختلف I/O فراهم می‌کند.</li>
@@ -71,11 +31,11 @@
 <p>استریم‌ها به دو دسته تقسیم می‌شوند:</p>
 <ol>
 <li>
-<p><strong>Backing Store Streams</strong>
+<p><strong>Backing Store Streams</strong><br>
 این استریم‌ها به یک نوع خاص از Backing Store متصل هستند، مثل <code>FileStream</code> یا <code>NetworkStream</code>.</p>
 </li>
 <li>
-<p><strong>Decorator Streams</strong>
+<p><strong>Decorator Streams</strong><br>
 این استریم‌ها روی یک استریم دیگر سوار می‌شوند و داده‌ها را به نوعی تغییر می‌دهند، مثل <code>DeflateStream</code> یا <code>CryptoStream</code>.</p>
 </li>
 </ol>
@@ -126,50 +86,50 @@
 <p>متدهای <strong>Read</strong> و <strong>Write</strong> نسخه‌های <strong>Asynchronous</strong> هم دارند که مقدار <strong>Task</strong> برمی‌گردانند و به‌صورت اختیاری یک <strong>CancellationToken</strong> می‌پذیرند. همچنین نسخه‌های Overload برای کار با نوع‌های <code>Span&lt;T&gt;</code> و <code>Memory&lt;T&gt;</code> (که در فصل ۲۳ توضیح داده می‌شوند) وجود دارد.</p>
 <hr>
 <h3>📂 نمونه کد: خواندن، نوشتن و Seek در FileStream</h3>
-<pre><code class="language-csharp">using System;
-using System.IO;
+<pre class="hljs"><code><span class="hljs-keyword">using</span> System;
+<span class="hljs-keyword">using</span> System.IO;
 
-// ایجاد فایلی به نام test.txt در مسیر جاری:
-using (Stream s = new FileStream(&quot;test.txt&quot;, FileMode.Create))
+<span class="hljs-comment">// ایجاد فایلی به نام test.txt در مسیر جاری:</span>
+<span class="hljs-keyword">using</span> (Stream s = <span class="hljs-keyword">new</span> FileStream(<span class="hljs-string">&quot;test.txt&quot;</span>, FileMode.Create))
 {
-    Console.WriteLine(s.CanRead);   // True
-    Console.WriteLine(s.CanWrite);  // True
-    Console.WriteLine(s.CanSeek);   // True
+    Console.WriteLine(s.CanRead);   <span class="hljs-comment">// True</span>
+    Console.WriteLine(s.CanWrite);  <span class="hljs-comment">// True</span>
+    Console.WriteLine(s.CanSeek);   <span class="hljs-comment">// True</span>
 
-    s.WriteByte(101);
-    s.WriteByte(102);
+    s.WriteByte(<span class="hljs-number">101</span>);
+    s.WriteByte(<span class="hljs-number">102</span>);
 
-    byte[] block = { 1, 2, 3, 4, 5 };
-    s.Write(block, 0, block.Length);      // نوشتن یک بلوک 5 بایتی
+    <span class="hljs-built_in">byte</span>[] block = { <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span> };
+    s.Write(block, <span class="hljs-number">0</span>, block.Length);      <span class="hljs-comment">// نوشتن یک بلوک 5 بایتی</span>
 
-    Console.WriteLine(s.Length);          // 7
-    Console.WriteLine(s.Position);        // 7
+    Console.WriteLine(s.Length);          <span class="hljs-comment">// 7</span>
+    Console.WriteLine(s.Position);        <span class="hljs-comment">// 7</span>
 
-    s.Position = 0;                       // بازگشت به ابتدای فایل
-    Console.WriteLine(s.ReadByte());      // 101
-    Console.WriteLine(s.ReadByte());      // 102
+    s.Position = <span class="hljs-number">0</span>;                       <span class="hljs-comment">// بازگشت به ابتدای فایل</span>
+    Console.WriteLine(s.ReadByte());      <span class="hljs-comment">// 101</span>
+    Console.WriteLine(s.ReadByte());      <span class="hljs-comment">// 102</span>
 
-    // خواندن داده از استریم و بازنویسی در آرایه block:
-    Console.WriteLine(s.Read(block, 0, block.Length));   // 5
+    <span class="hljs-comment">// خواندن داده از استریم و بازنویسی در آرایه block:</span>
+    Console.WriteLine(s.Read(block, <span class="hljs-number">0</span>, block.Length));   <span class="hljs-comment">// 5</span>
 
-    // چون در انتهای فایل هستیم، بار بعدی خواندن 0 برمی‌گرداند:
-    Console.WriteLine(s.Read(block, 0, block.Length));   // 0
+    <span class="hljs-comment">// چون در انتهای فایل هستیم، بار بعدی خواندن 0 برمی‌گرداند:</span>
+    Console.WriteLine(s.Read(block, <span class="hljs-number">0</span>, block.Length));   <span class="hljs-comment">// 0</span>
 }
 </code></pre>
 <hr>
 <h3>🌀 نمونه کد: استفاده از متدهای Async</h3>
 <p>خواندن یا نوشتن به‌صورت <strong>Asynchronous</strong> فقط به این معنی است که به‌جای <strong>Read/Write</strong>، از <strong>ReadAsync/WriteAsync</strong> استفاده کنید و نتیجه را <code>await</code> کنید (و همچنین باید متد فراخواننده <code>async</code> تعریف شود، همان‌طور که در فصل ۱۴ توضیح داده شد).</p>
-<pre><code class="language-csharp">async static void AsyncDemo()
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">async</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">AsyncDemo</span>()</span>
 {
-    using (Stream s = new FileStream(&quot;test.txt&quot;, FileMode.Create))
+    <span class="hljs-keyword">using</span> (Stream s = <span class="hljs-keyword">new</span> FileStream(<span class="hljs-string">&quot;test.txt&quot;</span>, FileMode.Create))
     {
-        byte[] block = { 1, 2, 3, 4, 5 };
+        <span class="hljs-built_in">byte</span>[] block = { <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span> };
 
-        await s.WriteAsync(block, 0, block.Length);   // نوشتن به‌صورت Async
-        s.Position = 0;                               // بازگشت به ابتدای فایل
+        <span class="hljs-keyword">await</span> s.WriteAsync(block, <span class="hljs-number">0</span>, block.Length);   <span class="hljs-comment">// نوشتن به‌صورت Async</span>
+        s.Position = <span class="hljs-number">0</span>;                               <span class="hljs-comment">// بازگشت به ابتدای فایل</span>
 
-        // خواندن دوباره داده‌ها از استریم به آرایه block:
-        Console.WriteLine(await s.ReadAsync(block, 0, block.Length));   // 5
+        <span class="hljs-comment">// خواندن دوباره داده‌ها از استریم به آرایه block:</span>
+        Console.WriteLine(<span class="hljs-keyword">await</span> s.ReadAsync(block, <span class="hljs-number">0</span>, block.Length));   <span class="hljs-comment">// 5</span>
     }
 }
 </code></pre>
@@ -195,19 +155,19 @@ using (Stream s = new FileStream(&quot;test.txt&quot;, FileMode.Create))
 <hr>
 <h3>❌ مثال اشتباه</h3>
 <p>فرض کنید یک استریم ۱۰۰۰ بایتی داریم:</p>
-<pre><code class="language-csharp">// فرض کنید s یک استریم است:
-byte[] data = new byte[1000];
-s.Read(data, 0, data.Length);
+<pre class="hljs"><code><span class="hljs-comment">// فرض کنید s یک استریم است:</span>
+<span class="hljs-built_in">byte</span>[] data = <span class="hljs-keyword">new</span> <span class="hljs-built_in">byte</span>[<span class="hljs-number">1000</span>];
+s.Read(data, <span class="hljs-number">0</span>, data.Length);
 </code></pre>
 <p>در این حالت، <code>Read</code> ممکن است هر مقداری بین <strong>۱ تا ۱۰۰۰</strong> برگرداند و بخش باقی‌مانده خوانده نشود.</p>
 <hr>
 <h3>✅ مثال درست</h3>
-<pre><code class="language-csharp">byte[] data = new byte[1000];
-// bytesRead در نهایت همیشه 1000 خواهد بود، مگر این‌که طول استریم کمتر باشد:
-int bytesRead = 0;
-int chunkSize = 1;
+<pre class="hljs"><code><span class="hljs-built_in">byte</span>[] data = <span class="hljs-keyword">new</span> <span class="hljs-built_in">byte</span>[<span class="hljs-number">1000</span>];
+<span class="hljs-comment">// bytesRead در نهایت همیشه 1000 خواهد بود، مگر این‌که طول استریم کمتر باشد:</span>
+<span class="hljs-built_in">int</span> bytesRead = <span class="hljs-number">0</span>;
+<span class="hljs-built_in">int</span> chunkSize = <span class="hljs-number">1</span>;
 
-while (bytesRead &lt; data.Length &amp;&amp; chunkSize &gt; 0)
+<span class="hljs-keyword">while</span> (bytesRead &lt; data.Length &amp;&amp; chunkSize &gt; <span class="hljs-number">0</span>)
     bytesRead += chunkSize = s.Read(data, bytesRead, data.Length - bytesRead);
 </code></pre>
 <hr>
@@ -218,16 +178,16 @@ while (bytesRead &lt; data.Length &amp;&amp; chunkSize &gt; 0)
 <li><code>ReadAtLeast</code></li>
 </ul>
 <p>(به همراه نسخه‌های Async آن‌ها).</p>
-<pre><code class="language-csharp">byte[] data = new byte[1000];
-s.ReadExactly(data);   // دقیقاً 1000 بایت می‌خواند
+<pre class="hljs"><code><span class="hljs-built_in">byte</span>[] data = <span class="hljs-keyword">new</span> <span class="hljs-built_in">byte</span>[<span class="hljs-number">1000</span>];
+s.ReadExactly(data);   <span class="hljs-comment">// دقیقاً 1000 بایت می‌خواند</span>
 </code></pre>
 <p>معادل:</p>
-<pre><code class="language-csharp">s.ReadExactly(data, offset: 0, count: 1000);
+<pre class="hljs"><code>s.ReadExactly(data, offset: <span class="hljs-number">0</span>, count: <span class="hljs-number">1000</span>);
 </code></pre>
 <hr>
 <h3>📦 BinaryReader</h3>
 <p>نوع <strong>BinaryReader</strong> راه‌حل دیگری برای این کار است:</p>
-<pre><code class="language-csharp">byte[] data = new BinaryReader(s).ReadBytes(1000);
+<pre class="hljs"><code><span class="hljs-built_in">byte</span>[] data = <span class="hljs-keyword">new</span> BinaryReader(s).ReadBytes(<span class="hljs-number">1000</span>);
 </code></pre>
 <ul>
 <li>اگر طول استریم کمتر از ۱۰۰۰ بایت باشد، اندازه آرایه متناسب با طول واقعی استریم خواهد بود.</li>
@@ -240,7 +200,7 @@ s.ReadExactly(data);   // دقیقاً 1000 بایت می‌خواند
 <h3>🔹 ReadByte و WriteByte</h3>
 <ul>
 <li>
-<p>متد <code>ReadByte</code> یک بایت می‌خواند و در صورت رسیدن به انتهای استریم، <code>-1</code> برمی‌گرداند.
+<p>متد <code>ReadByte</code> یک بایت می‌خواند و در صورت رسیدن به انتهای استریم، <code>-1</code> برمی‌گرداند.<br>
 (به همین دلیل مقدار بازگشتی آن <code>int</code> است، چون نوع <code>byte</code> نمی‌تواند <code>-1</code> برگرداند).</p>
 </li>
 <li>
@@ -279,7 +239,7 @@ s.ReadExactly(data);   // دقیقاً 1000 بایت می‌خواند
 <li>متد <strong>Flush</strong> باعث می‌شود داده‌های بافر شده فوراً نوشته شوند.</li>
 <li><code>Flush</code> به‌صورت خودکار هنگام بسته شدن استریم صدا زده می‌شود، بنابراین هیچ‌وقت نیازی به نوشتن کدی مثل زیر ندارید:</li>
 </ul>
-<pre><code class="language-csharp">s.Flush();
+<pre class="hljs"><code>s.Flush();
 s.Close();
 </code></pre>
 <h2>⏱️ Timeoutها</h2>
@@ -303,7 +263,7 @@ s.Close();
 <li>این متد یک استریم از هر نوع را می‌پذیرد و یک <strong>Wrapper ایمن برای Thread</strong> برمی‌گرداند.</li>
 <li>این Wrapper با گرفتن یک <strong>قفل انحصاری (Exclusive Lock)</strong> در اطراف هر عملیات خواندن، نوشتن یا Seek، تضمین می‌کند که فقط یک Thread در هر لحظه بتواند عمل مورد نظر را انجام دهد.</li>
 </ul>
-<p>🔹 نتیجه عملی این است که چند Thread می‌توانند به‌طور هم‌زمان داده‌ها را به یک استریم <strong>Append</strong> کنند.
+<p>🔹 نتیجه عملی این است که چند Thread می‌توانند به‌طور هم‌زمان داده‌ها را به یک استریم <strong>Append</strong> کنند.<br>
 اما سایر فعالیت‌ها (مثل خواندن هم‌زمان) نیازمند قفل‌گذاری اضافی هستند تا مطمئن شوید هر Thread دقیقاً به بخش درستی از استریم دسترسی دارد.</p>
 <p>📖 جزئیات کامل‌تر درباره <strong>Thread Safety</strong> در فصل ۲۱ توضیح داده می‌شود.</p>
 <hr>
@@ -330,14 +290,14 @@ s.Close();
 <hr>
 <h3>🛠️ ساخت یک FileStream</h3>
 <p>ساده‌ترین راه برای نمونه‌سازی <strong>FileStream</strong> استفاده از متدهای استاتیک کلاس <strong>File</strong> است:</p>
-<pre><code class="language-csharp">FileStream fs1 = File.OpenRead(&quot;readme.bin&quot;);   // فقط خواندن
-FileStream fs2 = File.OpenWrite(&quot;writeme.tmp&quot;); // فقط نوشتن
-FileStream fs3 = File.Create(&quot;readwrite.tmp&quot;);  // خواندن/نوشتن
+<pre class="hljs"><code>FileStream fs1 = File.OpenRead(<span class="hljs-string">&quot;readme.bin&quot;</span>);   <span class="hljs-comment">// فقط خواندن</span>
+FileStream fs2 = File.OpenWrite(<span class="hljs-string">&quot;writeme.tmp&quot;</span>); <span class="hljs-comment">// فقط نوشتن</span>
+FileStream fs3 = File.Create(<span class="hljs-string">&quot;readwrite.tmp&quot;</span>);  <span class="hljs-comment">// خواندن/نوشتن</span>
 </code></pre>
 <p>⚠️ تفاوت <code>OpenWrite</code> و <code>Create</code>:</p>
 <ul>
 <li><code>Create</code> محتوای قبلی فایل را <strong>کامل پاک می‌کند</strong> (truncate).</li>
-<li><code>OpenWrite</code> محتوای موجود را نگه می‌دارد و مکان استریم را روی صفر قرار می‌دهد.
+<li><code>OpenWrite</code> محتوای موجود را نگه می‌دارد و مکان استریم را روی صفر قرار می‌دهد.<br>
 اگر کمتر از اندازه‌ی قبلی داده بنویسید، نتیجه ترکیبی از داده‌های قدیمی و جدید خواهد شد.</li>
 </ul>
 <p>همچنین می‌توانید مستقیم از <strong>سازنده‌ی FileStream</strong> استفاده کنید. سازنده‌ها امکان کنترل کامل روی:</p>
@@ -347,7 +307,7 @@ FileStream fs3 = File.Create(&quot;readwrite.tmp&quot;);  // خواندن/نوش
 <li>گزینه‌های اشتراک‌گذاری (sharing)، بافرینگ و امنیت</li>
 </ul>
 <p>را فراهم می‌کنند. برای مثال:</p>
-<pre><code class="language-csharp">using var fs = new FileStream(&quot;readwrite.tmp&quot;, FileMode.Open);
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> fs = <span class="hljs-keyword">new</span> FileStream(<span class="hljs-string">&quot;readwrite.tmp&quot;</span>, FileMode.Open);
 </code></pre>
 <p>(کلیدواژه‌ی <code>using</code> تضمین می‌کند که استریم پس از خروج از محدوده dispose شود).</p>
 <p>🔎 در ادامه به جزئیات <code>FileMode</code> می‌پردازیم.</p>
@@ -368,8 +328,8 @@ FileStream fs3 = File.Create(&quot;readwrite.tmp&quot;);  // خواندن/نوش
 </ul>
 <p>همچنین متدی به نام <code>File.ReadLines</code> وجود دارد که مانند <code>ReadAllLines</code> است، با این تفاوت که یک <code>IEnumerable&lt;string&gt;</code> <strong>Lazy</strong> بازمی‌گرداند (به‌صورت تدریجی خوانده می‌شود، نه یک‌جا). این کارایی بهتری دارد چون کل فایل یک‌جا در حافظه بارگذاری نمی‌شود.</p>
 <p>مثال با LINQ برای شمردن تعداد خطوطی که طول آن‌ها بیشتر از ۸۰ کاراکتر است:</p>
-<pre><code class="language-csharp">int longLines = File.ReadLines(&quot;filePath&quot;)
-                   .Count(l =&gt; l.Length &gt; 80);
+<pre class="hljs"><code><span class="hljs-built_in">int</span> longLines = File.ReadLines(<span class="hljs-string">&quot;filePath&quot;</span>)
+                   .Count(l =&gt; l.Length &gt; <span class="hljs-number">80</span>);
 </code></pre>
 <hr>
 <h3>📁 مشخص‌کردن نام فایل</h3>
@@ -391,17 +351,17 @@ FileStream fs3 = File.Create(&quot;readwrite.tmp&quot;);  // خواندن/نوش
 </li>
 </ul>
 <p>🔹 دایرکتوری فعلی برنامه از طریق ویژگی استاتیک:</p>
-<pre><code class="language-csharp">Environment.CurrentDirectory
+<pre class="hljs"><code>Environment.CurrentDirectory
 </code></pre>
 <p>قابل دسترسی و تغییر است.</p>
 <p>⚠️ اما دایرکتوری فعلی <strong>ممکن است با مسیر اجرایی برنامه یکی نباشد</strong>. بنابراین <strong>هیچ‌وقت</strong> برای یافتن فایل‌های همراه executable روی آن حساب نکنید.</p>
 <p>دایرکتوری پایه‌ی اپلیکیشن از طریق:</p>
-<pre><code class="language-csharp">AppDomain.CurrentDomain.BaseDirectory
+<pre class="hljs"><code>AppDomain.CurrentDomain.BaseDirectory
 </code></pre>
 <p>دریافت می‌شود (معمولاً همان پوشه‌ی فایل اجرایی است).</p>
 <p>برای مشخص کردن نام فایل به‌صورت نسبی نسبت به این دایرکتوری:</p>
-<pre><code class="language-csharp">string baseFolder = AppDomain.CurrentDomain.BaseDirectory;
-string logoPath = Path.Combine(baseFolder, &quot;logo.jpg&quot;);
+<pre class="hljs"><code><span class="hljs-built_in">string</span> baseFolder = AppDomain.CurrentDomain.BaseDirectory;
+<span class="hljs-built_in">string</span> logoPath = Path.Combine(baseFolder, <span class="hljs-string">&quot;logo.jpg&quot;</span>);
 Console.WriteLine(File.Exists(logoPath));
 </code></pre>
 <hr>
@@ -421,23 +381,23 @@ Console.WriteLine(File.Exists(logoPath));
 </div>
 <h2>📂 FileStream</h2>
 <p>🔹 اگر روی فایل‌های <strong>Hidden</strong> از <code>File.Create</code> یا <code>FileMode.Create</code> استفاده کنید، یک <strong>استثنا (Exception)</strong> پرتاب می‌شود. برای بازنویسی یک فایل مخفی، باید ابتدا آن را <strong>حذف</strong> و سپس دوباره ایجاد کنید:</p>
-<pre><code class="language-csharp">File.Delete(&quot;hidden.txt&quot;);
-using var file = File.Create(&quot;hidden.txt&quot;);
+<pre class="hljs"><code>File.Delete(<span class="hljs-string">&quot;hidden.txt&quot;</span>);
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> <span class="hljs-keyword">file</span> = File.Create(<span class="hljs-string">&quot;hidden.txt&quot;</span>);
 </code></pre>
 <hr>
 <h3>📖 FileAccess</h3>
-<p>اگر فقط نام فایل و یک <code>FileMode</code> را به سازنده‌ی <code>FileStream</code> بدهید، نتیجه (با یک استثنا) یک استریم <strong>قابل خواندن/نوشتن</strong> خواهد بود.
+<p>اگر فقط نام فایل و یک <code>FileMode</code> را به سازنده‌ی <code>FileStream</code> بدهید، نتیجه (با یک استثنا) یک استریم <strong>قابل خواندن/نوشتن</strong> خواهد بود.<br>
 اما می‌توانید با مشخص‌کردن آرگومان <strong>FileAccess</strong> دسترسی را محدود کنید:</p>
-<pre><code class="language-csharp">[Flags]
-public enum FileAccess { Read = 1, Write = 2, ReadWrite = 3 }
+<pre class="hljs"><code>[<span class="hljs-meta">Flags</span>]
+<span class="hljs-keyword">public</span> <span class="hljs-built_in">enum</span> FileAccess { Read = <span class="hljs-number">1</span>, Write = <span class="hljs-number">2</span>, ReadWrite = <span class="hljs-number">3</span> }
 </code></pre>
 <p>مثال: ساختن یک استریم فقط-خواندنی (معادل <code>File.OpenRead</code>):</p>
-<pre><code class="language-csharp">using var fs = new FileStream(&quot;x.bin&quot;, FileMode.Open, FileAccess.Read);
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> fs = <span class="hljs-keyword">new</span> FileStream(<span class="hljs-string">&quot;x.bin&quot;</span>, FileMode.Open, FileAccess.Read);
 </code></pre>
-<p>⚠️ حالت خاص: <code>FileMode.Append</code> → فقط <strong>Write-only</strong> است.
+<p>⚠️ حالت خاص: <code>FileMode.Append</code> → فقط <strong>Write-only</strong> است.<br>
 اگر می‌خواهید داده‌ها را <strong>اضافه (Append)</strong> کنید و همزمان امکان خواندن داشته باشید، باید از <code>FileMode.Open</code> یا <code>FileMode.OpenOrCreate</code> استفاده کنید و سپس مکان استریم را به انتهای فایل ببرید:</p>
-<pre><code class="language-csharp">using var fs = new FileStream(&quot;myFile.bin&quot;, FileMode.Open);
-fs.Seek(0, SeekOrigin.End);
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> fs = <span class="hljs-keyword">new</span> FileStream(<span class="hljs-string">&quot;myFile.bin&quot;</span>, FileMode.Open);
+fs.Seek(<span class="hljs-number">0</span>, SeekOrigin.End);
 </code></pre>
 <hr>
 <h3>⚙️ ویژگی‌های پیشرفته‌ی FileStream</h3>
@@ -465,13 +425,13 @@ fs.Seek(0, SeekOrigin.End);
 </ul>
 <p>⚠️ فلگ‌هایی که سیستم‌عامل پشتیبانی نکند، بی‌صدا (silently) نادیده گرفته می‌شوند.</p>
 <p>اگر با <code>FileShare.ReadWrite</code> فایل را باز کنید، چند پردازش یا کاربر می‌توانند همزمان بخوانند/بنویسند. برای جلوگیری از تداخل، می‌توان بخش‌هایی از فایل را قفل کرد:</p>
-<pre><code class="language-csharp">public virtual void Lock(long position, long length);
-public virtual void Unlock(long position, long length);
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Lock</span>(<span class="hljs-params"><span class="hljs-built_in">long</span> position, <span class="hljs-built_in">long</span> length</span>)</span>;
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">virtual</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Unlock</span>(<span class="hljs-params"><span class="hljs-built_in">long</span> position, <span class="hljs-built_in">long</span> length</span>)</span>;
 </code></pre>
 <p>متد <code>Lock</code> اگر ناحیه‌ای از فایل قبلاً قفل باشد، استثنا پرتاب می‌کند.</p>
 <hr>
 <h2>🧠 MemoryStream</h2>
-<p><strong>MemoryStream</strong> از یک آرایه در حافظه به‌عنوان <strong>backing store</strong> استفاده می‌کند.
+<p><strong>MemoryStream</strong> از یک آرایه در حافظه به‌عنوان <strong>backing store</strong> استفاده می‌کند.<br>
 این یعنی تمام داده‌ها باید یک‌جا در حافظه باشند (برخلاف مزیت اصلی Stream).</p>
 <p>اما همچنان مفید است، به‌خصوص وقتی:</p>
 <ul>
@@ -479,7 +439,7 @@ public virtual void Unlock(long position, long length);
 <li>داده‌ی اصلی کوچک و قابل مدیریت است.</li>
 </ul>
 <p>📌 مثال: کپی کردن داده‌ی یک استریم درون MemoryStream:</p>
-<pre><code class="language-csharp">var ms = new MemoryStream();
+<pre class="hljs"><code><span class="hljs-keyword">var</span> ms = <span class="hljs-keyword">new</span> MemoryStream();
 sourceStream.CopyTo(ms);
 </code></pre>
 <ul>
@@ -529,53 +489,53 @@ sourceStream.CopyTo(ms);
 <p>سپس دو طرف از استریم برای خواندن/نوشتن استفاده می‌کنند.</p>
 <p>📍 مثال ساده:</p>
 <p><strong>Server</strong> → ارسال یک بایت (۱۰۰) و دریافت یک بایت:</p>
-<pre><code class="language-csharp">using var s = new NamedPipeServerStream(&quot;pipedream&quot;);
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> s = <span class="hljs-keyword">new</span> NamedPipeServerStream(<span class="hljs-string">&quot;pipedream&quot;</span>);
 s.WaitForConnection();
-s.WriteByte(100);
+s.WriteByte(<span class="hljs-number">100</span>);
 Console.WriteLine(s.ReadByte());
 </code></pre>
 <p><strong>Client</strong> → دریافت بایت و ارسال یک بایت (۲۰۰):</p>
-<pre><code class="language-csharp">using var s = new NamedPipeClientStream(&quot;pipedream&quot;);
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> s = <span class="hljs-keyword">new</span> NamedPipeClientStream(<span class="hljs-string">&quot;pipedream&quot;</span>);
 s.Connect();
 Console.WriteLine(s.ReadByte());
-s.WriteByte(200);
+s.WriteByte(<span class="hljs-number">200</span>);
 </code></pre>
 <p>🔹 Pipeها به‌طور پیش‌فرض <strong>دوطرفه</strong> هستند. پس باید یک <strong>پروتکل توافقی</strong> بین Client و Server وجود داشته باشد تا هر دو همزمان ننویسند یا نخوانند.</p>
 <hr>
 <h3>📑 Message Transmission Mode (فقط ویندوز)</h3>
-<p>برای پیام‌های طولانی‌تر، Pipeها یک حالت خاص به نام <strong>Message Mode</strong> دارند.
+<p>برای پیام‌های طولانی‌تر، Pipeها یک حالت خاص به نام <strong>Message Mode</strong> دارند.<br>
 در این حالت می‌توان با ویژگی <code>IsMessageComplete</code> فهمید یک پیام کامل دریافت شده است.</p>
 <p>📌 مثال: خواندن کل پیام:</p>
-<pre><code class="language-csharp">static byte[] ReadMessage(PipeStream s)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-built_in">byte</span>[] <span class="hljs-title">ReadMessage</span>(<span class="hljs-params">PipeStream s</span>)</span>
 {
-    MemoryStream ms = new MemoryStream();
-    byte[] buffer = new byte[0x1000]; // 4KB
-    do { ms.Write(buffer, 0, s.Read(buffer, 0, buffer.Length)); }
-    while (!s.IsMessageComplete);
-    return ms.ToArray();
+    MemoryStream ms = <span class="hljs-keyword">new</span> MemoryStream();
+    <span class="hljs-built_in">byte</span>[] buffer = <span class="hljs-keyword">new</span> <span class="hljs-built_in">byte</span>[<span class="hljs-number">0x1000</span>]; <span class="hljs-comment">// 4KB</span>
+    <span class="hljs-keyword">do</span> { ms.Write(buffer, <span class="hljs-number">0</span>, s.Read(buffer, <span class="hljs-number">0</span>, buffer.Length)); }
+    <span class="hljs-keyword">while</span> (!s.IsMessageComplete);
+    <span class="hljs-keyword">return</span> ms.ToArray();
 }
 </code></pre>
 <hr>
 <h3>✨ فعال‌سازی Message Mode</h3>
 <p><strong>Server</strong>:</p>
-<pre><code class="language-csharp">using var s = new NamedPipeServerStream(
-    &quot;pipedream&quot;, PipeDirection.InOut, 1, PipeTransmissionMode.Message);
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> s = <span class="hljs-keyword">new</span> NamedPipeServerStream(
+    <span class="hljs-string">&quot;pipedream&quot;</span>, PipeDirection.InOut, <span class="hljs-number">1</span>, PipeTransmissionMode.Message);
 
 s.WaitForConnection();
-byte[] msg = Encoding.UTF8.GetBytes(&quot;Hello&quot;);
-s.Write(msg, 0, msg.Length);
+<span class="hljs-built_in">byte</span>[] msg = Encoding.UTF8.GetBytes(<span class="hljs-string">&quot;Hello&quot;</span>);
+s.Write(msg, <span class="hljs-number">0</span>, msg.Length);
 Console.WriteLine(Encoding.UTF8.GetString(ReadMessage(s)));
 </code></pre>
 <p><strong>Client</strong>:</p>
-<pre><code class="language-csharp">using var s = new NamedPipeClientStream(&quot;pipedream&quot;);
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> s = <span class="hljs-keyword">new</span> NamedPipeClientStream(<span class="hljs-string">&quot;pipedream&quot;</span>);
 s.Connect();
 s.ReadMode = PipeTransmissionMode.Message;
 
 Console.WriteLine(Encoding.UTF8.GetString(ReadMessage(s)));
-byte[] msg = Encoding.UTF8.GetBytes(&quot;Hello right back!&quot;);
-s.Write(msg, 0, msg.Length);
+<span class="hljs-built_in">byte</span>[] msg = Encoding.UTF8.GetBytes(<span class="hljs-string">&quot;Hello right back!&quot;</span>);
+s.Write(msg, <span class="hljs-number">0</span>, msg.Length);
 </code></pre>
-<p>⚠️ <strong>Message Mode فقط روی ویندوز پشتیبانی می‌شود.</strong>
+<p>⚠️ <strong>Message Mode فقط روی ویندوز پشتیبانی می‌شود.</strong><br>
 در سایر سیستم‌عامل‌ها → <code>PlatformNotSupportedException</code> پرتاب می‌شود.</p>
 <hr>
 <h3><strong>پایپ‌های ناشناس (Anonymous pipes)</strong></h3>
@@ -590,49 +550,49 @@ s.Write(msg, 0, msg.Length);
 </ol>
 <p>از آنجا که پایپ‌های ناشناس یک‌طرفه هستند، یک سرور برای ارتباط دوطرفه باید <strong>دو پایپ</strong> بسازد.</p>
 <p>کد زیر نشان می‌دهد که چطور دو پایپ (ورودی و خروجی) ساخته می‌شوند و سپس یک پردازش فرزند راه‌اندازی می‌شود. در ادامه، یک بایت از سرور به فرزند ارسال شده و یک بایت در پاسخ دریافت می‌شود:</p>
-<pre><code class="language-csharp">class Program
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title">Program</span>
 {
-  static void Main (string[] args)
+  <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Main</span> (<span class="hljs-params"><span class="hljs-built_in">string</span>[] <span class="hljs-keyword">args</span></span>)</span>
   {
-    if (args.Length == 0)
-      // بدون آرگومان = حالت سرور
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">args</span>.Length == <span class="hljs-number">0</span>)
+      <span class="hljs-comment">// بدون آرگومان = حالت سرور</span>
       AnonymousPipeServer();
-    else
-      // آرگومان‌ها = شناسه‌های پایپ برای حالت کلاینت
-      AnonymousPipeClient (args [0], args [1]);
+    <span class="hljs-keyword">else</span>
+      <span class="hljs-comment">// آرگومان‌ها = شناسه‌های پایپ برای حالت کلاینت</span>
+      AnonymousPipeClient (<span class="hljs-keyword">args</span> [<span class="hljs-number">0</span>], <span class="hljs-keyword">args</span> [<span class="hljs-number">1</span>]);
   }
 
-  static void AnonymousPipeClient (string rxID, string txID)
+  <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">AnonymousPipeClient</span> (<span class="hljs-params"><span class="hljs-built_in">string</span> rxID, <span class="hljs-built_in">string</span> txID</span>)</span>
   {
-    using var rx = new AnonymousPipeClientStream (PipeDirection.In, rxID);
-    using var tx = new AnonymousPipeClientStream (PipeDirection.Out, txID);
-    Console.WriteLine (&quot;Client received: &quot; + rx.ReadByte ());
-    tx.WriteByte (200);
+    <span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> rx = <span class="hljs-keyword">new</span> AnonymousPipeClientStream (PipeDirection.In, rxID);
+    <span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> tx = <span class="hljs-keyword">new</span> AnonymousPipeClientStream (PipeDirection.Out, txID);
+    Console.WriteLine (<span class="hljs-string">&quot;Client received: &quot;</span> + rx.ReadByte ());
+    tx.WriteByte (<span class="hljs-number">200</span>);
   }
 
-  static void AnonymousPipeServer ()
+  <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">AnonymousPipeServer</span> ()</span>
   {
-    using var tx = new AnonymousPipeServerStream (
+    <span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> tx = <span class="hljs-keyword">new</span> AnonymousPipeServerStream (
                      PipeDirection.Out, HandleInheritability.Inheritable);
-    using var rx = new AnonymousPipeServerStream (
+    <span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> rx = <span class="hljs-keyword">new</span> AnonymousPipeServerStream (
                      PipeDirection.In, HandleInheritability.Inheritable);
 
-    string txID = tx.GetClientHandleAsString ();
-    string rxID = rx.GetClientHandleAsString ();
+    <span class="hljs-built_in">string</span> txID = tx.GetClientHandleAsString ();
+    <span class="hljs-built_in">string</span> rxID = rx.GetClientHandleAsString ();
 
-    // ایجاد و راه‌اندازی پردازش فرزند
-    string thisAssembly = Assembly.GetEntryAssembly().Location;
-    string thisExe = Path.ChangeExtension (thisAssembly, &quot;.exe&quot;);
-    var args = $&quot;{txID} {rxID}&quot;;
-    var startInfo = new ProcessStartInfo (thisExe, args);
-    startInfo.UseShellExecute = false;   // الزامی برای پردازش فرزند
+    <span class="hljs-comment">// ایجاد و راه‌اندازی پردازش فرزند</span>
+    <span class="hljs-built_in">string</span> thisAssembly = Assembly.GetEntryAssembly().Location;
+    <span class="hljs-built_in">string</span> thisExe = Path.ChangeExtension (thisAssembly, <span class="hljs-string">&quot;.exe&quot;</span>);
+    <span class="hljs-keyword">var</span> <span class="hljs-keyword">args</span> = <span class="hljs-string">$&quot;<span class="hljs-subst">{txID}</span> <span class="hljs-subst">{rxID}</span>&quot;</span>;
+    <span class="hljs-keyword">var</span> startInfo = <span class="hljs-keyword">new</span> ProcessStartInfo (thisExe, <span class="hljs-keyword">args</span>);
+    startInfo.UseShellExecute = <span class="hljs-literal">false</span>;   <span class="hljs-comment">// الزامی برای پردازش فرزند</span>
     Process p = Process.Start (startInfo);
 
-    tx.DisposeLocalCopyOfClientHandle ();  // آزادسازی منابع
+    tx.DisposeLocalCopyOfClientHandle ();  <span class="hljs-comment">// آزادسازی منابع</span>
     rx.DisposeLocalCopyOfClientHandle ();
 
-    tx.WriteByte (100);    // ارسال یک بایت به پردازش فرزند
-    Console.WriteLine (&quot;Server received: &quot; + rx.ReadByte ());
+    tx.WriteByte (<span class="hljs-number">100</span>);    <span class="hljs-comment">// ارسال یک بایت به پردازش فرزند</span>
+    Console.WriteLine (<span class="hljs-string">&quot;Server received: &quot;</span> + rx.ReadByte ());
     p.WaitForExit ();
   }
 }
@@ -646,12 +606,12 @@ s.Write(msg, 0, msg.Length);
 <h3><strong>BufferedStream (استریم بافر شده)</strong></h3>
 <p>بافرینگ باعث بهبود کارایی می‌شود چون تعداد دفعات رفت‌وبرگشت به <strong>backing store</strong> (مثل فایل یا شبکه) را کاهش می‌دهد.</p>
 <p>در مثال زیر ما یک <strong>FileStream</strong> را داخل یک <strong>BufferedStream</strong> با اندازه‌ی بافر ۲۰ کیلوبایت می‌پیچیم:</p>
-<pre><code class="language-csharp">// نوشتن 100K در یک فایل:
-File.WriteAllBytes (&quot;myFile.bin&quot;, new byte [100000]);
-using FileStream fs = File.OpenRead (&quot;myFile.bin&quot;);
-using BufferedStream bs = new BufferedStream (fs, 20000);  // بافر 20K
+<pre class="hljs"><code><span class="hljs-comment">// نوشتن 100K در یک فایل:</span>
+File.WriteAllBytes (<span class="hljs-string">&quot;myFile.bin&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">byte</span> [<span class="hljs-number">100000</span>]);
+<span class="hljs-keyword">using</span> FileStream fs = File.OpenRead (<span class="hljs-string">&quot;myFile.bin&quot;</span>);
+<span class="hljs-keyword">using</span> BufferedStream bs = <span class="hljs-keyword">new</span> BufferedStream (fs, <span class="hljs-number">20000</span>);  <span class="hljs-comment">// بافر 20K</span>
 bs.ReadByte();
-Console.WriteLine (fs.Position);   // 20000
+Console.WriteLine (fs.Position);   <span class="hljs-comment">// 20000</span>
 </code></pre>
 <p>🔍 در این مثال، استریم زیرین (<strong>FileStream</strong>) بعد از خواندن فقط <strong>یک بایت</strong>، به اندازه‌ی ۲۰,۰۰۰ بایت جلو می‌رود؛ این به خاطر <strong>read-ahead buffering</strong> است. ما می‌توانیم متد <code>ReadByte</code> را <strong>۱۹,۹۹۹ بار دیگر</strong> صدا بزنیم، بدون اینکه دوباره <code>FileStream</code> درگیر شود.</p>
 <p>✅ در عمل، بستن یک <strong>BufferedStream</strong> به طور خودکار استریم backing store زیرین را هم می‌بندد.</p>
@@ -690,11 +650,11 @@ Console.WriteLine (fs.Position);   // 20000
 <p><code>TextReader</code> و <code>TextWriter</code> کلاس‌های پایه‌ی انتزاعی هستند که مخصوص کار با <strong>کاراکترها</strong> و <strong>رشته‌ها</strong> طراحی شده‌اند. هر کدام در .NET دو پیاده‌سازی عمومی دارند:</p>
 <ul>
 <li>
-<p><strong><code>StreamReader</code> / <code>StreamWriter</code></strong>
+<p><strong><code>StreamReader</code> / <code>StreamWriter</code></strong><br>
 از یک <strong>Stream</strong> به‌عنوان منبع داده‌ی خام استفاده می‌کنند و بایت‌های استریم را به کاراکترها یا رشته‌ها تبدیل می‌کنند.</p>
 </li>
 <li>
-<p><strong><code>StringReader</code> / <code>StringWriter</code></strong>
+<p><strong><code>StringReader</code> / <code>StringWriter</code></strong><br>
 <code>TextReader</code> / <code>TextWriter</code> را با استفاده از <strong>رشته‌های درون حافظه</strong> پیاده‌سازی می‌کنند.</p>
 </li>
 </ul>
@@ -714,7 +674,7 @@ Console.WriteLine (fs.Position);   // 20000
 <ul>
 <li><strong>CR</strong> (کد کاراکتری 13)</li>
 <li><strong>LF</strong> (کد کاراکتری 10)</li>
-<li>یا ترکیب <strong>CR+LF</strong>
+<li>یا ترکیب <strong>CR+LF</strong><br>
 سپس یک <strong>رشته (string)</strong> برمی‌گرداند و کاراکترهای CR/LF را حذف می‌کند.</li>
 </ul>
 </li>
@@ -735,62 +695,62 @@ Console.WriteLine (fs.Position);   // 20000
 <p>همانند <code>Stream</code>، کلاس‌های <code>TextReader</code> و <code>TextWriter</code> نسخه‌های <strong>آسنکرون مبتنی بر Task</strong> از متدهای خواندن و نوشتن خود را ارائه می‌دهند.</p>
 <h3>StreamReader و StreamWriter 📄✍️</h3>
 <p>در مثال زیر، یک <code>StreamWriter</code> دو خط متن را در یک فایل می‌نویسد و سپس یک <code>StreamReader</code> فایل را دوباره می‌خواند:</p>
-<pre><code class="language-csharp">using (FileStream fs = File.Create(&quot;test.txt&quot;))
-using (TextWriter writer = new StreamWriter(fs))
+<pre class="hljs"><code><span class="hljs-keyword">using</span> (FileStream fs = File.Create(<span class="hljs-string">&quot;test.txt&quot;</span>))
+<span class="hljs-keyword">using</span> (TextWriter writer = <span class="hljs-keyword">new</span> StreamWriter(fs))
 {
-    writer.WriteLine(&quot;Line1&quot;);
-    writer.WriteLine(&quot;Line2&quot;);
+    writer.WriteLine(<span class="hljs-string">&quot;Line1&quot;</span>);
+    writer.WriteLine(<span class="hljs-string">&quot;Line2&quot;</span>);
 }
-using (FileStream fs = File.OpenRead(&quot;test.txt&quot;))
-using (TextReader reader = new StreamReader(fs))
+<span class="hljs-keyword">using</span> (FileStream fs = File.OpenRead(<span class="hljs-string">&quot;test.txt&quot;</span>))
+<span class="hljs-keyword">using</span> (TextReader reader = <span class="hljs-keyword">new</span> StreamReader(fs))
 {
-    Console.WriteLine(reader.ReadLine()); // Line1
-    Console.WriteLine(reader.ReadLine()); // Line2
+    Console.WriteLine(reader.ReadLine()); <span class="hljs-comment">// Line1</span>
+    Console.WriteLine(reader.ReadLine()); <span class="hljs-comment">// Line2</span>
 }
 </code></pre>
 <p>چون <strong>Text adapters</strong> اغلب همراه با فایل‌ها استفاده می‌شوند، کلاس <code>File</code> متدهای <strong>استاتیک</strong> <code>CreateText</code>، <code>AppendText</code> و <code>OpenText</code> را برای کوتاه کردن روند فراهم می‌کند:</p>
-<pre><code class="language-csharp">using (TextWriter writer = File.CreateText(&quot;test.txt&quot;))
+<pre class="hljs"><code><span class="hljs-keyword">using</span> (TextWriter writer = File.CreateText(<span class="hljs-string">&quot;test.txt&quot;</span>))
 {
-    writer.WriteLine(&quot;Line1&quot;);
-    writer.WriteLine(&quot;Line2&quot;);
+    writer.WriteLine(<span class="hljs-string">&quot;Line1&quot;</span>);
+    writer.WriteLine(<span class="hljs-string">&quot;Line2&quot;</span>);
 }
-using (TextWriter writer = File.AppendText(&quot;test.txt&quot;))
-    writer.WriteLine(&quot;Line3&quot;);
+<span class="hljs-keyword">using</span> (TextWriter writer = File.AppendText(<span class="hljs-string">&quot;test.txt&quot;</span>))
+    writer.WriteLine(<span class="hljs-string">&quot;Line3&quot;</span>);
 
-using (TextReader reader = File.OpenText(&quot;test.txt&quot;))
-    while (reader.Peek() &gt; -1)
-        Console.WriteLine(reader.ReadLine()); // Line1, Line2, Line3
+<span class="hljs-keyword">using</span> (TextReader reader = File.OpenText(<span class="hljs-string">&quot;test.txt&quot;</span>))
+    <span class="hljs-keyword">while</span> (reader.Peek() &gt; <span class="hljs-number">-1</span>)
+        Console.WriteLine(reader.ReadLine()); <span class="hljs-comment">// Line1, Line2, Line3</span>
 </code></pre>
 <p>این مثال همچنین نشان می‌دهد که چگونه پایان فایل را بررسی کنیم (<code>reader.Peek()</code>). روش دیگر این است که تا وقتی <code>reader.ReadLine</code> مقدار <code>null</code> برگرداند، ادامه دهیم.</p>
 <p>می‌توانید انواع دیگری مانند <strong>اعداد صحیح</strong> را نیز بخوانید و بنویسید، اما چون <code>TextWriter</code> متد <code>ToString</code> را روی نوع شما صدا می‌زند، هنگام خواندن باید رشته را <strong>Parse</strong> کنید:</p>
-<pre><code class="language-csharp">using (TextWriter w = File.CreateText(&quot;data.txt&quot;))
+<pre class="hljs"><code><span class="hljs-keyword">using</span> (TextWriter w = File.CreateText(<span class="hljs-string">&quot;data.txt&quot;</span>))
 {
-    w.WriteLine(123);      // می‌نویسد &quot;123&quot;
-    w.WriteLine(true);     // می‌نویسد &quot;true&quot;
+    w.WriteLine(<span class="hljs-number">123</span>);      <span class="hljs-comment">// می‌نویسد &quot;123&quot;</span>
+    w.WriteLine(<span class="hljs-literal">true</span>);     <span class="hljs-comment">// می‌نویسد &quot;true&quot;</span>
 }
-using (TextReader r = File.OpenText(&quot;data.txt&quot;))
+<span class="hljs-keyword">using</span> (TextReader r = File.OpenText(<span class="hljs-string">&quot;data.txt&quot;</span>))
 {
-    int myInt = int.Parse(r.ReadLine());   // myInt == 123
-    bool yes = bool.Parse(r.ReadLine());   // yes == true
+    <span class="hljs-built_in">int</span> myInt = <span class="hljs-built_in">int</span>.Parse(r.ReadLine());   <span class="hljs-comment">// myInt == 123</span>
+    <span class="hljs-built_in">bool</span> yes = <span class="hljs-built_in">bool</span>.Parse(r.ReadLine());   <span class="hljs-comment">// yes == true</span>
 }
 </code></pre>
 <h3>رمزگذاری کاراکترها 🔤</h3>
 <p><code>TextReader</code> و <code>TextWriter</code> خودشان تنها کلاس‌های <strong>abstract</strong> هستند و ارتباطی با یک <strong>stream</strong> یا <strong>backing store</strong> ندارند. اما <code>StreamReader</code> و <code>StreamWriter</code> به یک <strong>stream بایت‌محور</strong> متصل‌اند و باید بین <strong>کاراکترها و بایت‌ها</strong> تبدیل انجام دهند. این کار از طریق کلاس <code>Encoding</code> در <strong>System.Text</strong> انجام می‌شود که هنگام ساخت <code>StreamReader</code> یا <code>StreamWriter</code> انتخاب می‌کنید. اگر چیزی انتخاب نکنید، <strong>UTF-8</strong> پیش‌فرض استفاده می‌شود.</p>
 <p>اگر به‌طور صریح یک <strong>Encoding</strong> مشخص کنید، <code>StreamWriter</code> به‌طور پیش‌فرض یک پیش‌وند (prefix) برای شناسایی رمزگذاری به ابتدای جریان می‌نویسد. این معمولاً ناخواسته است و می‌توانید با ساخت Encoding به شکل زیر از آن جلوگیری کنید:</p>
-<pre><code class="language-csharp">var encoding = new UTF8Encoding(
-    encoderShouldEmitUTF8Identifier: false,
-    throwOnInvalidBytes: true
+<pre class="hljs"><code><span class="hljs-keyword">var</span> encoding = <span class="hljs-keyword">new</span> UTF8Encoding(
+    encoderShouldEmitUTF8Identifier: <span class="hljs-literal">false</span>,
+    throwOnInvalidBytes: <span class="hljs-literal">true</span>
 );
 </code></pre>
 <p>آرگومان دوم به <code>StreamWriter</code> یا <code>StreamReader</code> می‌گوید اگر با بایت‌هایی مواجه شد که ترجمه معتبر به رشته ندارند، <strong>Exception</strong> پرتاب کند، که با رفتار پیش‌فرض مطابقت دارد.</p>
 <h3>مثال رمزگذاری ASCII و UTF-8</h3>
 <p>رمزگذاری ساده <code>ASCII</code> است، چون هر کاراکتر با یک بایت نمایش داده می‌شود. کاراکترهای غیرانگلیسی یا نمادهای ویژه قابل نمایش نیستند و به <code>□</code> تبدیل می‌شوند.</p>
 <p>رمزگذاری پیش‌فرض <code>UTF-8</code> می‌تواند تمام کاراکترهای یونیکد را نمایش دهد. کاراکترهای ASCII (127 کاراکتر اول) با یک بایت کدگذاری می‌شوند؛ بقیه کاراکترها با تعداد بایت متغیر (معمولاً دو یا سه) کدگذاری می‌شوند. مثال:</p>
-<pre><code class="language-csharp">using (TextWriter w = File.CreateText(&quot;but.txt&quot;)) // استفاده از UTF-8 پیش‌فرض
-    w.WriteLine(&quot;but-&quot;);
+<pre class="hljs"><code><span class="hljs-keyword">using</span> (TextWriter w = File.CreateText(<span class="hljs-string">&quot;but.txt&quot;</span>)) <span class="hljs-comment">// استفاده از UTF-8 پیش‌فرض</span>
+    w.WriteLine(<span class="hljs-string">&quot;but-&quot;</span>);
 
-using (Stream s = File.OpenRead(&quot;but.txt&quot;))
-    for (int b; (b = s.ReadByte()) &gt; -1;)
+<span class="hljs-keyword">using</span> (Stream s = File.OpenRead(<span class="hljs-string">&quot;but.txt&quot;</span>))
+    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> b; (b = s.ReadByte()) &gt; <span class="hljs-number">-1</span>;)
         Console.WriteLine(b);
 </code></pre>
 <p>برای کاراکتر <strong>em dash (—)</strong> که خارج از 127 کاراکتر اول یونیکد است، UTF-8 سه بایت استفاده می‌کند.</p>
@@ -800,30 +760,30 @@ using (Stream s = File.OpenRead(&quot;but.txt&quot;))
 <h3>StringReader و StringWriter</h3>
 <p>این‌ها <strong>stream</strong> را wrap نمی‌کنند و از یک <strong>string</strong> یا <strong>StringBuilder</strong> به‌عنوان منبع داده استفاده می‌کنند. بنابراین نیاز به ترجمه بایت نیست و کلاس‌ها تنها بر اساس همان رفتار پایه <code>StreamReader/StreamWriter</code> عمل می‌کنند.</p>
 <p>مثال: اگر بخواهید یک رشته حاوی XML را با <code>XmlReader</code> تجزیه کنید:</p>
-<pre><code class="language-csharp">XmlReader r = XmlReader.Create(new StringReader(myString));
+<pre class="hljs"><code>XmlReader r = XmlReader.Create(<span class="hljs-keyword">new</span> StringReader(myString));
 </code></pre>
 <h3>Binary Adapters 💾</h3>
-<p><code>BinaryReader</code> و <code>BinaryWriter</code> داده‌های native مانند <code>bool</code>، <code>byte</code>، <code>int</code>، <code>double</code>، <code>string</code> و آرایه‌های نوع‌های اولیه را می‌خوانند و می‌نویسند.
+<p><code>BinaryReader</code> و <code>BinaryWriter</code> داده‌های native مانند <code>bool</code>، <code>byte</code>، <code>int</code>، <code>double</code>، <code>string</code> و آرایه‌های نوع‌های اولیه را می‌خوانند و می‌نویسند.<br>
 بر خلاف <code>StreamReader/StreamWriter</code>، binary adapters داده‌ها را به‌صورت <strong>موثر در حافظه</strong> ذخیره می‌کنند.</p>
 <p>مثال تعریف کلاس ساده و ذخیره/بارگذاری با binary adapters:</p>
-<pre><code class="language-csharp">public class Person
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Person</span>
 {
-    public string Name;
-    public int Age;
-    public double Height;
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Name;
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> Age;
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">double</span> Height;
 
-    public void SaveData(Stream s)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SaveData</span>(<span class="hljs-params">Stream s</span>)</span>
     {
-        var w = new BinaryWriter(s);
+        <span class="hljs-keyword">var</span> w = <span class="hljs-keyword">new</span> BinaryWriter(s);
         w.Write(Name);
         w.Write(Age);
         w.Write(Height);
-        w.Flush(); // اطمینان از خالی شدن بافر
+        w.Flush(); <span class="hljs-comment">// اطمینان از خالی شدن بافر</span>
     }
 
-    public void LoadData(Stream s)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">LoadData</span>(<span class="hljs-params">Stream s</span>)</span>
     {
-        var r = new BinaryReader(s);
+        <span class="hljs-keyword">var</span> r = <span class="hljs-keyword">new</span> BinaryReader(s);
         Name = r.ReadString();
         Age = r.ReadInt32();
         Height = r.ReadDouble();
@@ -831,7 +791,7 @@ using (Stream s = File.OpenRead(&quot;but.txt&quot;))
 }
 </code></pre>
 <p>همچنین می‌توان با <code>BinaryReader</code> کل محتوای یک <strong>stream seekable</strong> را به آرایه بایت خواند:</p>
-<pre><code class="language-csharp">byte[] data = new BinaryReader(s).ReadBytes((int)s.Length);
+<pre class="hljs"><code><span class="hljs-built_in">byte</span>[] data = <span class="hljs-keyword">new</span> BinaryReader(s).ReadBytes((<span class="hljs-built_in">int</span>)s.Length);
 </code></pre>
 <p>این روش راحت‌تر از خواندن مستقیم از stream است، چون نیاز به loop برای اطمینان از خواندن تمام داده‌ها ندارد.</p>
 <h3>بستن و آزادسازی Stream Adapters 🔒</h3>
@@ -844,32 +804,32 @@ using (Stream s = File.OpenRead(&quot;but.txt&quot;))
 </ol>
 <p>در adapters، متدهای <code>Close</code> و <code>Dispose</code> <strong>هم‌معنی</strong> هستند، همانند رفتارشان در streams.</p>
 <p>گزینه‌های 1 و 2 از نظر معنایی <strong>یکسان</strong> هستند، زیرا بستن یک adapter به‌طور خودکار <strong>stream زیرین</strong> را نیز می‌بندد. هر زمان که از <strong>nested using statements</strong> استفاده می‌کنید، عملاً گزینه 2 را انتخاب کرده‌اید:</p>
-<pre><code class="language-csharp">using (FileStream fs = File.Create(&quot;test.txt&quot;))
-using (TextWriter writer = new StreamWriter(fs))
-    writer.WriteLine(&quot;Line&quot;);
+<pre class="hljs"><code><span class="hljs-keyword">using</span> (FileStream fs = File.Create(<span class="hljs-string">&quot;test.txt&quot;</span>))
+<span class="hljs-keyword">using</span> (TextWriter writer = <span class="hljs-keyword">new</span> StreamWriter(fs))
+    writer.WriteLine(<span class="hljs-string">&quot;Line&quot;</span>);
 </code></pre>
 <p>چون dispose به ترتیب از داخل به بیرون انجام می‌شود، ابتدا adapter بسته می‌شود و سپس stream. همچنین اگر در <strong>constructor</strong> adapter استثنایی رخ دهد، stream همچنان بسته می‌شود. استفاده از nested using statements تقریباً همیشه ایمن است.</p>
 <blockquote>
 <p>هرگز یک stream را قبل از بستن یا Flush کردن writer آن نبندید — در غیر این صورت داده‌های بافر شده در adapter از بین می‌روند.</p>
 </blockquote>
 <p>گزینه‌های 3 و 4 کار می‌کنند چون adapters در دسته <strong>objects با disposal اختیاری</strong> قرار دارند. یک مثال: ممکن است adapter را تمام کرده باشید ولی بخواهید <strong>stream زیرین</strong> برای استفاده‌های بعدی باز بماند:</p>
-<pre><code class="language-csharp">using (FileStream fs = new FileStream(&quot;test.txt&quot;, FileMode.Create))
+<pre class="hljs"><code><span class="hljs-keyword">using</span> (FileStream fs = <span class="hljs-keyword">new</span> FileStream(<span class="hljs-string">&quot;test.txt&quot;</span>, FileMode.Create))
 {
-    StreamWriter writer = new StreamWriter(fs);
-    writer.WriteLine(&quot;Hello&quot;);
+    StreamWriter writer = <span class="hljs-keyword">new</span> StreamWriter(fs);
+    writer.WriteLine(<span class="hljs-string">&quot;Hello&quot;</span>);
     writer.Flush();
-    fs.Position = 0;
+    fs.Position = <span class="hljs-number">0</span>;
     Console.WriteLine(fs.ReadByte());
 }
 </code></pre>
 <p>در اینجا، ابتدا به فایل می‌نویسیم، موقعیت stream را تغییر می‌دهیم و سپس اولین بایت را می‌خوانیم. اگر StreamWriter را dispose می‌کردیم، FileStream نیز بسته می‌شد و خواندن بعدی شکست می‌خورد. شرط این است که <strong>Flush</strong> را صدا بزنیم تا بافر StreamWriter به stream نوشته شود.</p>
 <p>Stream adapters با semantics <strong>اختیاری در disposal</strong>، الگوی <strong>extended disposal</strong> که finalizer در آن Dispose را صدا می‌زند، پیاده‌سازی نمی‌کنند. این امکان را می‌دهد که adapter رهاشده هنگام رسیدن <strong>garbage collector</strong> به آن، خودکار dispose نشود.</p>
 <p>همچنین یک constructor در StreamReader/StreamWriter وجود دارد که دستور می‌دهد stream بعد از disposal باز بماند. بنابراین می‌توان مثال قبل را به شکل زیر بازنویسی کرد:</p>
-<pre><code class="language-csharp">using (var fs = new FileStream(&quot;test.txt&quot;, FileMode.Create))
+<pre class="hljs"><code><span class="hljs-keyword">using</span> (<span class="hljs-keyword">var</span> fs = <span class="hljs-keyword">new</span> FileStream(<span class="hljs-string">&quot;test.txt&quot;</span>, FileMode.Create))
 {
-    using (var writer = new StreamWriter(fs, new UTF8Encoding(false, true), 0x400, true))
-        writer.WriteLine(&quot;Hello&quot;);
-    fs.Position = 0;
+    <span class="hljs-keyword">using</span> (<span class="hljs-keyword">var</span> writer = <span class="hljs-keyword">new</span> StreamWriter(fs, <span class="hljs-keyword">new</span> UTF8Encoding(<span class="hljs-literal">false</span>, <span class="hljs-literal">true</span>), <span class="hljs-number">0x400</span>, <span class="hljs-literal">true</span>))
+        writer.WriteLine(<span class="hljs-string">&quot;Hello&quot;</span>);
+    fs.Position = <span class="hljs-number">0</span>;
     Console.WriteLine(fs.ReadByte());
     Console.WriteLine(fs.Length);
 }
@@ -885,102 +845,102 @@ using (TextWriter writer = new StreamWriter(fs))
 </ul>
 <p><code>DeflateStream</code>، <code>GZipStream</code> و <code>BrotliStream</code> <strong>decorator</strong> هستند؛ آن‌ها داده‌ها را از stream دیگری که هنگام ساخت ارائه می‌دهید، فشرده یا دیکامپر می‌کنند.</p>
 <p>مثال فشرده‌سازی و دیکامپرشن یک سری بایت با استفاده از FileStream:</p>
-<pre><code class="language-csharp">using (Stream s = File.Create(&quot;compressed.bin&quot;))
-using (Stream ds = new DeflateStream(s, CompressionMode.Compress))
-    for (byte i = 0; i &lt; 100; i++)
+<pre class="hljs"><code><span class="hljs-keyword">using</span> (Stream s = File.Create(<span class="hljs-string">&quot;compressed.bin&quot;</span>))
+<span class="hljs-keyword">using</span> (Stream ds = <span class="hljs-keyword">new</span> DeflateStream(s, CompressionMode.Compress))
+    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">byte</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">100</span>; i++)
         ds.WriteByte(i);
 
-using (Stream s = File.OpenRead(&quot;compressed.bin&quot;))
-using (Stream ds = new DeflateStream(s, CompressionMode.Decompress))
-    for (byte i = 0; i &lt; 100; i++)
-        Console.WriteLine(ds.ReadByte()); // 0 تا 99
+<span class="hljs-keyword">using</span> (Stream s = File.OpenRead(<span class="hljs-string">&quot;compressed.bin&quot;</span>))
+<span class="hljs-keyword">using</span> (Stream ds = <span class="hljs-keyword">new</span> DeflateStream(s, CompressionMode.Decompress))
+    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">byte</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">100</span>; i++)
+        Console.WriteLine(ds.ReadByte()); <span class="hljs-comment">// 0 تا 99</span>
 </code></pre>
 <p>با DeflateStream، فایل فشرده 102 بایت است: کمی بزرگتر از اصلی. BrotliStream آن را به 73 بایت فشرده می‌کند. فشرده‌سازی با داده‌های باینری <strong>متراکم و غیرتکراری</strong> ضعیف عمل می‌کند و با داده‌های رمزنگاری شده بدتر است. اما برای فایل‌های متنی عملکرد خوبی دارد.</p>
 <p>مثال بعدی: فشرده و دیکامپرشن یک متن 1000 کلمه با الگوریتم Brotli:</p>
-<pre><code class="language-csharp">string[] words = &quot;The quick brown fox jumps over the lazy dog&quot;.Split();
-Random rand = new Random(0); // برای ثبات
-using (Stream s = File.Create(&quot;compressed.bin&quot;))
-using (Stream ds = new BrotliStream(s, CompressionMode.Compress))
-using (TextWriter w = new StreamWriter(ds))
-    for (int i = 0; i &lt; 1000; i++)
-        await w.WriteAsync(words[rand.Next(words.Length)] + &quot; &quot;);
+<pre class="hljs"><code><span class="hljs-built_in">string</span>[] words = <span class="hljs-string">&quot;The quick brown fox jumps over the lazy dog&quot;</span>.Split();
+Random rand = <span class="hljs-keyword">new</span> Random(<span class="hljs-number">0</span>); <span class="hljs-comment">// برای ثبات</span>
+<span class="hljs-keyword">using</span> (Stream s = File.Create(<span class="hljs-string">&quot;compressed.bin&quot;</span>))
+<span class="hljs-keyword">using</span> (Stream ds = <span class="hljs-keyword">new</span> BrotliStream(s, CompressionMode.Compress))
+<span class="hljs-keyword">using</span> (TextWriter w = <span class="hljs-keyword">new</span> StreamWriter(ds))
+    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000</span>; i++)
+        <span class="hljs-keyword">await</span> w.WriteAsync(words[rand.Next(words.Length)] + <span class="hljs-string">&quot; &quot;</span>);
 
-Console.WriteLine(new FileInfo(&quot;compressed.bin&quot;).Length); // 808
+Console.WriteLine(<span class="hljs-keyword">new</span> FileInfo(<span class="hljs-string">&quot;compressed.bin&quot;</span>).Length); <span class="hljs-comment">// 808</span>
 
-using (Stream s = File.OpenRead(&quot;compressed.bin&quot;))
-using (Stream ds = new BrotliStream(s, CompressionMode.Decompress))
-using (TextReader r = new StreamReader(ds))
-    Console.Write(await r.ReadToEndAsync());
+<span class="hljs-keyword">using</span> (Stream s = File.OpenRead(<span class="hljs-string">&quot;compressed.bin&quot;</span>))
+<span class="hljs-keyword">using</span> (Stream ds = <span class="hljs-keyword">new</span> BrotliStream(s, CompressionMode.Decompress))
+<span class="hljs-keyword">using</span> (TextReader r = <span class="hljs-keyword">new</span> StreamReader(ds))
+    Console.Write(<span class="hljs-keyword">await</span> r.ReadToEndAsync());
 </code></pre>
 <p>در این حالت، BrotliStream به طور مؤثر فایل را به 808 بایت فشرده می‌کند — کمتر از یک بایت برای هر کلمه. (DeflateStream همان داده‌ها را به 885 بایت فشرده می‌کند.)</p>
 <hr>
 <h3>فشرده‌سازی در حافظه 🧠💨</h3>
 <p>گاهی لازم است فشرده‌سازی کاملاً <strong>در حافظه</strong> انجام شود. نمونه با MemoryStream:</p>
-<pre><code class="language-csharp">byte[] data = new byte[1000]; // آرایه خالی برای تست فشرده‌سازی
-var ms = new MemoryStream();
-using (Stream ds = new DeflateStream(ms, CompressionMode.Compress))
-    ds.Write(data, 0, data.Length);
+<pre class="hljs"><code><span class="hljs-built_in">byte</span>[] data = <span class="hljs-keyword">new</span> <span class="hljs-built_in">byte</span>[<span class="hljs-number">1000</span>]; <span class="hljs-comment">// آرایه خالی برای تست فشرده‌سازی</span>
+<span class="hljs-keyword">var</span> ms = <span class="hljs-keyword">new</span> MemoryStream();
+<span class="hljs-keyword">using</span> (Stream ds = <span class="hljs-keyword">new</span> DeflateStream(ms, CompressionMode.Compress))
+    ds.Write(data, <span class="hljs-number">0</span>, data.Length);
 
-byte[] compressed = ms.ToArray();
-Console.WriteLine(compressed.Length); // 11
+<span class="hljs-built_in">byte</span>[] compressed = ms.ToArray();
+Console.WriteLine(compressed.Length); <span class="hljs-comment">// 11</span>
 
-// دیکامپرشن دوباره به آرایه داده:
-ms = new MemoryStream(compressed);
-using (Stream ds = new DeflateStream(ms, CompressionMode.Decompress))
-    for (int i = 0; i &lt; 1000; i += ds.Read(data, i, 1000 - i));
+<span class="hljs-comment">// دیکامپرشن دوباره به آرایه داده:</span>
+ms = <span class="hljs-keyword">new</span> MemoryStream(compressed);
+<span class="hljs-keyword">using</span> (Stream ds = <span class="hljs-keyword">new</span> DeflateStream(ms, CompressionMode.Decompress))
+    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000</span>; i += ds.Read(data, i, <span class="hljs-number">1000</span> - i));
 </code></pre>
 <p>استفاده از <code>using</code> روی DeflateStream آن را به‌طور استاندارد می‌بندد و هر بافر نوشته‌نشده را Flush می‌کند. این همچنین MemoryStream را می‌بندد، بنابراین برای استخراج داده‌ها باید <code>ToArray</code> را صدا بزنیم.</p>
 <p>نسخه جایگزین که <strong>MemoryStream را باز نگه می‌دارد</strong> و از متدهای <strong>آسنکرون</strong> استفاده می‌کند:</p>
-<pre><code class="language-csharp">byte[] data = new byte[1000];
-MemoryStream ms = new MemoryStream();
-using (Stream ds = new DeflateStream(ms, CompressionMode.Compress, true))
-    await ds.WriteAsync(data, 0, data.Length);
+<pre class="hljs"><code><span class="hljs-built_in">byte</span>[] data = <span class="hljs-keyword">new</span> <span class="hljs-built_in">byte</span>[<span class="hljs-number">1000</span>];
+MemoryStream ms = <span class="hljs-keyword">new</span> MemoryStream();
+<span class="hljs-keyword">using</span> (Stream ds = <span class="hljs-keyword">new</span> DeflateStream(ms, CompressionMode.Compress, <span class="hljs-literal">true</span>))
+    <span class="hljs-keyword">await</span> ds.WriteAsync(data, <span class="hljs-number">0</span>, data.Length);
 
-Console.WriteLine(ms.Length); // 113
-ms.Position = 0;
-using (Stream ds = new DeflateStream(ms, CompressionMode.Decompress))
-    for (int i = 0; i &lt; 1000; i += await ds.ReadAsync(data, i, 1000 - i));
+Console.WriteLine(ms.Length); <span class="hljs-comment">// 113</span>
+ms.Position = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">using</span> (Stream ds = <span class="hljs-keyword">new</span> DeflateStream(ms, CompressionMode.Decompress))
+    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000</span>; i += <span class="hljs-keyword">await</span> ds.ReadAsync(data, i, <span class="hljs-number">1000</span> - i));
 </code></pre>
 <p>فلگ اضافی در constructor به DeflateStream می‌گوید که <strong>stream زیرین را در disposal نبندد</strong>. به این ترتیب MemoryStream باز می‌ماند و می‌توانیم آن را دوباره از موقعیت صفر بخوانیم.</p>
 <h3>فشرده‌سازی فایل‌ها در Unix با GZip 🐧📦</h3>
 <p>الگوریتم فشرده‌سازی <strong>GZipStream</strong> در سیستم‌های Unix به‌عنوان فرمت فشرده‌سازی فایل محبوب است. هر فایل منبع در یک فایل هدف جداگانه با پسوند <code>.gz</code> فشرده می‌شود.</p>
 <p>روش‌های زیر همان کار <strong>gzip</strong> و <strong>gunzip</strong> در خط فرمان Unix را انجام می‌دهند:</p>
-<pre><code class="language-csharp">async Task GZip(string sourcefile, bool deleteSource = true)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">async</span> Task <span class="hljs-title">GZip</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> sourcefile, <span class="hljs-built_in">bool</span> deleteSource = <span class="hljs-literal">true</span></span>)</span>
 {
-    var gzip = $&quot;{sourcefile}.gz&quot;;
-    if (File.Exists(gzip))
-        throw new Exception(&quot;Gzip file already exists&quot;);
+    <span class="hljs-keyword">var</span> gzip = <span class="hljs-string">$&quot;<span class="hljs-subst">{sourcefile}</span>.gz&quot;</span>;
+    <span class="hljs-keyword">if</span> (File.Exists(gzip))
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Exception(<span class="hljs-string">&quot;Gzip file already exists&quot;</span>);
     
-    // فشرده‌سازی
-    using (FileStream inStream = File.Open(sourcefile, FileMode.Open))
-    using (FileStream outStream = new FileStream(gzip, FileMode.CreateNew))
-    using (GZipStream gzipStream = new GZipStream(outStream, CompressionMode.Compress))
-        await inStream.CopyToAsync(gzipStream); 
+    <span class="hljs-comment">// فشرده‌سازی</span>
+    <span class="hljs-keyword">using</span> (FileStream inStream = File.Open(sourcefile, FileMode.Open))
+    <span class="hljs-keyword">using</span> (FileStream outStream = <span class="hljs-keyword">new</span> FileStream(gzip, FileMode.CreateNew))
+    <span class="hljs-keyword">using</span> (GZipStream gzipStream = <span class="hljs-keyword">new</span> GZipStream(outStream, CompressionMode.Compress))
+        <span class="hljs-keyword">await</span> inStream.CopyToAsync(gzipStream); 
 
-    if (deleteSource) File.Delete(sourcefile);
+    <span class="hljs-keyword">if</span> (deleteSource) File.Delete(sourcefile);
 }
 
-async Task GUnzip(string gzipfile, bool deleteGzip = true)
+<span class="hljs-function"><span class="hljs-keyword">async</span> Task <span class="hljs-title">GUnzip</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> gzipfile, <span class="hljs-built_in">bool</span> deleteGzip = <span class="hljs-literal">true</span></span>)</span>
 {
-    if (Path.GetExtension(gzipfile) != &quot;.gz&quot;)
-        throw new Exception(&quot;Not a gzip file&quot;);
+    <span class="hljs-keyword">if</span> (Path.GetExtension(gzipfile) != <span class="hljs-string">&quot;.gz&quot;</span>)
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Exception(<span class="hljs-string">&quot;Not a gzip file&quot;</span>);
 
-    var uncompressedFile = gzipfile.Substring(0, gzipfile.Length - 3);
-    if (File.Exists(uncompressedFile))
-        throw new Exception(&quot;Destination file already exists&quot;);
+    <span class="hljs-keyword">var</span> uncompressedFile = gzipfile.Substring(<span class="hljs-number">0</span>, gzipfile.Length - <span class="hljs-number">3</span>);
+    <span class="hljs-keyword">if</span> (File.Exists(uncompressedFile))
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Exception(<span class="hljs-string">&quot;Destination file already exists&quot;</span>);
     
-    // دیکامپرشن
-    using (FileStream uncompressToStream = File.Open(uncompressedFile, FileMode.Create))
-    using (FileStream zipfileStream = File.Open(gzipfile, FileMode.Open))
-    using (var unzipStream = new GZipStream(zipfileStream, CompressionMode.Decompress))
-        await unzipStream.CopyToAsync(uncompressToStream);
+    <span class="hljs-comment">// دیکامپرشن</span>
+    <span class="hljs-keyword">using</span> (FileStream uncompressToStream = File.Open(uncompressedFile, FileMode.Create))
+    <span class="hljs-keyword">using</span> (FileStream zipfileStream = File.Open(gzipfile, FileMode.Open))
+    <span class="hljs-keyword">using</span> (<span class="hljs-keyword">var</span> unzipStream = <span class="hljs-keyword">new</span> GZipStream(zipfileStream, CompressionMode.Decompress))
+        <span class="hljs-keyword">await</span> unzipStream.CopyToAsync(uncompressToStream);
 
-    if (deleteGzip) File.Delete(gzipfile);
+    <span class="hljs-keyword">if</span> (deleteGzip) File.Delete(gzipfile);
 }
 </code></pre>
 <p>نمونه استفاده:</p>
-<pre><code class="language-csharp">await GZip(&quot;/tmp/myfile.txt&quot;);        // ایجاد /tmp/myfile.txt.gz
-await GUnzip(&quot;/tmp/myfile.txt.gz&quot;);   // بازسازی /tmp/myfile.txt
+<pre class="hljs"><code><span class="hljs-keyword">await</span> GZip(<span class="hljs-string">&quot;/tmp/myfile.txt&quot;</span>);        <span class="hljs-comment">// ایجاد /tmp/myfile.txt.gz</span>
+<span class="hljs-keyword">await</span> GUnzip(<span class="hljs-string">&quot;/tmp/myfile.txt.gz&quot;</span>);   <span class="hljs-comment">// بازسازی /tmp/myfile.txt</span>
 </code></pre>
 <hr>
 <h3>کار با فایل‌های ZIP 🗜️</h3>
@@ -1000,69 +960,69 @@ await GUnzip(&quot;/tmp/myfile.txt.gz&quot;);   // بازسازی /tmp/myfile.tx
 </li>
 </ul>
 <p>نمونه استفاده از <strong>CreateFromDirectory</strong> برای افزودن تمام فایل‌های یک دایرکتوری به ZIP:</p>
-<pre><code class="language-csharp">ZipFile.CreateFromDirectory(@&quot;d:\MyFolder&quot;, @&quot;d:\archive.zip&quot;);
+<pre class="hljs"><code>ZipFile.CreateFromDirectory(<span class="hljs-string">@&quot;d:\MyFolder&quot;</span>, <span class="hljs-string">@&quot;d:\archive.zip&quot;</span>);
 </code></pre>
 <p>برای استخراج ZIP به دایرکتوری:</p>
-<pre><code class="language-csharp">ZipFile.ExtractToDirectory(@&quot;d:\archive.zip&quot;, @&quot;d:\MyFolder&quot;);
+<pre class="hljs"><code>ZipFile.ExtractToDirectory(<span class="hljs-string">@&quot;d:\archive.zip&quot;</span>, <span class="hljs-string">@&quot;d:\MyFolder&quot;</span>);
 </code></pre>
 <blockquote>
 <p>از .NET 8 به بعد می‌توانید به جای مسیر فایل، یک Stream نیز مشخص کنید.</p>
 </blockquote>
 <p>هنگام فشرده‌سازی، می‌توانید مشخص کنید که بهینه‌سازی برای <strong>حجم فایل یا سرعت</strong> انجام شود و آیا نام دایرکتوری منبع در آرشیو لحاظ شود یا نه.</p>
 <p>برای دسترسی به ورودی‌های منفرد ZIP از <strong>Open</strong> استفاده می‌کنیم، که یک <strong>ZipArchive</strong> برمی‌گرداند. می‌توان فایل‌ها را از طریق <strong>Entries</strong> شمارش یا با <strong>GetEntry</strong> به‌صورت خاص یافت:</p>
-<pre><code class="language-csharp">using (ZipArchive zip = ZipFile.Open(@&quot;d:\zz.zip&quot;, ZipArchiveMode.Read))
-    foreach (ZipArchiveEntry entry in zip.Entries)
-        Console.WriteLine(entry.FullName + &quot; &quot; + entry.Length);
+<pre class="hljs"><code><span class="hljs-keyword">using</span> (ZipArchive zip = ZipFile.Open(<span class="hljs-string">@&quot;d:\zz.zip&quot;</span>, ZipArchiveMode.Read))
+    <span class="hljs-keyword">foreach</span> (ZipArchiveEntry entry <span class="hljs-keyword">in</span> zip.Entries)
+        Console.WriteLine(entry.FullName + <span class="hljs-string">&quot; &quot;</span> + entry.Length);
 </code></pre>
 <p><strong>ZipArchiveEntry</strong> همچنین متدهای <code>Delete</code>، <code>ExtractToFile</code> و <code>Open</code> را دارد. برای ایجاد ورودی جدید از <code>CreateEntry</code> یا متد اکستنشن <code>CreateEntryFromFile</code> استفاده می‌کنیم:</p>
-<pre><code class="language-csharp">byte[] data = File.ReadAllBytes(@&quot;d:\foo.dll&quot;); 
-using (ZipArchive zip = ZipFile.Open(@&quot;d:\zz.zip&quot;, ZipArchiveMode.Update))
-    zip.CreateEntry(@&quot;bin\X64\foo.dll&quot;).Open().Write(data, 0, data.Length);
+<pre class="hljs"><code><span class="hljs-built_in">byte</span>[] data = File.ReadAllBytes(<span class="hljs-string">@&quot;d:\foo.dll&quot;</span>); 
+<span class="hljs-keyword">using</span> (ZipArchive zip = ZipFile.Open(<span class="hljs-string">@&quot;d:\zz.zip&quot;</span>, ZipArchiveMode.Update))
+    zip.CreateEntry(<span class="hljs-string">@&quot;bin\X64\foo.dll&quot;</span>).Open().Write(data, <span class="hljs-number">0</span>, data.Length);
 </code></pre>
 <p>می‌توان تمام این کارها را کاملاً در حافظه انجام داد با استفاده از <strong>MemoryStream</strong> به جای مسیر فایل.</p>
 <hr>
 <h3>کار با فایل‌های Tar 📦🐧</h3>
 <p>کلاس‌های <code>System.Formats.Tar</code> (.NET 7 به بعد) از فرمت <strong>.tar</strong> پشتیبانی می‌کنند. این فرمت در Unix برای بسته‌بندی چندین فایل محبوب است.</p>
 <p>ایجاد یک فایل tar (tarball):</p>
-<pre><code class="language-csharp">TarFile.CreateFromDirectory(&quot;/tmp/testfolder&quot;, &quot;/tmp/test.tar&quot;, false);
+<pre class="hljs"><code>TarFile.CreateFromDirectory(<span class="hljs-string">&quot;/tmp/testfolder&quot;</span>, <span class="hljs-string">&quot;/tmp/test.tar&quot;</span>, <span class="hljs-literal">false</span>);
 </code></pre>
 <ul>
 <li>آرگومان سوم مشخص می‌کند که آیا نام دایرکتوری پایه در ورودی‌های آرشیو لحاظ شود یا خیر.</li>
 </ul>
 <p>استخراج tarball:</p>
-<pre><code class="language-csharp">TarFile.ExtractToDirectory(&quot;/tmp/test.tar&quot;, &quot;/tmp/testfolder&quot;, true);
+<pre class="hljs"><code>TarFile.ExtractToDirectory(<span class="hljs-string">&quot;/tmp/test.tar&quot;</span>, <span class="hljs-string">&quot;/tmp/testfolder&quot;</span>, <span class="hljs-literal">true</span>);
 </code></pre>
 <ul>
 <li>آرگومان سوم مشخص می‌کند که آیا فایل‌های موجود بازنویسی شوند یا خیر.</li>
 </ul>
 <p>هر دو متد امکان استفاده از <strong>Stream</strong> به جای مسیر فایل tar را نیز دارند.</p>
 <p>نمونه فشرده‌سازی tar به tar.gz با GZipStream:</p>
-<pre><code class="language-csharp">var ms = new MemoryStream();
-TarFile.CreateFromDirectory(&quot;/tmp/testfolder&quot;, ms, false);
-ms.Position = 0;
+<pre class="hljs"><code><span class="hljs-keyword">var</span> ms = <span class="hljs-keyword">new</span> MemoryStream();
+TarFile.CreateFromDirectory(<span class="hljs-string">&quot;/tmp/testfolder&quot;</span>, ms, <span class="hljs-literal">false</span>);
+ms.Position = <span class="hljs-number">0</span>;
 
-using (var fs = File.Create(&quot;/tmp/test.tar.gz&quot;))
-using (var gz = new GZipStream(fs, CompressionMode.Compress))
+<span class="hljs-keyword">using</span> (<span class="hljs-keyword">var</span> fs = File.Create(<span class="hljs-string">&quot;/tmp/test.tar.gz&quot;</span>))
+<span class="hljs-keyword">using</span> (<span class="hljs-keyword">var</span> gz = <span class="hljs-keyword">new</span> GZipStream(fs, CompressionMode.Compress))
     ms.CopyTo(gz);
 </code></pre>
 <ul>
 <li>این کار مفید است چون فرمت tar خودش فشرده‌سازی ندارد، بر خلاف zip.</li>
 </ul>
 <p>استخراج tar.gz:</p>
-<pre><code class="language-csharp">using (var fs = File.OpenRead(&quot;/tmp/test.tar.gz&quot;))
-using (var gz = new GZipStream(fs, CompressionMode.Decompress))
-    TarFile.ExtractToDirectory(gz, &quot;/tmp/testfolder&quot;, true);
+<pre class="hljs"><code><span class="hljs-keyword">using</span> (<span class="hljs-keyword">var</span> fs = File.OpenRead(<span class="hljs-string">&quot;/tmp/test.tar.gz&quot;</span>))
+<span class="hljs-keyword">using</span> (<span class="hljs-keyword">var</span> gz = <span class="hljs-keyword">new</span> GZipStream(fs, CompressionMode.Decompress))
+    TarFile.ExtractToDirectory(gz, <span class="hljs-string">&quot;/tmp/testfolder&quot;</span>, <span class="hljs-literal">true</span>);
 </code></pre>
 <p>همچنین می‌توانید با کلاس‌های <strong>TarReader</strong> و <strong>TarWriter</strong> به سطح API دقیق‌تری دسترسی داشته باشید. نمونه استفاده از <strong>TarReader</strong>:</p>
-<pre><code class="language-csharp">using (FileStream archiveStream = File.OpenRead(&quot;/tmp/test.tar&quot;))
-using (TarReader reader = new(archiveStream))
+<pre class="hljs"><code><span class="hljs-keyword">using</span> (FileStream archiveStream = File.OpenRead(<span class="hljs-string">&quot;/tmp/test.tar&quot;</span>))
+<span class="hljs-keyword">using</span> (TarReader reader = <span class="hljs-keyword">new</span>(archiveStream))
 {
-    while (true)
+    <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>)
     {
         TarEntry entry = reader.GetNextEntry();
-        if (entry == null) break;
-        Console.WriteLine($&quot;Entry {entry.Name} is {entry.DataStream.Length} bytes long&quot;);
-        entry.ExtractToFile(Path.Combine(&quot;/tmp/testfolder&quot;, entry.Name), true);
+        <span class="hljs-keyword">if</span> (entry == <span class="hljs-literal">null</span>) <span class="hljs-keyword">break</span>;
+        Console.WriteLine(<span class="hljs-string">$&quot;Entry <span class="hljs-subst">{entry.Name}</span> is <span class="hljs-subst">{entry.DataStream.Length}</span> bytes long&quot;</span>);
+        entry.ExtractToFile(Path.Combine(<span class="hljs-string">&quot;/tmp/testfolder&quot;</span>, entry.Name), <span class="hljs-literal">true</span>);
     }
 }
 </code></pre>
@@ -1082,25 +1042,25 @@ using (TarReader reader = new(archiveStream))
 <p>علاوه بر این، کلاس ایستای <strong>Path</strong> وجود دارد که هیچ عملی روی فایل یا دایرکتوری انجام نمی‌دهد؛ بلکه متدهایی برای <strong>دستکاری رشته مسیرها و نام فایل‌ها</strong> ارائه می‌کند و همچنین با فایل‌های موقت کمک می‌کند.</p>
 <h3>کلاس File 📁💻</h3>
 <p>کلاس <strong>File</strong> یک کلاس ایستا (static) است که تمام متدهای آن یک <strong>نام فایل</strong> می‌گیرند. نام فایل می‌تواند نسبی به دایرکتوری جاری یا کامل با مسیر دایرکتوری باشد. متدهای این کلاس (تمامی <strong>public</strong> و <strong>static</strong>) عبارت‌اند از:</p>
-<pre><code class="language-csharp">bool Exists(string path);                 // اگر فایل موجود باشد true برمی‌گرداند
-void Delete(string path);                 
-void Copy(string sourceFileName, string destFileName);
-void Move(string sourceFileName, string destFileName);
-void Replace(string sourceFileName, string destinationFileName,
-             string destinationBackupFileName);
-FileAttributes GetAttributes(string path);
-void SetAttributes(string path, FileAttributes fileAttributes);
-void Decrypt(string path);
-void Encrypt(string path);
-DateTime GetCreationTime(string path);      // نسخه UTC نیز وجود دارد
-DateTime GetLastAccessTime(string path);    // نسخه UTC نیز وجود دارد
-DateTime GetLastWriteTime(string path);
-void SetCreationTime(string path, DateTime creationTime);
-void SetLastAccessTime(string path, DateTime lastAccessTime);
-void SetLastWriteTime(string path, DateTime lastWriteTime);
-FileSecurity GetAccessControl(string path);
-FileSecurity GetAccessControl(string path, AccessControlSections includeSections);
-void SetAccessControl(string path, FileSecurity fileSecurity);
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-built_in">bool</span> <span class="hljs-title">Exists</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path</span>)</span>;                 <span class="hljs-comment">// اگر فایل موجود باشد true برمی‌گرداند</span>
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Delete</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path</span>)</span>;                 
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Copy</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> sourceFileName, <span class="hljs-built_in">string</span> destFileName</span>)</span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Move</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> sourceFileName, <span class="hljs-built_in">string</span> destFileName</span>)</span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Replace</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> sourceFileName, <span class="hljs-built_in">string</span> destinationFileName,
+             <span class="hljs-built_in">string</span> destinationBackupFileName</span>)</span>;
+<span class="hljs-function">FileAttributes <span class="hljs-title">GetAttributes</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path</span>)</span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">SetAttributes</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path, FileAttributes fileAttributes</span>)</span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Decrypt</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path</span>)</span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Encrypt</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path</span>)</span>;
+<span class="hljs-function">DateTime <span class="hljs-title">GetCreationTime</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path</span>)</span>;      <span class="hljs-comment">// نسخه UTC نیز وجود دارد</span>
+<span class="hljs-function">DateTime <span class="hljs-title">GetLastAccessTime</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path</span>)</span>;    <span class="hljs-comment">// نسخه UTC نیز وجود دارد</span>
+<span class="hljs-function">DateTime <span class="hljs-title">GetLastWriteTime</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path</span>)</span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">SetCreationTime</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path, DateTime creationTime</span>)</span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">SetLastAccessTime</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path, DateTime lastAccessTime</span>)</span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">SetLastWriteTime</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path, DateTime lastWriteTime</span>)</span>;
+<span class="hljs-function">FileSecurity <span class="hljs-title">GetAccessControl</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path</span>)</span>;
+<span class="hljs-function">FileSecurity <span class="hljs-title">GetAccessControl</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path, AccessControlSections includeSections</span>)</span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">SetAccessControl</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path, FileSecurity fileSecurity</span>)</span>;
 </code></pre>
 <ul>
 <li>متد <strong>Move</strong> اگر فایل مقصد وجود داشته باشد استثنا می‌اندازد؛ اما <strong>Replace</strong> این کار را نمی‌کند.</li>
@@ -1108,25 +1068,25 @@ void SetAccessControl(string path, FileSecurity fileSecurity);
 <li><strong>Delete</strong> اگر فایل <strong>read-only</strong> باشد یا مجوز حذف توسط سیستم‌عامل به فرآیند شما داده نشده باشد، استثنا <code>UnauthorizedAccessException</code> پرتاب می‌کند.</li>
 </ul>
 <p>تمام اعضای <strong>FileAttributes</strong> که توسط <code>GetAttributes</code> برگردانده می‌شوند:</p>
-<pre><code>Archive, Compressed, Device, Directory, Encrypted,
+<pre class="hljs"><code>Archive, Compressed, Device, Directory, Encrypted,
 Hidden, IntegritySystem, Normal, NoScrubData, NotContentIndexed, 
 Offline, ReadOnly, ReparsePoint, SparseFile, System, Temporary
 </code></pre>
 <p>این اعضا قابل ترکیب هستند. برای تغییر یک ویژگی فایل بدون تغییر سایر ویژگی‌ها:</p>
-<pre><code class="language-csharp">string filePath = &quot;test.txt&quot;;
+<pre class="hljs"><code><span class="hljs-built_in">string</span> filePath = <span class="hljs-string">&quot;test.txt&quot;</span>;
 FileAttributes fa = File.GetAttributes(filePath);
-if ((fa &amp; FileAttributes.ReadOnly) != 0)
+<span class="hljs-keyword">if</span> ((fa &amp; FileAttributes.ReadOnly) != <span class="hljs-number">0</span>)
 {
-    // از عملگر XOR (^) برای تغییر پرچم ReadOnly استفاده می‌کنیم
+    <span class="hljs-comment">// از عملگر XOR (^) برای تغییر پرچم ReadOnly استفاده می‌کنیم</span>
     fa ^= FileAttributes.ReadOnly;
     File.SetAttributes(filePath, fa);
 }
 
-// حالا می‌توانیم فایل را حذف کنیم
+<span class="hljs-comment">// حالا می‌توانیم فایل را حذف کنیم</span>
 File.Delete(filePath);
 </code></pre>
 <p>راه ساده‌تر با <strong>FileInfo</strong>:</p>
-<pre><code class="language-csharp">new FileInfo(&quot;test.txt&quot;).IsReadOnly = false;
+<pre class="hljs"><code><span class="hljs-keyword">new</span> FileInfo(<span class="hljs-string">&quot;test.txt&quot;</span>).IsReadOnly = <span class="hljs-literal">false</span>;
 </code></pre>
 <hr>
 <h3>ویژگی‌های فشرده‌سازی و رمزگذاری 🔒🗜️</h3>
@@ -1136,17 +1096,17 @@ File.Delete(filePath);
 <li>این نوع فشرده‌سازی و رمزگذاری <strong>شفاف</strong> است؛ به طوری که سیستم‌عامل تمام عملیات را انجام می‌دهد و شما می‌توانید داده‌ها را به صورت plain بخوانید و بنویسید.</li>
 <li>نمی‌توان با <code>SetAttributes</code> ویژگی‌های <strong>Compressed</strong> یا <strong>Encrypted</strong> را تغییر داد (اگر تلاش کنید، بدون خطا شکست می‌خورد).</li>
 </ul>
-<p>راه حل: برای رمزگذاری و رمزگشایی از متدهای <code>Encrypt()</code> و <code>Decrypt()</code> در کلاس <strong>File</strong> استفاده کنید.
+<p>راه حل: برای رمزگذاری و رمزگشایی از متدهای <code>Encrypt()</code> و <code>Decrypt()</code> در کلاس <strong>File</strong> استفاده کنید.<br>
 برای فشرده‌سازی، استفاده از WMI در <code>System.Management</code> راه حل است:</p>
-<pre><code class="language-csharp">static uint CompressFolder(string folder, bool recursive)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-built_in">uint</span> <span class="hljs-title">CompressFolder</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> folder, <span class="hljs-built_in">bool</span> recursive</span>)</span>
 {
-    string path = &quot;Win32_Directory.Name='&quot; + folder + &quot;'&quot;;
-    using (ManagementObject dir = new ManagementObject(path))
-    using (ManagementBaseObject p = dir.GetMethodParameters(&quot;CompressEx&quot;))
+    <span class="hljs-built_in">string</span> path = <span class="hljs-string">&quot;Win32_Directory.Name=&#x27;&quot;</span> + folder + <span class="hljs-string">&quot;&#x27;&quot;</span>;
+    <span class="hljs-keyword">using</span> (ManagementObject dir = <span class="hljs-keyword">new</span> ManagementObject(path))
+    <span class="hljs-keyword">using</span> (ManagementBaseObject p = dir.GetMethodParameters(<span class="hljs-string">&quot;CompressEx&quot;</span>))
     {
-        p[&quot;Recursive&quot;] = recursive;
-        using (ManagementBaseObject result = dir.InvokeMethod(&quot;CompressEx&quot;, p, null))
-            return (uint)result.Properties[&quot;ReturnValue&quot;].Value;
+        p[<span class="hljs-string">&quot;Recursive&quot;</span>] = recursive;
+        <span class="hljs-keyword">using</span> (ManagementBaseObject result = dir.InvokeMethod(<span class="hljs-string">&quot;CompressEx&quot;</span>, p, <span class="hljs-literal">null</span>))
+            <span class="hljs-keyword">return</span> (<span class="hljs-built_in">uint</span>)result.Properties[<span class="hljs-string">&quot;ReturnValue&quot;</span>].Value;
     }
 }
 </code></pre>
@@ -1156,31 +1116,31 @@ File.Delete(filePath);
 <p><strong>رمزگذاری شفاف</strong> بر پایه کلیدی ساخته شده از رمز عبور کاربر لاگین شده است. تغییر رمز عبور توسط کاربر معتبر مشکلی ایجاد نمی‌کند، اما اگر رمز توسط مدیر ریست شود، داده‌های فایل‌های رمزگذاری‌شده قابل بازیابی نخواهند بود.</p>
 <p><strong>NTFS</strong> این قابلیت‌ها را پشتیبانی می‌کند؛ اما <strong>CDFS</strong> (روی CD-ROM) و <strong>FAT</strong> (روی کارت‌های قابل حمل) پشتیبانی نمی‌کنند.</p>
 <p>برای تشخیص پشتیبانی یک حجم از فشرده‌سازی و رمزگذاری:</p>
-<pre><code class="language-csharp">using System;
-using System.IO;
-using System.Text;
-using System.ComponentModel;
-using System.Runtime.InteropServices;
+<pre class="hljs"><code><span class="hljs-keyword">using</span> System;
+<span class="hljs-keyword">using</span> System.IO;
+<span class="hljs-keyword">using</span> System.Text;
+<span class="hljs-keyword">using</span> System.ComponentModel;
+<span class="hljs-keyword">using</span> System.Runtime.InteropServices;
 
-class SupportsCompressionEncryption
+<span class="hljs-keyword">class</span> <span class="hljs-title">SupportsCompressionEncryption</span>
 {
-    const int SupportsCompression = 0x10;
-    const int SupportsEncryption = 0x20000;
+    <span class="hljs-keyword">const</span> <span class="hljs-built_in">int</span> SupportsCompression = <span class="hljs-number">0x10</span>;
+    <span class="hljs-keyword">const</span> <span class="hljs-built_in">int</span> SupportsEncryption = <span class="hljs-number">0x20000</span>;
 
-    [DllImport(&quot;Kernel32.dll&quot;, SetLastError = true)]
-    extern static bool GetVolumeInformation(string vol, StringBuilder name,
-        int nameSize, out uint serialNum, out uint maxNameLen, out uint flags,
-        StringBuilder fileSysName, int fileSysNameSize);
+    [<span class="hljs-meta">DllImport(<span class="hljs-string">&quot;Kernel32.dll&quot;</span>, SetLastError = true)</span>]
+    <span class="hljs-function"><span class="hljs-keyword">extern</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">GetVolumeInformation</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> vol, StringBuilder name,
+        <span class="hljs-built_in">int</span> nameSize, <span class="hljs-keyword">out</span> <span class="hljs-built_in">uint</span> serialNum, <span class="hljs-keyword">out</span> <span class="hljs-built_in">uint</span> maxNameLen, <span class="hljs-keyword">out</span> <span class="hljs-built_in">uint</span> flags,
+        StringBuilder fileSysName, <span class="hljs-built_in">int</span> fileSysNameSize</span>)</span>;
 
-    static void Main()
+    <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Main</span>()</span>
     {
-        uint serialNum, maxNameLen, flags;
-        bool ok = GetVolumeInformation(@&quot;C:\&quot;, null, 0, out serialNum,
-                                       out maxNameLen, out flags, null, 0);
-        if (!ok) throw new Win32Exception();
+        <span class="hljs-built_in">uint</span> serialNum, maxNameLen, flags;
+        <span class="hljs-built_in">bool</span> ok = GetVolumeInformation(<span class="hljs-string">@&quot;C:\&quot;</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">0</span>, <span class="hljs-keyword">out</span> serialNum,
+                                       <span class="hljs-keyword">out</span> maxNameLen, <span class="hljs-keyword">out</span> flags, <span class="hljs-literal">null</span>, <span class="hljs-number">0</span>);
+        <span class="hljs-keyword">if</span> (!ok) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Win32Exception();
 
-        bool canCompress = (flags &amp; SupportsCompression) != 0;
-        bool canEncrypt = (flags &amp; SupportsEncryption) != 0;
+        <span class="hljs-built_in">bool</span> canCompress = (flags &amp; SupportsCompression) != <span class="hljs-number">0</span>;
+        <span class="hljs-built_in">bool</span> canEncrypt = (flags &amp; SupportsEncryption) != <span class="hljs-number">0</span>;
     }
 }
 </code></pre>
@@ -1188,51 +1148,51 @@ class SupportsCompressionEncryption
 <h3>امنیت فایل در Windows 🔐</h3>
 <p>این ویژگی نیز <strong>ویندوزی</strong> است و نیازمند پکیج NuGet <code>System.IO.FileSystem.AccessControl</code> می‌باشد.</p>
 <p>کلاس <strong>FileSecurity</strong> اجازه می‌دهد مجوزهای سیستم‌عامل را برای کاربران و نقش‌ها مشاهده و تغییر دهید:</p>
-<pre><code class="language-csharp">using System;
-using System.IO;
-using System.Security.AccessControl;
-using System.Security.Principal;
+<pre class="hljs"><code><span class="hljs-keyword">using</span> System;
+<span class="hljs-keyword">using</span> System.IO;
+<span class="hljs-keyword">using</span> System.Security.AccessControl;
+<span class="hljs-keyword">using</span> System.Security.Principal;
 
-void ShowSecurity(FileSecurity sec)
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">ShowSecurity</span>(<span class="hljs-params">FileSecurity sec</span>)</span>
 {
-    AuthorizationRuleCollection rules = sec.GetAccessRules(true, true, typeof(NTAccount));
-    foreach (FileSystemAccessRule r in rules.Cast&lt;FileSystemAccessRule&gt;()
+    AuthorizationRuleCollection rules = sec.GetAccessRules(<span class="hljs-literal">true</span>, <span class="hljs-literal">true</span>, <span class="hljs-keyword">typeof</span>(NTAccount));
+    <span class="hljs-keyword">foreach</span> (FileSystemAccessRule r <span class="hljs-keyword">in</span> rules.Cast&lt;FileSystemAccessRule&gt;()
         .OrderBy(rule =&gt; rule.IdentityReference.Value))
     {
-        Console.WriteLine($&quot;  {r.IdentityReference.Value}&quot;);  // مثال: MyDomain/Joe
-        Console.WriteLine($&quot;    {r.FileSystemRights}: {r.AccessControlType}&quot;); // FullControl
+        Console.WriteLine(<span class="hljs-string">$&quot;  <span class="hljs-subst">{r.IdentityReference.Value}</span>&quot;</span>);  <span class="hljs-comment">// مثال: MyDomain/Joe</span>
+        Console.WriteLine(<span class="hljs-string">$&quot;    <span class="hljs-subst">{r.FileSystemRights}</span>: <span class="hljs-subst">{r.AccessControlType}</span>&quot;</span>); <span class="hljs-comment">// FullControl</span>
     }
 }
 
-var file = &quot;sectest.txt&quot;;
-File.WriteAllText(file, &quot;File security test.&quot;);
+<span class="hljs-keyword">var</span> <span class="hljs-keyword">file</span> = <span class="hljs-string">&quot;sectest.txt&quot;</span>;
+File.WriteAllText(<span class="hljs-keyword">file</span>, <span class="hljs-string">&quot;File security test.&quot;</span>);
 
-var sid = new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null);
-string usersAccount = sid.Translate(typeof(NTAccount)).ToString();
-Console.WriteLine($&quot;User: {usersAccount}&quot;);
+<span class="hljs-keyword">var</span> sid = <span class="hljs-keyword">new</span> SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, <span class="hljs-literal">null</span>);
+<span class="hljs-built_in">string</span> usersAccount = sid.Translate(<span class="hljs-keyword">typeof</span>(NTAccount)).ToString();
+Console.WriteLine(<span class="hljs-string">$&quot;User: <span class="hljs-subst">{usersAccount}</span>&quot;</span>);
 
-FileSecurity sec = new FileSecurity(file,
+FileSecurity sec = <span class="hljs-keyword">new</span> FileSecurity(<span class="hljs-keyword">file</span>,
     AccessControlSections.Owner |
     AccessControlSections.Group |
     AccessControlSections.Access);
 
-Console.WriteLine(&quot;AFTER CREATE:&quot;);
-ShowSecurity(sec); // BUILTIN\Users هنوز دسترسی Write ندارد
+Console.WriteLine(<span class="hljs-string">&quot;AFTER CREATE:&quot;</span>);
+ShowSecurity(sec); <span class="hljs-comment">// BUILTIN\Users هنوز دسترسی Write ندارد</span>
 
 sec.ModifyAccessRule(AccessControlModification.Add,
-    new FileSystemAccessRule(usersAccount, FileSystemRights.Write, AccessControlType.Allow),
-    out bool modified);
+    <span class="hljs-keyword">new</span> FileSystemAccessRule(usersAccount, FileSystemRights.Write, AccessControlType.Allow),
+    <span class="hljs-keyword">out</span> <span class="hljs-built_in">bool</span> modified);
 
-Console.WriteLine(&quot;AFTER MODIFY:&quot;);
-ShowSecurity(sec); // BUILTIN\Users اکنون دسترسی Write دارد
+Console.WriteLine(<span class="hljs-string">&quot;AFTER MODIFY:&quot;</span>);
+ShowSecurity(sec); <span class="hljs-comment">// BUILTIN\Users اکنون دسترسی Write دارد</span>
 </code></pre>
 <p>مثال‌های بیشتری در بخش <strong>Special Folders</strong> صفحه 730 ارائه شده است.</p>
 <hr>
 <h3>امنیت فایل در Unix 🐧</h3>
 <p>از <strong>.NET 7</strong> به بعد، کلاس <strong>File</strong> شامل متدهای <strong>GetUnixFileMode</strong> و <strong>SetUnixFileMode</strong> برای گرفتن و تعیین مجوز فایل‌ها در Unix است.</p>
 <p>همچنین متد <strong>Directory.CreateDirectory</strong> اورلود شده تا بتواند مجوز Unix را بپذیرد، و هنگام ایجاد فایل می‌توان مجوز را مشخص کرد:</p>
-<pre><code class="language-csharp">var fs = new FileStream(&quot;test.txt&quot;,
-    new FileStreamOptions
+<pre class="hljs"><code><span class="hljs-keyword">var</span> fs = <span class="hljs-keyword">new</span> FileStream(<span class="hljs-string">&quot;test.txt&quot;</span>,
+    <span class="hljs-keyword">new</span> FileStreamOptions
     {
         Mode = FileMode.Create,
         UnixCreateMode = UnixFileMode.UserRead | UnixFileMode.UserWrite
@@ -1241,20 +1201,20 @@ ShowSecurity(sec); // BUILTIN\Users اکنون دسترسی Write دارد
 <h3>کلاس Directory 📂💻</h3>
 <p>کلاس <strong>Directory</strong> یک کلاس ایستا (static) است که مجموعه‌ای از متدها مشابه کلاس <strong>File</strong> ارائه می‌دهد، از جمله: بررسی وجود دایرکتوری (<code>Exists</code>)، جابجایی (<code>Move</code>)، حذف (<code>Delete</code>)، دریافت/تنظیم زمان ایجاد یا آخرین دسترسی، و دریافت/تنظیم مجوزهای امنیتی.</p>
 <p>متدهای مهم آن عبارت‌اند از:</p>
-<pre><code class="language-csharp">string GetCurrentDirectory();                 // دایرکتوری جاری
-void   SetCurrentDirectory(string path);     // تنظیم دایرکتوری جاری
-DirectoryInfo CreateDirectory(string path);  // ایجاد دایرکتوری
-DirectoryInfo GetParent(string path);        // دایرکتوری والد
-string GetDirectoryRoot(string path);        // ریشه دایرکتوری
-string[] GetLogicalDrives();                 // درایوها یا mount points در Unix
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-built_in">string</span> <span class="hljs-title">GetCurrentDirectory</span>()</span>;                 <span class="hljs-comment">// دایرکتوری جاری</span>
+<span class="hljs-function"><span class="hljs-keyword">void</span>   <span class="hljs-title">SetCurrentDirectory</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path</span>)</span>;     <span class="hljs-comment">// تنظیم دایرکتوری جاری</span>
+<span class="hljs-function">DirectoryInfo <span class="hljs-title">CreateDirectory</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path</span>)</span>;  <span class="hljs-comment">// ایجاد دایرکتوری</span>
+<span class="hljs-function">DirectoryInfo <span class="hljs-title">GetParent</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path</span>)</span>;        <span class="hljs-comment">// دایرکتوری والد</span>
+<span class="hljs-function"><span class="hljs-built_in">string</span> <span class="hljs-title">GetDirectoryRoot</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path</span>)</span>;        <span class="hljs-comment">// ریشه دایرکتوری</span>
+<span class="hljs-function"><span class="hljs-built_in">string</span>[] <span class="hljs-title">GetLogicalDrives</span>()</span>;                 <span class="hljs-comment">// درایوها یا mount points در Unix</span>
 
-// بازگرداندن مسیرهای کامل
-string[] GetFiles(string path);
-string[] GetDirectories(string path);
-string[] GetFileSystemEntries(string path);
-IEnumerable&lt;string&gt; EnumerateFiles(string path);
-IEnumerable&lt;string&gt; EnumerateDirectories(string path);
-IEnumerable&lt;string&gt; EnumerateFileSystemEntries(string path);
+<span class="hljs-comment">// بازگرداندن مسیرهای کامل</span>
+<span class="hljs-function"><span class="hljs-built_in">string</span>[] <span class="hljs-title">GetFiles</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path</span>)</span>;
+<span class="hljs-function"><span class="hljs-built_in">string</span>[] <span class="hljs-title">GetDirectories</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path</span>)</span>;
+<span class="hljs-function"><span class="hljs-built_in">string</span>[] <span class="hljs-title">GetFileSystemEntries</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path</span>)</span>;
+<span class="hljs-function">IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; <span class="hljs-title">EnumerateFiles</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path</span>)</span>;
+<span class="hljs-function">IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; <span class="hljs-title">EnumerateDirectories</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path</span>)</span>;
+<span class="hljs-function">IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; <span class="hljs-title">EnumerateFileSystemEntries</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path</span>)</span>;
 </code></pre>
 <p>نکات مهم:</p>
 <ul>
@@ -1263,8 +1223,8 @@ IEnumerable&lt;string&gt; EnumerateFileSystemEntries(string path);
 <li>متدهای <code>*FileSystemEntries</code> ترکیبی از فایل‌ها و دایرکتوری‌ها هستند.</li>
 </ul>
 <p>ایجاد یک دایرکتوری تنها در صورت عدم وجود:</p>
-<pre><code class="language-csharp">if (!Directory.Exists(@&quot;d:\test&quot;))
-    Directory.CreateDirectory(@&quot;d:\test&quot;);
+<pre class="hljs"><code><span class="hljs-keyword">if</span> (!Directory.Exists(<span class="hljs-string">@&quot;d:\test&quot;</span>))
+    Directory.CreateDirectory(<span class="hljs-string">@&quot;d:\test&quot;</span>);
 </code></pre>
 <hr>
 <h3>FileInfo و DirectoryInfo 📝</h3>
@@ -1272,52 +1232,52 @@ IEnumerable&lt;string&gt; EnumerateFileSystemEntries(string path);
 <ul>
 <li><strong>FileInfo</strong> اکثر متدهای کلاس <strong>File</strong> را به صورت instance ارائه می‌دهد و ویژگی‌های اضافی مثل <code>Extension</code>، <code>Length</code>، <code>IsReadOnly</code> و <code>Directory</code> دارد:</li>
 </ul>
-<pre><code class="language-csharp">static string TestDirectory =&gt;
+<pre class="hljs"><code><span class="hljs-keyword">static</span> <span class="hljs-built_in">string</span> TestDirectory =&gt;
     RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-        ? @&quot;C:\Temp&quot; 
-        : &quot;/tmp&quot;;
+        ? <span class="hljs-string">@&quot;C:\Temp&quot;</span> 
+        : <span class="hljs-string">&quot;/tmp&quot;</span>;
 
 Directory.CreateDirectory(TestDirectory);
-FileInfo fi = new FileInfo(Path.Combine(TestDirectory, &quot;FileInfo.txt&quot;));
+FileInfo fi = <span class="hljs-keyword">new</span> FileInfo(Path.Combine(TestDirectory, <span class="hljs-string">&quot;FileInfo.txt&quot;</span>));
 
-Console.WriteLine(fi.Exists);          // false
-using (TextWriter w = fi.CreateText())
-    w.Write(&quot;Some text&quot;);
+Console.WriteLine(fi.Exists);          <span class="hljs-comment">// false</span>
+<span class="hljs-keyword">using</span> (TextWriter w = fi.CreateText())
+    w.Write(<span class="hljs-string">&quot;Some text&quot;</span>);
 
 fi.Refresh();
-Console.WriteLine(fi.Exists);          // true
-Console.WriteLine(fi.Name);            // FileInfo.txt
-Console.WriteLine(fi.FullName);        // c:\temp\FileInfo.txt (Windows) یا /tmp/FileInfo.txt (Unix)
-Console.WriteLine(fi.DirectoryName);   // c:\temp یا /tmp
-Console.WriteLine(fi.Directory.Name);  // temp
-Console.WriteLine(fi.Extension);       // .txt
-Console.WriteLine(fi.Length);          // 9
+Console.WriteLine(fi.Exists);          <span class="hljs-comment">// true</span>
+Console.WriteLine(fi.Name);            <span class="hljs-comment">// FileInfo.txt</span>
+Console.WriteLine(fi.FullName);        <span class="hljs-comment">// c:\temp\FileInfo.txt (Windows) یا /tmp/FileInfo.txt (Unix)</span>
+Console.WriteLine(fi.DirectoryName);   <span class="hljs-comment">// c:\temp یا /tmp</span>
+Console.WriteLine(fi.Directory.Name);  <span class="hljs-comment">// temp</span>
+Console.WriteLine(fi.Extension);       <span class="hljs-comment">// .txt</span>
+Console.WriteLine(fi.Length);          <span class="hljs-comment">// 9</span>
 fi.Encrypt();
-fi.Attributes ^= FileAttributes.Hidden; // تغییر پرچم Hidden
-fi.IsReadOnly = true;
-Console.WriteLine(fi.Attributes);      // ReadOnly, Archive, Hidden, Encrypted
-Console.WriteLine(fi.CreationTime);   // زمان ایجاد
-fi.MoveTo(Path.Combine(TestDirectory, &quot;FileInfoX.txt&quot;)); 
+fi.Attributes ^= FileAttributes.Hidden; <span class="hljs-comment">// تغییر پرچم Hidden</span>
+fi.IsReadOnly = <span class="hljs-literal">true</span>;
+Console.WriteLine(fi.Attributes);      <span class="hljs-comment">// ReadOnly, Archive, Hidden, Encrypted</span>
+Console.WriteLine(fi.CreationTime);   <span class="hljs-comment">// زمان ایجاد</span>
+fi.MoveTo(Path.Combine(TestDirectory, <span class="hljs-string">&quot;FileInfoX.txt&quot;</span>)); 
 </code></pre>
 <ul>
 <li><strong>DirectoryInfo</strong> برای پیمایش دایرکتوری‌ها و فایل‌ها مناسب است:</li>
 </ul>
-<pre><code class="language-csharp">DirectoryInfo di = new DirectoryInfo(@&quot;e:\photos&quot;);
+<pre class="hljs"><code>DirectoryInfo di = <span class="hljs-keyword">new</span> DirectoryInfo(<span class="hljs-string">@&quot;e:\photos&quot;</span>);
 
-foreach (FileInfo fi in di.GetFiles(&quot;*.jpg&quot;))
+<span class="hljs-keyword">foreach</span> (FileInfo fi <span class="hljs-keyword">in</span> di.GetFiles(<span class="hljs-string">&quot;*.jpg&quot;</span>))
     Console.WriteLine(fi.Name);
 
-foreach (DirectoryInfo subDir in di.GetDirectories())
+<span class="hljs-keyword">foreach</span> (DirectoryInfo subDir <span class="hljs-keyword">in</span> di.GetDirectories())
     Console.WriteLine(subDir.FullName);
 </code></pre>
 <hr>
 <h3>کلاس Path 🛤️</h3>
 <p>کلاس <strong>Path</strong> به صورت ایستا متدها و فیلدهایی برای کار با مسیرها و نام فایل‌ها ارائه می‌دهد.</p>
 <p>مثال:</p>
-<pre><code class="language-csharp">string dir  = @&quot;c:\mydir&quot;;    // یا /mydir
-string file = &quot;myfile.txt&quot;;
-string path = @&quot;c:\mydir\myfile.txt&quot;;    // یا /mydir/myfile.txt
-Directory.SetCurrentDirectory(@&quot;k:\demo&quot;);  // یا /demo
+<pre class="hljs"><code><span class="hljs-built_in">string</span> dir  = <span class="hljs-string">@&quot;c:\mydir&quot;</span>;    <span class="hljs-comment">// یا /mydir</span>
+<span class="hljs-built_in">string</span> <span class="hljs-keyword">file</span> = <span class="hljs-string">&quot;myfile.txt&quot;</span>;
+<span class="hljs-built_in">string</span> path = <span class="hljs-string">@&quot;c:\mydir\myfile.txt&quot;</span>;    <span class="hljs-comment">// یا /mydir/myfile.txt</span>
+Directory.SetCurrentDirectory(<span class="hljs-string">@&quot;k:\demo&quot;</span>);  <span class="hljs-comment">// یا /demo</span>
 </code></pre>
 <p>با این setup می‌توان از متدهای کلاس <strong>Path</strong> برای دستکاری رشته‌های مسیر و نام فایل استفاده کرد، مانند ترکیب مسیر، استخراج نام فایل، استخراج پسوند، و غیره.</p>
 <div align="center">
@@ -1332,25 +1292,25 @@ Directory.SetCurrentDirectory(@&quot;k:\demo&quot;);  // یا /demo
 </ul>
 <h4>۲. <strong>GetFullPath</strong></h4>
 <p>تبدیل مسیر نسبی به مسیر کامل (Absolute).</p>
-<pre><code class="language-csharp">string fullPath = Path.GetFullPath(@&quot;..\..\file.txt&quot;);
+<pre class="hljs"><code><span class="hljs-built_in">string</span> fullPath = Path.GetFullPath(<span class="hljs-string">@&quot;..\..\file.txt&quot;</span>);
 </code></pre>
 <h4>۳. <strong>GetRandomFileName و GetTempFileName</strong></h4>
 <ul>
 <li><code>GetRandomFileName</code> نام فایل ۸.۳ منحصر به‌فرد تولید می‌کند بدون ایجاد فایل واقعی.</li>
-<li><code>GetTempFileName</code> نام فایل موقت ایجاد می‌کند و فایل صفر بایتی در دایرکتوری temp می‌سازد.
+<li><code>GetTempFileName</code> نام فایل موقت ایجاد می‌کند و فایل صفر بایتی در دایرکتوری temp می‌سازد.<br>
 ⚠️ پس از استفاده باید آن را حذف کنید، در غیر این صورت پس از ۶۵۰۰۰ بار فراخوانی استثنا ایجاد می‌شود.</li>
 </ul>
 <p>اگر مشکل ایجاد شد، می‌توان از ترکیب <code>GetTempPath</code> با <code>GetRandomFileName</code> استفاده کرد، اما مراقب پر شدن هارد باشید.</p>
 <hr>
 <h3>پوشه‌های ویژه (Special Folders) 🌟</h3>
 <p>کلاس <strong>Path</strong> و <strong>Directory</strong> پوشه‌های ویژه مثل <strong>My Documents</strong> یا <strong>Program Files</strong> را پوشش نمی‌دهند. برای این کار از:</p>
-<pre><code class="language-csharp">string myDocPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+<pre class="hljs"><code><span class="hljs-built_in">string</span> myDocPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 </code></pre>
 <ul>
 <li><code>Environment.SpecialFolder</code> یک enum است که تمام پوشه‌های ویژه ویندوز را شامل می‌شود: AdminTools, ApplicationData, Fonts, StartMenu و غیره.</li>
 <li>مسیر runtime دات‌نت با:</li>
 </ul>
-<pre><code class="language-csharp">System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory()
+<pre class="hljs"><code>System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory()
 </code></pre>
 <h4>نکات مهم در ویندوز</h4>
 <ul>
@@ -1359,31 +1319,31 @@ Directory.SetCurrentDirectory(@&quot;k:\demo&quot;);  // یا /demo
 <li><strong>CommonApplicationData:</strong> داده‌های مشترک بین کاربران.</li>
 </ul>
 <p>رعایت استاندارد: ایجاد یک زیرپوشه با نام برنامه شما برای ذخیره‌سازی داده‌ها.</p>
-<pre><code class="language-csharp">string localAppDataPath = Path.Combine(
+<pre class="hljs"><code><span class="hljs-built_in">string</span> localAppDataPath = Path.Combine(
     Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-    &quot;MyCoolApplication&quot;
+    <span class="hljs-string">&quot;MyCoolApplication&quot;</span>
 );
-if (!Directory.Exists(localAppDataPath))
+<span class="hljs-keyword">if</span> (!Directory.Exists(localAppDataPath))
     Directory.CreateDirectory(localAppDataPath);
 </code></pre>
 <p>⚠️ نکته: اگر برنامه با سطح دسترسی مدیر اجرا شود و پوشه‌ها در <code>CommonApplicationData</code> ایجاد شوند، کاربران با دسترسی محدود ممکن است نتوانند فایل‌ها را بعداً تغییر دهند. راه‌حل: ایجاد پوشه‌ها با مجوز مناسب در فرآیند نصب.</p>
 <hr>
 <h3>Querying Volume Information 💽</h3>
 <p>برای دریافت اطلاعات درایوها از <strong>DriveInfo</strong> استفاده می‌کنیم:</p>
-<pre><code class="language-csharp">DriveInfo c = new DriveInfo(&quot;C&quot;); // یا &quot;/&quot; در Unix
-long totalSize = c.TotalSize;
-long freeBytes = c.TotalFreeSpace;
-long freeToMe  = c.AvailableFreeSpace;
+<pre class="hljs"><code>DriveInfo c = <span class="hljs-keyword">new</span> DriveInfo(<span class="hljs-string">&quot;C&quot;</span>); <span class="hljs-comment">// یا &quot;/&quot; در Unix</span>
+<span class="hljs-built_in">long</span> totalSize = c.TotalSize;
+<span class="hljs-built_in">long</span> freeBytes = c.TotalFreeSpace;
+<span class="hljs-built_in">long</span> freeToMe  = c.AvailableFreeSpace;
 
-foreach (DriveInfo d in DriveInfo.GetDrives())
+<span class="hljs-keyword">foreach</span> (DriveInfo d <span class="hljs-keyword">in</span> DriveInfo.GetDrives())
 {
-    Console.WriteLine(d.Name);          // C:\
-    Console.WriteLine(d.DriveType);     // Fixed
-    Console.WriteLine(d.RootDirectory); // C:\
-    if (d.IsReady)
+    Console.WriteLine(d.Name);          <span class="hljs-comment">// C:\</span>
+    Console.WriteLine(d.DriveType);     <span class="hljs-comment">// Fixed</span>
+    Console.WriteLine(d.RootDirectory); <span class="hljs-comment">// C:\</span>
+    <span class="hljs-keyword">if</span> (d.IsReady)
     {
-        Console.WriteLine(d.VolumeLabel); // برچسب درایو
-        Console.WriteLine(d.DriveFormat); // NTFS, FAT و غیره
+        Console.WriteLine(d.VolumeLabel); <span class="hljs-comment">// برچسب درایو</span>
+        Console.WriteLine(d.DriveFormat); <span class="hljs-comment">// NTFS, FAT و غیره</span>
     }
 }
 </code></pre>
@@ -1398,34 +1358,34 @@ foreach (DriveInfo d in DriveInfo.GetDrives())
 <li>رویدادهایی دارد که هنگام ایجاد، تغییر، حذف، تغییر نام یا تغییر ویژگی فایل/دایرکتوری فعال می‌شوند.</li>
 </ul>
 <p>مثال:</p>
-<pre><code class="language-csharp">Watch(GetTestDirectory(), &quot;*.txt&quot;, true);
+<pre class="hljs"><code>Watch(GetTestDirectory(), <span class="hljs-string">&quot;*.txt&quot;</span>, <span class="hljs-literal">true</span>);
 
-void Watch(string path, string filter, bool includeSubDirs)
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Watch</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> path, <span class="hljs-built_in">string</span> filter, <span class="hljs-built_in">bool</span> includeSubDirs</span>)</span>
 {
-    using var watcher = new FileSystemWatcher(path, filter);
+    <span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> watcher = <span class="hljs-keyword">new</span> FileSystemWatcher(path, filter);
     watcher.Created += FileCreatedChangedDeleted;
     watcher.Changed += FileCreatedChangedDeleted;
     watcher.Deleted += FileCreatedChangedDeleted;
     watcher.Renamed += FileRenamed;
     watcher.Error   += FileError;
     watcher.IncludeSubdirectories = includeSubDirs;
-    watcher.EnableRaisingEvents = true;
+    watcher.EnableRaisingEvents = <span class="hljs-literal">true</span>;
 
-    Console.WriteLine(&quot;Listening for events - press &lt;enter&gt; to end&quot;);
+    Console.WriteLine(<span class="hljs-string">&quot;Listening for events - press &lt;enter&gt; to end&quot;</span>);
     Console.ReadLine();
 }
 
-void FileCreatedChangedDeleted(object o, FileSystemEventArgs e)
-    =&gt; Console.WriteLine(&quot;File {0} has been {1}&quot;, e.FullPath, e.ChangeType);
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">FileCreatedChangedDeleted</span>(<span class="hljs-params"><span class="hljs-built_in">object</span> o, FileSystemEventArgs e</span>)</span>
+    =&gt; Console.WriteLine(<span class="hljs-string">&quot;File {0} has been {1}&quot;</span>, e.FullPath, e.ChangeType);
 
-void FileRenamed(object o, RenamedEventArgs e)
-    =&gt; Console.WriteLine(&quot;Renamed: {0}-&gt;{1}&quot;, e.OldFullPath, e.FullPath);
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">FileRenamed</span>(<span class="hljs-params"><span class="hljs-built_in">object</span> o, RenamedEventArgs e</span>)</span>
+    =&gt; Console.WriteLine(<span class="hljs-string">&quot;Renamed: {0}-&gt;{1}&quot;</span>, e.OldFullPath, e.FullPath);
 
-void FileError(object o, ErrorEventArgs e)
-    =&gt; Console.WriteLine(&quot;Error: &quot; + e.GetException().Message);
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">FileError</span>(<span class="hljs-params"><span class="hljs-built_in">object</span> o, ErrorEventArgs e</span>)</span>
+    =&gt; Console.WriteLine(<span class="hljs-string">&quot;Error: &quot;</span> + e.GetException().Message);
 
-string GetTestDirectory() =&gt;
-    RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? @&quot;C:\Temp&quot; : &quot;/tmp&quot;;
+<span class="hljs-function"><span class="hljs-built_in">string</span> <span class="hljs-title">GetTestDirectory</span>()</span> =&gt;
+    RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? <span class="hljs-string">@&quot;C:\Temp&quot;</span> : <span class="hljs-string">&quot;/tmp&quot;</span>;
 </code></pre>
 <p>نکات مهم:</p>
 <ul>
@@ -1461,18 +1421,18 @@ string GetTestDirectory() =&gt;
 </li>
 </ul>
 <p>برای تشخیص اینکه برنامه با دسترسی مدیر اجرا می‌شود:</p>
-<pre><code class="language-csharp">[DllImport(&quot;libc&quot;)]
-public static extern uint getuid();
+<pre class="hljs"><code>[<span class="hljs-meta">DllImport(<span class="hljs-string">&quot;libc&quot;</span>)</span>]
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">extern</span> <span class="hljs-built_in">uint</span> <span class="hljs-title">getuid</span>()</span>;
 
-static bool IsRunningAsAdmin()
+<span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">IsRunningAsAdmin</span>()</span>
 {
-    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+    <span class="hljs-keyword">if</span> (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
     {
-        using var identity = WindowsIdentity.GetCurrent();
-        var principal = new WindowsPrincipal(identity);
-        return principal.IsInRole(WindowsBuiltInRole.Administrator);
+        <span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> identity = WindowsIdentity.GetCurrent();
+        <span class="hljs-keyword">var</span> principal = <span class="hljs-keyword">new</span> WindowsPrincipal(identity);
+        <span class="hljs-keyword">return</span> principal.IsInRole(WindowsBuiltInRole.Administrator);
     }
-    return getuid() == 0;
+    <span class="hljs-keyword">return</span> getuid() == <span class="hljs-number">0</span>;
 }
 </code></pre>
 <ul>
@@ -1498,21 +1458,21 @@ static bool IsRunningAsAdmin()
 </ul>
 <hr>
 <h4>۴. <strong>مکان‌های پیشنهادی ذخیره‌سازی فایل‌ها</strong></h4>
-<pre><code class="language-csharp">string docsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-string path = Path.Combine(docsFolder, &quot;test.txt&quot;);
+<pre class="hljs"><code><span class="hljs-built_in">string</span> docsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+<span class="hljs-built_in">string</span> path = Path.Combine(docsFolder, <span class="hljs-string">&quot;test.txt&quot;</span>);
 
-string configFolder = Path.Combine(
-    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), // برای کاربر فعلی
-    &quot;MyApp&quot;
+<span class="hljs-built_in">string</span> configFolder = Path.Combine(
+    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), <span class="hljs-comment">// برای کاربر فعلی</span>
+    <span class="hljs-string">&quot;MyApp&quot;</span>
 );
-if (!Directory.Exists(configFolder))
+<span class="hljs-keyword">if</span> (!Directory.Exists(configFolder))
     Directory.CreateDirectory(configFolder);
 </code></pre>
 <p>⚠️ توجه: استفاده از <code>CommonApplicationData</code> برای دسترسی همه کاربران، باید با تنظیم مجوزها همراه باشد.</p>
 <hr>
 <h4>۵. <strong>Elevation مدیریتی و Virtualization ویندوز</strong></h4>
 <p>با <strong>Application Manifest</strong> می‌توانید درخواست دسترسی مدیر کنید:</p>
-<pre><code class="language-xml">&lt;requestedExecutionLevel level=&quot;requireAdministrator&quot; /&gt;
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">requestedExecutionLevel</span> <span class="hljs-attr">level</span>=<span class="hljs-string">&quot;requireAdministrator&quot;</span> /&gt;</span>
 </code></pre>
 <ul>
 <li><code>asInvoker</code>: برنامه بدون دسترسی مدیر اجرا شود و Virtualization غیرفعال است.</li>
@@ -1556,12 +1516,12 @@ if (!Directory.Exists(configFolder))
 <li>یک <code>MemoryMappedFile</code> بسازید و فایل را به آن بدهید.</li>
 <li>از <code>CreateViewAccessor</code> برای ایجاد <strong>View Accessor</strong> استفاده کنید.</li>
 </ol>
-<pre><code class="language-csharp">File.WriteAllBytes(&quot;long.bin&quot;, new byte[1_000_000]);
-using MemoryMappedFile mmf = MemoryMappedFile.CreateFromFile(&quot;long.bin&quot;);
-using MemoryMappedViewAccessor accessor = mmf.CreateViewAccessor();
+<pre class="hljs"><code>File.WriteAllBytes(<span class="hljs-string">&quot;long.bin&quot;</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">byte</span>[<span class="hljs-number">1</span>_000_000]);
+<span class="hljs-keyword">using</span> MemoryMappedFile mmf = MemoryMappedFile.CreateFromFile(<span class="hljs-string">&quot;long.bin&quot;</span>);
+<span class="hljs-keyword">using</span> MemoryMappedViewAccessor accessor = mmf.CreateViewAccessor();
 
-accessor.Write(500_000, (byte)77);
-Console.WriteLine(accessor.ReadByte(500_000));  // 77
+accessor.Write(<span class="hljs-number">500</span>_000, (<span class="hljs-built_in">byte</span>)<span class="hljs-number">77</span>);
+Console.WriteLine(accessor.ReadByte(<span class="hljs-number">500</span>_000));  <span class="hljs-comment">// 77</span>
 </code></pre>
 <ul>
 <li>می‌توان نام Map و ظرفیت مشخص کرد تا حافظه به اشتراک گذاشته شود یا اندازه فایل بزرگ‌تر شود.</li>
@@ -1572,16 +1532,16 @@ Console.WriteLine(accessor.ReadByte(500_000));  // 77
 <li>یک فرآیند <code>MemoryMappedFile.CreateNew</code> ایجاد می‌کند.</li>
 <li>فرآیندهای دیگر با <code>OpenExisting</code> به همان حافظه دسترسی دارند.</li>
 </ul>
-<pre><code class="language-csharp">// Writer
-using var mmFile = MemoryMappedFile.CreateNew(&quot;Demo&quot;, 500);
-using var accessor = mmFile.CreateViewAccessor();
-accessor.Write(0, 12345);
-Console.ReadLine(); // حافظه را زنده نگه می‌دارد
+<pre class="hljs"><code><span class="hljs-comment">// Writer</span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> mmFile = MemoryMappedFile.CreateNew(<span class="hljs-string">&quot;Demo&quot;</span>, <span class="hljs-number">500</span>);
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> accessor = mmFile.CreateViewAccessor();
+accessor.Write(<span class="hljs-number">0</span>, <span class="hljs-number">12345</span>);
+Console.ReadLine(); <span class="hljs-comment">// حافظه را زنده نگه می‌دارد</span>
 
-// Reader (فرآیند دیگر)
-using var mmFile = MemoryMappedFile.OpenExisting(&quot;Demo&quot;);
-using var accessor = mmFile.CreateViewAccessor();
-Console.WriteLine(accessor.ReadInt32(0)); // 12345
+<span class="hljs-comment">// Reader (فرآیند دیگر)</span>
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> mmFile = MemoryMappedFile.OpenExisting(<span class="hljs-string">&quot;Demo&quot;</span>);
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> accessor = mmFile.CreateViewAccessor();
+Console.WriteLine(accessor.ReadInt32(<span class="hljs-number">0</span>)); <span class="hljs-comment">// 12345</span>
 </code></pre>
 <hr>
 <h4>۳. اشتراک حافظه بین فرآیندها در Windows و Unix</h4>
@@ -1589,15 +1549,15 @@ Console.WriteLine(accessor.ReadInt32(0)); // 12345
 <li>فایل را با <code>FileStream</code> باز کنید و اجازه خواندن/نوشتن مشترک بدهید (<code>FileShare.ReadWrite</code>).</li>
 <li>سپس <code>MemoryMappedFile.CreateFromFile</code> بسازید.</li>
 </ul>
-<pre><code class="language-csharp">var file = Path.Combine(TestDirectory, &quot;interprocess.bin&quot;);
-File.WriteAllBytes(file, new byte[100]);
+<pre class="hljs"><code><span class="hljs-keyword">var</span> <span class="hljs-keyword">file</span> = Path.Combine(TestDirectory, <span class="hljs-string">&quot;interprocess.bin&quot;</span>);
+File.WriteAllBytes(<span class="hljs-keyword">file</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">byte</span>[<span class="hljs-number">100</span>]);
 
-using FileStream fs = new FileStream(file, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-using MemoryMappedFile mmf = MemoryMappedFile.CreateFromFile(fs, null, fs.Length, MemoryMappedFileAccess.ReadWrite, HandleInheritability.None, true);
-using MemoryMappedViewAccessor accessor = mmf.CreateViewAccessor();
-accessor.Write(0, 12345);
+<span class="hljs-keyword">using</span> FileStream fs = <span class="hljs-keyword">new</span> FileStream(<span class="hljs-keyword">file</span>, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+<span class="hljs-keyword">using</span> MemoryMappedFile mmf = MemoryMappedFile.CreateFromFile(fs, <span class="hljs-literal">null</span>, fs.Length, MemoryMappedFileAccess.ReadWrite, HandleInheritability.None, <span class="hljs-literal">true</span>);
+<span class="hljs-keyword">using</span> MemoryMappedViewAccessor accessor = mmf.CreateViewAccessor();
+accessor.Write(<span class="hljs-number">0</span>, <span class="hljs-number">12345</span>);
 Console.ReadLine();
-File.Delete(file);
+File.Delete(<span class="hljs-keyword">file</span>);
 </code></pre>
 <hr>
 <h4>۴. کار با View Accessor</h4>
@@ -1605,41 +1565,41 @@ File.Delete(file);
 <li><code>Read*</code> و <code>Write*</code> برای <strong>نوع‌های عددی، bool، char</strong> و آرایه‌ها/structهای Value Type استفاده می‌شوند.</li>
 <li>برای رشته‌ها، باید ابتدا آن‌ها را به آرایه بایت تبدیل کنید.</li>
 </ul>
-<pre><code class="language-csharp">byte[] data = Encoding.UTF8.GetBytes(&quot;This is a test&quot;);
-accessor.Write(0, data.Length);
-accessor.WriteArray(4, data, 0, data.Length);
+<pre class="hljs"><code><span class="hljs-built_in">byte</span>[] data = Encoding.UTF8.GetBytes(<span class="hljs-string">&quot;This is a test&quot;</span>);
+accessor.Write(<span class="hljs-number">0</span>, data.Length);
+accessor.WriteArray(<span class="hljs-number">4</span>, data, <span class="hljs-number">0</span>, data.Length);
 
-// خواندن مجدد
-byte[] readData = new byte[accessor.ReadInt32(0)];
-accessor.ReadArray(4, readData, 0, readData.Length);
-Console.WriteLine(Encoding.UTF8.GetString(readData)); // This is a test
+<span class="hljs-comment">// خواندن مجدد</span>
+<span class="hljs-built_in">byte</span>[] readData = <span class="hljs-keyword">new</span> <span class="hljs-built_in">byte</span>[accessor.ReadInt32(<span class="hljs-number">0</span>)];
+accessor.ReadArray(<span class="hljs-number">4</span>, readData, <span class="hljs-number">0</span>, readData.Length);
+Console.WriteLine(Encoding.UTF8.GetString(readData)); <span class="hljs-comment">// This is a test</span>
 </code></pre>
 <ul>
 <li>کار با struct:</li>
 </ul>
-<pre><code class="language-csharp">struct Data { public int X, Y; }
-var data = new Data { X = 123, Y = 456 };
-accessor.Write(0, ref data);
-accessor.Read(0, out data);
-Console.WriteLine(data.X + &quot; &quot; + data.Y); // 123 456
+<pre class="hljs"><code><span class="hljs-keyword">struct</span> Data { <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> X, Y; }
+<span class="hljs-keyword">var</span> data = <span class="hljs-keyword">new</span> Data { X = <span class="hljs-number">123</span>, Y = <span class="hljs-number">456</span> };
+accessor.Write(<span class="hljs-number">0</span>, <span class="hljs-keyword">ref</span> data);
+accessor.Read(<span class="hljs-number">0</span>, <span class="hljs-keyword">out</span> data);
+Console.WriteLine(data.X + <span class="hljs-string">&quot; &quot;</span> + data.Y); <span class="hljs-comment">// 123 456</span>
 </code></pre>
 <hr>
 <h4>۵. بهینه‌سازی عملکرد با اشاره‌گرها (Unsafe)</h4>
 <ul>
 <li>استفاده از <code>SafeMemoryMappedViewHandle.AcquirePointer</code> بسیار سریع‌تر از <code>Read/Write</code> است، مخصوصاً برای داده‌های بزرگ:</li>
 </ul>
-<pre><code class="language-csharp">unsafe
+<pre class="hljs"><code><span class="hljs-keyword">unsafe</span>
 {
-    byte* pointer = null;
-    try
+    <span class="hljs-built_in">byte</span>* pointer = <span class="hljs-literal">null</span>;
+    <span class="hljs-keyword">try</span>
     {
-        accessor.SafeMemoryMappedViewHandle.AcquirePointer(ref pointer);
-        int* intPointer = (int*)pointer;
-        Console.WriteLine(*intPointer); // 123
+        accessor.SafeMemoryMappedViewHandle.AcquirePointer(<span class="hljs-keyword">ref</span> pointer);
+        <span class="hljs-built_in">int</span>* intPointer = (<span class="hljs-built_in">int</span>*)pointer;
+        Console.WriteLine(*intPointer); <span class="hljs-comment">// 123</span>
     }
-    finally
+    <span class="hljs-keyword">finally</span>
     {
-        if (pointer != null)
+        <span class="hljs-keyword">if</span> (pointer != <span class="hljs-literal">null</span>)
             accessor.SafeMemoryMappedViewHandle.ReleasePointer();
     }
 }
@@ -1647,55 +1607,9 @@ Console.WriteLine(data.X + &quot; &quot; + data.Y); // 123 456
 <ul>
 <li>نیاز به فعال کردن unsafe code در فایل <code>.csproj</code>:</li>
 </ul>
-<pre><code class="language-xml">&lt;PropertyGroup&gt;
-  &lt;AllowUnsafeBlocks&gt;true&lt;/AllowUnsafeBlocks&gt;
-&lt;/PropertyGroup&gt;
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">PropertyGroup</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">AllowUnsafeBlocks</span>&gt;</span>true<span class="hljs-tag">&lt;/<span class="hljs-name">AllowUnsafeBlocks</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">PropertyGroup</span>&gt;</span>
 </code></pre>
 <p>دلیل اصلی برتری عملکرد استفاده از <strong>اشاره‌گرها (pointers)</strong> وقتی با ساختارهای بزرگ کار می‌کنیم این است که اشاره‌گرها اجازه می‌دهند مستقیماً با داده‌های خام (raw data) کار کنیم، بدون اینکه مجبور باشیم از متدهای <code>Read</code> و <code>Write</code> برای کپی کردن داده‌ها بین حافظه <strong>مدیریت‌شده (managed)</strong> و <strong>مدیریت‌نشده (unmanaged)</strong> استفاده کنیم.</p>
 <p>این کار باعث صرفه‌جویی قابل‌توجهی در زمان و منابع می‌شود، به‌ویژه وقتی حجم داده‌ها زیاد باشد. این موضوع در <strong>فصل ۲۴</strong> کتاب به‌طور کامل بررسی شده است.</p>
-
-  </main>
-
-  <!-- فوتر مشترک -->
-  <footer class="footer">
-    <div class="container">
-      <p>
-        <img src="/icone/copyright.svg" alt="کپی‌رایت" width="14" height="14"
-             style="vertical-align:middle;margin-inline:4px">
-        <span id="y"></span> Gitab — برای توسعه‌دهندگان
-      </p>
-    </div>
-  </footer>
-
-  <!-- سال + اسکریپت تم -->
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
-
-    (() => {
-      const root = document.documentElement;
-      const btn = document.getElementById('themeToggle');
-      const KEY = 'gitab-theme';
-      const media = window.matchMedia('(prefers-color-scheme: dark)');
-      const getEffective = s => s === 'auto' ? (media.matches ? 'dark' : 'light') : s;
-      function updateTheme(s) {
-        root.setAttribute('data-theme', s);
-        const mode = getEffective(s);
-        root.dataset.colorMode = mode;
-        btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
-      }
-      const saved = localStorage.getItem(KEY) || 'auto';
-      updateTheme(saved);
-      btn.addEventListener('click', () => {
-        const curr = localStorage.getItem(KEY) || 'auto';
-        const next = curr === 'auto' ? 'dark' : curr === 'dark' ? 'light' : 'auto';
-        localStorage.setItem(KEY, next);
-        updateTheme(next);
-      });
-      media.addEventListener('change', () => {
-        if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
-      });
-      window.addEventListener('DOMContentLoaded', () => updateTheme(saved));
-    })();
-  </script>
-</body>
-</html>

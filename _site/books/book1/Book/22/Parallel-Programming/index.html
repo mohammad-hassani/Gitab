@@ -1,44 +1,4 @@
-<!doctype html>
-<html lang="fa" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gitab | کتابخانهٔ ترجمه‌های دات‌نت و سی شارپ</title>
-  <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
-  <link rel="stylesheet" href="/styles/main.css">
-</head>
-<body>
-  <!-- هدر مشترک -->
-  <header class="header">
-    <div class="container nav-wrap">
-      <a class="brand" href="/">
-        <img src="/icone/logo.svg" alt="Gitab" width="28" height="28">
-        <span>Gitab</span>
-      </a>
-
-      <nav class="nav">
-        <a href="/">خانه</a>
-        <a href="/books/list-books">کتاب‌ها</a>
-        <a href="#">همکاری</a>
-        <a href="#">درباره‌ما</a>
-      </nav>
-
-     <div class="nav-actions">
-  <button id="themeToggle" class="icon-btn theme-btn" aria-label="تغییر حالت">
-    <img class="icon-sun" src="/icone/sun.svg" alt="روشن">
-    <img class="icon-moon" src="/icone/moon.svg" alt="تاریک">
-  </button>
-
-  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
-    <img src="/icone/github.svg" alt="GitHub">
-  </a>
-</div>
-
-  </header>
-
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل بیست و دوم:  برنامه‌نویسی موازی (Parallel Programming)</h1>
+<h1>فصل بیست و دوم:  برنامه‌نویسی موازی (Parallel Programming)</h1>
 <p>در این فصل، ما به <strong>APIها</strong> و ساختارهای چندنخی (multithreading) می‌پردازیم که با هدف بهره‌برداری از پردازنده‌های چند‌هسته‌ای طراحی شده‌اند:</p>
 <ul>
 <li><strong>Parallel LINQ (PLINQ)</strong></li>
@@ -46,7 +6,7 @@
 <li><strong>ساختارهای task parallelism</strong></li>
 <li><strong>مجموعه‌های concurrent</strong></li>
 </ul>
-<p>این ساختارها در مجموع (به‌صورت غیررسمی) با عنوان <strong>Parallel Framework (PFX)</strong> شناخته می‌شوند.
+<p>این ساختارها در مجموع (به‌صورت غیررسمی) با عنوان <strong>Parallel Framework (PFX)</strong> شناخته می‌شوند.<br>
 کلاس <strong>Parallel</strong> همراه با ساختارهای <strong>task parallelism</strong> تحت عنوان <strong>Task Parallel Library (TPL)</strong> نامیده می‌شوند.</p>
 <p>پیش از مطالعه‌ی این فصل، لازم است با مفاهیم پایه‌ای در فصل ۱۴ آشنا باشید—به‌ویژه <strong>locking</strong>، <strong>ایمنی نخ‌ها (thread safety)</strong> و کلاس <strong>Task</strong>.</p>
 <p>🔧 علاوه بر این‌ها، .NET مجموعه‌ای از APIهای تخصصی دیگر را برای کمک به برنامه‌نویسی موازی و ناهمگام ارائه می‌دهد:</p>
@@ -117,7 +77,7 @@
 <h3>مجموعه‌های Concurrent و Spinning Primitives ⚙️</h3>
 <p><strong>مجموعه‌های concurrent</strong> و <strong>spinning primitives</strong> به شما در فعالیت‌های سطح پایین‌تر برنامه‌نویسی موازی کمک می‌کنند. اهمیت این ابزارها از آنجاست که <strong>PFX</strong> نه‌تنها برای سخت‌افزار امروزی بلکه برای نسل‌های آینده‌ی پردازنده‌ها با تعداد هسته‌های بسیار بیشتر طراحی شده است.</p>
 <p>فرض کنید باید یک توده چوب خردشده را جابه‌جا کنید و ۳۲ کارگر در اختیار دارید؛ بزرگ‌ترین چالش این است که کارگران بدون مزاحمت برای یکدیگر بتوانند کار کنند. دقیقا همین موضوع در تقسیم یک الگوریتم بین ۳۲ هسته رخ می‌دهد: اگر از <strong>lockهای معمولی</strong> برای محافظت از منابع مشترک استفاده شود، قفل شدن‌ها (blocking) باعث می‌شوند تنها بخشی از هسته‌ها واقعاً فعال باشند.</p>
-<p>🔑 مجموعه‌های concurrent به‌طور خاص برای دسترسی‌های بسیار هم‌زمان تنظیم شده‌اند، با تمرکز بر <strong>حداقل‌سازی یا حذف قفل شدن</strong>.
+<p>🔑 مجموعه‌های concurrent به‌طور خاص برای دسترسی‌های بسیار هم‌زمان تنظیم شده‌اند، با تمرکز بر <strong>حداقل‌سازی یا حذف قفل شدن</strong>.<br>
 کلاس <strong>Parallel</strong> و همچنین <strong>PLINQ</strong> خودشان برای مدیریت کار به‌صورت کارآمد، متکی بر همین مجموعه‌ها و <strong>spinning primitives</strong> هستند.</p>
 <hr>
 <h2>کاربردهای دیگر PFX 🛠️</h2>
@@ -132,7 +92,7 @@
 <p>مورد اصلی استفاده از <strong>PFX</strong>، <strong>برنامه‌نویسی موازی</strong> است: یعنی بهره‌برداری از چند‌هسته برای سرعت‌بخشیدن به کدهای محاسباتی سنگین.</p>
 <p>یکی از چالش‌های مهم در برنامه‌نویسی موازی، <strong>قانون Amdahl</strong> است. این قانون می‌گوید بیشترین بهبود کارایی از موازی‌سازی، توسط بخشی از کد که باید به‌صورت ترتیبی (sequential) اجرا شود محدود می‌گردد.</p>
 <p>📌 مثال: اگر تنها دوسوم زمان اجرای یک الگوریتم قابل موازی‌سازی باشد، حتی با بی‌نهایت هسته نمی‌توانید بیش از سه برابر افزایش کارایی داشته باشید.</p>
-<p>بنابراین، پیش از ادامه باید مطمئن شوید که گلوگاه واقعاً در بخشی از کد است که قابلیت موازی‌سازی دارد. همچنین باید بررسی کنید که آیا اصلاً کد شما نیاز به محاسبات سنگین دارد یا خیر—زیرا <strong>بهینه‌سازی</strong> اغلب ساده‌ترین و مؤثرترین راهکار است.
+<p>بنابراین، پیش از ادامه باید مطمئن شوید که گلوگاه واقعاً در بخشی از کد است که قابلیت موازی‌سازی دارد. همچنین باید بررسی کنید که آیا اصلاً کد شما نیاز به محاسبات سنگین دارد یا خیر—زیرا <strong>بهینه‌سازی</strong> اغلب ساده‌ترین و مؤثرترین راهکار است.<br>
 البته این موضوع یک معامله دارد، چون برخی روش‌های بهینه‌سازی می‌توانند موازی‌سازی کد را سخت‌تر کنند.</p>
 <p>بیشترین سود در مواردی به‌دست می‌آید که به آن‌ها <strong>embarrassingly parallel problems</strong> می‌گویند—یعنی زمانی که یک کار به‌راحتی می‌تواند به وظایف جداگانه تقسیم شود و هرکدام به‌طور مستقل و کارآمد اجرا شوند.</p>
 <p>📷 نمونه‌ها:</p>
@@ -144,19 +104,19 @@
 <p>نمونه‌ی یک <strong>مشکل غیر embarrassingly parallel</strong>، پیاده‌سازی یک نسخه‌ی بهینه از الگوریتم <strong>quicksort</strong> است—که برای رسیدن به نتیجه خوب نیازمند فکر بیشتری است و شاید به <strong>unstructured parallelism</strong> نیاز داشته باشد.</p>
 <hr>
 <h2>PLINQ ⚡</h2>
-<p><strong>PLINQ</strong> پرس‌و‌جوهای LINQ محلی را به‌طور خودکار موازی‌سازی می‌کند.
+<p><strong>PLINQ</strong> پرس‌و‌جوهای LINQ محلی را به‌طور خودکار موازی‌سازی می‌کند.<br>
 مزیت بزرگ آن این است که بار تقسیم کار و جمع‌آوری نتایج را به‌طور کامل به <strong>.NET</strong> واگذار می‌کند.</p>
 <p>برای استفاده از PLINQ، کافیست روی توالی ورودی، متد <strong>AsParallel()</strong> را فراخوانی کرده و سپس پرس‌وجوی LINQ را مثل همیشه ادامه دهید.</p>
 <p>نمونه‌ی زیر عددهای اول بین ۳ تا ۱۰۰,۰۰۰ را با استفاده کامل از تمام هسته‌های ماشین محاسبه می‌کند:</p>
-<pre><code class="language-csharp">// محاسبه اعداد اول با یک الگوریتم ساده (غیربهینه).
-IEnumerable&lt;int&gt; numbers = Enumerable.Range (3, 100000 - 3);
+<pre class="hljs"><code><span class="hljs-comment">// محاسبه اعداد اول با یک الگوریتم ساده (غیربهینه).</span>
+IEnumerable&lt;<span class="hljs-built_in">int</span>&gt; numbers = Enumerable.Range (<span class="hljs-number">3</span>, <span class="hljs-number">100000</span> - <span class="hljs-number">3</span>);
 
-var parallelQuery =
-    from n in numbers.AsParallel()
-    where Enumerable.Range (2, (int) Math.Sqrt(n)).All (i =&gt; n % i &gt; 0)
-    select n;
+<span class="hljs-keyword">var</span> parallelQuery =
+    <span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> numbers.AsParallel()
+    <span class="hljs-keyword">where</span> Enumerable.Range (<span class="hljs-number">2</span>, (<span class="hljs-built_in">int</span>) Math.Sqrt(n)).All (i =&gt; n % i &gt; <span class="hljs-number">0</span>)
+    <span class="hljs-keyword">select</span> n;
 
-int[] primes = parallelQuery.ToArray();
+<span class="hljs-built_in">int</span>[] primes = parallelQuery.ToArray();
 </code></pre>
 <p>🔍 متد <strong>AsParallel</strong> یک <strong>extension method</strong> در <strong>System.Linq.ParallelEnumerable</strong> است. این متد ورودی را در یک توالی بر پایه‌ی <strong>ParallelQuery<TSource></strong> می‌پیچد. همین موضوع باعث می‌شود عملگرهای پرس‌وجوی LINQ که در ادامه فراخوانی می‌کنید، به مجموعه‌ای جایگزین از متدهای توسعه‌یافته در <strong>ParallelEnumerable</strong> متصل شوند.</p>
 <p>این متدها پیاده‌سازی‌های موازی از هر یک از عملگرهای استاندارد پرس‌وجو را فراهم می‌کنند. اساس کار آن‌ها این است که توالی ورودی را به بخش‌هایی تقسیم می‌کنند تا روی نخ‌های مختلف اجرا شوند و سپس نتایج را دوباره در یک توالی خروجی واحد گردآوری کنند (مطابق شکل 22-2).</p>
@@ -172,9 +132,9 @@ int[] primes = parallelQuery.ToArray();
 </ul>
 <p>برای عملگرهای پرس‌و‌جویی که <strong>دو توالی ورودی</strong> دریافت می‌کنند (مثل <strong>Join, GroupJoin, Concat, Union, Intersect, Except و Zip</strong>) باید روی هر دو توالی ورودی، متد <strong>AsParallel()</strong> اعمال شود؛ در غیر این صورت خطا (exception) پرتاب خواهد شد.</p>
 <p>نکته: نیازی نیست در طول پیشرفت یک پرس‌و‌جو مدام <strong>AsParallel()</strong> را اعمال کنید، زیرا عملگرهای پرس‌و‌جوی PLINQ خودشان یک <strong>ParallelQuery</strong> دیگر برمی‌گردانند. در واقع، فراخوانی دوباره‌ی AsParallel ناکارآمد است، چون باعث ادغام (merge) و تقسیم‌بندی مجدد پرس‌و‌جو می‌شود:</p>
-<pre><code class="language-csharp">mySequence.AsParallel()           // توالی را به ParallelQuery&lt;int&gt; می‌پیچد
-          .Where (n =&gt; n &gt; 100)   // یک ParallelQuery&lt;int&gt; دیگر تولید می‌کند
-          .AsParallel()           // غیرضروری و ناکارآمد!
+<pre class="hljs"><code>mySequence.AsParallel()           <span class="hljs-comment">// توالی را به ParallelQuery&lt;int&gt; می‌پیچد</span>
+          .Where (n =&gt; n &gt; <span class="hljs-number">100</span>)   <span class="hljs-comment">// یک ParallelQuery&lt;int&gt; دیگر تولید می‌کند</span>
+          .AsParallel()           <span class="hljs-comment">// غیرضروری و ناکارآمد!</span>
           .Select (n =&gt; n * n);
 </code></pre>
 <hr>
@@ -191,7 +151,7 @@ int[] primes = parallelQuery.ToArray();
 <p>دلایل این رویکرد opt-in عبارتند از:</p>
 <ol>
 <li>
-<p>برای اینکه PLINQ مفید باشد، باید حجم قابل‌توجهی از کار محاسباتی سنگین وجود داشته باشد.
+<p>برای اینکه PLINQ مفید باشد، باید حجم قابل‌توجهی از کار محاسباتی سنگین وجود داشته باشد.<br>
 اکثر پرس‌و‌جوهای LINQ-to-Objects خیلی سریع اجرا می‌شوند؛ در این حالت نه‌تنها موازی‌سازی غیرضروری است، بلکه سربار تقسیم‌بندی، جمع‌آوری و هماهنگی نخ‌های اضافی می‌تواند اجرای کد را کندتر کند.</p>
 </li>
 <li>
@@ -224,19 +184,19 @@ int[] primes = parallelQuery.ToArray();
 <li><strong>FullyBuffered</strong> → کل مجموعه نتایج را قبل از ارائه به مصرف‌کننده ذخیره می‌کند (عملگرهایی مانند <strong>OrderBy</strong> و <strong>Reverse</strong> و همچنین عملگرهای مربوط به <strong>element</strong>، <strong>aggregation</strong> و <strong>conversion</strong> ذاتاً همین‌گونه عمل می‌کنند).</li>
 </ul>
 <h3>📌 PLINQ و ترتیب (Ordering)</h3>
-<p>یکی از عوارض جانبی موازی‌سازی عملگرهای پرس‌وجو این است که هنگام جمع‌آوری نتایج، <strong>لزومی ندارد ترتیب عناصر مثل حالت اولیه باقی بماند</strong> (به شکل 22-2 مراجعه کنید).
+<p>یکی از عوارض جانبی موازی‌سازی عملگرهای پرس‌وجو این است که هنگام جمع‌آوری نتایج، <strong>لزومی ندارد ترتیب عناصر مثل حالت اولیه باقی بماند</strong> (به شکل 22-2 مراجعه کنید).<br>
 به بیان دیگر، تضمین <strong>حفظ ترتیب</strong> در LINQ برای توالی‌ها در PLINQ برقرار نیست.</p>
 <p>اگر به <strong>حفظ ترتیب</strong> نیاز داشته باشید، می‌توانید پس از <code>AsParallel()</code> از <code>AsOrdered()</code> استفاده کنید:</p>
-<pre><code class="language-csharp">myCollection.AsParallel().AsOrdered()...
+<pre class="hljs"><code>myCollection.AsParallel().AsOrdered()...
 </code></pre>
 <p>استفاده از <code>AsOrdered</code> هنگام کار با مجموعه‌های بزرگ باعث کاهش کارایی می‌شود، چون PLINQ باید موقعیت اصلی هر عنصر را دنبال کند.</p>
-<p>می‌توانید اثر <code>AsOrdered</code> را در ادامه‌ی پرس‌وجو با استفاده از <code>AsUnordered</code> خنثی کنید. این کار یک “نقطه‌ی تصادفی در ترتیب” ایجاد می‌کند که به پرس‌وجو اجازه می‌دهد از آن نقطه به بعد کارایی بهتری داشته باشد.
+<p>می‌توانید اثر <code>AsOrdered</code> را در ادامه‌ی پرس‌وجو با استفاده از <code>AsUnordered</code> خنثی کنید. این کار یک “نقطه‌ی تصادفی در ترتیب” ایجاد می‌کند که به پرس‌وجو اجازه می‌دهد از آن نقطه به بعد کارایی بهتری داشته باشد.<br>
 برای مثال، اگر بخواهید ترتیب ورودی فقط برای دو عملگر اول حفظ شود:</p>
-<pre><code class="language-csharp">inputSequence.AsParallel().AsOrdered()
+<pre class="hljs"><code>inputSequence.AsParallel().AsOrdered()
   .QueryOperator1()
   .QueryOperator2()
   .AsUnordered()
-      // از اینجا به بعد ترتیب اهمیتی ندارد
+      <span class="hljs-comment">// از اینجا به بعد ترتیب اهمیتی ندارد</span>
   .QueryOperator3()
   ...
 </code></pre>
@@ -252,61 +212,61 @@ int[] primes = parallelQuery.ToArray();
 </blockquote>
 </li>
 <li>
-<p>عملگرهای زیر قابل موازی‌سازی هستند، اما از استراتژی تقسیم‌بندی پرهزینه‌ای استفاده می‌کنند که گاهی حتی از پردازش ترتیبی کندتر است:
+<p>عملگرهای زیر قابل موازی‌سازی هستند، اما از استراتژی تقسیم‌بندی پرهزینه‌ای استفاده می‌کنند که گاهی حتی از پردازش ترتیبی کندتر است:<br>
 <code>Join</code>, <code>GroupBy</code>, <code>GroupJoin</code>, <code>Distinct</code>, <code>Union</code>, <code>Intersect</code>, <code>Except</code></p>
 </li>
 <li>
 <p>نسخه‌های <strong>Seeded</strong> از عملگر <code>Aggregate</code> در حالت عادی قابل موازی‌سازی نیستند. PLINQ برای این مورد نسخه‌های خاصی ارائه می‌دهد (بخش <em>Optimizing PLINQ</em> در صفحه 942).</p>
 </li>
 <li>
-<p>همه‌ی عملگرهای دیگر موازی‌سازی می‌شوند، اما این تضمین نمی‌کند که پرس‌وجوی شما <strong>حتماً</strong> موازی شود. اگر PLINQ تشخیص دهد سربار موازی‌سازی پرس‌وجو را کند می‌کند، ممکن است آن را ترتیبی اجرا کند.
+<p>همه‌ی عملگرهای دیگر موازی‌سازی می‌شوند، اما این تضمین نمی‌کند که پرس‌وجوی شما <strong>حتماً</strong> موازی شود. اگر PLINQ تشخیص دهد سربار موازی‌سازی پرس‌وجو را کند می‌کند، ممکن است آن را ترتیبی اجرا کند.<br>
 ✅ می‌توانید با این کد رفتار را مجبور به موازی‌سازی کنید:</p>
 </li>
 </ul>
-<pre><code class="language-csharp">.WithExecutionMode(ParallelExecutionMode.ForceParallelism)
+<pre class="hljs"><code>.WithExecutionMode(ParallelExecutionMode.ForceParallelism)
 </code></pre>
 <hr>
 <h3>📝 مثال: بررسی املا (Spellchecker) موازی</h3>
 <p>فرض کنید می‌خواهیم یک <strong>بررسی‌کننده‌ی املای سریع</strong> برای اسناد بزرگ بنویسیم که از تمام هسته‌های CPU استفاده کند. با تبدیل الگوریتم به یک پرس‌وجوی LINQ، می‌توانیم به‌راحتی آن را موازی کنیم.</p>
 <p>🔹 مرحله‌ی اول: دانلود یک <strong>دیکشنری از کلمات انگلیسی</strong> و ذخیره در <code>HashSet</code> برای جست‌وجوی سریع:</p>
-<pre><code class="language-csharp">if (!File.Exists(&quot;WordLookup.txt&quot;))    // حدود 150,000 کلمه
-    File.WriteAllText(&quot;WordLookup.txt&quot;,
-        await new HttpClient().GetStringAsync(
-            &quot;http://www.albahari.com/ispell/allwords.txt&quot;));
+<pre class="hljs"><code><span class="hljs-keyword">if</span> (!File.Exists(<span class="hljs-string">&quot;WordLookup.txt&quot;</span>))    <span class="hljs-comment">// حدود 150,000 کلمه</span>
+    File.WriteAllText(<span class="hljs-string">&quot;WordLookup.txt&quot;</span>,
+        <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> HttpClient().GetStringAsync(
+            <span class="hljs-string">&quot;http://www.albahari.com/ispell/allwords.txt&quot;</span>));
 
-var wordLookup = new HashSet&lt;string&gt;(
-    File.ReadAllLines(&quot;WordLookup.txt&quot;),
+<span class="hljs-keyword">var</span> wordLookup = <span class="hljs-keyword">new</span> HashSet&lt;<span class="hljs-built_in">string</span>&gt;(
+    File.ReadAllLines(<span class="hljs-string">&quot;WordLookup.txt&quot;</span>),
     StringComparer.InvariantCultureIgnoreCase);
 </code></pre>
 <p>🔹 مرحله‌ی دوم: ایجاد یک “سند آزمایشی” شامل یک میلیون کلمه‌ی تصادفی، سپس ایجاد چند غلط املایی عمدی:</p>
-<pre><code class="language-csharp">var random = new Random();
-string[] wordList = wordLookup.ToArray();
+<pre class="hljs"><code><span class="hljs-keyword">var</span> random = <span class="hljs-keyword">new</span> Random();
+<span class="hljs-built_in">string</span>[] wordList = wordLookup.ToArray();
 
-string[] wordsToTest = Enumerable.Range(0, 1000000)
-    .Select(i =&gt; wordList[random.Next(0, wordList.Length)])
+<span class="hljs-built_in">string</span>[] wordsToTest = Enumerable.Range(<span class="hljs-number">0</span>, <span class="hljs-number">1000000</span>)
+    .Select(i =&gt; wordList[random.Next(<span class="hljs-number">0</span>, wordList.Length)])
     .ToArray();
 
-wordsToTest[12345] = &quot;woozsh&quot;;   // چند غلط املایی
-wordsToTest[23456] = &quot;wubsie&quot;;
+wordsToTest[<span class="hljs-number">12345</span>] = <span class="hljs-string">&quot;woozsh&quot;</span>;   <span class="hljs-comment">// چند غلط املایی</span>
+wordsToTest[<span class="hljs-number">23456</span>] = <span class="hljs-string">&quot;wubsie&quot;</span>;
 </code></pre>
 <p>🔹 مرحله‌ی سوم: اجرای بررسی موازی با PLINQ:</p>
-<pre><code class="language-csharp">var query = wordsToTest
+<pre class="hljs"><code><span class="hljs-keyword">var</span> query = wordsToTest
     .AsParallel()
     .Select((word, index) =&gt; (word, index))
     .Where(iword =&gt; !wordLookup.Contains(iword.word))
     .OrderBy(iword =&gt; iword.index);
 
-foreach (var mistake in query)
-    Console.WriteLine(mistake.word + &quot; - index = &quot; + mistake.index);
+<span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> mistake <span class="hljs-keyword">in</span> query)
+    Console.WriteLine(mistake.word + <span class="hljs-string">&quot; - index = &quot;</span> + mistake.index);
 
-// خروجی:
-// woozsh - index = 12345
-// wubsie - index = 23456
+<span class="hljs-comment">// خروجی:</span>
+<span class="hljs-comment">// woozsh - index = 12345</span>
+<span class="hljs-comment">// wubsie - index = 23456</span>
 </code></pre>
 <p>متد <code>wordLookup.Contains</code> در predicate به پرس‌وجو <strong>حجم پردازشی مناسبی</strong> می‌دهد و ارزش موازی‌سازی را ایجاد می‌کند.</p>
 <hr>
 <h3>📦 نکته درباره‌ی کارایی و حافظه</h3>
-<p>در پرس‌وجو از <strong>Tuple</strong>‌ها <code>(word, index)</code> به‌جای <strong>نوع ناشناس (anonymous types)</strong> استفاده شده است.
+<p>در پرس‌وجو از <strong>Tuple</strong>‌ها <code>(word, index)</code> به‌جای <strong>نوع ناشناس (anonymous types)</strong> استفاده شده است.<br>
 چون Tupleها به‌صورت <strong>Value Type</strong> پیاده‌سازی شده‌اند (نه Reference Type):</p>
 <ul>
 <li>مصرف حافظه در اوج کاهش می‌یابد ✅</li>
@@ -315,28 +275,28 @@ foreach (var mistake in query)
 </ul>
 <p>📊 البته بنچمارک‌ها نشان می‌دهند این مزایا در عمل <strong>متوسط</strong> هستند، چون مدیر حافظه بسیار کارآمد است و این تخصیص‌ها معمولاً بیش از <strong>Generation 0</strong> دوام نمی‌آورند.</p>
 <h3>🧵 استفاده از <code>ThreadLocal&lt;T&gt;</code></h3>
-<p>بیایید مثال خودمان را گسترش دهیم و <strong>ایجاد لیست تصادفی کلمات آزمایشی</strong> را نیز موازی‌سازی کنیم.
+<p>بیایید مثال خودمان را گسترش دهیم و <strong>ایجاد لیست تصادفی کلمات آزمایشی</strong> را نیز موازی‌سازی کنیم.<br>
 ما آن را به‌صورت یک پرس‌وجوی LINQ ساختاربندی کردیم، پس باید ساده باشد.</p>
 <p>🔹 نسخه‌ی ترتیبی:</p>
-<pre><code class="language-csharp">string[] wordsToTest = Enumerable.Range(0, 1000000)
-    .Select(i =&gt; wordList[random.Next(0, wordList.Length)])
+<pre class="hljs"><code><span class="hljs-built_in">string</span>[] wordsToTest = Enumerable.Range(<span class="hljs-number">0</span>, <span class="hljs-number">1000000</span>)
+    .Select(i =&gt; wordList[random.Next(<span class="hljs-number">0</span>, wordList.Length)])
     .ToArray();
 </code></pre>
 <p>اما مشکل اینجاست که فراخوانی <code>random.Next</code> <strong>Thread-Safe</strong> نیست؛ بنابراین به‌سادگی نمی‌توانیم <code>AsParallel()</code> را در پرس‌وجو وارد کنیم.</p>
-<p>راه‌حل احتمالی این است که متدی بنویسیم که دور <code>random.Next</code> قفل بگذارد؛ اما این باعث محدود شدن هم‌زمانی (Concurrency) می‌شود.
+<p>راه‌حل احتمالی این است که متدی بنویسیم که دور <code>random.Next</code> قفل بگذارد؛ اما این باعث محدود شدن هم‌زمانی (Concurrency) می‌شود.<br>
 ✅ راه‌حل بهتر این است که از <code>ThreadLocal&lt;Random&gt;</code> (بخش <em>Thread-Local Storage</em> صفحه 923) استفاده کنیم تا برای هر نخ یک شیء <code>Random</code> جداگانه ساخته شود.</p>
 <p>🔹 نسخه‌ی موازی:</p>
-<pre><code class="language-csharp">var localRandom = new ThreadLocal&lt;Random&gt;(
-    () =&gt; new Random(Guid.NewGuid().GetHashCode()));
+<pre class="hljs"><code><span class="hljs-keyword">var</span> localRandom = <span class="hljs-keyword">new</span> ThreadLocal&lt;Random&gt;(
+    () =&gt; <span class="hljs-keyword">new</span> Random(Guid.NewGuid().GetHashCode()));
 
-string[] wordsToTest = Enumerable.Range(0, 1000000).AsParallel()
-    .Select(i =&gt; wordList[localRandom.Value.Next(0, wordList.Length)])
+<span class="hljs-built_in">string</span>[] wordsToTest = Enumerable.Range(<span class="hljs-number">0</span>, <span class="hljs-number">1000000</span>).AsParallel()
+    .Select(i =&gt; wordList[localRandom.Value.Next(<span class="hljs-number">0</span>, wordList.Length)])
     .ToArray();
 </code></pre>
 <p>در تابع کارخانه‌ای که برای ایجاد یک شیء <code>Random</code> نوشتیم، از هش (<code>HashCode</code>) یک <code>Guid</code> استفاده کردیم تا مطمئن شویم اگر دو شیء <code>Random</code> در یک بازه‌ی زمانی کوتاه ساخته شوند، دنباله‌ی اعداد تصادفی‌شان متفاوت خواهد بود. 🎲</p>
 <hr>
 <h3>🤔 چه زمانی از PLINQ استفاده کنیم؟</h3>
-<p>ممکن است وسوسه شوید در برنامه‌های موجود خود به‌دنبال پرس‌وجوهای LINQ بگردید و آنها را موازی‌سازی کنید.
+<p>ممکن است وسوسه شوید در برنامه‌های موجود خود به‌دنبال پرس‌وجوهای LINQ بگردید و آنها را موازی‌سازی کنید.<br>
 اما این معمولاً بی‌فایده است، چون مسائلی که LINQ بهترین راه‌حل برایشان محسوب می‌شود، خیلی سریع اجرا می‌شوند و موازی‌سازی کمکی نمی‌کند.</p>
 <p>✅ رویکرد بهتر:</p>
 <ul>
@@ -344,24 +304,24 @@ string[] wordsToTest = Enumerable.Range(0, 1000000).AsParallel()
 <li>سپس بررسی اینکه آیا می‌توان آن را به‌صورت یک پرس‌وجوی LINQ بیان کرد</li>
 </ul>
 <p>🔹 یک اثر جانبی خوشایند این بازنویسی این است که کد <strong>کوچک‌تر و خواناتر</strong> می‌شود.</p>
-<p>📌 PLINQ برای مسائلی که به‌طور واضح <strong>Embarrassingly Parallel</strong> هستند عالی است.
-اما برای پردازش تصویر (Imaging) انتخاب خوبی نیست، چون جمع‌آوری میلیون‌ها پیکسل در یک توالی خروجی خودش تبدیل به گلوگاه می‌شود.
+<p>📌 PLINQ برای مسائلی که به‌طور واضح <strong>Embarrassingly Parallel</strong> هستند عالی است.<br>
+اما برای پردازش تصویر (Imaging) انتخاب خوبی نیست، چون جمع‌آوری میلیون‌ها پیکسل در یک توالی خروجی خودش تبدیل به گلوگاه می‌شود.<br>
 راه بهتر این است که پیکسل‌ها را مستقیماً در یک آرایه یا بلوک حافظه‌ی unmanaged بنویسیم و از <strong>کلاس Parallel</strong> یا <strong>task parallelism</strong> برای مدیریت چندریسمانی استفاده کنیم.</p>
 <p>(با این حال می‌توان با متد <code>ForAll</code> جمع‌آوری نتایج را حذف کرد—بخش <em>Optimizing PLINQ</em> صفحه 942 توضیح می‌دهد. این کار وقتی منطقی است که الگوریتم پردازش تصویر ذاتاً مناسب LINQ باشد.)</p>
 <hr>
 <h3>🧼 خلوص تابعی (Functional Purity)</h3>
 <p>چون PLINQ پرس‌وجوی شما را روی نخ‌های موازی اجرا می‌کند، باید مراقب باشید عملیاتی انجام ندهید که <strong>Thread-Safe</strong> نیستند.</p>
 <p>به‌ویژه، نوشتن در متغیرها اثر جانبی دارد و بنابراین ناامن است:</p>
-<pre><code class="language-csharp">// پرس‌وجوی زیر هر عنصر را در موقعیتش ضرب می‌کند.
-// با ورودی Enumerable.Range(0,999) باید مربع‌ها را بدهد.
-int i = 0;
-var query = from n in Enumerable.Range(0,999).AsParallel()
-            select n * i++;
+<pre class="hljs"><code><span class="hljs-comment">// پرس‌وجوی زیر هر عنصر را در موقعیتش ضرب می‌کند.</span>
+<span class="hljs-comment">// با ورودی Enumerable.Range(0,999) باید مربع‌ها را بدهد.</span>
+<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">var</span> query = <span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> Enumerable.Range(<span class="hljs-number">0</span>,<span class="hljs-number">999</span>).AsParallel()
+            <span class="hljs-keyword">select</span> n * i++;
 </code></pre>
-<p>حتی اگر افزایش <code>i</code> را با قفل ایمن کنیم، باز هم مشکل باقی می‌ماند چون <code>i</code> لزوماً با موقعیت عنصر ورودی تطابق ندارد.
+<p>حتی اگر افزایش <code>i</code> را با قفل ایمن کنیم، باز هم مشکل باقی می‌ماند چون <code>i</code> لزوماً با موقعیت عنصر ورودی تطابق ندارد.<br>
 افزودن <code>AsOrdered</code> هم مشکل را حل نمی‌کند؛ چون فقط تضمین می‌کند خروجی به‌ترتیب عناصر پردازش‌شده باشد، نه اینکه واقعاً پردازش ترتیبی انجام شود.</p>
 <p>✅ راه‌حل درست: استفاده از نسخه‌ی اندیس‌دار <code>Select</code>:</p>
-<pre><code class="language-csharp">var query = Enumerable.Range(0,999).AsParallel()
+<pre class="hljs"><code><span class="hljs-keyword">var</span> query = Enumerable.Range(<span class="hljs-number">0</span>,<span class="hljs-number">999</span>).AsParallel()
                       .Select((n, i) =&gt; n * i);
 </code></pre>
 <p>🔹 برای بهترین کارایی، متدهایی که در عملگرهای پرس‌وجو فراخوانی می‌شوند باید <strong>Thread-Safe</strong> باشند؛</p>
@@ -371,57 +331,57 @@ var query = from n in Enumerable.Range(0,999).AsParallel()
 </ul>
 <hr>
 <h3>⚙️ تنظیم درجه‌ی موازی‌سازی (Degree of Parallelism)</h3>
-<p>به‌طور پیش‌فرض، PLINQ درجه‌ی موازی‌سازی بهینه برای پردازنده را انتخاب می‌کند.
+<p>به‌طور پیش‌فرض، PLINQ درجه‌ی موازی‌سازی بهینه برای پردازنده را انتخاب می‌کند.<br>
 می‌توانید آن را با متد <code>WithDegreeOfParallelism</code> تغییر دهید:</p>
-<pre><code class="language-csharp">...AsParallel().WithDegreeOfParallelism(4)...
+<pre class="hljs"><code>...AsParallel().WithDegreeOfParallelism(<span class="hljs-number">4</span>)...
 </code></pre>
-<p>🔹 نمونه: شاید بخواهید درجه‌ی موازی‌سازی را بالاتر از تعداد هسته‌ها افزایش دهید، وقتی کار <strong>I/O-Bound</strong> دارید (مثلاً دانلود هم‌زمان صفحات وب).
+<p>🔹 نمونه: شاید بخواهید درجه‌ی موازی‌سازی را بالاتر از تعداد هسته‌ها افزایش دهید، وقتی کار <strong>I/O-Bound</strong> دارید (مثلاً دانلود هم‌زمان صفحات وب).<br>
 بااین‌حال، <strong>Task combinators</strong> و <strong>توابع Asynchronous</strong> راه‌حل مشابه اما کارآمدتری ارائه می‌دهند.</p>
 <p>🚫 برخلاف Tasks، PLINQ نمی‌تواند کارهای I/O-Bound را بدون مسدود کردن نخ‌ها انجام دهد (و این بدتر باعث قفل شدن نخ‌های pool می‌شود).</p>
-<p>📍 توجه:
-<code>WithDegreeOfParallelism</code> را فقط <strong>یک‌بار</strong> می‌توان در یک پرس‌وجوی PLINQ فراخوانی کرد.
+<p>📍 توجه:<br>
+<code>WithDegreeOfParallelism</code> را فقط <strong>یک‌بار</strong> می‌توان در یک پرس‌وجوی PLINQ فراخوانی کرد.<br>
 اگر نیاز دارید دوباره صدا بزنید، باید پرس‌وجو را merge و دوباره partition کنید (با صدا زدن دوباره‌ی <code>AsParallel</code>).</p>
 <p>مثال:</p>
-<pre><code class="language-csharp">&quot;The Quick Brown Fox&quot;
-    .AsParallel().WithDegreeOfParallelism(2)
-    .Where(c =&gt; !char.IsWhiteSpace(c))
-    .AsParallel().WithDegreeOfParallelism(3)   // Merge + Partition دوباره
-    .Select(c =&gt; char.ToUpper(c));
+<pre class="hljs"><code><span class="hljs-string">&quot;The Quick Brown Fox&quot;</span>
+    .AsParallel().WithDegreeOfParallelism(<span class="hljs-number">2</span>)
+    .Where(c =&gt; !<span class="hljs-built_in">char</span>.IsWhiteSpace(c))
+    .AsParallel().WithDegreeOfParallelism(<span class="hljs-number">3</span>)   <span class="hljs-comment">// Merge + Partition دوباره</span>
+    .Select(c =&gt; <span class="hljs-built_in">char</span>.ToUpper(c));
 </code></pre>
 <hr>
 <h3>⏹ لغو (Cancellation)</h3>
-<p>لغو کردن یک پرس‌وجوی PLINQ که در حال مصرف نتایجش در <code>foreach</code> هستید ساده است:
+<p>لغو کردن یک پرس‌وجوی PLINQ که در حال مصرف نتایجش در <code>foreach</code> هستید ساده است:<br>
 کافی است از حلقه خارج شوید (<code>break</code>) و پرس‌وجو به‌طور خودکار لغو می‌شود، چون enumerator به‌طور ضمنی Dispose می‌شود.</p>
 <p>اما اگر پرس‌وجو با یک عملگر تبدیل، تک‌عنصر یا تجمیعی خاتمه یابد، باید آن را از یک نخ دیگر با <strong>CancellationToken</strong> لغو کنید.</p>
 <p>برای درج توکن، بعد از <code>AsParallel</code> از <code>WithCancellation</code> استفاده کنید و خاصیت <code>Token</code> از یک <code>CancellationTokenSource</code> را پاس دهید.</p>
 <p>مثال:</p>
-<pre><code class="language-csharp">IEnumerable&lt;int&gt; tenMillion = Enumerable.Range(3, 10_000_000);
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">int</span>&gt; tenMillion = Enumerable.Range(<span class="hljs-number">3</span>, <span class="hljs-number">10</span>_000_000);
 
-var cancelSource = new CancellationTokenSource();
-cancelSource.CancelAfter(100);   // لغو بعد از 100 میلی‌ثانیه
+<span class="hljs-keyword">var</span> cancelSource = <span class="hljs-keyword">new</span> CancellationTokenSource();
+cancelSource.CancelAfter(<span class="hljs-number">100</span>);   <span class="hljs-comment">// لغو بعد از 100 میلی‌ثانیه</span>
 
-var primeNumberQuery =
-    from n in tenMillion.AsParallel().WithCancellation(cancelSource.Token)
-    where Enumerable.Range(2, (int)Math.Sqrt(n)).All(i =&gt; n % i &gt; 0)
-    select n;
+<span class="hljs-keyword">var</span> primeNumberQuery =
+    <span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> tenMillion.AsParallel().WithCancellation(cancelSource.Token)
+    <span class="hljs-keyword">where</span> Enumerable.Range(<span class="hljs-number">2</span>, (<span class="hljs-built_in">int</span>)Math.Sqrt(n)).All(i =&gt; n % i &gt; <span class="hljs-number">0</span>)
+    <span class="hljs-keyword">select</span> n;
 
-try
+<span class="hljs-keyword">try</span>
 {
-    int[] primes = primeNumberQuery.ToArray();
-    // هرگز به این خط نمی‌رسیم چون نخ دیگر ما را لغو می‌کند
+    <span class="hljs-built_in">int</span>[] primes = primeNumberQuery.ToArray();
+    <span class="hljs-comment">// هرگز به این خط نمی‌رسیم چون نخ دیگر ما را لغو می‌کند</span>
 }
-catch (OperationCanceledException)
+<span class="hljs-keyword">catch</span> (OperationCanceledException)
 {
-    Console.WriteLine(&quot;Query canceled&quot;);
+    Console.WriteLine(<span class="hljs-string">&quot;Query canceled&quot;</span>);
 }
 </code></pre>
-<p>🔹 هنگام لغو، PLINQ منتظر می‌ماند هر نخ کاری روی عنصر جاری‌اش تمام کند، سپس پرس‌وجو پایان می‌یابد.
+<p>🔹 هنگام لغو، PLINQ منتظر می‌ماند هر نخ کاری روی عنصر جاری‌اش تمام کند، سپس پرس‌وجو پایان می‌یابد.<br>
 این یعنی هر متد خارجی که پرس‌وجو فراخوانی کرده باشد، تا انتها اجرا خواهد شد.</p>
 <h3>بهینه‌سازی PLINQ 🚀</h3>
 <h4>بهینه‌سازی در سمت خروجی</h4>
-<p>یکی از مزیت‌های <strong>PLINQ</strong> این است که نتایج پردازش موازی را به‌طور مرتب در یک دنباله‌ی خروجی واحد جمع‌آوری (collate) می‌کند.
+<p>یکی از مزیت‌های <strong>PLINQ</strong> این است که نتایج پردازش موازی را به‌طور مرتب در یک دنباله‌ی خروجی واحد جمع‌آوری (collate) می‌کند.<br>
 اما گاهی همه‌ی کاری که در نهایت انجام می‌دهید این است که روی هر عنصر فقط یک تابع را اجرا کنید:</p>
-<pre><code class="language-csharp">foreach (int n in parallelQuery)
+<pre class="hljs"><code><span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">int</span> n <span class="hljs-keyword">in</span> parallelQuery)
     DoSomething(n);
 </code></pre>
 <p>اگر چنین شرایطی داشته باشید—و برایتان مهم نباشد که عناصر به چه ترتیبی پردازش می‌شوند—می‌توانید با استفاده از متد <strong>ForAll</strong> در PLINQ کارایی را بهبود بدهید ✅.</p>
@@ -429,9 +389,9 @@ catch (OperationCanceledException)
 <h4>متد ForAll</h4>
 <p>متد <strong>ForAll</strong> یک delegate را روی هر عنصر خروجی یک <code>ParallelQuery</code> اجرا می‌کند. این متد مستقیماً به هسته‌ی داخلی PLINQ وصل می‌شود و مراحل جمع‌آوری و پیمایش نتایج (collating و enumerating) را دور می‌زند.</p>
 <p>🔹 مثال ساده:</p>
-<pre><code class="language-csharp">&quot;abcdef&quot;
+<pre class="hljs"><code><span class="hljs-string">&quot;abcdef&quot;</span>
     .AsParallel()
-    .Select(c =&gt; char.ToUpper(c))
+    .Select(c =&gt; <span class="hljs-built_in">char</span>.ToUpper(c))
     .ForAll(Console.Write);
 </code></pre>
 <hr>
@@ -441,7 +401,7 @@ catch (OperationCanceledException)
 </div>
 <h3>بهینه‌سازی PLINQ 🚀</h3>
 <h4>جمع‌آوری و پیمایش نتایج (Collating &amp; Enumerating)</h4>
-<p>عملیات جمع‌آوری (collating) و پیمایش (enumerating) نتایج، ذاتاً <strong>خیلی پرهزینه نیستند</strong>.
+<p>عملیات جمع‌آوری (collating) و پیمایش (enumerating) نتایج، ذاتاً <strong>خیلی پرهزینه نیستند</strong>.<br>
 به همین دلیل، بهینه‌سازی با استفاده از متد <strong>ForAll</strong> بیشترین سود را زمانی به همراه دارد که:</p>
 <ul>
 <li>تعداد عناصر ورودی خیلی زیاد باشد 🔢</li>
@@ -478,8 +438,8 @@ catch (OperationCanceledException)
 </div>
 <h3>بهینه‌سازی PLINQ در پارتیشن‌بندی ⚡</h3>
 <h4>عملگرهایی که نیاز به مقایسه دارند</h4>
-<p>برای عملگرهای LINQ که نیازمند <strong>مقایسه عناصر</strong> هستند (مانند:
-<code>GroupBy</code>، <code>Join</code>، <code>GroupJoin</code>، <code>Intersect</code>، <code>Except</code>، <code>Union</code> و <code>Distinct</code>) ✅
+<p>برای عملگرهای LINQ که نیازمند <strong>مقایسه عناصر</strong> هستند (مانند:<br>
+<code>GroupBy</code>، <code>Join</code>، <code>GroupJoin</code>، <code>Intersect</code>، <code>Except</code>، <code>Union</code> و <code>Distinct</code>) ✅<br>
 هیچ انتخابی وجود ندارد: <strong>PLINQ همیشه از Hash Partitioning استفاده می‌کند</strong>.</p>
 <ul>
 <li>در این حالت PLINQ باید از قبل <strong>hashcode</strong> همه عناصر را محاسبه کند تا اطمینان یابد عناصر با hashcode مشابه روی همان thread پردازش می‌شوند.</li>
@@ -495,9 +455,9 @@ catch (OperationCanceledException)
 </ul>
 <p>به‌صورت پیش‌فرض:</p>
 <ul>
-<li>اگر دنباله ورودی <strong>ایندکس‌پذیر</strong> باشد (مثل آرایه‌ها یا چیزی که <code>IList&lt;T&gt;</code> پیاده‌سازی کرده)،
+<li>اگر دنباله ورودی <strong>ایندکس‌پذیر</strong> باشد (مثل آرایه‌ها یا چیزی که <code>IList&lt;T&gt;</code> پیاده‌سازی کرده)،<br>
 ➝ <strong>PLINQ از Range Partitioning استفاده می‌کند</strong>.</li>
-<li>در غیر این صورت،
+<li>در غیر این صورت،<br>
 ➝ <strong>Chunk Partitioning انتخاب می‌شود</strong>.</li>
 </ul>
 <hr>
@@ -512,14 +472,14 @@ catch (OperationCanceledException)
 <li>اگر کوئری با <code>Enumerable.Range</code> شروع می‌شود، آن را با <code>ParallelEnumerable.Range</code> جایگزین کنید.</li>
 <li>در غیر این صورت، کافی است روی ورودی <code>ToList</code> یا <code>ToArray</code> صدا بزنید (البته این خودش هزینه‌ی کارایی دارد).</li>
 </ol>
-<p>📌 نکته مهم:
+<p>📌 نکته مهم:<br>
 <code>ParallelEnumerable.Range</code> فقط یک شورتکات برای <code>Enumerable.Range(...).AsParallel()</code> نیست؛ بلکه واقعاً باعث <strong>فعال شدن Range Partitioning</strong> می‌شود و رفتار کوئری را تغییر می‌دهد.</p>
 <hr>
 <h4>اجبار به Chunk Partitioning</h4>
 <p>برای این کار باید دنباله ورودی را با <code>Partitioner.Create</code> (از فضای نام <code>System.Collections.Concurrent</code>) بپیچید:</p>
-<pre><code class="language-csharp">int[] numbers = { 3, 4, 5, 6, 7, 8, 9 };
-var parallelQuery =
-    Partitioner.Create(numbers, true).AsParallel()
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] numbers = { <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span> };
+<span class="hljs-keyword">var</span> parallelQuery =
+    Partitioner.Create(numbers, <span class="hljs-literal">true</span>).AsParallel()
               .Where(...);
 </code></pre>
 <ul>
@@ -561,9 +521,9 @@ var parallelQuery =
 <li>هر thread بخش <strong>ثابتی</strong> از داده را می‌گیرد → بدون نیاز به lock.</li>
 <li>مشکل: اگر بعضی threads عناصر &quot;ساده‌تر&quot; بگیرند و زودتر تمام کنند، بقیه هنوز در حال کار خواهند بود → و این باعث idle شدن threadها می‌شود.</li>
 </ul>
-<p>📌 مثال: محاسبه اعداد اول با Range Partitioning ممکن است عملکرد ضعیفی داشته باشد.
+<p>📌 مثال: محاسبه اعداد اول با Range Partitioning ممکن است عملکرد ضعیفی داشته باشد.<br>
 📌 اما محاسبه ریشه دوم ۱۰ میلیون عدد اول (که زمان پردازش هر عنصر یکسان است) بسیار خوب عمل می‌کند:</p>
-<pre><code class="language-csharp">ParallelEnumerable.Range(1, 10_000_000).Sum(i =&gt; Math.Sqrt(i));
+<pre class="hljs"><code>ParallelEnumerable.Range(<span class="hljs-number">1</span>, <span class="hljs-number">10</span>_000_000).Sum(i =&gt; Math.Sqrt(i));
 </code></pre>
  <div align="center">
 <p><img src="../../../assets/image/22/Table-22-6.jpeg" alt="Conventions-UsedThis-Book"></p>
@@ -578,11 +538,11 @@ var parallelQuery =
 </ul>
 <hr>
 <h4>بهینه‌سازی Aggregation سفارشی</h4>
-<p>PLINQ عملگرهای استاندارد مانند <code>Sum</code>، <code>Average</code>، <code>Min</code> و <code>Max</code> را به‌صورت موازی و بهینه مدیریت می‌کند.
+<p>PLINQ عملگرهای استاندارد مانند <code>Sum</code>، <code>Average</code>، <code>Min</code> و <code>Max</code> را به‌صورت موازی و بهینه مدیریت می‌کند.<br>
 اما <strong>Aggregate</strong> چالش‌های خاصی دارد.</p>
 <p>مثال ساده از Aggregate (جمع کردن یک دنباله اعداد):</p>
-<pre><code class="language-csharp">int[] numbers = { 1, 2, 3 };
-int sum = numbers.Aggregate(0, (total, n) =&gt; total + n); // 6
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] numbers = { <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span> };
+<span class="hljs-built_in">int</span> sum = numbers.Aggregate(<span class="hljs-number">0</span>, (total, n) =&gt; total + n); <span class="hljs-comment">// 6</span>
 </code></pre>
 <ul>
 <li>برای <strong>aggregation بدون seed</strong>، delegate ارائه‌شده باید <strong>associative</strong> و <strong>commutative</strong> باشد.</li>
@@ -613,22 +573,22 @@ int sum = numbers.Aggregate(0, (total, n) =&gt; total + n); // 6
 <li><code>resultSelector</code> → تبدیل نهایی نتیجه</li>
 </ol>
 <p>مثال ساده جمع اعداد با PLINQ:</p>
-<pre><code class="language-csharp">numbers.AsParallel().Aggregate(
-    () =&gt; 0,                           // seedFactory
-    (localTotal, n) =&gt; localTotal + n, // updateAccumulatorFunc
-    (mainTot, localTot) =&gt; mainTot + localTot, // combineAccumulatorFunc
-    finalResult =&gt; finalResult          // resultSelector
+<pre class="hljs"><code>numbers.AsParallel().Aggregate(
+    () =&gt; <span class="hljs-number">0</span>,                           <span class="hljs-comment">// seedFactory</span>
+    (localTotal, n) =&gt; localTotal + n, <span class="hljs-comment">// updateAccumulatorFunc</span>
+    (mainTot, localTot) =&gt; mainTot + localTot, <span class="hljs-comment">// combineAccumulatorFunc</span>
+    finalResult =&gt; finalResult          <span class="hljs-comment">// resultSelector</span>
 );
 </code></pre>
 <hr>
 <h4>مثال واقعی‌تر: شمارش فرکانس حروف در متن</h4>
 <p>متن:</p>
-<pre><code class="language-csharp">string text = &quot;Let’s suppose this is a really long string&quot;;
-var letterFrequencies = new int[26];
-foreach (char c in text)
+<pre class="hljs"><code><span class="hljs-built_in">string</span> text = <span class="hljs-string">&quot;Let’s suppose this is a really long string&quot;</span>;
+<span class="hljs-keyword">var</span> letterFrequencies = <span class="hljs-keyword">new</span> <span class="hljs-built_in">int</span>[<span class="hljs-number">26</span>];
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">char</span> c <span class="hljs-keyword">in</span> text)
 {
-    int index = char.ToUpper(c) - 'A';
-    if (index &gt;= 0 &amp;&amp; index &lt; 26) letterFrequencies[index]++;
+    <span class="hljs-built_in">int</span> index = <span class="hljs-built_in">char</span>.ToUpper(c) - <span class="hljs-string">&#x27;A&#x27;</span>;
+    <span class="hljs-keyword">if</span> (index &gt;= <span class="hljs-number">0</span> &amp;&amp; index &lt; <span class="hljs-number">26</span>) letterFrequencies[index]++;
 }
 </code></pre>
 <ul>
@@ -636,17 +596,17 @@ foreach (char c in text)
 <li>موازی‌سازی با <code>Parallel.ForEach</code> نیازمند مدیریت همزمانی روی آرایه مشترک است، و قفل کردن می‌تواند <strong>پتانسیل موازی‌سازی</strong> را از بین ببرد.</li>
 </ul>
 <p>PLINQ با Aggregate راه‌حل تمیزی ارائه می‌دهد:</p>
-<pre><code class="language-csharp">int[] result = text.AsParallel().Aggregate(
-    () =&gt; new int[26],               // accumulator محلی
-    (localFrequencies, c) =&gt;        // جمع‌بندی در accumulator محلی
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] result = text.AsParallel().Aggregate(
+    () =&gt; <span class="hljs-keyword">new</span> <span class="hljs-built_in">int</span>[<span class="hljs-number">26</span>],               <span class="hljs-comment">// accumulator محلی</span>
+    (localFrequencies, c) =&gt;        <span class="hljs-comment">// جمع‌بندی در accumulator محلی</span>
     {
-        int index = char.ToUpper(c) - 'A';
-        if (index &gt;= 0 &amp;&amp; index &lt; 26) localFrequencies[index]++;
-        return localFrequencies;
+        <span class="hljs-built_in">int</span> index = <span class="hljs-built_in">char</span>.ToUpper(c) - <span class="hljs-string">&#x27;A&#x27;</span>;
+        <span class="hljs-keyword">if</span> (index &gt;= <span class="hljs-number">0</span> &amp;&amp; index &lt; <span class="hljs-number">26</span>) localFrequencies[index]++;
+        <span class="hljs-keyword">return</span> localFrequencies;
     },
-    (mainFreq, localFreq) =&gt;         // ترکیب local -&gt; main
+    (mainFreq, localFreq) =&gt;         <span class="hljs-comment">// ترکیب local -&gt; main</span>
         mainFreq.Zip(localFreq, (f1, f2) =&gt; f1 + f2).ToArray(),
-    finalResult =&gt; finalResult        // تبدیل نهایی
+    finalResult =&gt; finalResult        <span class="hljs-comment">// تبدیل نهایی</span>
 );
 </code></pre>
 <ul>
@@ -657,15 +617,15 @@ foreach (char c in text)
 <p>کتابخانه PFX یک شکل پایه از <strong>Structured Parallelism</strong> ارائه می‌دهد که از طریق سه متد <strong>static</strong> در کلاس <code>Parallel</code> قابل استفاده است:</p>
 <ul>
 <li>
-<p><code>Parallel.Invoke</code>
+<p><code>Parallel.Invoke</code><br>
 اجرای یک آرایه از delegateها به‌صورت موازی</p>
 </li>
 <li>
-<p><code>Parallel.For</code>
+<p><code>Parallel.For</code><br>
 معادل موازی حلقه <code>for</code> در C#</p>
 </li>
 <li>
-<p><code>Parallel.ForEach</code>
+<p><code>Parallel.ForEach</code><br>
 معادل موازی حلقه <code>foreach</code> در C#</p>
 </li>
 </ul>
@@ -675,26 +635,26 @@ foreach (char c in text)
 <hr>
 <h4>Parallel.Invoke</h4>
 <p><code>Parallel.Invoke</code> یک آرایه از delegateهای <strong>Action</strong> را موازی اجرا کرده و منتظر اتمام آن‌ها می‌ماند. ساده‌ترین امضای متد:</p>
-<pre><code class="language-csharp">public static void Invoke(params Action[] actions);
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Invoke</span>(<span class="hljs-params"><span class="hljs-keyword">params</span> Action[] actions</span>)</span>;
 </code></pre>
 <ul>
 <li>مشابه PLINQ، متدهای <code>Parallel.*</code> برای کارهای <strong>compute-bound</strong> بهینه شده‌اند، نه I/O-bound.</li>
 <li>مثال ساده با دانلود دو صفحه وب به صورت موازی:</li>
 </ul>
-<pre><code class="language-csharp">Parallel.Invoke(
-    () =&gt; new WebClient().DownloadFile(&quot;http://www.linqpad.net&quot;, &quot;lp.html&quot;),
-    () =&gt; new WebClient().DownloadFile(&quot;http://microsoft.com&quot;, &quot;ms.html&quot;)
+<pre class="hljs"><code>Parallel.Invoke(
+    () =&gt; <span class="hljs-keyword">new</span> WebClient().DownloadFile(<span class="hljs-string">&quot;http://www.linqpad.net&quot;</span>, <span class="hljs-string">&quot;lp.html&quot;</span>),
+    () =&gt; <span class="hljs-keyword">new</span> WebClient().DownloadFile(<span class="hljs-string">&quot;http://microsoft.com&quot;</span>, <span class="hljs-string">&quot;ms.html&quot;</span>)
 );
 </code></pre>
-<p><strong>نکته مهم:</strong>
+<p><strong>نکته مهم:</strong><br>
 <code>Parallel.Invoke</code> حتی با یک میلیون delegate هم به‌صورت مؤثر کار می‌کند، زیرا عناصر را به <strong>batch</strong> تقسیم می‌کند و به چند Task اصلی اختصاص می‌دهد، به جای ایجاد یک Task برای هر delegate.</p>
 <blockquote>
 <p>مسئولیت collating نتایج بر عهده شماست؛ بنابراین باید به <strong>Thread Safety</strong> توجه کنید:</p>
 </blockquote>
-<pre><code class="language-csharp">var data = new List&lt;string&gt;();
+<pre class="hljs"><code><span class="hljs-keyword">var</span> data = <span class="hljs-keyword">new</span> List&lt;<span class="hljs-built_in">string</span>&gt;();
 Parallel.Invoke(
-    () =&gt; data.Add(new WebClient().DownloadString(&quot;http://www.foo.com&quot;)),
-    () =&gt; data.Add(new WebClient().DownloadString(&quot;http://www.far.com&quot;))
+    () =&gt; data.Add(<span class="hljs-keyword">new</span> WebClient().DownloadString(<span class="hljs-string">&quot;http://www.foo.com&quot;</span>)),
+    () =&gt; data.Add(<span class="hljs-keyword">new</span> WebClient().DownloadString(<span class="hljs-string">&quot;http://www.far.com&quot;</span>))
 );
 </code></pre>
 <ul>
@@ -702,7 +662,7 @@ Parallel.Invoke(
 <li>راه بهتر: استفاده از <strong>Thread-Safe Collections</strong>، مانند <code>ConcurrentBag</code>.</li>
 </ul>
 <p>همچنین <code>Parallel.Invoke</code> یک overload دارد که <strong>ParallelOptions</strong> می‌گیرد:</p>
-<pre><code class="language-csharp">public static void Invoke(ParallelOptions options, params Action[] actions);
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Invoke</span>(<span class="hljs-params">ParallelOptions options, <span class="hljs-keyword">params</span> Action[] actions</span>)</span>;
 </code></pre>
 <ul>
 <li>با <code>ParallelOptions</code> می‌توان <strong>CancellationToken</strong> وارد کرد، حداکثر concurrency را محدود کرد، یا یک <strong>task scheduler</strong> سفارشی مشخص کرد.</li>
@@ -711,37 +671,37 @@ Parallel.Invoke(
 <h4>Parallel.For و Parallel.ForEach</h4>
 <p>این متدها معادل موازی حلقه‌های <code>for</code> و <code>foreach</code> هستند، به این معنا که هر iteration به‌صورت موازی اجرا می‌شود.</p>
 <p>ساده‌ترین امضاها:</p>
-<pre><code class="language-csharp">public static ParallelLoopResult For(int fromInclusive, int toExclusive, Action&lt;int&gt; body);
-public static ParallelLoopResult ForEach&lt;TSource&gt;(IEnumerable&lt;TSource&gt; source, Action&lt;TSource&gt; body);
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> ParallelLoopResult <span class="hljs-title">For</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> fromInclusive, <span class="hljs-built_in">int</span> toExclusive, Action&lt;<span class="hljs-built_in">int</span>&gt; body</span>)</span>;
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> ParallelLoopResult <span class="hljs-title">ForEach</span>&lt;<span class="hljs-title">TSource</span>&gt;(<span class="hljs-params">IEnumerable&lt;TSource&gt; source, Action&lt;TSource&gt; body</span>)</span>;
 </code></pre>
 <p>مثال:</p>
 <p>حلقه <code>for</code> معمولی:</p>
-<pre><code class="language-csharp">for (int i = 0; i &lt; 100; i++)
+<pre class="hljs"><code><span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">100</span>; i++)
     Foo(i);
 </code></pre>
 <p>معادل موازی:</p>
-<pre><code class="language-csharp">Parallel.For(0, 100, i =&gt; Foo(i));
-// یا ساده‌تر
-Parallel.For(0, 100, Foo);
+<pre class="hljs"><code>Parallel.For(<span class="hljs-number">0</span>, <span class="hljs-number">100</span>, i =&gt; Foo(i));
+<span class="hljs-comment">// یا ساده‌تر</span>
+Parallel.For(<span class="hljs-number">0</span>, <span class="hljs-number">100</span>, Foo);
 </code></pre>
 <p>حلقه <code>foreach</code> معمولی:</p>
-<pre><code class="language-csharp">foreach (char c in &quot;Hello, world&quot;)
+<pre class="hljs"><code><span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">char</span> c <span class="hljs-keyword">in</span> <span class="hljs-string">&quot;Hello, world&quot;</span>)
     Foo(c);
 </code></pre>
 <p>معادل موازی:</p>
-<pre><code class="language-csharp">Parallel.ForEach(&quot;Hello, world&quot;, Foo);
+<pre class="hljs"><code>Parallel.ForEach(<span class="hljs-string">&quot;Hello, world&quot;</span>, Foo);
 </code></pre>
 <p>مثال عملی با رمزنگاری (<code>System.Security.Cryptography</code>):</p>
-<pre><code class="language-csharp">var keyPairs = new string[6];
-Parallel.For(0, keyPairs.Length,
-    i =&gt; keyPairs[i] = RSA.Create().ToXmlString(true));
+<pre class="hljs"><code><span class="hljs-keyword">var</span> keyPairs = <span class="hljs-keyword">new</span> <span class="hljs-built_in">string</span>[<span class="hljs-number">6</span>];
+Parallel.For(<span class="hljs-number">0</span>, keyPairs.Length,
+    i =&gt; keyPairs[i] = RSA.Create().ToXmlString(<span class="hljs-literal">true</span>));
 </code></pre>
 <ul>
 <li>مشابه <code>Parallel.Invoke</code>، می‌توان تعداد زیادی work item به <code>Parallel.For</code> و <code>Parallel.ForEach</code> داد و آن‌ها به‌صورت مؤثر روی چند Task تقسیم می‌شوند.</li>
 <li>همان کار را می‌توان با PLINQ انجام داد:</li>
 </ul>
-<pre><code class="language-csharp">string[] keyPairs = ParallelEnumerable.Range(0, 6)
-    .Select(i =&gt; RSA.Create().ToXmlString(true))
+<pre class="hljs"><code><span class="hljs-built_in">string</span>[] keyPairs = ParallelEnumerable.Range(<span class="hljs-number">0</span>, <span class="hljs-number">6</span>)
+    .Select(i =&gt; RSA.Create().ToXmlString(<span class="hljs-literal">true</span>))
     .ToArray();
 </code></pre>
 <hr>
@@ -751,70 +711,70 @@ Parallel.For(0, keyPairs.Length,
 <li>موازی‌سازی هر دو حلقه داخلی و خارجی معمولاً غیرضروری است.</li>
 </ul>
 <p>مثال:</p>
-<pre><code class="language-csharp">Parallel.For(0, 100, i =&gt;
+<pre class="hljs"><code>Parallel.For(<span class="hljs-number">0</span>, <span class="hljs-number">100</span>, i =&gt;
 {
-    Parallel.For(0, 50, j =&gt; Foo(i, j));   // حلقه داخلی: معمولاً sequential بهتر است
+    Parallel.For(<span class="hljs-number">0</span>, <span class="hljs-number">50</span>, j =&gt; Foo(i, j));   <span class="hljs-comment">// حلقه داخلی: معمولاً sequential بهتر است</span>
 });
 </code></pre>
 <h3>Parallel.ForEach با اندیس و مدیریت توقف حلقه 🟢</h3>
 <p>گاهی اوقات در <strong>حلقه‌های موازی</strong> لازم است که <strong>اندیس iteration</strong> را بدانیم.</p>
 <h4>اندیس در حلقه‌های موازی</h4>
 <p>در حلقه sequential معمولی:</p>
-<pre><code class="language-csharp">int i = 0;
-foreach (char c in &quot;Hello, world&quot;)
+<pre class="hljs"><code><span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">char</span> c <span class="hljs-keyword">in</span> <span class="hljs-string">&quot;Hello, world&quot;</span>)
     Console.WriteLine(c.ToString() + i++);
 </code></pre>
-<p>اما در محیط موازی، <strong>افزایش یک متغیر مشترک thread-safe نیست</strong>.
+<p>اما در محیط موازی، <strong>افزایش یک متغیر مشترک thread-safe نیست</strong>.<br>
 راه حل: استفاده از overload ای از <code>Parallel.ForEach</code> که اندیس loop را ارائه می‌دهد:</p>
-<pre><code class="language-csharp">public static ParallelLoopResult ForEach&lt;TSource&gt;(
-    IEnumerable&lt;TSource&gt; source, Action&lt;TSource, ParallelLoopState, long&gt; body)
-</code></pre>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> ParallelLoopResult <span class="hljs-title">ForEach</span>&lt;<span class="hljs-title">TSource</span>&gt;(<span class="hljs-params">
+    IEnumerable&lt;TSource&gt; source, Action&lt;TSource, ParallelLoopState, <span class="hljs-built_in">long</span>&gt; body</span>)
+</span></code></pre>
 <ul>
 <li>پارامتر سوم از نوع <code>long</code> اندیس هر عنصر را نشان می‌دهد.</li>
 <li>مثال:</li>
 </ul>
-<pre><code class="language-csharp">Parallel.ForEach(&quot;Hello, world&quot;, (c, state, i) =&gt;
+<pre class="hljs"><code>Parallel.ForEach(<span class="hljs-string">&quot;Hello, world&quot;</span>, (c, state, i) =&gt;
 {
     Console.WriteLine(c.ToString() + i);
 });
 </code></pre>
 <hr>
 <h4>مثال عملی: Spellchecker موازی</h4>
-<pre><code class="language-csharp">var wordLookup = new HashSet&lt;string&gt;(
-    File.ReadAllLines(&quot;WordLookup.txt&quot;),
+<pre class="hljs"><code><span class="hljs-keyword">var</span> wordLookup = <span class="hljs-keyword">new</span> HashSet&lt;<span class="hljs-built_in">string</span>&gt;(
+    File.ReadAllLines(<span class="hljs-string">&quot;WordLookup.txt&quot;</span>),
     StringComparer.InvariantCultureIgnoreCase
 );
 
-var random = new Random();
-string[] wordList = wordLookup.ToArray();
-string[] wordsToTest = Enumerable.Range(0, 1000000)
-    .Select(i =&gt; wordList[random.Next(0, wordList.Length)])
+<span class="hljs-keyword">var</span> random = <span class="hljs-keyword">new</span> Random();
+<span class="hljs-built_in">string</span>[] wordList = wordLookup.ToArray();
+<span class="hljs-built_in">string</span>[] wordsToTest = Enumerable.Range(<span class="hljs-number">0</span>, <span class="hljs-number">1000000</span>)
+    .Select(i =&gt; wordList[random.Next(<span class="hljs-number">0</span>, wordList.Length)])
     .ToArray();
 
-wordsToTest[12345] = &quot;woozsh&quot;;
-wordsToTest[23456] = &quot;wubsie&quot;;
+wordsToTest[<span class="hljs-number">12345</span>] = <span class="hljs-string">&quot;woozsh&quot;</span>;
+wordsToTest[<span class="hljs-number">23456</span>] = <span class="hljs-string">&quot;wubsie&quot;</span>;
 
-var misspellings = new ConcurrentBag&lt;Tuple&lt;int,string&gt;&gt;();
+<span class="hljs-keyword">var</span> misspellings = <span class="hljs-keyword">new</span> ConcurrentBag&lt;Tuple&lt;<span class="hljs-built_in">int</span>,<span class="hljs-built_in">string</span>&gt;&gt;();
 
 Parallel.ForEach(wordsToTest, (word, state, i) =&gt;
 {
-    if (!wordLookup.Contains(word))
-        misspellings.Add(Tuple.Create((int)i, word));
+    <span class="hljs-keyword">if</span> (!wordLookup.Contains(word))
+        misspellings.Add(Tuple.Create((<span class="hljs-built_in">int</span>)i, word));
 });
 </code></pre>
 <blockquote>
-<p>نکته: باید نتایج را در یک <strong>collection ایمن برای Thread</strong> جمع‌آوری کنید.
+<p>نکته: باید نتایج را در یک <strong>collection ایمن برای Thread</strong> جمع‌آوری کنید.<br>
 مزیت استفاده از indexed <code>ForEach</code> نسبت به PLINQ: اجرای <strong>مستقیم بدون اعمال Select با اندیس</strong> که کارایی بیشتری دارد.</p>
 </blockquote>
 <hr>
 <h4>ParallelLoopState: توقف زودهنگام حلقه</h4>
-<p>در حلقه موازی نمی‌توان از <code>break</code> معمولی استفاده کرد.
+<p>در حلقه موازی نمی‌توان از <code>break</code> معمولی استفاده کرد.<br>
 باید از متدهای <code>Break()</code> یا <code>Stop()</code> در شی <code>ParallelLoopState</code> استفاده کنید.</p>
-<pre><code class="language-csharp">Parallel.ForEach(&quot;Hello, world&quot;, (c, loopState) =&gt;
+<pre class="hljs"><code>Parallel.ForEach(<span class="hljs-string">&quot;Hello, world&quot;</span>, (c, loopState) =&gt;
 {
-    if (c == ',')
-        loopState.Break();  // پایان حلقه بعد از iteration جاری
-    else
+    <span class="hljs-keyword">if</span> (c == <span class="hljs-string">&#x27;,&#x27;</span>)
+        loopState.Break();  <span class="hljs-comment">// پایان حلقه بعد از iteration جاری</span>
+    <span class="hljs-keyword">else</span>
         Console.Write(c);
 });
 </code></pre>
@@ -845,12 +805,12 @@ Parallel.ForEach(wordsToTest, (word, state, i) =&gt;
 <p>گاهی حلقه‌های موازی نیاز به <strong>جمع‌آوری داده‌ها در حین iteration</strong> دارند، مخصوصاً وقتی تعداد تکرارها زیاد است.</p>
 <hr>
 <h4>مشکل نمونه: جمع زدن ریشه دوم ۱۰ میلیون عدد</h4>
-<pre><code class="language-csharp">object locker = new object();
-double total = 0;
+<pre class="hljs"><code><span class="hljs-built_in">object</span> locker = <span class="hljs-keyword">new</span> <span class="hljs-built_in">object</span>();
+<span class="hljs-built_in">double</span> total = <span class="hljs-number">0</span>;
 
-Parallel.For(1, 10000000, i =&gt;
+Parallel.For(<span class="hljs-number">1</span>, <span class="hljs-number">10000000</span>, i =&gt;
 {
-    lock (locker)
+    <span class="hljs-keyword">lock</span> (locker)
         total += Math.Sqrt(i);
 });
 </code></pre>
@@ -858,7 +818,7 @@ Parallel.For(1, 10000000, i =&gt;
 <li>هر iteration نیاز به <strong>lock</strong> دارد.</li>
 <li>۱۰ میلیون lock باعث <strong>افت شدید کارایی</strong> می‌شود.</li>
 </ul>
-<p><strong>تشبیه:</strong>
+<p><strong>تشبیه:</strong><br>
 فرض کنید ۱۰ نفر زباله جمع می‌کنند و همه یک سطل مشترک دارند؛ زمان تلف شده برای صف‌بندی و contention بسیار زیاد است.</p>
 <hr>
 <h4>راه حل: <strong>Local Value</strong> (مقدار محلی)</h4>
@@ -866,14 +826,14 @@ Parallel.For(1, 10000000, i =&gt;
 <li>هر thread یک <strong>مقدار محلی</strong> دارد (مثل سطل زباله خصوصی).</li>
 <li>در پایان iteration‌ها، مقادیر محلی به مقدار اصلی اضافه می‌شوند.</li>
 </ul>
-<pre><code class="language-csharp">object locker = new object();
-double grandTotal = 0;
+<pre class="hljs"><code><span class="hljs-built_in">object</span> locker = <span class="hljs-keyword">new</span> <span class="hljs-built_in">object</span>();
+<span class="hljs-built_in">double</span> grandTotal = <span class="hljs-number">0</span>;
 
 Parallel.For(
-    1, 10000000,
-    () =&gt; 0.0,  // مقدار محلی جدید برای هر thread
-    (i, state, localTotal) =&gt; localTotal + Math.Sqrt(i),  // بدنه حلقه: جمع به local
-    localTotal =&gt; { lock (locker) grandTotal += localTotal; }  // جمع local به مقدار اصلی
+    <span class="hljs-number">1</span>, <span class="hljs-number">10000000</span>,
+    () =&gt; <span class="hljs-number">0.0</span>,  <span class="hljs-comment">// مقدار محلی جدید برای هر thread</span>
+    (i, state, localTotal) =&gt; localTotal + Math.Sqrt(i),  <span class="hljs-comment">// بدنه حلقه: جمع به local</span>
+    localTotal =&gt; { <span class="hljs-keyword">lock</span> (locker) grandTotal += localTotal; }  <span class="hljs-comment">// جمع local به مقدار اصلی</span>
 );
 </code></pre>
 <ul>
@@ -885,7 +845,7 @@ Parallel.For(
 <ul>
 <li><strong>PLINQ</strong> اغلب جایگزین مناسبی است:</li>
 </ul>
-<pre><code class="language-csharp">ParallelEnumerable.Range(1, 10000000)
+<pre class="hljs"><code>ParallelEnumerable.Range(<span class="hljs-number">1</span>, <span class="hljs-number">10000000</span>)
                   .Sum(i =&gt; Math.Sqrt(i));
 </code></pre>
 <ul>
@@ -923,17 +883,17 @@ Parallel.For(
 <li>Shortcut برای <code>Task.Factory.StartNew</code> که <strong>گزینه‌های بیشتری</strong> برای کنترل دارد.</li>
 </ul>
 <h5>مثال: ارسال state به task</h5>
-<pre><code class="language-csharp">var task = Task.Factory.StartNew(Greet, &quot;Hello&quot;);
-task.Wait();  // منتظر تکمیل task
-void Greet(object state) { Console.Write(state); }  // خروجی: Hello
+<pre class="hljs"><code><span class="hljs-keyword">var</span> task = Task.Factory.StartNew(Greet, <span class="hljs-string">&quot;Hello&quot;</span>);
+task.Wait();  <span class="hljs-comment">// منتظر تکمیل task</span>
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Greet</span>(<span class="hljs-params"><span class="hljs-built_in">object</span> state</span>)</span> { Console.Write(state); }  <span class="hljs-comment">// خروجی: Hello</span>
 </code></pre>
 <ul>
 <li>همچنین می‌توان <strong>نام معنی‌دار</strong> برای task اختصاص داد:</li>
 </ul>
-<pre><code class="language-csharp">var task = Task.Factory.StartNew(state =&gt; Greet(&quot;Hello&quot;), &quot;Greeting&quot;);
-Console.WriteLine(task.AsyncState);  // Greeting
+<pre class="hljs"><code><span class="hljs-keyword">var</span> task = Task.Factory.StartNew(state =&gt; Greet(<span class="hljs-string">&quot;Hello&quot;</span>), <span class="hljs-string">&quot;Greeting&quot;</span>);
+Console.WriteLine(task.AsyncState);  <span class="hljs-comment">// Greeting</span>
 task.Wait();
-void Greet(string message) { Console.Write(message); }
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Greet</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> message</span>)</span> { Console.Write(message); }
 </code></pre>
 <hr>
 <h4>TaskCreationOptions</h4>
@@ -949,24 +909,24 @@ void Greet(string message) { Console.Write(message); }
 <li>وقتی یک task دیگری را ایجاد می‌کند، می‌توان رابطه والد/فرزند ایجاد کرد.</li>
 <li>مثال:</li>
 </ul>
-<pre><code class="language-csharp">Task parent = Task.Factory.StartNew(() =&gt;
+<pre class="hljs"><code>Task parent = Task.Factory.StartNew(() =&gt;
 {
-    Console.WriteLine(&quot;I am a parent&quot;);
-    Task.Factory.StartNew(() =&gt; Console.WriteLine(&quot;I am detached&quot;));  // Detached
-    Task.Factory.StartNew(() =&gt; Console.WriteLine(&quot;I am a child&quot;), TaskCreationOptions.AttachedToParent);
+    Console.WriteLine(<span class="hljs-string">&quot;I am a parent&quot;</span>);
+    Task.Factory.StartNew(() =&gt; Console.WriteLine(<span class="hljs-string">&quot;I am detached&quot;</span>));  <span class="hljs-comment">// Detached</span>
+    Task.Factory.StartNew(() =&gt; Console.WriteLine(<span class="hljs-string">&quot;I am a child&quot;</span>), TaskCreationOptions.AttachedToParent);
 });
 </code></pre>
 <ul>
 <li><strong>ویژگی مهم:</strong> هنگام <code>Wait</code> روی parent، taskهای child هم منتظر می‌مانند و <strong>استثناهای child به parent منتقل می‌شوند</strong>.</li>
 </ul>
-<pre><code class="language-csharp">TaskCreationOptions atp = TaskCreationOptions.AttachedToParent;
-var parent = Task.Factory.StartNew(() =&gt;
+<pre class="hljs"><code>TaskCreationOptions atp = TaskCreationOptions.AttachedToParent;
+<span class="hljs-keyword">var</span> parent = Task.Factory.StartNew(() =&gt;
 {
     Task.Factory.StartNew(() =&gt; 
-        Task.Factory.StartNew(() =&gt; { throw null; }, atp), atp);
+        Task.Factory.StartNew(() =&gt; { <span class="hljs-keyword">throw</span> <span class="hljs-literal">null</span>; }, atp), atp);
 });
 
-parent.Wait();  // NullReferenceException wrapped در AggregateException
+parent.Wait();  <span class="hljs-comment">// NullReferenceException wrapped در AggregateException</span>
 </code></pre>
 <hr>
 <h4>انتظار برای چند task</h4>
@@ -994,22 +954,22 @@ parent.Wait();  // NullReferenceException wrapped در AggregateException
 <li>اگر با <code>Cancel</code> روی token فراخوانی شود، task وارد حالت <strong>Canceled</strong> می‌شود.</li>
 </ul>
 <h5>مثال</h5>
-<pre><code class="language-csharp">var cts = new CancellationTokenSource();
+<pre class="hljs"><code><span class="hljs-keyword">var</span> cts = <span class="hljs-keyword">new</span> CancellationTokenSource();
 CancellationToken token = cts.Token;
-cts.CancelAfter(500);  // لغو خودکار پس از 500ms
+cts.CancelAfter(<span class="hljs-number">500</span>);  <span class="hljs-comment">// لغو خودکار پس از 500ms</span>
 
 Task task = Task.Factory.StartNew(() =&gt;
 {
-    Thread.Sleep(1000);
-    token.ThrowIfCancellationRequested(); // بررسی لغو
+    Thread.Sleep(<span class="hljs-number">1000</span>);
+    token.ThrowIfCancellationRequested(); <span class="hljs-comment">// بررسی لغو</span>
 }, token);
 
-try { task.Wait(); }
-catch (AggregateException ex)
+<span class="hljs-keyword">try</span> { task.Wait(); }
+<span class="hljs-keyword">catch</span> (AggregateException ex)
 {
-    Console.WriteLine(ex.InnerException is TaskCanceledException); // True
-    Console.WriteLine(task.IsCanceled);                             // True
-    Console.WriteLine(task.Status);                                 // Canceled
+    Console.WriteLine(ex.InnerException <span class="hljs-keyword">is</span> TaskCanceledException); <span class="hljs-comment">// True</span>
+    Console.WriteLine(task.IsCanceled);                             <span class="hljs-comment">// True</span>
+    Console.WriteLine(task.Status);                                 <span class="hljs-comment">// Canceled</span>
 }
 </code></pre>
 <ul>
@@ -1023,13 +983,13 @@ catch (AggregateException ex)
 <li>بسیاری از APIها مانند PLINQ از cancellation token پشتیبانی می‌کنند.</li>
 <li>مثال:</li>
 </ul>
-<pre><code class="language-csharp">var cancelSource = new CancellationTokenSource();
+<pre class="hljs"><code><span class="hljs-keyword">var</span> cancelSource = <span class="hljs-keyword">new</span> CancellationTokenSource();
 CancellationToken token = cancelSource.Token;
 
 Task task = Task.Factory.StartNew(() =&gt;
 {
-    var query = someSequence.AsParallel().WithCancellation(token);
-    foreach(var item in query) { ... }
+    <span class="hljs-keyword">var</span> query = someSequence.AsParallel().WithCancellation(token);
+    <span class="hljs-keyword">foreach</span>(<span class="hljs-keyword">var</span> item <span class="hljs-keyword">in</span> query) { ... }
 });
 </code></pre>
 <ul>
@@ -1041,25 +1001,25 @@ Task task = Task.Factory.StartNew(() =&gt;
 <li><code>ContinueWith</code> یک delegate را <strong>بلافاصله بعد از پایان یک task</strong> اجرا می‌کند.</li>
 <li>مثال ساده:</li>
 </ul>
-<pre><code class="language-csharp">Task task1 = Task.Factory.StartNew(() =&gt; Console.Write(&quot;antecedent..&quot;));
-Task task2 = task1.ContinueWith(ant =&gt; Console.Write(&quot;..continuation&quot;));
+<pre class="hljs"><code>Task task1 = Task.Factory.StartNew(() =&gt; Console.Write(<span class="hljs-string">&quot;antecedent..&quot;</span>));
+Task task2 = task1.ContinueWith(ant =&gt; Console.Write(<span class="hljs-string">&quot;..continuation&quot;</span>));
 </code></pre>
 <ul>
 <li><code>ant</code> → ارجاع به task اصلی.</li>
 <li><code>ContinueWith</code> خود task جدیدی برمی‌گرداند و می‌توان <strong>چند continuation زنجیره‌ای</strong> ایجاد کرد.</li>
 </ul>
 <h5>اجرای Continuation روی همان thread</h5>
-<pre><code class="language-csharp">task1.ContinueWith(ant =&gt; ..., TaskContinuationOptions.ExecuteSynchronously);
+<pre class="hljs"><code>task1.ContinueWith(ant =&gt; ..., TaskContinuationOptions.ExecuteSynchronously);
 </code></pre>
 <hr>
 <h4>Continuations با Task<TResult></h4>
 <ul>
 <li>Continuation می‌تواند <strong>مقدار بازگرداند</strong> و داده‌ها را پردازش کند:</li>
 </ul>
-<pre><code class="language-csharp">Task.Factory.StartNew&lt;int&gt;(() =&gt; 8)
-    .ContinueWith(ant =&gt; ant.Result * 2)
+<pre class="hljs"><code>Task.Factory.StartNew&lt;<span class="hljs-built_in">int</span>&gt;(() =&gt; <span class="hljs-number">8</span>)
+    .ContinueWith(ant =&gt; ant.Result * <span class="hljs-number">2</span>)
     .ContinueWith(ant =&gt; Math.Sqrt(ant.Result))
-    .ContinueWith(ant =&gt; Console.WriteLine(ant.Result));  // 4
+    .ContinueWith(ant =&gt; Console.WriteLine(ant.Result));  <span class="hljs-comment">// 4</span>
 </code></pre>
 <hr>
 <h4>Continuations و Exception</h4>
@@ -1068,29 +1028,29 @@ Task task2 = task1.ContinueWith(ant =&gt; Console.Write(&quot;..continuation&quo
 <li>اگر continuation exception را نبیند، <strong>UnobservedTaskException</strong> رخ می‌دهد.</li>
 <li>الگوی ایمن:</li>
 </ul>
-<pre><code class="language-csharp">Task continuation = Task.Factory.StartNew(() =&gt; { throw null; })
-    .ContinueWith(ant =&gt; { ant.Wait(); /* ادامه پردازش */ });
-continuation.Wait();  // exception پرتاب می‌شود
+<pre class="hljs"><code>Task continuation = Task.Factory.StartNew(() =&gt; { <span class="hljs-keyword">throw</span> <span class="hljs-literal">null</span>; })
+    .ContinueWith(ant =&gt; { ant.Wait(); <span class="hljs-comment">/* ادامه پردازش */</span> });
+continuation.Wait();  <span class="hljs-comment">// exception پرتاب می‌شود</span>
 </code></pre>
 <ul>
 <li>می‌توان continuations مختلف برای <strong>موارد خطا و غیرخطا</strong> تعریف کرد:</li>
 </ul>
-<pre><code class="language-csharp">Task task1 = Task.Factory.StartNew(() =&gt; { throw null; });
+<pre class="hljs"><code>Task task1 = Task.Factory.StartNew(() =&gt; { <span class="hljs-keyword">throw</span> <span class="hljs-literal">null</span>; });
 Task error = task1.ContinueWith(ant =&gt; Console.Write(ant.Exception),
                                 TaskContinuationOptions.OnlyOnFaulted);
-Task ok = task1.ContinueWith(ant =&gt; Console.Write(&quot;Success!&quot;),
+Task ok = task1.ContinueWith(ant =&gt; Console.Write(<span class="hljs-string">&quot;Success!&quot;</span>),
                              TaskContinuationOptions.NotOnFaulted);
 </code></pre>
 <ul>
 <li>برای صرف نظر از استثناها:</li>
 </ul>
-<pre><code class="language-csharp">public static void IgnoreExceptions(this Task task)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">IgnoreExceptions</span>(<span class="hljs-params"><span class="hljs-keyword">this</span> Task task</span>)</span>
 {
-    task.ContinueWith(t =&gt; { var ignore = t.Exception; },
+    task.ContinueWith(t =&gt; { <span class="hljs-keyword">var</span> ignore = t.Exception; },
                       TaskContinuationOptions.OnlyOnFaulted);
 }
 
-Task.Factory.StartNew(() =&gt; { throw null; }).IgnoreExceptions();
+Task.Factory.StartNew(() =&gt; { <span class="hljs-keyword">throw</span> <span class="hljs-literal">null</span>; }).IgnoreExceptions();
 </code></pre>
 <hr>
 <h4>Continuations و Child Tasks 👶</h4>
@@ -1098,13 +1058,13 @@ Task.Factory.StartNew(() =&gt; { throw null; }).IgnoreExceptions();
 <li>Continuation <strong>تنها زمانی اجرا می‌شود که تمام child taskها کامل شوند</strong>.</li>
 <li>استثناهای childها به continuation منتقل می‌شوند:</li>
 </ul>
-<pre><code class="language-csharp">TaskCreationOptions atp = TaskCreationOptions.AttachedToParent;
+<pre class="hljs"><code>TaskCreationOptions atp = TaskCreationOptions.AttachedToParent;
 
 Task.Factory.StartNew(() =&gt;
 {
-    Task.Factory.StartNew(() =&gt; { throw null; }, atp);
-    Task.Factory.StartNew(() =&gt; { throw null; }, atp);
-    Task.Factory.StartNew(() =&gt; { throw null; }, atp);
+    Task.Factory.StartNew(() =&gt; { <span class="hljs-keyword">throw</span> <span class="hljs-literal">null</span>; }, atp);
+    Task.Factory.StartNew(() =&gt; { <span class="hljs-keyword">throw</span> <span class="hljs-literal">null</span>; }, atp);
+    Task.Factory.StartNew(() =&gt; { <span class="hljs-keyword">throw</span> <span class="hljs-literal">null</span>; }, atp);
 })
 .ContinueWith(p =&gt; Console.WriteLine(p.Exception),
               TaskContinuationOptions.OnlyOnFaulted);
@@ -1205,22 +1165,22 @@ Task.Factory.StartNew(() =&gt;
 </blockquote>
 <hr>
 <h4>مثال عملی</h4>
-<pre><code class="language-csharp">Task t1 = Task.Factory.StartNew(() =&gt; { /* کار اصلی */ });
+<pre class="hljs"><code>Task t1 = Task.Factory.StartNew(() =&gt; { <span class="hljs-comment">/* کار اصلی */</span> });
 
-// ادامه فقط در صورت خطا
+<span class="hljs-comment">// ادامه فقط در صورت خطا</span>
 Task fault = t1.ContinueWith(
-    ant =&gt; Console.WriteLine(&quot;fault&quot;),
+    ant =&gt; Console.WriteLine(<span class="hljs-string">&quot;fault&quot;</span>),
     TaskContinuationOptions.OnlyOnFaulted
 );
 
-// ادامه روی continuation قبلی
+<span class="hljs-comment">// ادامه روی continuation قبلی</span>
 Task t3 = fault.ContinueWith(
-    ant =&gt; Console.WriteLine(&quot;t3&quot;)  // این همیشه اجرا می‌شود!
+    ant =&gt; Console.WriteLine(<span class="hljs-string">&quot;t3&quot;</span>)  <span class="hljs-comment">// این همیشه اجرا می‌شود!</span>
 );
 
-// اگر بخواهیم t3 تنها وقتی اجرا شود که fault اجرا شده:
+<span class="hljs-comment">// اگر بخواهیم t3 تنها وقتی اجرا شود که fault اجرا شده:</span>
 Task t3_conditional = fault.ContinueWith(
-    ant =&gt; Console.WriteLine(&quot;t3&quot;),
+    ant =&gt; Console.WriteLine(<span class="hljs-string">&quot;t3&quot;</span>),
     TaskContinuationOptions.NotOnCanceled
 );
 </code></pre>
@@ -1258,19 +1218,19 @@ Task t3_conditional = fault.ContinueWith(
 <blockquote>
 <p>مثال با <code>ContinueWhenAll</code>:</p>
 </blockquote>
-<pre><code class="language-csharp">var task1 = Task.Run(() =&gt; Console.Write(&quot;X&quot;));
-var task2 = Task.Run(() =&gt; Console.Write(&quot;Y&quot;));
+<pre class="hljs"><code><span class="hljs-keyword">var</span> task1 = Task.Run(() =&gt; Console.Write(<span class="hljs-string">&quot;X&quot;</span>));
+<span class="hljs-keyword">var</span> task2 = Task.Run(() =&gt; Console.Write(<span class="hljs-string">&quot;Y&quot;</span>));
 
-var continuation = Task.Factory.ContinueWhenAll(
-    new[] { task1, task2 },
-    tasks =&gt; Console.WriteLine(&quot;Done&quot;)
+<span class="hljs-keyword">var</span> continuation = Task.Factory.ContinueWhenAll(
+    <span class="hljs-keyword">new</span>[] { task1, task2 },
+    tasks =&gt; Console.WriteLine(<span class="hljs-string">&quot;Done&quot;</span>)
 );
 </code></pre>
 <ul>
 <li>همان نتیجه با <strong>task combinator</strong> <code>WhenAll</code>:</li>
 </ul>
-<pre><code class="language-csharp">var continuation = Task.WhenAll(task1, task2)
-                       .ContinueWith(ant =&gt; Console.WriteLine(&quot;Done&quot;));
+<pre class="hljs"><code><span class="hljs-keyword">var</span> continuation = Task.WhenAll(task1, task2)
+                       .ContinueWith(ant =&gt; Console.WriteLine(<span class="hljs-string">&quot;Done&quot;</span>));
 </code></pre>
 <hr>
 <h4>2️⃣ چند continuation روی یک antecedent</h4>
@@ -1278,10 +1238,10 @@ var continuation = Task.Factory.ContinueWhenAll(
 <li>می‌توان چند <code>ContinueWith</code> روی یک task واحد صدا زد.</li>
 <li>همه continuationها پس از پایان antecedent شروع می‌شوند (مگر گزینه <code>ExecuteSynchronously</code> مشخص شود).</li>
 </ul>
-<pre><code class="language-csharp">var t = Task.Factory.StartNew(() =&gt; Thread.Sleep(1000));
-t.ContinueWith(ant =&gt; Console.Write(&quot;X&quot;));
-t.ContinueWith(ant =&gt; Console.Write(&quot;Y&quot;));
-// خروجی می‌تواند XY یا YX باشد
+<pre class="hljs"><code><span class="hljs-keyword">var</span> t = Task.Factory.StartNew(() =&gt; Thread.Sleep(<span class="hljs-number">1000</span>));
+t.ContinueWith(ant =&gt; Console.Write(<span class="hljs-string">&quot;X&quot;</span>));
+t.ContinueWith(ant =&gt; Console.Write(<span class="hljs-string">&quot;Y&quot;</span>));
+<span class="hljs-comment">// خروجی می‌تواند XY یا YX باشد</span>
 </code></pre>
 <hr>
 <h4>3️⃣ Task Schedulers 🗂️</h4>
@@ -1300,7 +1260,7 @@ t.ContinueWith(ant =&gt; Console.Write(&quot;Y&quot;));
 <blockquote>
 <p>مثال: اجرای یک continuation روی UI thread:</p>
 </blockquote>
-<pre><code class="language-csharp">_uiScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+<pre class="hljs"><code>_uiScheduler = TaskScheduler.FromCurrentSynchronizationContext();
 Task.Run(() =&gt; Foo())
     .ContinueWith(ant =&gt; lblResult.Content = ant.Result, _uiScheduler);
 </code></pre>
@@ -1325,12 +1285,12 @@ Task.Run(() =&gt; Foo())
 <p>می‌توان TaskFactory خود را با مقادیر پیش‌فرض سفارشی ساخت:</p>
 </li>
 </ul>
-<pre><code class="language-csharp">var factory = new TaskFactory(
+<pre class="hljs"><code><span class="hljs-keyword">var</span> factory = <span class="hljs-keyword">new</span> TaskFactory(
     TaskCreationOptions.LongRunning | TaskCreationOptions.AttachedToParent,
     TaskContinuationOptions.None
 );
 
-// استفاده از factory برای ایجاد taskها
+<span class="hljs-comment">// استفاده از factory برای ایجاد taskها</span>
 Task task1 = factory.StartNew(Method1);
 Task task2 = factory.StartNew(Method2);
 </code></pre>
@@ -1339,29 +1299,29 @@ Task task2 = factory.StartNew(Method2);
 </ul>
 <h3>کار با AggregateException ⚠️</h3>
 <p>همان‌طور که دیدیم، <strong>PLINQ</strong>، کلاس <strong>Parallel</strong> و <strong>Tasks</strong> به‌صورت خودکار استثناها را به مصرف‌کننده منتقل می‌کنند. برای درک اهمیت این موضوع، فرض کنید کوئری LINQ زیر را داریم که در اولین تکرار، یک <strong>DivideByZeroException</strong> ایجاد می‌کند:</p>
-<pre><code class="language-csharp">try
+<pre class="hljs"><code><span class="hljs-keyword">try</span>
 {
-    var query = from i in Enumerable.Range(0, 1000000)
-                select 100 / i;
+    <span class="hljs-keyword">var</span> query = <span class="hljs-keyword">from</span> i <span class="hljs-keyword">in</span> Enumerable.Range(<span class="hljs-number">0</span>, <span class="hljs-number">1000000</span>)
+                <span class="hljs-keyword">select</span> <span class="hljs-number">100</span> / i;
     ...
 }
-catch (DivideByZeroException)
+<span class="hljs-keyword">catch</span> (DivideByZeroException)
 {
     ...
 }
 </code></pre>
 <p>اگر از PLINQ بخواهیم این کوئری را موازی‌سازی کند و رسیدگی به استثناها را نادیده بگیرد، احتمالاً <strong>DivideByZeroException</strong> در یک نخ (Thread) جداگانه رخ خواهد داد، بدون آن که بلاک <code>catch</code> ما اجرا شود و باعث کرش کردن برنامه خواهد شد.</p>
 <p>بنابراین، استثناها به‌طور خودکار گرفته شده و دوباره به فراخواننده پرتاب می‌شوند. اما متأسفانه موضوع به سادگی گرفتن یک <strong>DivideByZeroException</strong> نیست. چون این کتابخانه‌ها از چندین نخ استفاده می‌کنند، ممکن است دو یا چند استثنا همزمان پرتاب شوند. برای اطمینان از گزارش همه استثناها، آن‌ها داخل یک <strong>AggregateException</strong> قرار می‌گیرند که پراپرتی <strong>InnerExceptions</strong> آن شامل همه استثناهای گرفته شده است:</p>
-<pre><code class="language-csharp">try
+<pre class="hljs"><code><span class="hljs-keyword">try</span>
 {
-    var query = from i in ParallelEnumerable.Range(0, 1000000)
-                select 100 / i;
-    // اجرای کوئری
+    <span class="hljs-keyword">var</span> query = <span class="hljs-keyword">from</span> i <span class="hljs-keyword">in</span> ParallelEnumerable.Range(<span class="hljs-number">0</span>, <span class="hljs-number">1000000</span>)
+                <span class="hljs-keyword">select</span> <span class="hljs-number">100</span> / i;
+    <span class="hljs-comment">// اجرای کوئری</span>
     ...
 }
-catch (AggregateException aex)
+<span class="hljs-keyword">catch</span> (AggregateException aex)
 {
-    foreach (Exception ex in aex.InnerExceptions)
+    <span class="hljs-keyword">foreach</span> (Exception ex <span class="hljs-keyword">in</span> aex.InnerExceptions)
         Console.WriteLine(ex.Message);
 }
 </code></pre>
@@ -1371,47 +1331,47 @@ catch (AggregateException aex)
 <p>کلاس <strong>AggregateException</strong> دو روش برای ساده‌سازی مدیریت استثنا ارائه می‌دهد: <strong>Flatten</strong> و <strong>Handle</strong>.</p>
 <h4>Flatten</h4>
 <p>اغلب <strong>AggregateException</strong> شامل <strong>AggregateException</strong>های دیگر نیز می‌شود. این حالت معمولاً زمانی رخ می‌دهد که یک <strong>Child Task</strong> استثنا پرتاب کند. با استفاده از <strong>Flatten</strong> می‌توان هر سطحی از تودرتویی را حذف کرد تا مدیریت ساده‌تر شود. این متد یک <strong>AggregateException</strong> جدید با لیست مسطحی از استثناهای داخلی برمی‌گرداند:</p>
-<pre><code class="language-csharp">catch (AggregateException aex)
+<pre class="hljs"><code><span class="hljs-keyword">catch</span> (AggregateException aex)
 {
-    foreach (Exception ex in aex.Flatten().InnerExceptions)
+    <span class="hljs-keyword">foreach</span> (Exception ex <span class="hljs-keyword">in</span> aex.Flatten().InnerExceptions)
         myLogWriter.LogException(ex);
 }
 </code></pre>
 <h4>Handle</h4>
 <p>گاهی لازم است فقط نوع خاصی از استثناها گرفته شوند و بقیه دوباره پرتاب شوند. متد <strong>Handle</strong> این کار را ساده می‌کند. این متد یک <strong>predicate</strong> از نوع <code>Func&lt;Exception, bool&gt;</code> می‌گیرد و روی هر استثنای داخلی اجرا می‌کند:</p>
-<pre><code class="language-csharp">public void Handle(Func&lt;Exception, bool&gt; predicate)
-</code></pre>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Handle</span>(<span class="hljs-params">Func&lt;Exception, <span class="hljs-built_in">bool</span>&gt; predicate</span>)
+</span></code></pre>
 <p>اگر <strong>predicate</strong> مقدار <code>true</code> برگرداند، آن استثنا &quot;مدیریت شده&quot; محسوب می‌شود. پس از اجرای delegate روی همه استثناها:</p>
 <ul>
 <li>اگر همه استثناها مدیریت شده باشند، دوباره پرتاب نمی‌شوند.</li>
 <li>اگر استثنایی مدیریت نشده باشد (<code>false</code>)، یک <strong>AggregateException</strong> جدید شامل آن استثناها ایجاد شده و پرتاب می‌شود.</li>
 </ul>
 <p>مثال زیر یک <strong>AggregateException</strong> دیگر شامل یک <strong>NullReferenceException</strong> ایجاد می‌کند:</p>
-<pre><code class="language-csharp">var parent = Task.Factory.StartNew(() =&gt; 
+<pre class="hljs"><code><span class="hljs-keyword">var</span> parent = Task.Factory.StartNew(() =&gt; 
 {
-    int[] numbers = { 0 };
-    var childFactory = new TaskFactory(TaskCreationOptions.AttachedToParent, TaskContinuationOptions.None);
-    childFactory.StartNew(() =&gt; 5 / numbers[0]);   // تقسیم بر صفر
-    childFactory.StartNew(() =&gt; numbers[1]);       // خارج از محدوده
-    childFactory.StartNew(() =&gt; { throw null; });  // ارجاع null
+    <span class="hljs-built_in">int</span>[] numbers = { <span class="hljs-number">0</span> };
+    <span class="hljs-keyword">var</span> childFactory = <span class="hljs-keyword">new</span> TaskFactory(TaskCreationOptions.AttachedToParent, TaskContinuationOptions.None);
+    childFactory.StartNew(() =&gt; <span class="hljs-number">5</span> / numbers[<span class="hljs-number">0</span>]);   <span class="hljs-comment">// تقسیم بر صفر</span>
+    childFactory.StartNew(() =&gt; numbers[<span class="hljs-number">1</span>]);       <span class="hljs-comment">// خارج از محدوده</span>
+    childFactory.StartNew(() =&gt; { <span class="hljs-keyword">throw</span> <span class="hljs-literal">null</span>; });  <span class="hljs-comment">// ارجاع null</span>
 });
 
-try { parent.Wait(); }
-catch (AggregateException aex)
+<span class="hljs-keyword">try</span> { parent.Wait(); }
+<span class="hljs-keyword">catch</span> (AggregateException aex)
 {
-    aex.Flatten().Handle(ex =&gt; // نیاز به Flatten داریم
+    aex.Flatten().Handle(ex =&gt; <span class="hljs-comment">// نیاز به Flatten داریم</span>
     {
-        if (ex is DivideByZeroException)
+        <span class="hljs-keyword">if</span> (ex <span class="hljs-keyword">is</span> DivideByZeroException)
         {
-            Console.WriteLine(&quot;Divide by zero&quot;);
-            return true; // مدیریت شد
+            Console.WriteLine(<span class="hljs-string">&quot;Divide by zero&quot;</span>);
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>; <span class="hljs-comment">// مدیریت شد</span>
         }
-        if (ex is IndexOutOfRangeException)
+        <span class="hljs-keyword">if</span> (ex <span class="hljs-keyword">is</span> IndexOutOfRangeException)
         {
-            Console.WriteLine(&quot;Index out of range&quot;);
-            return true; // مدیریت شد
+            Console.WriteLine(<span class="hljs-string">&quot;Index out of range&quot;</span>);
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>; <span class="hljs-comment">// مدیریت شد</span>
         }
-        return false; // سایر استثناها دوباره پرتاب می‌شوند
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; <span class="hljs-comment">// سایر استثناها دوباره پرتاب می‌شوند</span>
     });
 }
 </code></pre>
@@ -1431,12 +1391,12 @@ catch (AggregateException aex)
 <li>کلاس‌های <strong>ConcurrentStack</strong>، <strong>ConcurrentQueue</strong> و <strong>ConcurrentBag</strong> به‌صورت داخلی با <strong>لیست‌های پیوندی</strong> پیاده‌سازی شده‌اند. این باعث می‌شود که مصرف حافظه آن‌ها نسبت به <strong>Stack</strong> و <strong>Queue</strong> غیرهمزمان بیشتر باشد، اما دسترسی همزمان را بهینه می‌کند، زیرا لیست‌های پیوندی برای پیاده‌سازی‌های بدون قفل یا کم‌قفل مناسب‌اند. (چرا که اضافه کردن یک گره به لیست پیوندی تنها نیازمند به‌روزرسانی چند مرجع است، در حالی که اضافه کردن یک عنصر به ساختار شبیه <strong>List<T></strong> ممکن است نیاز به جابه‌جایی هزاران عنصر داشته باشد.)</li>
 </ul>
 <p>به عبارت دیگر، این مجموعه‌ها صرفاً جایگزینی برای استفاده از <strong>یک مجموعه عادی با قفل</strong> نیستند. برای مثال، اگر کد زیر را روی یک نخ اجرا کنیم:</p>
-<pre><code class="language-csharp">var d = new ConcurrentDictionary&lt;int,int&gt;();
-for (int i = 0; i &lt; 1000000; i++) d[i] = 123;
+<pre class="hljs"><code><span class="hljs-keyword">var</span> d = <span class="hljs-keyword">new</span> ConcurrentDictionary&lt;<span class="hljs-built_in">int</span>,<span class="hljs-built_in">int</span>&gt;();
+<span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000000</span>; i++) d[i] = <span class="hljs-number">123</span>;
 </code></pre>
 <p>این کد <strong>سه برابر کندتر</strong> از حالت زیر اجرا می‌شود:</p>
-<pre><code class="language-csharp">var d = new Dictionary&lt;int,int&gt;();
-for (int i = 0; i &lt; 1000000; i++) lock (d) d[i] = 123;
+<pre class="hljs"><code><span class="hljs-keyword">var</span> d = <span class="hljs-keyword">new</span> Dictionary&lt;<span class="hljs-built_in">int</span>,<span class="hljs-built_in">int</span>&gt;();
+<span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000000</span>; i++) <span class="hljs-keyword">lock</span> (d) d[i] = <span class="hljs-number">123</span>;
 </code></pre>
 <p>(با این حال، <strong>خواندن از ConcurrentDictionary</strong> سریع است، زیرا بدون قفل انجام می‌شود.)</p>
 <hr>
@@ -1456,16 +1416,16 @@ for (int i = 0; i &lt; 1000000; i++) lock (d) d[i] = 123;
 <li><strong>ConcurrentBag<T></strong></li>
 </ul>
 <p>این رابط از <strong>ICollection</strong> ارث‌بری می‌کند و متدهای زیر را اضافه می‌کند:</p>
-<pre><code class="language-csharp">void CopyTo(T[] array, int index);
-T[] ToArray();
-bool TryAdd(T item);
-bool TryTake(out T item);
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">CopyTo</span>(<span class="hljs-params">T[] array, <span class="hljs-built_in">int</span> index</span>)</span>;
+<span class="hljs-function">T[] <span class="hljs-title">ToArray</span>()</span>;
+<span class="hljs-function"><span class="hljs-built_in">bool</span> <span class="hljs-title">TryAdd</span>(<span class="hljs-params">T item</span>)</span>;
+<span class="hljs-function"><span class="hljs-built_in">bool</span> <span class="hljs-title">TryTake</span>(<span class="hljs-params"><span class="hljs-keyword">out</span> T item</span>)</span>;
 </code></pre>
 <ul>
 <li><strong>TryAdd</strong> و <strong>TryTake</strong> بررسی می‌کنند که آیا می‌توان عملیات افزودن یا حذف را انجام داد؛ اگر ممکن باشد، آن را انجام می‌دهند. تست و عمل به‌صورت <strong>اتمیک</strong> انجام می‌شود، بنابراین نیاز به قفل مانند مجموعه‌های معمولی نیست:</li>
 </ul>
-<pre><code class="language-csharp">int result;
-lock (myStack) if (myStack.Count &gt; 0) result = myStack.Pop();
+<pre class="hljs"><code><span class="hljs-built_in">int</span> result;
+<span class="hljs-keyword">lock</span> (myStack) <span class="hljs-keyword">if</span> (myStack.Count &gt; <span class="hljs-number">0</span>) result = myStack.Pop();
 </code></pre>
 <ul>
 <li><strong>TryTake</strong> اگر مجموعه خالی باشد، مقدار <code>false</code> برمی‌گرداند.</li>
@@ -1487,11 +1447,11 @@ lock (myStack) if (myStack.Count &gt; 0) result = myStack.Pop();
 <p>وقتی <strong>Take</strong> را فراخوانی می‌کنید، ابتدا به <strong>لیست خصوصی نخ جاری</strong> نگاه می‌کند. اگر حداقل یک عنصر وجود داشته باشد، عملیات به‌راحتی و بدون هم‌زمانی انجام می‌شود. اما اگر لیست خالی باشد، باید عنصری را از لیست خصوصی نخ دیگری <strong>&quot;سرقت&quot;</strong> کند و احتمال ایجاد هم‌زمانی وجود دارد.</p>
 <p>بنابراین، دقیقاً می‌توان گفت که <strong>Take</strong> عنصری را برمی‌گرداند که اخیراً توسط همان نخ اضافه شده است؛ اگر در آن نخ عنصری نباشد، عنصری از نخ دیگری به‌صورت تصادفی بازگردانده می‌شود.</p>
 <p><strong>ConcurrentBag</strong> برای مواقعی ایده‌آل است که عملیات موازی روی مجموعه شما عمدتاً شامل <strong>افزودن عناصر</strong> باشد، یا زمانی که <strong>افزودن و برداشتن عناصر روی هر نخ متعادل</strong> است. مثال قبلی از استفاده از <strong>Parallel.ForEach</strong> برای پیاده‌سازی <strong>SpellChecker موازی</strong> را به یاد بیاورید:</p>
-<pre><code class="language-csharp">var misspellings = new ConcurrentBag&lt;Tuple&lt;int,string&gt;&gt;();
+<pre class="hljs"><code><span class="hljs-keyword">var</span> misspellings = <span class="hljs-keyword">new</span> ConcurrentBag&lt;Tuple&lt;<span class="hljs-built_in">int</span>,<span class="hljs-built_in">string</span>&gt;&gt;();
 Parallel.ForEach(wordsToTest, (word, state, i) =&gt;
 {
-  if (!wordLookup.Contains(word))
-    misspellings.Add(Tuple.Create((int)i, word));
+  <span class="hljs-keyword">if</span> (!wordLookup.Contains(word))
+    misspellings.Add(Tuple.Create((<span class="hljs-built_in">int</span>)i, word));
 });
 </code></pre>
 <p>اما استفاده از <strong>ConcurrentBag</strong> برای یک <strong>صف Producer/Consumer</strong> مناسب نیست، زیرا عناصر توسط نخ‌های مختلف اضافه و حذف می‌شوند.</p>
@@ -1525,28 +1485,28 @@ Parallel.ForEach(wordsToTest, (word, state, i) =&gt;
 <p>با این حال، نوشتن یک صف از صفر <strong>ضروری نیست</strong>، زیرا اکثر قابلیت‌ها توسط <strong>BlockingCollection<T></strong> فراهم شده‌اند.</p>
 <hr>
 <h4>مثال استفاده از BlockingCollection برای صف PCQueue 🛠️</h4>
-<pre><code class="language-csharp">public class PCQueue : IDisposable
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">PCQueue</span> : <span class="hljs-title">IDisposable</span>
 {
-  BlockingCollection&lt;Action&gt; _taskQ = new BlockingCollection&lt;Action&gt;();
+  BlockingCollection&lt;Action&gt; _taskQ = <span class="hljs-keyword">new</span> BlockingCollection&lt;Action&gt;();
 
-  public PCQueue(int workerCount)
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">PCQueue</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> workerCount</span>)</span>
   {
-    // ایجاد و شروع یک Task جداگانه برای هر مصرف‌کننده:
-    for (int i = 0; i &lt; workerCount; i++)
+    <span class="hljs-comment">// ایجاد و شروع یک Task جداگانه برای هر مصرف‌کننده:</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; workerCount; i++)
       Task.Factory.StartNew(Consume);
   }
 
-  public void Enqueue(Action action) { _taskQ.Add(action); }
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Enqueue</span>(<span class="hljs-params">Action action</span>)</span> { _taskQ.Add(action); }
 
-  void Consume()
+  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Consume</span>()</span>
   {
-    // این دنباله هنگام نبود عنصر Block می‌شود
-    // و با فراخوانی CompleteAdding خاتمه می‌یابد.
-    foreach (Action action in _taskQ.GetConsumingEnumerable())
-      action();  // اجرای کار
+    <span class="hljs-comment">// این دنباله هنگام نبود عنصر Block می‌شود</span>
+    <span class="hljs-comment">// و با فراخوانی CompleteAdding خاتمه می‌یابد.</span>
+    <span class="hljs-keyword">foreach</span> (Action action <span class="hljs-keyword">in</span> _taskQ.GetConsumingEnumerable())
+      action();  <span class="hljs-comment">// اجرای کار</span>
   }
 
-  public void Dispose() { _taskQ.CompleteAdding(); }
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Dispose</span>()</span> { _taskQ.CompleteAdding(); }
 }
 </code></pre>
 <p>چون چیزی به سازنده <strong>BlockingCollection</strong> ارسال نکرده‌ایم، به‌صورت خودکار یک <strong>ConcurrentQueue</strong> ایجاد می‌شود. اگر یک <strong>ConcurrentStack</strong> می‌دادیم، صف به یک <strong>Producer/Consumer Stack</strong> تبدیل می‌شد.</p>
@@ -1561,93 +1521,47 @@ Parallel.ForEach(wordsToTest, (word, state, i) =&gt;
 <p>راه حل ایده‌آل این است که متد <strong>Enqueue</strong> یک <strong>Task</strong> برگرداند تا بتوانیم همه این قابلیت‌ها را داشته باشیم. خوشبختانه کلاس <strong>Task</strong> دقیقاً این کار را انجام می‌دهد و می‌توان آن را با <strong>TaskCompletionSource</strong> یا با <strong>ایجاد مستقیم</strong> یک Task (Cold/Unstarted) تولید کرد.</p>
 <hr>
 <h4>مثال PCQueue با Task 🎯</h4>
-<pre><code class="language-csharp">public class PCQueue : IDisposable
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">PCQueue</span> : <span class="hljs-title">IDisposable</span>
 {
-  BlockingCollection&lt;Task&gt; _taskQ = new BlockingCollection&lt;Task&gt;();
+  BlockingCollection&lt;Task&gt; _taskQ = <span class="hljs-keyword">new</span> BlockingCollection&lt;Task&gt;();
 
-  public PCQueue(int workerCount)
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">PCQueue</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> workerCount</span>)</span>
   {
-    for (int i = 0; i &lt; workerCount; i++)
+    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; workerCount; i++)
       Task.Factory.StartNew(Consume);
   }
 
-  public Task Enqueue(Action action, CancellationToken cancelToken = default)
+  <span class="hljs-function"><span class="hljs-keyword">public</span> Task <span class="hljs-title">Enqueue</span>(<span class="hljs-params">Action action, CancellationToken cancelToken = <span class="hljs-literal">default</span></span>)</span>
   {
-    var task = new Task(action, cancelToken);
+    <span class="hljs-keyword">var</span> task = <span class="hljs-keyword">new</span> Task(action, cancelToken);
     _taskQ.Add(task);
-    return task;
+    <span class="hljs-keyword">return</span> task;
   }
 
-  public Task&lt;TResult&gt; Enqueue&lt;TResult&gt;(Func&lt;TResult&gt; func, CancellationToken cancelToken = default)
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Task</span>&lt;<span class="hljs-title">TResult</span>&gt; <span class="hljs-title">Enqueue</span>&lt;<span class="hljs-title">TResult</span>&gt;(<span class="hljs-params">Func&lt;TResult&gt; func, CancellationToken cancelToken = <span class="hljs-literal">default</span></span>)</span>
   {
-    var task = new Task&lt;TResult&gt;(func, cancelToken);
+    <span class="hljs-keyword">var</span> task = <span class="hljs-keyword">new</span> Task&lt;TResult&gt;(func, cancelToken);
     _taskQ.Add(task);
-    return task;
+    <span class="hljs-keyword">return</span> task;
   }
 
-  void Consume()
+  <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Consume</span>()</span>
   {
-    foreach (var task in _taskQ.GetConsumingEnumerable())
-      try 
+    <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> task <span class="hljs-keyword">in</span> _taskQ.GetConsumingEnumerable())
+      <span class="hljs-keyword">try</span> 
       {
-          if (!task.IsCanceled) task.RunSynchronously();
+          <span class="hljs-keyword">if</span> (!task.IsCanceled) task.RunSynchronously();
       } 
-      catch (InvalidOperationException) { }  // شرایط نادر Race Condition
+      <span class="hljs-keyword">catch</span> (InvalidOperationException) { }  <span class="hljs-comment">// شرایط نادر Race Condition</span>
   }
 
-  public void Dispose() { _taskQ.CompleteAdding(); }
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Dispose</span>()</span> { _taskQ.CompleteAdding(); }
 }
 </code></pre>
 <p>در متد <strong>Enqueue</strong>، یک <strong>Task</strong> ایجاد می‌کنیم، آن را در صف قرار می‌دهیم و به فراخواننده برمی‌گردانیم بدون اینکه اجرا شود. در متد <strong>Consume</strong>، <strong>Task</strong> روی نخ مصرف‌کننده <strong>به‌صورت هم‌زمان اجرا</strong> می‌شود. با گرفتن <strong>InvalidOperationException</strong>، شرایط نادر لغو هم‌زمان Task مدیریت می‌شود.</p>
 <hr>
 <h4>نمونه استفاده</h4>
-<pre><code class="language-csharp">var pcQ = new PCQueue(2);    // حداکثر concurrency برابر ۲
-string result = await pcQ.Enqueue(() =&gt; &quot;That was easy!&quot;);
+<pre class="hljs"><code><span class="hljs-keyword">var</span> pcQ = <span class="hljs-keyword">new</span> PCQueue(<span class="hljs-number">2</span>);    <span class="hljs-comment">// حداکثر concurrency برابر ۲</span>
+<span class="hljs-built_in">string</span> result = <span class="hljs-keyword">await</span> pcQ.Enqueue(() =&gt; <span class="hljs-string">&quot;That was easy!&quot;</span>);
 </code></pre>
 <p>با این روش، <strong>تمام مزایای Task</strong> از جمله <strong>انتشار استثناها، بازگشت مقادیر و لغو</strong> را داریم، در حالی که <strong>کنترل کامل روی زمان‌بندی اجرای کارها</strong> نیز در اختیارمان است.</p>
-
-  </main>
-
-  <!-- فوتر مشترک -->
-  <footer class="footer">
-    <div class="container">
-      <p>
-        <img src="/icone/copyright.svg" alt="کپی‌رایت" width="14" height="14"
-             style="vertical-align:middle;margin-inline:4px">
-        <span id="y"></span> Gitab — برای توسعه‌دهندگان
-      </p>
-    </div>
-  </footer>
-
-  <!-- سال + اسکریپت تم -->
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
-
-    (() => {
-      const root = document.documentElement;
-      const btn = document.getElementById('themeToggle');
-      const KEY = 'gitab-theme';
-      const media = window.matchMedia('(prefers-color-scheme: dark)');
-      const getEffective = s => s === 'auto' ? (media.matches ? 'dark' : 'light') : s;
-      function updateTheme(s) {
-        root.setAttribute('data-theme', s);
-        const mode = getEffective(s);
-        root.dataset.colorMode = mode;
-        btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
-      }
-      const saved = localStorage.getItem(KEY) || 'auto';
-      updateTheme(saved);
-      btn.addEventListener('click', () => {
-        const curr = localStorage.getItem(KEY) || 'auto';
-        const next = curr === 'auto' ? 'dark' : curr === 'dark' ? 'light' : 'auto';
-        localStorage.setItem(KEY, next);
-        updateTheme(next);
-      });
-      media.addEventListener('change', () => {
-        if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
-      });
-      window.addEventListener('DOMContentLoaded', () => updateTheme(saved));
-    })();
-  </script>
-</body>
-</html>

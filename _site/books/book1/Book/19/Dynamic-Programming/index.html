@@ -1,45 +1,5 @@
-<!doctype html>
-<html lang="fa" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gitab | کتابخانهٔ ترجمه‌های دات‌نت و سی شارپ</title>
-  <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
-  <link rel="stylesheet" href="/styles/main.css">
-</head>
-<body>
-  <!-- هدر مشترک -->
-  <header class="header">
-    <div class="container nav-wrap">
-      <a class="brand" href="/">
-        <img src="/icone/logo.svg" alt="Gitab" width="28" height="28">
-        <span>Gitab</span>
-      </a>
-
-      <nav class="nav">
-        <a href="/">خانه</a>
-        <a href="/books/list-books">کتاب‌ها</a>
-        <a href="#">همکاری</a>
-        <a href="#">درباره‌ما</a>
-      </nav>
-
-     <div class="nav-actions">
-  <button id="themeToggle" class="icon-btn theme-btn" aria-label="تغییر حالت">
-    <img class="icon-sun" src="/icone/sun.svg" alt="روشن">
-    <img class="icon-moon" src="/icone/moon.svg" alt="تاریک">
-  </button>
-
-  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
-    <img src="/icone/github.svg" alt="GitHub">
-  </a>
-</div>
-
-  </header>
-
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل نوزدهم:  برنامه‌نویسی پویا (Dynamic Programming)</h1>
-<p>فصل ۴ توضیح داد که <strong>dynamic binding</strong> در زبان C# چگونه کار می‌کند.
+<h1>فصل نوزدهم:  برنامه‌نویسی پویا (Dynamic Programming)</h1>
+<p>فصل ۴ توضیح داد که <strong>dynamic binding</strong> در زبان C# چگونه کار می‌کند.<br>
 در این فصل، ابتدا به‌طور مختصر به <strong>Dynamic Language Runtime (DLR)</strong> می‌پردازیم و سپس الگوهای زیر در برنامه‌نویسی پویا را بررسی می‌کنیم:</p>
 <ul>
 <li><strong>Dynamic member overload resolution</strong></li>
@@ -66,9 +26,9 @@
 <h3>❓ Call Site چیست؟</h3>
 <p>وقتی کامپایلر با یک <strong>dynamic expression</strong> روبه‌رو می‌شود، نمی‌داند چه کسی آن عبارت را در زمان اجرا ارزیابی خواهد کرد.</p>
 <p>مثلاً متد زیر را در نظر بگیرید:</p>
-<pre><code class="language-csharp">public dynamic Foo (dynamic x, dynamic y)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">dynamic</span> <span class="hljs-title">Foo</span> (<span class="hljs-params"><span class="hljs-built_in">dynamic</span> x, <span class="hljs-built_in">dynamic</span> y</span>)</span>
 {
-  return x / y;   // Dynamic expression
+  <span class="hljs-keyword">return</span> x / y;   <span class="hljs-comment">// Dynamic expression</span>
 }
 </code></pre>
 <p>متغیرهای <code>x</code> و <code>y</code> می‌توانند هر چیزی باشند:</p>
@@ -77,61 +37,61 @@
 <li>یک شیء <strong>COM</strong></li>
 <li>یا حتی یک شیء در یک زبان پویا</li>
 </ul>
-<p>به همین دلیل، کامپایلر نمی‌تواند از روش معمول استاتیک خود (یعنی صدا زدن یک متد مشخص از یک نوع مشخص) استفاده کند.
-در عوض، کامپایلر کدی تولید می‌کند که در نهایت یک <strong>expression tree</strong> می‌سازد؛ این <strong>expression tree</strong> عملیاتی را توصیف می‌کند که توسط یک <strong>call site</strong> مدیریت می‌شود و <strong>DLR</strong> آن را در زمان اجرا bind می‌کند.
+<p>به همین دلیل، کامپایلر نمی‌تواند از روش معمول استاتیک خود (یعنی صدا زدن یک متد مشخص از یک نوع مشخص) استفاده کند.<br>
+در عوض، کامپایلر کدی تولید می‌کند که در نهایت یک <strong>expression tree</strong> می‌سازد؛ این <strong>expression tree</strong> عملیاتی را توصیف می‌کند که توسط یک <strong>call site</strong> مدیریت می‌شود و <strong>DLR</strong> آن را در زمان اجرا bind می‌کند.<br>
 درواقع، <strong>call site</strong> مانند یک واسطه (intermediary) بین <strong>caller</strong> و <strong>callee</strong> عمل می‌کند.</p>
-<p>یک <strong>call site</strong> توسط کلاس <strong>CallSite&lt;&gt;</strong> در <strong>System.Core.dll</strong> نمایش داده می‌شود.
+<p>یک <strong>call site</strong> توسط کلاس <strong>CallSite&lt;&gt;</strong> در <strong>System.Core.dll</strong> نمایش داده می‌شود.<br>
 با <strong>disassemble</strong> کردن متد قبلی، نتیجه تقریباً به‌شکل زیر خواهد بود:</p>
-<pre><code class="language-csharp">static CallSite&lt;Func&lt;CallSite,object,object,object&gt;&gt; divideSite;
+<pre class="hljs"><code><span class="hljs-keyword">static</span> CallSite&lt;Func&lt;CallSite,<span class="hljs-built_in">object</span>,<span class="hljs-built_in">object</span>,<span class="hljs-built_in">object</span>&gt;&gt; divideSite;
 
-[return: Dynamic]
-public object Foo ([Dynamic] object x, [Dynamic] object y)
+[<span class="hljs-meta">return: Dynamic</span>]
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">object</span> <span class="hljs-title">Foo</span> (<span class="hljs-params">[Dynamic] <span class="hljs-built_in">object</span> x, [Dynamic] <span class="hljs-built_in">object</span> y</span>)</span>
 {
-  if (divideSite == null)
+  <span class="hljs-keyword">if</span> (divideSite == <span class="hljs-literal">null</span>)
     divideSite =
-      CallSite&lt;Func&lt;CallSite,object,object,object&gt;&gt;.Create (
+      CallSite&lt;Func&lt;CallSite,<span class="hljs-built_in">object</span>,<span class="hljs-built_in">object</span>,<span class="hljs-built_in">object</span>&gt;&gt;.Create (
         Microsoft.CSharp.RuntimeBinder.Binder.BinaryOperation (
           CSharpBinderFlags.None,
           ExpressionType.Divide,
-          /* Remaining arguments omitted for brevity */ ));
+          <span class="hljs-comment">/* Remaining arguments omitted for brevity */</span> ));
 
-  return divideSite.Target (divideSite, x, y);
+  <span class="hljs-keyword">return</span> divideSite.Target (divideSite, x, y);
 }
 </code></pre>
-<p>همان‌طور که می‌بینید، <strong>call site</strong> در یک <strong>static field</strong> ذخیره می‌شود تا هزینه‌ی ساخت مجدد آن در هر بار فراخوانی اجتناب شود.
+<p>همان‌طور که می‌بینید، <strong>call site</strong> در یک <strong>static field</strong> ذخیره می‌شود تا هزینه‌ی ساخت مجدد آن در هر بار فراخوانی اجتناب شود.<br>
 همچنین، DLR نتیجه‌ی <strong>binding phase</strong> و <strong>method targets</strong> واقعی را cache می‌کند. (ممکن است چندین target بسته به نوع‌های <code>x</code> و <code>y</code> وجود داشته باشد.)</p>
 <p>فراخوانی پویا (dynamic call) در عمل با صدا زدن <strong>Target</strong> (که یک <strong>delegate</strong> است) انجام می‌شود و عملوندهای <code>x</code> و <code>y</code> به آن پاس داده می‌شوند.</p>
-<p>نکته‌ی مهم: کلاس <strong>Binder</strong> مخصوص هر زبان است.
+<p>نکته‌ی مهم: کلاس <strong>Binder</strong> مخصوص هر زبان است.<br>
 هر زبانی که از <strong>dynamic binding</strong> پشتیبانی می‌کند، یک <strong>language-specific binder</strong> دارد تا به DLR کمک کند عبارات را مطابق منطق آن زبان تفسیر کند و رفتار غیرمنتظره برای برنامه‌نویس ایجاد نشود.</p>
 <p>مثلاً اگر متد <code>Foo</code> را با مقادیر عددی <code>5</code> و <code>2</code> صدا بزنیم:</p>
 <ul>
 <li><strong>C# binder</strong> نتیجه‌ی <code>2</code> را برمی‌گرداند.</li>
-<li>اما <strong>VB.NET binder</strong> نتیجه‌ی <code>2.5</code> را خواهد داد.</li>
+<li>اما <strong><a href="http://VB.NET">VB.NET</a> binder</strong> نتیجه‌ی <code>2.5</code> را خواهد داد.</li>
 </ul>
 <hr>
 <h3>⚡ Dynamic Member Overload Resolution</h3>
 <p>فراخوانی یک متد <strong>statically known</strong> با آرگومان‌های <strong>dynamically typed</strong> باعث می‌شود که <strong>member overload resolution</strong> از زمان کامپایل به زمان اجرا منتقل شود.</p>
-<p>این ویژگی برای ساده‌سازی برخی وظایف برنامه‌نویسی مفید است—مثل ساده‌تر کردن <strong>Visitor design pattern</strong>.
+<p>این ویژگی برای ساده‌سازی برخی وظایف برنامه‌نویسی مفید است—مثل ساده‌تر کردن <strong>Visitor design pattern</strong>.<br>
 همچنین در دور زدن محدودیت‌های اعمال‌شده توسط <strong>static typing</strong> در C# بسیار کاربرد دارد.</p>
 <h3>🎯 ساده‌سازی الگوی Visitor</h3>
 <p>به‌طور خلاصه، <strong>Visitor pattern</strong> این امکان را می‌دهد که بدون تغییر در کلاس‌های موجود، یک متد به یک سلسله‌مراتب کلاسی (class hierarchy) “اضافه” کنید.</p>
 <p>اگرچه این الگو مفید است، اما نسخه‌ی <strong>استاتیک</strong> آن در مقایسه با بسیاری از الگوهای طراحی دیگر، ظریف و غیرمستقیم است. همچنین، این الگو نیاز دارد که کلاس‌هایی که قرار است بازدید شوند، “visitor-friendly” باشند؛ یعنی یک متد <strong>Accept</strong> را در اختیار قرار دهند. این موضوع زمانی غیرممکن است که کلاس‌ها تحت کنترل شما نباشند.</p>
 <p>با استفاده از <strong>dynamic binding</strong> می‌توانید به همان هدف دست پیدا کنید—اما بسیار ساده‌تر و بدون نیاز به تغییر کلاس‌های موجود.</p>
 <p>برای روشن شدن موضوع، به سلسله‌مراتب کلاس زیر دقت کنید:</p>
-<pre><code class="language-csharp">class Person
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span>
 {
-  public string FirstName { get; set; }
-  public string LastName  { get; set; }
-  // مجموعه Friends می‌تواند شامل Customers و Employees باشد:
-  public readonly IList&lt;Person&gt; Friends = new Collection&lt;Person&gt; ();
+  <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> FirstName { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+  <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> LastName  { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+  <span class="hljs-comment">// مجموعه Friends می‌تواند شامل Customers و Employees باشد:</span>
+  <span class="hljs-keyword">public</span> <span class="hljs-keyword">readonly</span> IList&lt;Person&gt; Friends = <span class="hljs-keyword">new</span> Collection&lt;Person&gt; ();
 }
 
-class Customer : Person { public decimal CreditLimit { get; set; } }
+<span class="hljs-keyword">class</span> <span class="hljs-title">Customer</span> : <span class="hljs-title">Person</span> { <span class="hljs-keyword">public</span> <span class="hljs-built_in">decimal</span> CreditLimit { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; } }
 
-class Employee : Person { public decimal Salary { get; set; } }
+<span class="hljs-keyword">class</span> <span class="hljs-title">Employee</span> : <span class="hljs-title">Person</span> { <span class="hljs-keyword">public</span> <span class="hljs-built_in">decimal</span> Salary { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; } }
 </code></pre>
-<p>فرض کنید می‌خواهیم متدی بنویسیم که جزئیات یک <strong>Person</strong> را به‌صورت برنامه‌نویسی به یک <strong>XElement</strong> در XML صادر کند.
-واضح‌ترین راه این است که در کلاس <strong>Person</strong> یک متد مجازی (virtual) به نام <strong>ToXElement()</strong> تعریف کنیم که یک <strong>XElement</strong> شامل propertyهای یک <strong>Person</strong> برگرداند.
+<p>فرض کنید می‌خواهیم متدی بنویسیم که جزئیات یک <strong>Person</strong> را به‌صورت برنامه‌نویسی به یک <strong>XElement</strong> در XML صادر کند.<br>
+واضح‌ترین راه این است که در کلاس <strong>Person</strong> یک متد مجازی (virtual) به نام <strong>ToXElement()</strong> تعریف کنیم که یک <strong>XElement</strong> شامل propertyهای یک <strong>Person</strong> برگرداند.<br>
 سپس در کلاس‌های <strong>Customer</strong> و <strong>Employee</strong> آن را override کنیم تا <strong>XElement</strong> به ترتیب شامل <strong>CreditLimit</strong> و <strong>Salary</strong> هم باشد.</p>
 <p>اما این الگو می‌تواند از دو جهت مشکل‌ساز باشد:</p>
 <ol>
@@ -139,32 +99,32 @@ class Employee : Person { public decimal Salary { get; set; } }
 <li>کلاس‌های <strong>Person</strong>، <strong>Customer</strong> و <strong>Employee</strong> ممکن است همین حالا هم خیلی بزرگ باشند. یک <strong>antipattern</strong> رایج، <strong>God Object</strong> است؛ جایی که یک کلاسی مثل <strong>Person</strong> آنقدر عملکردهای مختلف به خود می‌گیرد که نگهداری آن کابوس‌وار می‌شود. یک راه‌حل خوب این است که از افزودن توابعی به <strong>Person</strong> که نیازی به دسترسی به وضعیت خصوصی آن ندارند، پرهیز کنیم. متد <strong>ToXElement</strong> می‌تواند یک کاندید عالی برای بیرون کشیده شدن باشد.</li>
 </ol>
 <p>با استفاده از <strong>dynamic member overload resolution</strong> می‌توانیم قابلیت <strong>ToXElement</strong> را در یک کلاس جداگانه پیاده‌سازی کنیم، بدون آنکه مجبور شویم از switchهای زشت بر اساس نوع استفاده کنیم:</p>
-<pre><code class="language-csharp">class ToXElementPersonVisitor
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title">ToXElementPersonVisitor</span>
 {
-  public XElement DynamicVisit (Person p) =&gt; Visit ((dynamic)p);
+  <span class="hljs-function"><span class="hljs-keyword">public</span> XElement <span class="hljs-title">DynamicVisit</span> (<span class="hljs-params">Person p</span>)</span> =&gt; Visit ((<span class="hljs-built_in">dynamic</span>)p);
 
-  XElement Visit (Person p)
+  <span class="hljs-function">XElement <span class="hljs-title">Visit</span> (<span class="hljs-params">Person p</span>)</span>
   {
-    return new XElement (&quot;Person&quot;,
-      new XAttribute (&quot;Type&quot;, p.GetType().Name),
-      new XElement (&quot;FirstName&quot;, p.FirstName),
-      new XElement (&quot;LastName&quot;, p.LastName),
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> XElement (<span class="hljs-string">&quot;Person&quot;</span>,
+      <span class="hljs-keyword">new</span> XAttribute (<span class="hljs-string">&quot;Type&quot;</span>, p.GetType().Name),
+      <span class="hljs-keyword">new</span> XElement (<span class="hljs-string">&quot;FirstName&quot;</span>, p.FirstName),
+      <span class="hljs-keyword">new</span> XElement (<span class="hljs-string">&quot;LastName&quot;</span>, p.LastName),
       p.Friends.Select (f =&gt; DynamicVisit (f))
     );
   }
 
-  XElement Visit (Customer c)   // منطق اختصاصی برای Customer
+  <span class="hljs-function">XElement <span class="hljs-title">Visit</span> (<span class="hljs-params">Customer c</span>)   <span class="hljs-comment">// منطق اختصاصی برای Customer</span></span>
   {
-    XElement xe = Visit ((Person)c);   // صدا زدن متد &quot;base&quot;
-    xe.Add (new XElement (&quot;CreditLimit&quot;, c.CreditLimit));
-    return xe;
+    XElement xe = Visit ((Person)c);   <span class="hljs-comment">// صدا زدن متد &quot;base&quot;</span>
+    xe.Add (<span class="hljs-keyword">new</span> XElement (<span class="hljs-string">&quot;CreditLimit&quot;</span>, c.CreditLimit));
+    <span class="hljs-keyword">return</span> xe;
   }
 
-  XElement Visit (Employee e)   // منطق اختصاصی برای Employee
+  <span class="hljs-function">XElement <span class="hljs-title">Visit</span> (<span class="hljs-params">Employee e</span>)   <span class="hljs-comment">// منطق اختصاصی برای Employee</span></span>
   {
-    XElement xe = Visit ((Person)e);   // صدا زدن متد &quot;base&quot;
-    xe.Add (new XElement (&quot;Salary&quot;, e.Salary));
-    return xe;
+    XElement xe = Visit ((Person)e);   <span class="hljs-comment">// صدا زدن متد &quot;base&quot;</span>
+    xe.Add (<span class="hljs-keyword">new</span> XElement (<span class="hljs-string">&quot;Salary&quot;</span>, e.Salary));
+    <span class="hljs-keyword">return</span> xe;
   }
 }
 </code></pre>
@@ -172,39 +132,39 @@ class Employee : Person { public decimal Salary { get; set; } }
 <p>به خطی که در آن متد <strong>DynamicVisit</strong> روی هر <strong>Person</strong> در مجموعه‌ی <strong>Friends</strong> صدا زده می‌شود توجه کنید. این تضمین می‌کند که اگر یک دوست از نوع <strong>Customer</strong> یا <strong>Employee</strong> باشد، overload صحیح فراخوانی شود.</p>
 <hr>
 <h3>📌 مثال اجرا</h3>
-<pre><code class="language-csharp">var cust = new Customer
+<pre class="hljs"><code><span class="hljs-keyword">var</span> cust = <span class="hljs-keyword">new</span> Customer
 {
-  FirstName = &quot;Joe&quot;, LastName = &quot;Bloggs&quot;, CreditLimit = 123
+  FirstName = <span class="hljs-string">&quot;Joe&quot;</span>, LastName = <span class="hljs-string">&quot;Bloggs&quot;</span>, CreditLimit = <span class="hljs-number">123</span>
 };
 
 cust.Friends.Add (
-  new Employee { FirstName = &quot;Sue&quot;, LastName = &quot;Brown&quot;, Salary = 50000 }
+  <span class="hljs-keyword">new</span> Employee { FirstName = <span class="hljs-string">&quot;Sue&quot;</span>, LastName = <span class="hljs-string">&quot;Brown&quot;</span>, Salary = <span class="hljs-number">50000</span> }
 );
 
-Console.WriteLine (new ToXElementPersonVisitor().DynamicVisit (cust));
+Console.WriteLine (<span class="hljs-keyword">new</span> ToXElementPersonVisitor().DynamicVisit (cust));
 </code></pre>
 <hr>
 <h3>📤 خروجی</h3>
-<pre><code class="language-xml">&lt;Person Type=&quot;Customer&quot;&gt;
-  &lt;FirstName&gt;Joe&lt;/FirstName&gt;
-  &lt;LastName&gt;Bloggs&lt;/LastName&gt;
-  &lt;Person Type=&quot;Employee&quot;&gt;
-    &lt;FirstName&gt;Sue&lt;/FirstName&gt;
-    &lt;LastName&gt;Brown&lt;/LastName&gt;
-    &lt;Salary&gt;50000&lt;/Salary&gt;
-  &lt;/Person&gt;
-  &lt;CreditLimit&gt;123&lt;/CreditLimit&gt;
-&lt;/Person&gt;
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">Person</span> <span class="hljs-attr">Type</span>=<span class="hljs-string">&quot;Customer&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">FirstName</span>&gt;</span>Joe<span class="hljs-tag">&lt;/<span class="hljs-name">FirstName</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">LastName</span>&gt;</span>Bloggs<span class="hljs-tag">&lt;/<span class="hljs-name">LastName</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">Person</span> <span class="hljs-attr">Type</span>=<span class="hljs-string">&quot;Employee&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">FirstName</span>&gt;</span>Sue<span class="hljs-tag">&lt;/<span class="hljs-name">FirstName</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">LastName</span>&gt;</span>Brown<span class="hljs-tag">&lt;/<span class="hljs-name">LastName</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Salary</span>&gt;</span>50000<span class="hljs-tag">&lt;/<span class="hljs-name">Salary</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">Person</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">CreditLimit</span>&gt;</span>123<span class="hljs-tag">&lt;/<span class="hljs-name">CreditLimit</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">Person</span>&gt;</span>
 </code></pre>
 <h3>🔀 گونه‌ها (Variations)</h3>
 <p>اگر قصد داشته باشید بیش از یک کلاس Visitor بنویسید، یک تغییر مفید این است که یک کلاس پایه‌ی انتزاعی (<strong>abstract base class</strong>) برای Visitorها تعریف کنید:</p>
-<pre><code class="language-csharp">abstract class PersonVisitor&lt;T&gt;
+<pre class="hljs"><code><span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title">PersonVisitor</span>&lt;<span class="hljs-title">T</span>&gt;
 {
-  public T DynamicVisit (Person p) { return Visit ((dynamic)p); }
+  <span class="hljs-function"><span class="hljs-keyword">public</span> T <span class="hljs-title">DynamicVisit</span> (<span class="hljs-params">Person p</span>)</span> { <span class="hljs-keyword">return</span> Visit ((<span class="hljs-built_in">dynamic</span>)p); }
 
-  protected abstract T Visit (Person p);
-  protected virtual T Visit (Customer c) { return Visit ((Person) c); }
-  protected virtual T Visit (Employee e) { return Visit ((Person) e); }
+  <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">abstract</span> T <span class="hljs-title">Visit</span> (<span class="hljs-params">Person p</span>)</span>;
+  <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">virtual</span> T <span class="hljs-title">Visit</span> (<span class="hljs-params">Customer c</span>)</span> { <span class="hljs-keyword">return</span> Visit ((Person) c); }
+  <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">virtual</span> T <span class="hljs-title">Visit</span> (<span class="hljs-params">Employee e</span>)</span> { <span class="hljs-keyword">return</span> Visit ((Person) e); }
 }
 </code></pre>
 <p>در این حالت، کلاس‌های فرزند نیازی ندارند که متد <strong>DynamicVisit</strong> خودشان را تعریف کنند؛ تنها کاری که باید انجام دهند این است که نسخه‌های <strong>Visit</strong> را که می‌خواهند منطق اختصاصی برایشان بنویسند، override کنند.</p>
@@ -214,30 +174,30 @@ Console.WriteLine (new ToXElementPersonVisitor().DynamicVisit (cust));
 <li>اجازه دادن به پیاده‌سازان برای صدا زدن متدهای پایه (base methods) به شکلی طبیعی‌تر.</li>
 </ol>
 <p>نمونه:</p>
-<pre><code class="language-csharp">class ToXElementPersonVisitor : PersonVisitor&lt;XElement&gt;
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title">ToXElementPersonVisitor</span> : <span class="hljs-title">PersonVisitor</span>&lt;<span class="hljs-title">XElement</span>&gt;
 {
-  protected override XElement Visit (Person p)
+  <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> XElement <span class="hljs-title">Visit</span> (<span class="hljs-params">Person p</span>)</span>
   {
-    return new XElement (&quot;Person&quot;,
-      new XAttribute (&quot;Type&quot;, p.GetType().Name),
-      new XElement (&quot;FirstName&quot;, p.FirstName),
-      new XElement (&quot;LastName&quot;, p.LastName),
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> XElement (<span class="hljs-string">&quot;Person&quot;</span>,
+      <span class="hljs-keyword">new</span> XAttribute (<span class="hljs-string">&quot;Type&quot;</span>, p.GetType().Name),
+      <span class="hljs-keyword">new</span> XElement (<span class="hljs-string">&quot;FirstName&quot;</span>, p.FirstName),
+      <span class="hljs-keyword">new</span> XElement (<span class="hljs-string">&quot;LastName&quot;</span>, p.LastName),
       p.Friends.Select (f =&gt; DynamicVisit (f))
     );
   }
 
-  protected override XElement Visit (Customer c)
+  <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> XElement <span class="hljs-title">Visit</span> (<span class="hljs-params">Customer c</span>)</span>
   {
-    XElement xe = base.Visit (c);
-    xe.Add (new XElement (&quot;CreditLimit&quot;, c.CreditLimit));
-    return xe;
+    XElement xe = <span class="hljs-keyword">base</span>.Visit (c);
+    xe.Add (<span class="hljs-keyword">new</span> XElement (<span class="hljs-string">&quot;CreditLimit&quot;</span>, c.CreditLimit));
+    <span class="hljs-keyword">return</span> xe;
   }
 
-  protected override XElement Visit (Employee e)
+  <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> XElement <span class="hljs-title">Visit</span> (<span class="hljs-params">Employee e</span>)</span>
   {
-    XElement xe = base.Visit (e);
-    xe.Add (new XElement (&quot;Salary&quot;, e.Salary));
-    return xe;
+    XElement xe = <span class="hljs-keyword">base</span>.Visit (e);
+    xe.Add (<span class="hljs-keyword">new</span> XElement (<span class="hljs-string">&quot;Salary&quot;</span>, e.Salary));
+    <span class="hljs-keyword">return</span> xe;
   }
 }
 </code></pre>
@@ -251,28 +211,28 @@ Console.WriteLine (new ToXElementPersonVisitor().DynamicVisit (cust));
 </ul>
 <p>در چنین شرایطی، <strong>dynamic binding</strong> یک جایگزین تمیزتر و سریع‌تر از reflection است.</p>
 <p>مثال: وقتی نیاز دارید با یک شیء از نوع <code>G&lt;T&gt;</code> کار کنید در حالی که نوع <code>T</code> ناشناخته است.</p>
-<pre><code class="language-csharp">public class Foo&lt;T&gt; { public T Value; }
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span>&lt;<span class="hljs-title">T</span>&gt; { <span class="hljs-keyword">public</span> T Value; }
 </code></pre>
 <p>فرض کنید متدی به شکل زیر داریم:</p>
-<pre><code class="language-csharp">static void Write (object obj)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Write</span> (<span class="hljs-params"><span class="hljs-built_in">object</span> obj</span>)</span>
 {
-  if (obj is Foo&lt;&gt;)                           // Illegal
-    Console.WriteLine ((Foo&lt;&gt;) obj).Value);   // Illegal
+  <span class="hljs-keyword">if</span> (obj <span class="hljs-keyword">is</span> Foo&lt;&gt;)                           <span class="hljs-comment">// Illegal</span>
+    Console.WriteLine ((Foo&lt;&gt;) obj).Value);   <span class="hljs-comment">// Illegal</span>
 }
 </code></pre>
 <p>این کد کامپایل نمی‌شود: چون نمی‌توانید اعضای یک نوع generic غیرمتحد (unbound) را فراخوانی کنید.</p>
 <hr>
 <h3>✨ راه‌حل با dynamic binding</h3>
 <p>راه اول این است که <strong>Value</strong> را به‌صورت پویا (dynamic) صدا بزنید:</p>
-<pre><code class="language-csharp">static void Write (dynamic obj)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Write</span> (<span class="hljs-params"><span class="hljs-built_in">dynamic</span> obj</span>)</span>
 {
-  try { Console.WriteLine (obj.Value); }
-  catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException) {...}
+  <span class="hljs-keyword">try</span> { Console.WriteLine (obj.Value); }
+  <span class="hljs-keyword">catch</span> (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException) {...}
 }
 </code></pre>
 <hr>
 <h3>🐾 Multiple Dispatch</h3>
-<p>زبان C# و CLR همیشه یک شکل محدود از پویایی را با <strong>virtual method calls</strong> پشتیبانی کرده‌اند.
+<p>زبان C# و CLR همیشه یک شکل محدود از پویایی را با <strong>virtual method calls</strong> پشتیبانی کرده‌اند.<br>
 تفاوت آن با <strong>dynamic binding</strong> در این است که در <strong>virtual calls</strong>، کامپایلر باید در زمان کامپایل متعهد شود که کدام عضو مجازی صدا زده خواهد شد (بر اساس نام و امضای متدی که فراخوانی شده است).</p>
 <p>به این معنی که:</p>
 <ul>
@@ -280,7 +240,7 @@ Console.WriteLine (new ToXElementPersonVisitor().DynamicVisit (cust));
 <li><strong>Overload resolution</strong> باید کاملاً توسط کامپایلر و بر اساس نوع‌های زمان کامپایل آرگومان‌ها انجام شود.</li>
 </ul>
 <p>مثال:</p>
-<pre><code class="language-csharp">animal.Walk (owner);
+<pre class="hljs"><code>animal.Walk (owner);
 </code></pre>
 <p>نتیجه: توانایی انجام <strong>virtual calls</strong> به نام <strong>single dispatch</strong> شناخته می‌شود. چرا؟</p>
 <p>چون تصمیم زمان اجرا برای اینکه متد <strong>Walk</strong> سگ صدا زده شود یا متد <strong>Walk</strong> گربه، فقط به نوع دریافت‌کننده (<strong>receiver type</strong>)، یعنی <code>animal</code> بستگی دارد (به همین دلیل &quot;single&quot;).</p>
@@ -288,13 +248,13 @@ Console.WriteLine (new ToXElementPersonVisitor().DynamicVisit (cust));
 <hr>
 <h3>💡 Dynamic Multiple Dispatch</h3>
 <p>در مقابل، یک فراخوانی پویا (dynamic call) انتخاب overload را تا زمان اجرا به تأخیر می‌اندازد:</p>
-<pre><code class="language-csharp">animal.Walk ((dynamic) owner);
+<pre class="hljs"><code>animal.Walk ((<span class="hljs-built_in">dynamic</span>) owner);
 </code></pre>
-<p>این بار انتخاب نهایی اینکه کدام متد <strong>Walk</strong> فراخوانی شود به نوع‌های هر دو یعنی <code>animal</code> و <code>owner</code> بستگی دارد.
+<p>این بار انتخاب نهایی اینکه کدام متد <strong>Walk</strong> فراخوانی شود به نوع‌های هر دو یعنی <code>animal</code> و <code>owner</code> بستگی دارد.<br>
 به همین دلیل به آن <strong>multiple dispatch</strong> می‌گویند: چون نوع‌های زمان اجرا (<strong>runtime types</strong>) آرگومان‌ها علاوه بر <strong>receiver type</strong>، در تصمیم‌گیری دخالت دارند.</p>
 <hr>
 <h3>⚠️ مشکلات و راه‌حل بهتر</h3>
-<p>روش قبلی این مزیت را دارد که با هر شیئی که یک <strong>Value field</strong> یا <strong>Value property</strong> داشته باشد کار می‌کند.
+<p>روش قبلی این مزیت را دارد که با هر شیئی که یک <strong>Value field</strong> یا <strong>Value property</strong> داشته باشد کار می‌کند.<br>
 اما مشکلاتی هم دارد:</p>
 <ol>
 <li>
@@ -310,14 +270,14 @@ Console.WriteLine (new ToXElementPersonVisitor().DynamicVisit (cust));
 </ol>
 <hr>
 <h3>✅ راه‌حل بهتر: متد کمکی overload شده</h3>
-<pre><code class="language-csharp">static void Write (dynamic obj)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Write</span> (<span class="hljs-params"><span class="hljs-built_in">dynamic</span> obj</span>)</span>
 {
-  object result = GetFooValue (obj);
-  if (result != null) Console.WriteLine (result);
+  <span class="hljs-built_in">object</span> result = GetFooValue (obj);
+  <span class="hljs-keyword">if</span> (result != <span class="hljs-literal">null</span>) Console.WriteLine (result);
 }
 
-static T GetFooValue&lt;T&gt; (Foo&lt;T&gt; foo) =&gt; foo.Value;
-static object GetFooValue (object foo) =&gt; null;
+<span class="hljs-function"><span class="hljs-keyword">static</span> T <span class="hljs-title">GetFooValue</span>&lt;<span class="hljs-title">T</span>&gt; (<span class="hljs-params">Foo&lt;T&gt; foo</span>)</span> =&gt; foo.Value;
+<span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-built_in">object</span> <span class="hljs-title">GetFooValue</span> (<span class="hljs-params"><span class="hljs-built_in">object</span> foo</span>)</span> =&gt; <span class="hljs-literal">null</span>;
 </code></pre>
 <p>اینجا ما متد <strong>GetFooValue</strong> را overload کردیم تا یک پارامتر از نوع <code>object</code> هم بگیرد، که نقش fallback را دارد.</p>
 <p>در زمان اجرا، <strong>C# dynamic binder</strong> بهترین overload را انتخاب می‌کند. اگر شیء داده‌شده از نوع <code>Foo&lt;T&gt;</code> نباشد، نسخه‌ی <strong>object-parameter</strong> انتخاب می‌شود و به‌جای پرتاب exception مقدار null برمی‌گرداند.</p>
@@ -330,72 +290,72 @@ static object GetFooValue (object foo) =&gt; null;
 </ul>
 <hr>
 <h3>🔎 مثال: ToStringEx با dynamic binding</h3>
-<p>در فصل ۱۸، همین مشکل را برای یک interface با استفاده از reflection حل کردیم (که تلاش بیشتری نیاز داشت).
+<p>در فصل ۱۸، همین مشکل را برای یک interface با استفاده از reflection حل کردیم (که تلاش بیشتری نیاز داشت).<br>
 مثال ما طراحی نسخه‌ی قدرتمندتری از <strong>ToString()</strong> بود که می‌توانست اشیائی مانند <strong>IEnumerable</strong> و <strong>IGrouping&lt;,&gt;</strong> را درک کند.</p>
 <p>اینجا همان مثال با dynamic binding، اما زیباتر:</p>
-<pre><code class="language-csharp">static string GetGroupKey&lt;TKey,TElement&gt; (IGrouping&lt;TKey,TElement&gt; group)
-  =&gt; &quot;Group with key=&quot; + group.Key + &quot;: &quot;;
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-built_in">string</span> <span class="hljs-title">GetGroupKey</span>&lt;<span class="hljs-title">TKey</span>,<span class="hljs-title">TElement</span>&gt; (<span class="hljs-params">IGrouping&lt;TKey,TElement&gt; <span class="hljs-keyword">group</span></span>)</span>
+  =&gt; <span class="hljs-string">&quot;Group with key=&quot;</span> + <span class="hljs-keyword">group</span>.Key + <span class="hljs-string">&quot;: &quot;</span>;
 
-static string GetGroupKey (object source) =&gt; null;
+<span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-built_in">string</span> <span class="hljs-title">GetGroupKey</span> (<span class="hljs-params"><span class="hljs-built_in">object</span> source</span>)</span> =&gt; <span class="hljs-literal">null</span>;
 
-public static string ToStringEx (object value)
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">string</span> <span class="hljs-title">ToStringEx</span> (<span class="hljs-params"><span class="hljs-built_in">object</span> <span class="hljs-keyword">value</span></span>)</span>
 {
-  if (value == null) return &quot;&lt;null&gt;&quot;;
-  if (value is string s) return s;
-  if (value.GetType().IsPrimitive) return value.ToString();
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">value</span> == <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&lt;null&gt;&quot;</span>;
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">value</span> <span class="hljs-keyword">is</span> <span class="hljs-built_in">string</span> s) <span class="hljs-keyword">return</span> s;
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">value</span>.GetType().IsPrimitive) <span class="hljs-keyword">return</span> <span class="hljs-keyword">value</span>.ToString();
 
-  StringBuilder sb = new StringBuilder();
-  string groupKey = GetGroupKey ((dynamic)value);   // Dynamic dispatch
-  if (groupKey != null) sb.Append (groupKey);
+  StringBuilder sb = <span class="hljs-keyword">new</span> StringBuilder();
+  <span class="hljs-built_in">string</span> groupKey = GetGroupKey ((<span class="hljs-built_in">dynamic</span>)<span class="hljs-keyword">value</span>);   <span class="hljs-comment">// Dynamic dispatch</span>
+  <span class="hljs-keyword">if</span> (groupKey != <span class="hljs-literal">null</span>) sb.Append (groupKey);
 
-  if (value is IEnumerable)
-    foreach (object element in ((IEnumerable)value))
-      sb.Append (ToStringEx (element) + &quot; &quot;);
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">value</span> <span class="hljs-keyword">is</span> IEnumerable)
+    <span class="hljs-keyword">foreach</span> (<span class="hljs-function"><span class="hljs-built_in">object</span> element <span class="hljs-title">in</span> (<span class="hljs-params">(IEnumerable</span>)<span class="hljs-keyword">value</span>))
+      sb.<span class="hljs-title">Append</span> (<span class="hljs-params">ToStringEx (element</span>) + &quot; &quot;)</span>;
 
-  if (sb.Length == 0) sb.Append (value.ToString());
-  return &quot;\r\n&quot; + sb.ToString();
+  <span class="hljs-keyword">if</span> (sb.Length == <span class="hljs-number">0</span>) sb.Append (<span class="hljs-keyword">value</span>.ToString());
+  <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;\r\n&quot;</span> + sb.ToString();
 }
 </code></pre>
 <hr>
 <h3>▶️ اجرای کد</h3>
-<pre><code class="language-csharp">Console.WriteLine (ToStringEx (&quot;xyyzzz&quot;.GroupBy (c =&gt; c) ));
+<pre class="hljs"><code>Console.WriteLine (ToStringEx (<span class="hljs-string">&quot;xyyzzz&quot;</span>.GroupBy (c =&gt; c) ));
 </code></pre>
 <p>🔽 خروجی:</p>
-<pre><code>Group with key=x: x
+<pre class="hljs"><code>Group with key=x: x
 Group with key=y: y y
 Group with key=z: z z z
 </code></pre>
 <hr>
 <p>در اینجا از <strong>dynamic member overload resolution</strong> برای حل مسئله استفاده کردیم.</p>
 <p>اگر به‌جای آن، چنین کاری می‌کردیم:</p>
-<pre><code class="language-csharp">dynamic d = value;
-try { groupKey = d.Value; }
-catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException) {...}
+<pre class="hljs"><code><span class="hljs-built_in">dynamic</span> d = <span class="hljs-keyword">value</span>;
+<span class="hljs-keyword">try</span> { groupKey = d.Value; }
+<span class="hljs-keyword">catch</span> (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException) {...}
 </code></pre>
 <p>این روش شکست می‌خورد. چرا؟ چون عملگر <strong>GroupBy</strong> در LINQ یک نوعی را برمی‌گرداند که <strong>IGrouping&lt;,&gt;</strong> را پیاده‌سازی می‌کند و خودش <strong>internal</strong> است:</p>
-<pre><code class="language-csharp">internal class Grouping : IGrouping&lt;TKey,TElement&gt;, ...
+<pre class="hljs"><code><span class="hljs-keyword">internal</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Grouping</span> : <span class="hljs-title">IGrouping</span>&lt;<span class="hljs-title">TKey</span>,<span class="hljs-title">TElement</span>&gt;, ...
 {
-  public TKey Key;
+  <span class="hljs-keyword">public</span> TKey Key;
   ...
 }
 </code></pre>
-<p>حتی اگر property <strong>Key</strong> به‌صورت public تعریف شده باشد، کلاس حاوی آن <strong>internal</strong> است و بنابراین فقط از طریق <strong>IGrouping&lt;,&gt;</strong> قابل دسترسی است.
+<p>حتی اگر property <strong>Key</strong> به‌صورت public تعریف شده باشد، کلاس حاوی آن <strong>internal</strong> است و بنابراین فقط از طریق <strong>IGrouping&lt;,&gt;</strong> قابل دسترسی است.<br>
 و همان‌طور که در فصل ۴ توضیح دادیم، هیچ راهی وجود ندارد که به DLR بگوییم هنگام صدا زدن dynamic member، به آن interface bind شود.</p>
 <h3>پیاده‌سازی اشیای پویا 🦆✨</h3>
 <p>یک شیء می‌تواند با پیاده‌سازی <strong>IDynamicMetaObjectProvider</strong> معناشناسی (binding semantics) خودش را فراهم کند—یا راحت‌تر از آن، با ارث‌بری از کلاس <strong>DynamicObject</strong>، که یک پیاده‌سازی پیش‌فرض از این اینترفیس ارائه می‌دهد.</p>
 <p>این موضوع به‌طور مختصر در فصل ۴ با مثال زیر نشان داده شده است:</p>
-<pre><code class="language-csharp">dynamic d = new Duck();
-d.Quack();                  // متد Quack فراخوانی شد
-d.Waddle();                 // متد Waddle فراخوانی شد
+<pre class="hljs"><code><span class="hljs-built_in">dynamic</span> d = <span class="hljs-keyword">new</span> Duck();
+d.Quack();                  <span class="hljs-comment">// متد Quack فراخوانی شد</span>
+d.Waddle();                 <span class="hljs-comment">// متد Waddle فراخوانی شد</span>
 
-public class Duck : DynamicObject
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Duck</span> : <span class="hljs-title">DynamicObject</span>
 {
-  public override bool TryInvokeMember(
-    InvokeMemberBinder binder, object[] args, out object result)
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">override</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">TryInvokeMember</span>(<span class="hljs-params">
+    InvokeMemberBinder binder, <span class="hljs-built_in">object</span>[] <span class="hljs-keyword">args</span>, <span class="hljs-keyword">out</span> <span class="hljs-built_in">object</span> result</span>)</span>
   {
-    Console.WriteLine (binder.Name + &quot; method was called&quot;);
-    result = null;
-    return true;
+    Console.WriteLine (binder.Name + <span class="hljs-string">&quot; method was called&quot;</span>);
+    result = <span class="hljs-literal">null</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
   }
 }
 </code></pre>
@@ -411,63 +371,63 @@ public class Duck : DynamicObject
 <hr>
 <h3>نمونه با <code>TryGetMember</code> و <code>TrySetMember</code> 📝</h3>
 <p>در مثال زیر، کلاسی ساخته‌ایم که به ما امکان می‌دهد به‌صورت پویا به attributeها در یک <strong>XElement (System.Xml.Linq)</strong> دسترسی پیدا کنیم:</p>
-<pre><code class="language-csharp">static class XExtensions
+<pre class="hljs"><code><span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title">XExtensions</span>
 {
-  public static dynamic DynamicAttributes (this XElement e)
-    =&gt; new XWrapper (e);
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">dynamic</span> <span class="hljs-title">DynamicAttributes</span> (<span class="hljs-params"><span class="hljs-keyword">this</span> XElement e</span>)</span>
+    =&gt; <span class="hljs-keyword">new</span> XWrapper (e);
 
-  class XWrapper : DynamicObject
+  <span class="hljs-keyword">class</span> <span class="hljs-title">XWrapper</span> : <span class="hljs-title">DynamicObject</span>
   {
     XElement _element;
-    public XWrapper (XElement e) { _element = e; }
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">XWrapper</span> (<span class="hljs-params">XElement e</span>)</span> { _element = e; }
 
-    public override bool TryGetMember (GetMemberBinder binder,
-                                       out object result)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">override</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">TryGetMember</span> (<span class="hljs-params">GetMemberBinder binder,
+                                       <span class="hljs-keyword">out</span> <span class="hljs-built_in">object</span> result</span>)</span>
     {
       result = _element.Attribute (binder.Name).Value;
-      return true;
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     }
 
-    public override bool TrySetMember (SetMemberBinder binder,
-                                       object value)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">override</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">TrySetMember</span> (<span class="hljs-params">SetMemberBinder binder,
+                                       <span class="hljs-built_in">object</span> <span class="hljs-keyword">value</span></span>)</span>
     {
-      _element.SetAttributeValue (binder.Name, value);
-      return true;
+      _element.SetAttributeValue (binder.Name, <span class="hljs-keyword">value</span>);
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
     }
   }
 }
 </code></pre>
 <p>📌 نحوه‌ی استفاده:</p>
-<pre><code class="language-csharp">XElement x = XElement.Parse (@&quot;&lt;Label Text=&quot;&quot;Hello&quot;&quot; Id=&quot;&quot;5&quot;&quot;/&gt;&quot;);
-dynamic da = x.DynamicAttributes();
+<pre class="hljs"><code>XElement x = XElement.Parse (<span class="hljs-string">@&quot;&lt;Label Text=&quot;&quot;Hello&quot;&quot; Id=&quot;&quot;5&quot;&quot;/&gt;&quot;</span>);
+<span class="hljs-built_in">dynamic</span> da = x.DynamicAttributes();
 
-Console.WriteLine (da.Id);        // 5
-da.Text = &quot;Foo&quot;;
-Console.WriteLine (x.ToString()); // &lt;Label Text=&quot;Foo&quot; Id=&quot;5&quot; /&gt;
+Console.WriteLine (da.Id);        <span class="hljs-comment">// 5</span>
+da.Text = <span class="hljs-string">&quot;Foo&quot;</span>;
+Console.WriteLine (x.ToString()); <span class="hljs-comment">// &lt;Label Text=&quot;Foo&quot; Id=&quot;5&quot; /&gt;</span>
 </code></pre>
 <hr>
 <h3>نمونه با <code>System.Data.IDataRecord</code> 📊</h3>
 <p>در مثال بعدی، برای ساده‌تر کردن کار با <strong>data reader</strong>‌ها، از DynamicObject استفاده شده است:</p>
-<pre><code class="language-csharp">public class DynamicReader : DynamicObject
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">DynamicReader</span> : <span class="hljs-title">DynamicObject</span>
 {
-  readonly IDataRecord _dataRecord;
-  public DynamicReader (IDataRecord dr) { _dataRecord = dr; }
+  <span class="hljs-keyword">readonly</span> IDataRecord _dataRecord;
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">DynamicReader</span> (<span class="hljs-params">IDataRecord dr</span>)</span> { _dataRecord = dr; }
 
-  public override bool TryGetMember (GetMemberBinder binder,
-                                     out object result)
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">override</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">TryGetMember</span> (<span class="hljs-params">GetMemberBinder binder,
+                                     <span class="hljs-keyword">out</span> <span class="hljs-built_in">object</span> result</span>)</span>
   {
     result = _dataRecord[binder.Name];
-    return true;
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
   }
 }
 ...
-using (IDataReader reader = someDbCommand.ExecuteReader())
+<span class="hljs-keyword">using</span> (IDataReader reader = someDbCommand.ExecuteReader())
 {
-  dynamic dr = new DynamicReader (reader);
-  while (reader.Read())
+  <span class="hljs-built_in">dynamic</span> dr = <span class="hljs-keyword">new</span> DynamicReader (reader);
+  <span class="hljs-keyword">while</span> (reader.Read())
   {
-    int id = dr.ID;
-    string firstName = dr.FirstName;
+    <span class="hljs-built_in">int</span> id = dr.ID;
+    <span class="hljs-built_in">string</span> firstName = dr.FirstName;
     DateTime dob = dr.DateOfBirth;
     ...
   }
@@ -475,26 +435,26 @@ using (IDataReader reader = someDbCommand.ExecuteReader())
 </code></pre>
 <hr>
 <h3>نمونه با <code>TryBinaryOperation</code> و <code>TryInvoke</code> ➕🔔</h3>
-<pre><code class="language-csharp">dynamic d = new Duck();
-Console.WriteLine (d + d);       // foo
-Console.WriteLine (d (78, 'x')); // 123
+<pre class="hljs"><code><span class="hljs-built_in">dynamic</span> d = <span class="hljs-keyword">new</span> Duck();
+Console.WriteLine (d + d);       <span class="hljs-comment">// foo</span>
+Console.WriteLine (d (<span class="hljs-number">78</span>, <span class="hljs-string">&#x27;x&#x27;</span>)); <span class="hljs-comment">// 123</span>
 
-public class Duck : DynamicObject
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Duck</span> : <span class="hljs-title">DynamicObject</span>
 {
-  public override bool TryBinaryOperation (BinaryOperationBinder binder,
-                                           object arg, out object result)
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">override</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">TryBinaryOperation</span> (<span class="hljs-params">BinaryOperationBinder binder,
+                                           <span class="hljs-built_in">object</span> arg, <span class="hljs-keyword">out</span> <span class="hljs-built_in">object</span> result</span>)</span>
   {
-    Console.WriteLine (binder.Operation);   // Add
-    result = &quot;foo&quot;;
-    return true;
+    Console.WriteLine (binder.Operation);   <span class="hljs-comment">// Add</span>
+    result = <span class="hljs-string">&quot;foo&quot;</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
   }
 
-  public override bool TryInvoke (InvokeBinder binder,
-                                  object[] args, out object result)
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">override</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">TryInvoke</span> (<span class="hljs-params">InvokeBinder binder,
+                                  <span class="hljs-built_in">object</span>[] <span class="hljs-keyword">args</span>, <span class="hljs-keyword">out</span> <span class="hljs-built_in">object</span> result</span>)</span>
   {
-    Console.WriteLine (args[0]); // 78
-    result = 123;
-    return true;
+    Console.WriteLine (<span class="hljs-keyword">args</span>[<span class="hljs-number">0</span>]); <span class="hljs-comment">// 78</span>
+    result = <span class="hljs-number">123</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
   }
 }
 </code></pre>
@@ -505,24 +465,24 @@ public class Duck : DynamicObject
 <p>🔹 دلیل دیگر برای پیاده‌سازی <strong>GetDynamicMemberNames</strong> این است که <strong>دیباگر Visual Studio</strong> از این متد استفاده می‌کند تا نمایی از یک شیء پویا را نمایش دهد. 🖥️</p>
 <h3>ExpandoObject 🪄</h3>
 <p>یک کاربرد ساده دیگر از <strong>DynamicObject</strong> می‌تواند این باشد که یک کلاس پویا بنویسیم که اشیاء را در یک <strong>Dictionary</strong> ذخیره و بازیابی کند (کلیدها از نوع string). اما این قابلیت از قبل توسط کلاس <strong>ExpandoObject</strong> فراهم شده است:</p>
-<pre><code class="language-csharp">dynamic x = new ExpandoObject();
+<pre class="hljs"><code><span class="hljs-built_in">dynamic</span> x = <span class="hljs-keyword">new</span> ExpandoObject();
 x.FavoriteColor = ConsoleColor.Green;
-x.FavoriteNumber = 7;
+x.FavoriteNumber = <span class="hljs-number">7</span>;
 
-Console.WriteLine (x.FavoriteColor);   // Green
-Console.WriteLine (x.FavoriteNumber);  // 7
+Console.WriteLine (x.FavoriteColor);   <span class="hljs-comment">// Green</span>
+Console.WriteLine (x.FavoriteNumber);  <span class="hljs-comment">// 7</span>
 </code></pre>
 <p>🔑 در واقع، <strong>ExpandoObject</strong> اینترفیس <strong>IDictionary&lt;string, object&gt;</strong> را پیاده‌سازی می‌کند. بنابراین می‌توانیم مثال بالا را این‌طور ادامه دهیم:</p>
-<pre><code class="language-csharp">var dict = (IDictionary&lt;string,object&gt;) x;
-Console.WriteLine (dict[&quot;FavoriteColor&quot;]);   // Green
-Console.WriteLine (dict[&quot;FavoriteNumber&quot;]);  // 7
-Console.WriteLine (dict.Count);              // 2
+<pre class="hljs"><code><span class="hljs-keyword">var</span> dict = (IDictionary&lt;<span class="hljs-built_in">string</span>,<span class="hljs-built_in">object</span>&gt;) x;
+Console.WriteLine (dict[<span class="hljs-string">&quot;FavoriteColor&quot;</span>]);   <span class="hljs-comment">// Green</span>
+Console.WriteLine (dict[<span class="hljs-string">&quot;FavoriteNumber&quot;</span>]);  <span class="hljs-comment">// 7</span>
+Console.WriteLine (dict.Count);              <span class="hljs-comment">// 2</span>
 </code></pre>
 <hr>
 <h3>تعامل با زبان‌های پویا 🌍</h3>
 <p>اگرچه C# از طریق کلمه کلیدی <strong>dynamic</strong> از <strong>dynamic binding</strong> پشتیبانی می‌کند، اما اجازه نمی‌دهد یک عبارت ذخیره‌شده به شکل رشته (string) را در زمان اجرا مستقیماً اجرا کنید:</p>
-<pre><code class="language-csharp">string expr = &quot;2 * 3&quot;;
-// نمی‌توانیم expr را اجرا کنیم
+<pre class="hljs"><code><span class="hljs-built_in">string</span> expr = <span class="hljs-string">&quot;2 * 3&quot;</span>;
+<span class="hljs-comment">// نمی‌توانیم expr را اجرا کنیم</span>
 </code></pre>
 <p>علت این است که ترجمه‌ی یک رشته به یک <strong>expression tree</strong> نیازمند یک <strong>lexical parser</strong> و <strong>semantic parser</strong> است که در کامپایلر C# وجود دارند، اما به‌صورت سرویس در زمان اجرا در دسترس نیستند. در زمان اجرا، C# فقط یک <strong>binder</strong> فراهم می‌کند که به <strong>DLR</strong> می‌گوید چگونه یک expression tree از قبل ساخته‌شده را تفسیر کند.</p>
 <p>👨‍💻 در زبان‌های واقعاً پویا مثل <strong>IronPython</strong> و <strong>IronRuby</strong>، می‌توان رشته‌ها را به‌صورت مستقیم اجرا کرد. این موضوع برای کارهایی مثل <strong>اسکریپت‌نویسی</strong>، ساخت <strong>سیستم‌های پیکربندی پویا</strong>، و پیاده‌سازی <strong>rules engine</strong> بسیار مفید است. بنابراین، اگرچه می‌توانید بیشتر برنامه را در C# بنویسید، اما ممکن است برای برخی وظایف خاص، به استفاده از یک زبان پویا نیاز داشته باشید.</p>
@@ -534,120 +494,74 @@ Console.WriteLine (dict.Count);              // 2
 <h3>مثال با IronPython 🐍</h3>
 <p>در مثال زیر، از <strong>IronPython</strong> برای ارزیابی یک عبارت در زمان اجرا از درون C# استفاده می‌کنیم. می‌توان از این روش برای ساخت یک ماشین حساب ساده بهره برد.</p>
 <p>📌 برای اجرای این کد، باید پکیج‌های <strong>DynamicLanguageRuntime</strong> (توجه کنید با System.Dynamic.Runtime فرق دارد) و <strong>IronPython</strong> را نصب کنید.</p>
-<pre><code class="language-csharp">using System;
-using IronPython.Hosting;
-using Microsoft.Scripting;
-using Microsoft.Scripting.Hosting;
+<pre class="hljs"><code><span class="hljs-keyword">using</span> System;
+<span class="hljs-keyword">using</span> IronPython.Hosting;
+<span class="hljs-keyword">using</span> Microsoft.Scripting;
+<span class="hljs-keyword">using</span> Microsoft.Scripting.Hosting;
 
-int result = (int) Calculate (&quot;2 * 3&quot;);
-Console.WriteLine (result);  // 6
+<span class="hljs-built_in">int</span> result = (<span class="hljs-built_in">int</span>) Calculate (<span class="hljs-string">&quot;2 * 3&quot;</span>);
+Console.WriteLine (result);  <span class="hljs-comment">// 6</span>
 
-object Calculate (string expression)
+<span class="hljs-function"><span class="hljs-built_in">object</span> <span class="hljs-title">Calculate</span> (<span class="hljs-params"><span class="hljs-built_in">string</span> expression</span>)</span>
 {
   ScriptEngine engine = Python.CreateEngine();
-  return engine.Execute (expression);
+  <span class="hljs-keyword">return</span> engine.Execute (expression);
 }
 </code></pre>
 <p>✅ توجه کنید: چون رشته به <strong>Python</strong> پاس داده می‌شود، عبارت بر اساس قوانین Python ارزیابی خواهد شد، نه C#.</p>
 <p>برای مثال، می‌توان از امکانات زبان Python مثل <strong>لیست‌ها</strong> استفاده کرد:</p>
-<pre><code class="language-csharp">var list = (IEnumerable) Calculate (&quot;[1, 2, 3] + [4, 5]&quot;);
-foreach (int n in list) Console.Write (n);  // 12345
+<pre class="hljs"><code><span class="hljs-keyword">var</span> list = (IEnumerable) Calculate (<span class="hljs-string">&quot;[1, 2, 3] + [4, 5]&quot;</span>);
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">int</span> n <span class="hljs-keyword">in</span> list) Console.Write (n);  <span class="hljs-comment">// 12345</span>
 </code></pre>
 <hr>
 <h3>عبور وضعیت بین C# و اسکریپت 🔄</h3>
 <p>برای انتقال متغیرها از C# به Python، مراحل بیشتری نیاز است. مثال زیر این موضوع را نشان می‌دهد و می‌تواند پایه‌ای برای یک <strong>rules engine</strong> باشد:</p>
-<pre><code class="language-csharp">// این رشته می‌تواند از یک فایل یا دیتابیس بیاید:
-string auditRule = &quot;taxPaidLastYear / taxPaidThisYear &gt; 2&quot;;
+<pre class="hljs"><code><span class="hljs-comment">// این رشته می‌تواند از یک فایل یا دیتابیس بیاید:</span>
+<span class="hljs-built_in">string</span> auditRule = <span class="hljs-string">&quot;taxPaidLastYear / taxPaidThisYear &gt; 2&quot;</span>;
 
 ScriptEngine engine = Python.CreateEngine();    
 ScriptScope scope = engine.CreateScope();       
 
-scope.SetVariable (&quot;taxPaidLastYear&quot;, 20000m);
-scope.SetVariable (&quot;taxPaidThisYear&quot;, 8000m);
+scope.SetVariable (<span class="hljs-string">&quot;taxPaidLastYear&quot;</span>, <span class="hljs-number">20000</span>m);
+scope.SetVariable (<span class="hljs-string">&quot;taxPaidThisYear&quot;</span>, <span class="hljs-number">8000</span>m);
 
 ScriptSource source = engine.CreateScriptSourceFromString (
                       auditRule, SourceCodeKind.Expression);
 
-bool auditRequired = (bool) source.Execute (scope);
-Console.WriteLine (auditRequired);   // True
+<span class="hljs-built_in">bool</span> auditRequired = (<span class="hljs-built_in">bool</span>) source.Execute (scope);
+Console.WriteLine (auditRequired);   <span class="hljs-comment">// True</span>
 </code></pre>
 <p>📥 همچنین می‌توانید متغیرها را از اسکریپت به C# برگردانید:</p>
-<pre><code class="language-csharp">string code = &quot;result = input * 3&quot;;
+<pre class="hljs"><code><span class="hljs-built_in">string</span> code = <span class="hljs-string">&quot;result = input * 3&quot;</span>;
 
 ScriptEngine engine = Python.CreateEngine();
 ScriptScope scope = engine.CreateScope();
-scope.SetVariable (&quot;input&quot;, 2);
+scope.SetVariable (<span class="hljs-string">&quot;input&quot;</span>, <span class="hljs-number">2</span>);
 
 ScriptSource source = engine.CreateScriptSourceFromString (
                       code, SourceCodeKind.SingleStatement);
 
 source.Execute (scope);
 
-Console.WriteLine (scope.GetVariable (&quot;result&quot;));   // 6
+Console.WriteLine (scope.GetVariable (<span class="hljs-string">&quot;result&quot;</span>));   <span class="hljs-comment">// 6</span>
 </code></pre>
 <p>در این مثال دوم، از <strong>SourceCodeKind.SingleStatement</strong> به‌جای <strong>Expression</strong> استفاده کردیم تا به موتور بگوییم قصد اجرای یک <strong>statement</strong> را داریم.</p>
 <hr>
 <h3>تبادل انواع بین C# و Python 🔗</h3>
-<p>🔹 نوع‌ها به‌طور خودکار بین دنیای <strong>.NET</strong> و <strong>Python</strong> منتقل (marshal) می‌شوند.
+<p>🔹 نوع‌ها به‌طور خودکار بین دنیای <strong>.NET</strong> و <strong>Python</strong> منتقل (marshal) می‌شوند.<br>
 🔹 حتی می‌توانید اعضای یک شیء .NET را از سمت اسکریپت فراخوانی کنید:</p>
-<pre><code class="language-csharp">string code = @&quot;sb.Append (&quot;&quot;World&quot;&quot;)&quot;;
+<pre class="hljs"><code><span class="hljs-built_in">string</span> code = <span class="hljs-string">@&quot;sb.Append (&quot;&quot;World&quot;&quot;)&quot;</span>;
 
 ScriptEngine engine = Python.CreateEngine();
 ScriptScope scope = engine.CreateScope();
 
-var sb = new StringBuilder (&quot;Hello&quot;);
-scope.SetVariable (&quot;sb&quot;, sb);
+<span class="hljs-keyword">var</span> sb = <span class="hljs-keyword">new</span> StringBuilder (<span class="hljs-string">&quot;Hello&quot;</span>);
+scope.SetVariable (<span class="hljs-string">&quot;sb&quot;</span>, sb);
 
 ScriptSource source = engine.CreateScriptSourceFromString (
                       code, SourceCodeKind.SingleStatement);
 
 source.Execute (scope);
 
-Console.WriteLine (sb.ToString());   // HelloWorld
+Console.WriteLine (sb.ToString());   <span class="hljs-comment">// HelloWorld</span>
 </code></pre>
-
-  </main>
-
-  <!-- فوتر مشترک -->
-  <footer class="footer">
-    <div class="container">
-      <p>
-        <img src="/icone/copyright.svg" alt="کپی‌رایت" width="14" height="14"
-             style="vertical-align:middle;margin-inline:4px">
-        <span id="y"></span> Gitab — برای توسعه‌دهندگان
-      </p>
-    </div>
-  </footer>
-
-  <!-- سال + اسکریپت تم -->
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
-
-    (() => {
-      const root = document.documentElement;
-      const btn = document.getElementById('themeToggle');
-      const KEY = 'gitab-theme';
-      const media = window.matchMedia('(prefers-color-scheme: dark)');
-      const getEffective = s => s === 'auto' ? (media.matches ? 'dark' : 'light') : s;
-      function updateTheme(s) {
-        root.setAttribute('data-theme', s);
-        const mode = getEffective(s);
-        root.dataset.colorMode = mode;
-        btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
-      }
-      const saved = localStorage.getItem(KEY) || 'auto';
-      updateTheme(saved);
-      btn.addEventListener('click', () => {
-        const curr = localStorage.getItem(KEY) || 'auto';
-        const next = curr === 'auto' ? 'dark' : curr === 'dark' ? 'light' : 'auto';
-        localStorage.setItem(KEY, next);
-        updateTheme(next);
-      });
-      media.addEventListener('change', () => {
-        if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
-      });
-      window.addEventListener('DOMContentLoaded', () => updateTheme(saved));
-    })();
-  </script>
-</body>
-</html>

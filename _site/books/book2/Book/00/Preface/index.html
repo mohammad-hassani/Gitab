@@ -1,44 +1,4 @@
-<!doctype html>
-<html lang="fa" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gitab | کتابخانهٔ ترجمه‌های دات‌نت و سی شارپ</title>
-  <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
-  <link rel="stylesheet" href="/styles/main.css">
-</head>
-<body>
-  <!-- هدر مشترک -->
-  <header class="header">
-    <div class="container nav-wrap">
-      <a class="brand" href="/">
-        <img src="/icone/logo.svg" alt="Gitab" width="28" height="28">
-        <span>Gitab</span>
-      </a>
-
-      <nav class="nav">
-        <a href="/">خانه</a>
-        <a href="/books/list-books">کتاب‌ها</a>
-        <a href="#">همکاری</a>
-        <a href="#">درباره‌ما</a>
-      </nav>
-
-     <div class="nav-actions">
-  <button id="themeToggle" class="icon-btn theme-btn" aria-label="تغییر حالت">
-    <img class="icon-sun" src="/icone/sun.svg" alt="روشن">
-    <img class="icon-moon" src="/icone/moon.svg" alt="تاریک">
-  </button>
-
-  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
-    <img src="/icone/github.svg" alt="GitHub">
-  </a>
-</div>
-
-  </header>
-
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>پیشگفتار</h1>
+<h1>پیشگفتار</h1>
 <p>به &quot;کد تمیز در سی‌شارپ&quot; خوش آمدید. در این کتاب یاد می‌گیرید که چگونه کدهای مشکل‌ساز را شناسایی کنید؛ کدهایی که با وجود کامپایل شدن، قابلیت <strong>خوانایی (readability)</strong>، <strong>نگهداری (maintainability)</strong> و <strong>توسعه‌پذیری (extensibility)</strong> مناسبی ندارند. همچنین با ابزارها و الگوهای مختلفی آشنا می‌شوید، همراه با روش‌هایی برای <strong>Refactor</strong> کردن کد به منظور پاکیزه ساختن آن.</p>
 <h2>این کتاب برای چه کسانی است؟</h2>
 <p>این کتاب برای برنامه‌نویسان کامپیوتر با درک خوبی از زبان برنامه‌نویسی C# نگاشته شده است که به دنبال راهنمایی برای شناسایی کدهای مشکل‌ساز و <strong>نوشتن کد تمیز (clean code)</strong> در C# هستند. در درجه اول، مخاطبان این کتاب از برنامه‌نویسان <strong>تازه‌کار (Graduate)</strong> تا <strong>سطح میانی (Mid-level)</strong> را شامل می‌شوند، اما حتی <strong>برنامه‌نویسان ارشد (Senior)</strong> نیز ممکن است این کتاب را ارزشمند بیابند.</p>
@@ -94,50 +54,4 @@
 </tbody>
 </table>
 <p>داشتن این موارد قبل از شروع مطالعه و کار با فصل‌ها مفید خواهد بود.</p>
-<p>اگر از نسخه دیجیتال این کتاب استفاده می‌کنید، توصیه می‌کنیم کدها را خودتان تایپ کنید یا از طریق مخزن گیت‌هاب (لینک در بخش بعدی موجود است) به کدها دسترسی پیدا کنید. انجام این کار به شما کمک می‌کند تا از هرگونه خطای احتمالی مربوط به کپی و پیست کردن کد جلوگیری کنید. شما باید تجربه اولیه در استفاده از Visual Studio 2019 Community Edition یا بالاتر، و مهارت‌های برنامه‌نویسی پایه C#، از جمله نوشتن برنامه‌های کنسولی را داشته باشید. بسیاری از مثال‌ها به صورت برنامه‌های کنسولی C# خواهند بود. پروژه اصلی از ASP.NET استفاده خواهد کرد. اگر قادر به نوشتن وب‌سایت‌های ASP.NET با استفاده از Framework و Core باشید، کمک‌کننده خواهد بود. اما نگران نباشید – شما در مراحل لازم راهنمایی خواهید شد.</p>
-
-  </main>
-
-  <!-- فوتر مشترک -->
-  <footer class="footer">
-    <div class="container">
-      <p>
-        <img src="/icone/copyright.svg" alt="کپی‌رایت" width="14" height="14"
-             style="vertical-align:middle;margin-inline:4px">
-        <span id="y"></span> Gitab — برای توسعه‌دهندگان
-      </p>
-    </div>
-  </footer>
-
-  <!-- سال + اسکریپت تم -->
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
-
-    (() => {
-      const root = document.documentElement;
-      const btn = document.getElementById('themeToggle');
-      const KEY = 'gitab-theme';
-      const media = window.matchMedia('(prefers-color-scheme: dark)');
-      const getEffective = s => s === 'auto' ? (media.matches ? 'dark' : 'light') : s;
-      function updateTheme(s) {
-        root.setAttribute('data-theme', s);
-        const mode = getEffective(s);
-        root.dataset.colorMode = mode;
-        btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
-      }
-      const saved = localStorage.getItem(KEY) || 'auto';
-      updateTheme(saved);
-      btn.addEventListener('click', () => {
-        const curr = localStorage.getItem(KEY) || 'auto';
-        const next = curr === 'auto' ? 'dark' : curr === 'dark' ? 'light' : 'auto';
-        localStorage.setItem(KEY, next);
-        updateTheme(next);
-      });
-      media.addEventListener('change', () => {
-        if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
-      });
-      window.addEventListener('DOMContentLoaded', () => updateTheme(saved));
-    })();
-  </script>
-</body>
-</html>
+<p>اگر از نسخه دیجیتال این کتاب استفاده می‌کنید، توصیه می‌کنیم کدها را خودتان تایپ کنید یا از طریق مخزن گیت‌هاب (لینک در بخش بعدی موجود است) به کدها دسترسی پیدا کنید. انجام این کار به شما کمک می‌کند تا از هرگونه خطای احتمالی مربوط به کپی و پیست کردن کد جلوگیری کنید. شما باید تجربه اولیه در استفاده از Visual Studio 2019 Community Edition یا بالاتر، و مهارت‌های برنامه‌نویسی پایه C#، از جمله نوشتن برنامه‌های کنسولی را داشته باشید. بسیاری از مثال‌ها به صورت برنامه‌های کنسولی C# خواهند بود. پروژه اصلی از <a href="http://ASP.NET">ASP.NET</a> استفاده خواهد کرد. اگر قادر به نوشتن وب‌سایت‌های <a href="http://ASP.NET">ASP.NET</a> با استفاده از Framework و Core باشید، کمک‌کننده خواهد بود. اما نگران نباشید – شما در مراحل لازم راهنمایی خواهید شد.</p>

@@ -1,96 +1,56 @@
-<!doctype html>
-<html lang="fa" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gitab | کتابخانهٔ ترجمه‌های دات‌نت و سی شارپ</title>
-  <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
-  <link rel="stylesheet" href="/styles/main.css">
-</head>
-<body>
-  <!-- هدر مشترک -->
-  <header class="header">
-    <div class="container nav-wrap">
-      <a class="brand" href="/">
-        <img src="/icone/logo.svg" alt="Gitab" width="28" height="28">
-        <span>Gitab</span>
-      </a>
-
-      <nav class="nav">
-        <a href="/">خانه</a>
-        <a href="/books/list-books">کتاب‌ها</a>
-        <a href="#">همکاری</a>
-        <a href="#">درباره‌ما</a>
-      </nav>
-
-     <div class="nav-actions">
-  <button id="themeToggle" class="icon-btn theme-btn" aria-label="تغییر حالت">
-    <img class="icon-sun" src="/icone/sun.svg" alt="روشن">
-    <img class="icon-moon" src="/icone/moon.svg" alt="تاریک">
-  </button>
-
-  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
-    <img src="/icone/github.svg" alt="GitHub">
-  </a>
-</div>
-
-  </header>
-
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل یازدهم: سایر تکنولوژی‌های XML و JSON</h1>
-<p>در <strong>فصل ۱۰</strong>، ما API مربوط به <strong>LINQ-to-XML</strong> و به‌طور کلی XML را بررسی کردیم.
+<h1>فصل یازدهم: سایر تکنولوژی‌های XML و JSON</h1>
+<p>در <strong>فصل ۱۰</strong>، ما API مربوط به <strong>LINQ-to-XML</strong> و به‌طور کلی XML را بررسی کردیم.<br>
 در این فصل، به سراغ <strong>کلاس‌های سطح پایین XmlReader/XmlWriter</strong> و همچنین <strong>انواع داده‌هایی برای کار با JSON (JavaScript Object Notation)</strong> می‌رویم، که به‌عنوان یک جایگزین محبوب برای XML شناخته می‌شود.</p>
 <p>در ضمیمه‌ی آنلاین 📎، ابزارهایی برای کار با <strong>XML Schema</strong> و <strong>Stylesheet</strong>‌ها توضیح داده شده‌اند.</p>
 <hr>
 <h3>XmlReader ⚡</h3>
 <p><strong>XmlReader</strong> یک کلاس با کارایی بالا است که برای خواندن یک جریان (Stream) از XML به‌صورت سطح پایین و فقط رو به جلو استفاده می‌شود.</p>
 <p>به مثال زیر از یک فایل XML به نام <code>customer.xml</code> توجه کنید:</p>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;yes&quot;?&gt;
-&lt;customer id=&quot;123&quot; status=&quot;archived&quot;&gt;
-  &lt;firstname&gt;Jim&lt;/firstname&gt;
-  &lt;lastname&gt;Bo&lt;/lastname&gt;
-&lt;/customer&gt;
+<pre class="hljs"><code><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;utf-8&quot;</span> standalone=<span class="hljs-string">&quot;yes&quot;</span>?&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">customer</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;123&quot;</span> <span class="hljs-attr">status</span>=<span class="hljs-string">&quot;archived&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">firstname</span>&gt;</span>Jim<span class="hljs-tag">&lt;/<span class="hljs-name">firstname</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">lastname</span>&gt;</span>Bo<span class="hljs-tag">&lt;/<span class="hljs-name">lastname</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">customer</span>&gt;</span>
 </code></pre>
 <p>برای ساختن یک شیء از نوع <code>XmlReader</code>، کافی است متد استاتیک <code>XmlReader.Create</code> را صدا بزنید و یک <code>Stream</code>، یا یک <code>TextReader</code>، یا یک رشته‌ی URI به آن بدهید:</p>
-<pre><code class="language-csharp">using XmlReader reader = XmlReader.Create(&quot;customer.xml&quot;);
+<pre class="hljs"><code><span class="hljs-keyword">using</span> XmlReader reader = XmlReader.Create(<span class="hljs-string">&quot;customer.xml&quot;</span>);
 ...
 </code></pre>
-<p>از آن‌جایی که <strong>XmlReader</strong> می‌تواند داده‌ها را از منابعی کند (مثل <code>Stream</code>‌ها و URIها) بخواند، نسخه‌های <strong>asynchronous</strong> برای بیشتر متدهای خود ارائه می‌دهد تا بتوانید به‌سادگی کدهای <strong>nonblocking</strong> بنویسید.
+<p>از آن‌جایی که <strong>XmlReader</strong> می‌تواند داده‌ها را از منابعی کند (مثل <code>Stream</code>‌ها و URIها) بخواند، نسخه‌های <strong>asynchronous</strong> برای بیشتر متدهای خود ارائه می‌دهد تا بتوانید به‌سادگی کدهای <strong>nonblocking</strong> بنویسید.<br>
 (ما موضوع <strong>asynchrony</strong> را به‌طور کامل در فصل ۱۴ بررسی می‌کنیم.)</p>
 <hr>
 <p>برای ساختن یک <code>XmlReader</code> که از <strong>رشته (string)</strong> بخواند:</p>
-<pre><code class="language-csharp">using XmlReader reader = XmlReader.Create(
-    new System.IO.StringReader(myString));
+<pre class="hljs"><code><span class="hljs-keyword">using</span> XmlReader reader = XmlReader.Create(
+    <span class="hljs-keyword">new</span> System.IO.StringReader(myString));
 </code></pre>
 <p>شما همچنین می‌توانید یک شیء از نوع <code>XmlReaderSettings</code> ارسال کنید تا گزینه‌های <strong>Parsing</strong> و <strong>Validation</strong> را کنترل کنید.</p>
 <p>سه ویژگی مهم این کلاس که برای پرش از محتوای اضافی بسیار مفید هستند:</p>
-<pre><code class="language-csharp">bool IgnoreComments                  // پرش از روی nodeهای توضیحی؟
-bool IgnoreProcessingInstructions    // پرش از روی دستورهای پردازشی؟
-bool IgnoreWhitespace                // پرش از روی فضاهای خالی؟
+<pre class="hljs"><code><span class="hljs-built_in">bool</span> IgnoreComments                  <span class="hljs-comment">// پرش از روی nodeهای توضیحی؟</span>
+<span class="hljs-built_in">bool</span> IgnoreProcessingInstructions    <span class="hljs-comment">// پرش از روی دستورهای پردازشی؟</span>
+<span class="hljs-built_in">bool</span> IgnoreWhitespace                <span class="hljs-comment">// پرش از روی فضاهای خالی؟</span>
 </code></pre>
 <p>در مثال زیر، به Reader می‌گوییم که nodeهای فضای خالی را <strong>نادیده بگیرد</strong>، چون معمولاً در سناریوهای رایج مزاحم هستند:</p>
-<pre><code class="language-csharp">XmlReaderSettings settings = new XmlReaderSettings();
-settings.IgnoreWhitespace = true;
-using XmlReader reader = XmlReader.Create(&quot;customer.xml&quot;, settings);
+<pre class="hljs"><code>XmlReaderSettings settings = <span class="hljs-keyword">new</span> XmlReaderSettings();
+settings.IgnoreWhitespace = <span class="hljs-literal">true</span>;
+<span class="hljs-keyword">using</span> XmlReader reader = XmlReader.Create(<span class="hljs-string">&quot;customer.xml&quot;</span>, settings);
 ...
 </code></pre>
 <hr>
-<p>ویژگی مفید دیگر در <code>XmlReaderSettings</code>، گزینه‌ی <strong>ConformanceLevel</strong> است.
+<p>ویژگی مفید دیگر در <code>XmlReaderSettings</code>، گزینه‌ی <strong>ConformanceLevel</strong> است.<br>
 مقدار پیش‌فرض آن <strong>Document</strong> است؛ یعنی به Reader می‌گوید انتظار یک <strong>سند XML معتبر با یک ریشه‌ی واحد</strong> را داشته باشد.</p>
 <p>اما این موضوع مشکل‌ساز می‌شود اگر بخواهید فقط یک بخش داخلی از XML را بخوانید که شامل چندین node است:</p>
-<pre><code class="language-xml">&lt;firstname&gt;Jim&lt;/firstname&gt;
-&lt;lastname&gt;Bo&lt;/lastname&gt;
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">firstname</span>&gt;</span>Jim<span class="hljs-tag">&lt;/<span class="hljs-name">firstname</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">lastname</span>&gt;</span>Bo<span class="hljs-tag">&lt;/<span class="hljs-name">lastname</span>&gt;</span>
 </code></pre>
 <p>برای اینکه این قطعه بدون خطا خوانده شود، باید مقدار <code>ConformanceLevel</code> را روی <strong>Fragment</strong> قرار دهید.</p>
-<p>همچنین ویژگی دیگری به نام <strong>CloseInput</strong> در <code>XmlReaderSettings</code> وجود دارد که مشخص می‌کند وقتی Reader بسته می‌شود، آیا باید <strong>Stream زیربنایی</strong> هم بسته شود یا نه. (در <code>XmlWriterSettings</code> نیز ویژگی مشابهی به نام <strong>CloseOutput</strong> وجود دارد.)
+<p>همچنین ویژگی دیگری به نام <strong>CloseInput</strong> در <code>XmlReaderSettings</code> وجود دارد که مشخص می‌کند وقتی Reader بسته می‌شود، آیا باید <strong>Stream زیربنایی</strong> هم بسته شود یا نه. (در <code>XmlWriterSettings</code> نیز ویژگی مشابهی به نام <strong>CloseOutput</strong> وجود دارد.)<br>
 مقدار پیش‌فرض <code>CloseInput</code> و <code>CloseOutput</code> برابر <strong>false</strong> است.</p>
 <hr>
 <h3>خواندن Nodeها 📌</h3>
-<p>واحدهای یک جریان XML، <strong>Nodeها</strong> هستند.
-Reader جریان XML را به‌ترتیب متنی (به‌صورت <strong>Depth-First</strong>) پیمایش می‌کند.
+<p>واحدهای یک جریان XML، <strong>Nodeها</strong> هستند.<br>
+Reader جریان XML را به‌ترتیب متنی (به‌صورت <strong>Depth-First</strong>) پیمایش می‌کند.<br>
 ویژگی <code>Depth</code> در Reader، عمق فعلی مکان‌نما (Cursor) را بازمی‌گرداند.</p>
-<p>اولیه‌ترین روش برای خواندن از <code>XmlReader</code>، استفاده از متد <strong>Read</strong> است.
+<p>اولیه‌ترین روش برای خواندن از <code>XmlReader</code>، استفاده از متد <strong>Read</strong> است.<br>
 این متد مکان‌نما را به node بعدی در جریان XML می‌برد، تقریباً مشابه با متد <code>MoveNext</code> در <code>IEnumerator</code>.</p>
 <ul>
 <li>اولین فراخوانی به <code>Read</code> مکان‌نما را روی اولین node قرار می‌دهد.</li>
@@ -106,30 +66,30 @@ Reader جریان XML را به‌ترتیب متنی (به‌صورت <strong>D
 <hr>
 <h3>مثال: خواندن همه Nodeها 👇</h3>
 <p>در این مثال، ما هر node موجود در جریان XML را می‌خوانیم و نوع هر node را چاپ می‌کنیم:</p>
-<pre><code class="language-csharp">XmlReaderSettings settings = new XmlReaderSettings();
-settings.IgnoreWhitespace = true;
-using XmlReader reader = XmlReader.Create(&quot;customer.xml&quot;, settings);
+<pre class="hljs"><code>XmlReaderSettings settings = <span class="hljs-keyword">new</span> XmlReaderSettings();
+settings.IgnoreWhitespace = <span class="hljs-literal">true</span>;
+<span class="hljs-keyword">using</span> XmlReader reader = XmlReader.Create(<span class="hljs-string">&quot;customer.xml&quot;</span>, settings);
 
-while (reader.Read())
+<span class="hljs-keyword">while</span> (reader.Read())
 {
-    Console.Write(new string(' ', reader.Depth * 2));  // چاپ فاصله برای تورفتگی
+    Console.Write(<span class="hljs-keyword">new</span> <span class="hljs-built_in">string</span>(<span class="hljs-string">&#x27; &#x27;</span>, reader.Depth * <span class="hljs-number">2</span>));  <span class="hljs-comment">// چاپ فاصله برای تورفتگی</span>
     Console.Write(reader.NodeType.ToString());
 
-    if (reader.NodeType == XmlNodeType.Element ||
+    <span class="hljs-keyword">if</span> (reader.NodeType == XmlNodeType.Element ||
         reader.NodeType == XmlNodeType.EndElement)
     {
-        Console.Write(&quot; Name=&quot; + reader.Name);
+        Console.Write(<span class="hljs-string">&quot; Name=&quot;</span> + reader.Name);
     }
-    else if (reader.NodeType == XmlNodeType.Text)
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (reader.NodeType == XmlNodeType.Text)
     {
-        Console.Write(&quot; Value=&quot; + reader.Value);
+        Console.Write(<span class="hljs-string">&quot; Value=&quot;</span> + reader.Value);
     }
 
     Console.WriteLine();
 }
 </code></pre>
 <p>خروجی:</p>
-<pre><code>XmlDeclaration
+<pre class="hljs"><code>XmlDeclaration
 Element Name=customer
   Element Name=firstname
     Text Value=Jim
@@ -165,7 +125,7 @@ EndElement Name=customer
 </ul>
 <h3>خواندن Elementها در XML 🏷️📖</h3>
 <p>اغلب اوقات شما از قبل ساختار سند XML که می‌خواهید بخوانید را می‌دانید. برای ساده‌تر کردن این کار، <strong>XmlReader</strong> مجموعه‌ای از متدها را فراهم کرده است که هنگام خواندن، فرض می‌کنند ساختار مشخصی وجود دارد. این متدها هم کد شما را ساده‌تر می‌کنند و هم به‌طور هم‌زمان بخشی از <strong>Validation</strong> را انجام می‌دهند ✅.</p>
-<p>اگر هرگونه Validation شکست بخورد، <code>XmlReader</code> یک <strong>XmlException</strong> پرتاب می‌کند.
+<p>اگر هرگونه Validation شکست بخورد، <code>XmlReader</code> یک <strong>XmlException</strong> پرتاب می‌کند.<br>
 این استثنا ویژگی‌های <strong>LineNumber</strong> و <strong>LinePosition</strong> را دارد که نشان می‌دهد خطا در کجا رخ داده است—ثبت (Log کردن) این اطلاعات برای فایل‌های بزرگ XML بسیار ضروری است ⚠️.</p>
 <hr>
 <h3>متدهای پایه‌ای برای خواندن عناصر</h3>
@@ -174,10 +134,10 @@ EndElement Name=customer
 <li><code>ReadEndElement</code> بررسی می‌کند که <code>NodeType</code> فعلی از نوع <strong>EndElement</strong> باشد و سپس متد <code>Read</code> را صدا می‌زند.</li>
 </ul>
 <p>به‌عنوان مثال، برای خواندن:</p>
-<pre><code class="language-xml">&lt;firstname&gt;Jim&lt;/firstname&gt;
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">firstname</span>&gt;</span>Jim<span class="hljs-tag">&lt;/<span class="hljs-name">firstname</span>&gt;</span>
 </code></pre>
 <p>می‌توانیم کد زیر را بنویسیم:</p>
-<pre><code class="language-csharp">reader.ReadStartElement(&quot;firstname&quot;);
+<pre class="hljs"><code>reader.ReadStartElement(<span class="hljs-string">&quot;firstname&quot;</span>);
 Console.WriteLine(reader.Value);
 reader.Read();
 reader.ReadEndElement();
@@ -191,34 +151,34 @@ reader.ReadEndElement();
 <li>و یک <strong>end element</strong></li>
 </ul>
 <p>سپس محتوای داخلی را به‌صورت یک رشته بازمی‌گرداند:</p>
-<pre><code class="language-csharp">string firstName = reader.ReadElementContentAsString(&quot;firstname&quot;, &quot;&quot;);
+<pre class="hljs"><code><span class="hljs-built_in">string</span> firstName = reader.ReadElementContentAsString(<span class="hljs-string">&quot;firstname&quot;</span>, <span class="hljs-string">&quot;&quot;</span>);
 </code></pre>
 <p>آرگومان دوم به <strong>namespace</strong> اشاره دارد که در این مثال خالی است.</p>
 <p>همچنین نسخه‌های تایپ‌شده‌ای از این متد وجود دارد، مثل <code>ReadElementContentAsInt</code>، که خروجی را مستقیماً به نوع موردنظر Parse می‌کنند.</p>
 <hr>
 <h3>مثال کامل‌تر 📝</h3>
 <p>بیایید به سند XML زیر برگردیم:</p>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; standalone=&quot;yes&quot;?&gt;
-&lt;customer id=&quot;123&quot; status=&quot;archived&quot;&gt;
-  &lt;firstname&gt;Jim&lt;/firstname&gt;
-  &lt;lastname&gt;Bo&lt;/lastname&gt;
-  &lt;creditlimit&gt;500.00&lt;/creditlimit&gt;    &lt;!-- OK, we sneaked this in! --&gt;
-&lt;/customer&gt;
+<pre class="hljs"><code><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;utf-8&quot;</span> standalone=<span class="hljs-string">&quot;yes&quot;</span>?&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">customer</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;123&quot;</span> <span class="hljs-attr">status</span>=<span class="hljs-string">&quot;archived&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">firstname</span>&gt;</span>Jim<span class="hljs-tag">&lt;/<span class="hljs-name">firstname</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">lastname</span>&gt;</span>Bo<span class="hljs-tag">&lt;/<span class="hljs-name">lastname</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">creditlimit</span>&gt;</span>500.00<span class="hljs-tag">&lt;/<span class="hljs-name">creditlimit</span>&gt;</span>    <span class="hljs-comment">&lt;!-- OK, we sneaked this in! --&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">customer</span>&gt;</span>
 </code></pre>
 <p>و آن را این‌طور بخوانیم:</p>
-<pre><code class="language-csharp">XmlReaderSettings settings = new XmlReaderSettings();
-settings.IgnoreWhitespace = true;
+<pre class="hljs"><code>XmlReaderSettings settings = <span class="hljs-keyword">new</span> XmlReaderSettings();
+settings.IgnoreWhitespace = <span class="hljs-literal">true</span>;
 
-using XmlReader r = XmlReader.Create(&quot;customer.xml&quot;, settings);
-r.MoveToContent();                // پرش از روی XML declaration
-r.ReadStartElement(&quot;customer&quot;);
+<span class="hljs-keyword">using</span> XmlReader r = XmlReader.Create(<span class="hljs-string">&quot;customer.xml&quot;</span>, settings);
+r.MoveToContent();                <span class="hljs-comment">// پرش از روی XML declaration</span>
+r.ReadStartElement(<span class="hljs-string">&quot;customer&quot;</span>);
 
-string firstName    = r.ReadElementContentAsString(&quot;firstname&quot;, &quot;&quot;);
-string lastName     = r.ReadElementContentAsString(&quot;lastname&quot;, &quot;&quot;);
-decimal creditLimit = r.ReadElementContentAsDecimal(&quot;creditlimit&quot;, &quot;&quot;);
+<span class="hljs-built_in">string</span> firstName    = r.ReadElementContentAsString(<span class="hljs-string">&quot;firstname&quot;</span>, <span class="hljs-string">&quot;&quot;</span>);
+<span class="hljs-built_in">string</span> lastName     = r.ReadElementContentAsString(<span class="hljs-string">&quot;lastname&quot;</span>, <span class="hljs-string">&quot;&quot;</span>);
+<span class="hljs-built_in">decimal</span> creditLimit = r.ReadElementContentAsDecimal(<span class="hljs-string">&quot;creditlimit&quot;</span>, <span class="hljs-string">&quot;&quot;</span>);
 
-r.MoveToContent();      // پرش از روی کامنت
-r.ReadEndElement();     // خواندن تگ پایانی customer
+r.MoveToContent();      <span class="hljs-comment">// پرش از روی کامنت</span>
+r.ReadEndElement();     <span class="hljs-comment">// خواندن تگ پایانی customer</span>
 </code></pre>
 <hr>
 <h3>متد MoveToContent ⚡</h3>
@@ -233,46 +193,46 @@ r.ReadEndElement();     // خواندن تگ پایانی customer
 <hr>
 <h3>Elementهای اختیاری 🌀</h3>
 <p>در مثال قبلی، فرض کنید که <code>&lt;lastname&gt;</code> اختیاری باشد. راه‌حل ساده است:</p>
-<pre><code class="language-csharp">r.ReadStartElement(&quot;customer&quot;);
-string firstName    = r.ReadElementContentAsString(&quot;firstname&quot;, &quot;&quot;);
-string lastName     = r.Name == &quot;lastname&quot;
-                     ? r.ReadElementContentAsString() : null;
-decimal creditLimit = r.ReadElementContentAsDecimal(&quot;creditlimit&quot;, &quot;&quot;);
+<pre class="hljs"><code>r.ReadStartElement(<span class="hljs-string">&quot;customer&quot;</span>);
+<span class="hljs-built_in">string</span> firstName    = r.ReadElementContentAsString(<span class="hljs-string">&quot;firstname&quot;</span>, <span class="hljs-string">&quot;&quot;</span>);
+<span class="hljs-built_in">string</span> lastName     = r.Name == <span class="hljs-string">&quot;lastname&quot;</span>
+                     ? r.ReadElementContentAsString() : <span class="hljs-literal">null</span>;
+<span class="hljs-built_in">decimal</span> creditLimit = r.ReadElementContentAsDecimal(<span class="hljs-string">&quot;creditlimit&quot;</span>, <span class="hljs-string">&quot;&quot;</span>);
 </code></pre>
 <hr>
 <h3>ترتیب تصادفی Elementها 🔀</h3>
-<p>مثال‌های این بخش فرض می‌کنند که عناصر در فایل XML به‌ترتیب مشخصی قرار گرفته‌اند.
+<p>مثال‌های این بخش فرض می‌کنند که عناصر در فایل XML به‌ترتیب مشخصی قرار گرفته‌اند.<br>
 اگر نیاز دارید با عناصری که به ترتیب‌های مختلف می‌آیند کار کنید، ساده‌ترین راه این است که آن بخش از XML را به‌صورت یک <strong>X-DOM</strong> بخوانید. ما نحوه‌ی این کار را در بخش <strong>Patterns for Using XmlReader/XmlWriter</strong> در صفحه‌ی ۵۶۳ توضیح می‌دهیم.</p>
 <hr>
 <h3>Elementهای خالی ⬜</h3>
 <p>نحوه‌ی برخورد <code>XmlReader</code> با Elementهای خالی می‌تواند یک <strong>دام خطرناک</strong> باشد 😅.</p>
 <p>به این مثال توجه کنید:</p>
-<pre><code class="language-xml">&lt;customerList&gt;&lt;/customerList&gt;
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">customerList</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">customerList</span>&gt;</span>
 </code></pre>
 <p>در XML، این معادل است با:</p>
-<pre><code class="language-xml">&lt;customerList/&gt;
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">customerList</span>/&gt;</span>
 </code></pre>
 <p>اما <code>XmlReader</code> این دو را متفاوت تفسیر می‌کند.</p>
 <ul>
 <li>در حالت اول، کد زیر به‌خوبی کار می‌کند:</li>
 </ul>
-<pre><code class="language-csharp">reader.ReadStartElement(&quot;customerList&quot;);
+<pre class="hljs"><code>reader.ReadStartElement(<span class="hljs-string">&quot;customerList&quot;</span>);
 reader.ReadEndElement();
 </code></pre>
 <ul>
 <li>اما در حالت دوم، <code>ReadEndElement</code> یک استثنا پرتاب می‌کند چون از نظر XmlReader هیچ <strong>end element</strong> مجزایی وجود ندارد.</li>
 </ul>
 <p>راه‌حل: بررسی کنید که آیا Element خالی است یا خیر:</p>
-<pre><code class="language-csharp">bool isEmpty = reader.IsEmptyElement;
-reader.ReadStartElement(&quot;customerList&quot;);
-if (!isEmpty) reader.ReadEndElement();
+<pre class="hljs"><code><span class="hljs-built_in">bool</span> isEmpty = reader.IsEmptyElement;
+reader.ReadStartElement(<span class="hljs-string">&quot;customerList&quot;</span>);
+<span class="hljs-keyword">if</span> (!isEmpty) reader.ReadEndElement();
 </code></pre>
-<p>در عمل، این مشکل فقط زمانی آزاردهنده است که Element موردنظر قرار است <strong>child element</strong>‌ها داشته باشد (مثل یک customer list).
-برای Elementهایی که تنها متن ساده دارند (مثل firstname)، می‌توانید کل این موضوع را با استفاده از متدهایی مثل <code>ReadElementContentAsString</code> نادیده بگیرید.
+<p>در عمل، این مشکل فقط زمانی آزاردهنده است که Element موردنظر قرار است <strong>child element</strong>‌ها داشته باشد (مثل یک customer list).<br>
+برای Elementهایی که تنها متن ساده دارند (مثل firstname)، می‌توانید کل این موضوع را با استفاده از متدهایی مثل <code>ReadElementContentAsString</code> نادیده بگیرید.<br>
 متدهای <code>ReadElementXXX</code> هر دو نوع <strong>Elementهای خالی</strong> را به‌درستی مدیریت می‌کنند ✅.</p>
 <hr>
 <h3>سایر متدهای ReadXXX 📚</h3>
-<p>جدول <strong>۱۱-۱</strong> تمام متدهای <code>ReadXXX</code> در <strong>XmlReader</strong> را خلاصه می‌کند.
+<p>جدول <strong>۱۱-۱</strong> تمام متدهای <code>ReadXXX</code> در <strong>XmlReader</strong> را خلاصه می‌کند.<br>
 بیشتر این متدها برای کار با <strong>Elementها</strong> طراحی شده‌اند. در این جدول، بخش <strong>Bold</strong> شده از XML نمونه، قسمت خوانده‌شده توسط متد توضیح داده‌شده را نشان می‌دهد.</p>
 <div align="center">
 <p><img src="../../../assets/image/11/Table-11-1.jpeg" alt="Conventions-UsedThis-Book"></p>
@@ -287,62 +247,62 @@ if (!isEmpty) reader.ReadEndElement();
 <li><code>ReadElementString</code></li>
 </ul>
 <p>این‌ها شبیه به <code>ReadContentAsString</code> و <code>ReadElementContentAsString</code> عمل می‌کنند، اما اگر داخل Element بیش از <strong>یک Text Node</strong> وجود داشته باشد، <strong>استثنا</strong> پرتاب می‌کنند.</p>
-<p>🔴 مشکل دیگر: اگر یک <strong>Comment</strong> در Element باشد، این متدها هم استثنا پرتاب می‌کنند.
+<p>🔴 مشکل دیگر: اگر یک <strong>Comment</strong> در Element باشد، این متدها هم استثنا پرتاب می‌کنند.<br>
 بنابراین باید از استفاده‌ی آن‌ها خودداری کنید.</p>
 <hr>
 <h2>خواندن Attributes 🏷️</h2>
 <p>کلاس <strong>XmlReader</strong> یک <strong>Indexer</strong> فراهم می‌کند که به شما دسترسی مستقیم (Random Access) به Attributeهای یک Element می‌دهد—چه از طریق <strong>نام</strong> و چه از طریق <strong>موقعیت (Index)</strong>.</p>
 <p>استفاده از Indexer معادل با صدا زدن متد <code>GetAttribute</code> است.</p>
 <p>به مثال زیر توجه کنید:</p>
-<pre><code class="language-xml">&lt;customer id=&quot;123&quot; status=&quot;archived&quot;/&gt;
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">customer</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;123&quot;</span> <span class="hljs-attr">status</span>=<span class="hljs-string">&quot;archived&quot;</span>/&gt;</span>
 </code></pre>
 <p>می‌توانیم Attributeهای آن را این‌طور بخوانیم:</p>
-<pre><code class="language-csharp">Console.WriteLine(reader[&quot;id&quot;]);              // 123
-Console.WriteLine(reader[&quot;status&quot;]);          // archived
-Console.WriteLine(reader[&quot;bogus&quot;] == null);   // True
+<pre class="hljs"><code>Console.WriteLine(reader[<span class="hljs-string">&quot;id&quot;</span>]);              <span class="hljs-comment">// 123</span>
+Console.WriteLine(reader[<span class="hljs-string">&quot;status&quot;</span>]);          <span class="hljs-comment">// archived</span>
+Console.WriteLine(reader[<span class="hljs-string">&quot;bogus&quot;</span>] == <span class="hljs-literal">null</span>);   <span class="hljs-comment">// True</span>
 </code></pre>
-<p>⚠️ نکته: <code>XmlReader</code> باید <strong>روی یک Start Element</strong> قرار داشته باشد تا بتوان Attributeها را خواند.
+<p>⚠️ نکته: <code>XmlReader</code> باید <strong>روی یک Start Element</strong> قرار داشته باشد تا بتوان Attributeها را خواند.<br>
 بعد از اینکه <code>ReadStartElement</code> فراخوانی شد، Attributeها برای همیشه از دست می‌روند!</p>
 <hr>
 <h3>دسترسی بر اساس موقعیت (Ordinal Position) 🔢</h3>
 <p>اگرچه ترتیب Attributeها از نظر معنایی بی‌اهمیت است، شما می‌توانید آن‌ها را با شماره‌ی Index بخوانید:</p>
-<pre><code class="language-csharp">Console.WriteLine(reader[0]);   // 123
-Console.WriteLine(reader[1]);   // archived
+<pre class="hljs"><code>Console.WriteLine(reader[<span class="hljs-number">0</span>]);   <span class="hljs-comment">// 123</span>
+Console.WriteLine(reader[<span class="hljs-number">1</span>]);   <span class="hljs-comment">// archived</span>
 </code></pre>
 <p>همچنین Indexer این امکان را می‌دهد که <strong>Namespace</strong> مربوط به یک Attribute (اگر وجود داشته باشد) را مشخص کنید.</p>
 <p>ویژگی <code>AttributeCount</code> تعداد Attributeهای Node فعلی را بازمی‌گرداند.</p>
 <hr>
 <h2>Attribute Nodeها 🧩</h2>
-<p>برای پیمایش مستقیم در Attribute Nodeها، باید از مسیر معمولی خواندن با <code>Read</code> کمی <strong>منحرف شوید</strong>.
+<p>برای پیمایش مستقیم در Attribute Nodeها، باید از مسیر معمولی خواندن با <code>Read</code> کمی <strong>منحرف شوید</strong>.<br>
 این کار زمانی مفید است که بخواهید مقدار Attribute را به انواع دیگر تبدیل کنید (با استفاده از متدهای <code>ReadContentAsXXX</code>).</p>
-<p>این تغییر مسیر باید از یک <strong>Start Element</strong> آغاز شود.
+<p>این تغییر مسیر باید از یک <strong>Start Element</strong> آغاز شود.<br>
 برای راحتی کار، در حین پیمایش Attributeها، قانون <strong>Forward-Only</strong> کمی منعطف‌تر می‌شود: شما می‌توانید به هر Attribute (چه جلو چه عقب) با متد <code>MoveToAttribute</code> بروید.</p>
 <p>برای بازگشت به Start Element، از متد <code>MoveToElement</code> استفاده می‌شود.</p>
 <hr>
 <h3>مثال عملی 📝</h3>
 <p>بازگردیم به مثال قبلی:</p>
-<pre><code class="language-xml">&lt;customer id=&quot;123&quot; status=&quot;archived&quot;/&gt;
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">customer</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;123&quot;</span> <span class="hljs-attr">status</span>=<span class="hljs-string">&quot;archived&quot;</span>/&gt;</span>
 </code></pre>
 <p>می‌توانیم این‌طور عمل کنیم:</p>
-<pre><code class="language-csharp">reader.MoveToAttribute(&quot;status&quot;);
-string status = reader.ReadContentAsString();
+<pre class="hljs"><code>reader.MoveToAttribute(<span class="hljs-string">&quot;status&quot;</span>);
+<span class="hljs-built_in">string</span> status = reader.ReadContentAsString();
 
-reader.MoveToAttribute(&quot;id&quot;);
-int id = reader.ReadContentAsInt();
+reader.MoveToAttribute(<span class="hljs-string">&quot;id&quot;</span>);
+<span class="hljs-built_in">int</span> id = reader.ReadContentAsInt();
 </code></pre>
 <p>🔍 اگر Attribute مشخص‌شده وجود نداشته باشد، <code>MoveToAttribute</code> مقدار <strong>false</strong> برمی‌گرداند.</p>
 <hr>
 <h3>پیمایش همه Attributeها 🔄</h3>
 <p>می‌توانید هر Attribute را به‌ترتیب پیمایش کنید:</p>
-<pre><code class="language-csharp">if (reader.MoveToFirstAttribute())
-    do
+<pre class="hljs"><code><span class="hljs-keyword">if</span> (reader.MoveToFirstAttribute())
+    <span class="hljs-keyword">do</span>
     {
-        Console.WriteLine(reader.Name + &quot;=&quot; + reader.Value);
+        Console.WriteLine(reader.Name + <span class="hljs-string">&quot;=&quot;</span> + reader.Value);
     }
-    while (reader.MoveToNextAttribute());
+    <span class="hljs-keyword">while</span> (reader.MoveToNextAttribute());
 </code></pre>
 <p>🔽 خروجی:</p>
-<pre><code>id=123
+<pre class="hljs"><code>id=123
 status=archived
 </code></pre>
 <hr>
@@ -363,10 +323,10 @@ status=archived
 </div>
 <h3>📝 نام‌فضاها (Namespaces) و پیشوندها (Prefixes)</h3>
 <p>کد زیر با دو حالت اول کار می‌کند:</p>
-<pre><code class="language-csharp">reader.ReadStartElement(&quot;customer&quot;);
+<pre class="hljs"><code>reader.ReadStartElement(<span class="hljs-string">&quot;customer&quot;</span>);
 </code></pre>
 <p>اما برای رسیدگی به حالت سوم باید از کد زیر استفاده کنیم:</p>
-<pre><code class="language-csharp">reader.ReadStartElement(&quot;x:customer&quot;);
+<pre class="hljs"><code>reader.ReadStartElement(<span class="hljs-string">&quot;x:customer&quot;</span>);
 </code></pre>
 <p>سیستم دوم از دو ویژگی حساس به نام‌فضا استفاده می‌کند: <strong>NamespaceURI</strong> و <strong>LocalName</strong>. این ویژگی‌ها پیشوندها و نام‌فضاهای پیش‌فرضی که توسط عناصر والد تعریف شده‌اند را در نظر می‌گیرند. پیشوندها به‌طور خودکار گسترش می‌یابند. این یعنی:</p>
 <ul>
@@ -375,15 +335,15 @@ status=archived
 </ul>
 <p>وقتی دو آرگومان نام به متدی مثل <code>ReadStartElement</code> می‌دهید، درواقع از همین سیستم دوم استفاده می‌کنید.</p>
 <p>به‌عنوان مثال، کد XML زیر را در نظر بگیرید:</p>
-<pre><code class="language-xml">&lt;customer xmlns=&quot;DefaultNamespace&quot; xmlns:other=&quot;OtherNamespace&quot;&gt;
-  &lt;address&gt;
-    &lt;other:city&gt;
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">customer</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">&quot;DefaultNamespace&quot;</span> <span class="hljs-attr">xmlns:other</span>=<span class="hljs-string">&quot;OtherNamespace&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">address</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">other:city</span>&gt;</span>
     ...
 </code></pre>
 <p>می‌توانیم آن را این‌طور بخوانیم:</p>
-<pre><code class="language-csharp">reader.ReadStartElement(&quot;customer&quot;, &quot;DefaultNamespace&quot;);
-reader.ReadStartElement(&quot;address&quot;,  &quot;DefaultNamespace&quot;);
-reader.ReadStartElement(&quot;city&quot;,     &quot;OtherNamespace&quot;);
+<pre class="hljs"><code>reader.ReadStartElement(<span class="hljs-string">&quot;customer&quot;</span>, <span class="hljs-string">&quot;DefaultNamespace&quot;</span>);
+reader.ReadStartElement(<span class="hljs-string">&quot;address&quot;</span>,  <span class="hljs-string">&quot;DefaultNamespace&quot;</span>);
+reader.ReadStartElement(<span class="hljs-string">&quot;city&quot;</span>,     <span class="hljs-string">&quot;OtherNamespace&quot;</span>);
 </code></pre>
 <p>✅ انتزاع پیشوندها معمولاً همان چیزی است که می‌خواهید. اما اگر لازم باشد، می‌توانید ببینید چه پیشوندی استفاده شده است (از طریق ویژگی <strong>Prefix</strong>) و سپس آن را به یک نام‌فضا تبدیل کنید (با فراخوانی <strong>LookupNamespace</strong>).</p>
 <hr>
@@ -391,20 +351,20 @@ reader.ReadStartElement(&quot;city&quot;,     &quot;OtherNamespace&quot;);
 <p><strong>XmlWriter</strong> یک نویسنده‌ی فقط-رو‌به-جلو (forward-only) برای جریان XML است. طراحی XmlWriter به‌طور متقارن شبیه <strong>XmlReader</strong> است.</p>
 <p>مانند <strong>XmlTextReader</strong>، یک XmlWriter را با فراخوانی <strong>Create</strong> (با یک شیء تنظیمات اختیاری) می‌سازید.</p>
 <p>در مثال زیر، ما <strong>تورفتگی (Indenting)</strong> را فعال می‌کنیم تا خروجی برای انسان خواناتر شود و سپس یک فایل XML ساده می‌نویسیم:</p>
-<pre><code class="language-csharp">XmlWriterSettings settings = new XmlWriterSettings();
-settings.Indent = true;
-using XmlWriter writer = XmlWriter.Create(&quot;foo.xml&quot;, settings);
-writer.WriteStartElement(&quot;customer&quot;);
-writer.WriteElementString(&quot;firstname&quot;, &quot;Jim&quot;);
-writer.WriteElementString(&quot;lastname&quot;, &quot;Bo&quot;);
+<pre class="hljs"><code>XmlWriterSettings settings = <span class="hljs-keyword">new</span> XmlWriterSettings();
+settings.Indent = <span class="hljs-literal">true</span>;
+<span class="hljs-keyword">using</span> XmlWriter writer = XmlWriter.Create(<span class="hljs-string">&quot;foo.xml&quot;</span>, settings);
+writer.WriteStartElement(<span class="hljs-string">&quot;customer&quot;</span>);
+writer.WriteElementString(<span class="hljs-string">&quot;firstname&quot;</span>, <span class="hljs-string">&quot;Jim&quot;</span>);
+writer.WriteElementString(<span class="hljs-string">&quot;lastname&quot;</span>, <span class="hljs-string">&quot;Bo&quot;</span>);
 writer.WriteEndElement();
 </code></pre>
 <p>این کد سند زیر را تولید می‌کند (همان فایلی که در اولین مثال XmlReader خواندیم):</p>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-&lt;customer&gt;
-  &lt;firstname&gt;Jim&lt;/firstname&gt;
-  &lt;lastname&gt;Bo&lt;/lastname&gt;
-&lt;/customer&gt;
+<pre class="hljs"><code><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;utf-8&quot;</span>?&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">customer</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">firstname</span>&gt;</span>Jim<span class="hljs-tag">&lt;/<span class="hljs-name">firstname</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">lastname</span>&gt;</span>Bo<span class="hljs-tag">&lt;/<span class="hljs-name">lastname</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">customer</span>&gt;</span>
 </code></pre>
 <hr>
 <h3>⚙️ تنظیمات XmlWriter</h3>
@@ -418,14 +378,14 @@ writer.WriteEndElement();
 <ul>
 <li>متد <strong>WriteValue</strong> یک گره متنی منفرد می‌نویسد. این متد هم رشته‌ها و هم انواع غیررشته‌ای مثل <code>bool</code> و <code>DateTime</code> را می‌پذیرد و به‌طور داخلی از <strong>XmlConvert</strong> برای تبدیل رشته‌های سازگار با XML استفاده می‌کند:</li>
 </ul>
-<pre><code class="language-csharp">writer.WriteStartElement(&quot;birthdate&quot;);
+<pre class="hljs"><code>writer.WriteStartElement(<span class="hljs-string">&quot;birthdate&quot;</span>);
 writer.WriteValue(DateTime.Now);
 writer.WriteEndElement();
 </code></pre>
 <ul>
 <li>در مقابل، اگر این‌طور بنویسیم:</li>
 </ul>
-<pre><code class="language-csharp">WriteElementString(&quot;birthdate&quot;, DateTime.Now.ToString());
+<pre class="hljs"><code>WriteElementString(<span class="hljs-string">&quot;birthdate&quot;</span>, DateTime.Now.ToString());
 </code></pre>
 <p>خروجی ناسازگار با XML خواهد بود و امکان تفسیر نادرست دارد.</p>
 <ul>
@@ -435,12 +395,12 @@ writer.WriteEndElement();
 <hr>
 <h3>🏷️ نوشتن Attributeها</h3>
 <p>می‌توانید درست بعد از نوشتن یک StartElement، Attributeها را بنویسید:</p>
-<pre><code class="language-csharp">writer.WriteStartElement(&quot;customer&quot;);
-writer.WriteAttributeString(&quot;id&quot;, &quot;1&quot;);
-writer.WriteAttributeString(&quot;status&quot;, &quot;archived&quot;);
+<pre class="hljs"><code>writer.WriteStartElement(<span class="hljs-string">&quot;customer&quot;</span>);
+writer.WriteAttributeString(<span class="hljs-string">&quot;id&quot;</span>, <span class="hljs-string">&quot;1&quot;</span>);
+writer.WriteAttributeString(<span class="hljs-string">&quot;status&quot;</span>, <span class="hljs-string">&quot;archived&quot;</span>);
 </code></pre>
 <p>برای نوشتن مقادیر غیررشته‌ای، از این الگو استفاده کنید:</p>
-<pre><code class="language-csharp">WriteStartAttribute();
+<pre class="hljs"><code>WriteStartAttribute();
 WriteValue(...);
 WriteEndAttribute();
 </code></pre>
@@ -486,46 +446,46 @@ WriteEndAttribute();
 <h3>🌐 نام‌فضاها و پیشوندها در XmlWriter</h3>
 <p>نسخه‌های Overload متدهای Write* به شما امکان می‌دهند یک عنصر یا Attribute را به یک نام‌فضا متصل کنید.</p>
 <p>بیایید محتوای فایل XML قبلی را بازنویسی کنیم و این بار همه عناصر را به نام‌فضای <code>http://oreilly.com</code> متصل کنیم، و در عنصر <code>customer</code> پیشوند <code>o</code> را تعریف کنیم:</p>
-<pre><code class="language-csharp">writer.WriteStartElement(&quot;o&quot;, &quot;customer&quot;, &quot;http://oreilly.com&quot;);
-writer.WriteElementString(&quot;o&quot;, &quot;firstname&quot;, &quot;http://oreilly.com&quot;, &quot;Jim&quot;);
-writer.WriteElementString(&quot;o&quot;, &quot;lastname&quot;, &quot;http://oreilly.com&quot;, &quot;Bo&quot;);
+<pre class="hljs"><code>writer.WriteStartElement(<span class="hljs-string">&quot;o&quot;</span>, <span class="hljs-string">&quot;customer&quot;</span>, <span class="hljs-string">&quot;http://oreilly.com&quot;</span>);
+writer.WriteElementString(<span class="hljs-string">&quot;o&quot;</span>, <span class="hljs-string">&quot;firstname&quot;</span>, <span class="hljs-string">&quot;http://oreilly.com&quot;</span>, <span class="hljs-string">&quot;Jim&quot;</span>);
+writer.WriteElementString(<span class="hljs-string">&quot;o&quot;</span>, <span class="hljs-string">&quot;lastname&quot;</span>, <span class="hljs-string">&quot;http://oreilly.com&quot;</span>, <span class="hljs-string">&quot;Bo&quot;</span>);
 writer.WriteEndElement();
 </code></pre>
 <p>خروجی این خواهد بود:</p>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-&lt;o:customer xmlns:o='http://oreilly.com'&gt;
-  &lt;o:firstname&gt;Jim&lt;/o:firstname&gt;
-  &lt;o:lastname&gt;Bo&lt;/o:lastname&gt;
-&lt;/o:customer&gt;
+<pre class="hljs"><code><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;utf-8&quot;</span>?&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">o:customer</span> <span class="hljs-attr">xmlns:o</span>=<span class="hljs-string">&#x27;http://oreilly.com&#x27;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">o:firstname</span>&gt;</span>Jim<span class="hljs-tag">&lt;/<span class="hljs-name">o:firstname</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">o:lastname</span>&gt;</span>Bo<span class="hljs-tag">&lt;/<span class="hljs-name">o:lastname</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">o:customer</span>&gt;</span>
 </code></pre>
 <p>🔍 توجه کنید که برای اختصار، <strong>XmlWriter</strong> اعلام نام‌فضای عناصر فرزند را حذف می‌کند چون قبلاً توسط عنصر والد تعریف شده‌اند.</p>
 <h3>📌 الگوها برای استفاده از XmlReader/XmlWriter</h3>
 <hr>
 <h3>📂 کار با داده‌های سلسله‌مراتبی (Hierarchical Data)</h3>
 <p>در نظر بگیرید کلاس‌های زیر را داریم:</p>
-<pre><code class="language-csharp">public class Contacts
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Contacts</span>
 {
-  public IList&lt;Customer&gt; Customers = new List&lt;Customer&gt;();
-  public IList&lt;Supplier&gt; Suppliers = new List&lt;Supplier&gt;();
+  <span class="hljs-keyword">public</span> IList&lt;Customer&gt; Customers = <span class="hljs-keyword">new</span> List&lt;Customer&gt;();
+  <span class="hljs-keyword">public</span> IList&lt;Supplier&gt; Suppliers = <span class="hljs-keyword">new</span> List&lt;Supplier&gt;();
 }
-public class Customer { public string FirstName, LastName; }
-public class Supplier { public string Name; }
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Customer</span> { <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> FirstName, LastName; }
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Supplier</span> { <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Name; }
 </code></pre>
 <p>فرض کنید می‌خواهیم از <strong>XmlReader</strong> و <strong>XmlWriter</strong> برای <strong>سریال‌سازی (Serialization)</strong> یک شیء <code>Contacts</code> به XML استفاده کنیم. خروجی مدنظر به این صورت است:</p>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-&lt;contacts&gt;
-  &lt;customer id=&quot;1&quot;&gt;
-    &lt;firstname&gt;Jay&lt;/firstname&gt;
-    &lt;lastname&gt;Dee&lt;/lastname&gt;
-  &lt;/customer&gt;
-  &lt;customer&gt;                     &lt;!-- فرض می‌کنیم id اختیاری است --&gt;
-    &lt;firstname&gt;Kay&lt;/firstname&gt;
-    &lt;lastname&gt;Gee&lt;/lastname&gt;
-  &lt;/customer&gt;
-  &lt;supplier&gt;
-    &lt;name&gt;X Technologies Ltd&lt;/name&gt;
-  &lt;/supplier&gt;
-&lt;/contacts&gt;
+<pre class="hljs"><code><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;utf-8&quot;</span>?&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">contacts</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">customer</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;1&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">firstname</span>&gt;</span>Jay<span class="hljs-tag">&lt;/<span class="hljs-name">firstname</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">lastname</span>&gt;</span>Dee<span class="hljs-tag">&lt;/<span class="hljs-name">lastname</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">customer</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">customer</span>&gt;</span>                     <span class="hljs-comment">&lt;!-- فرض می‌کنیم id اختیاری است --&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">firstname</span>&gt;</span>Kay<span class="hljs-tag">&lt;/<span class="hljs-name">firstname</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">lastname</span>&gt;</span>Gee<span class="hljs-tag">&lt;/<span class="hljs-name">lastname</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">customer</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">supplier</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">name</span>&gt;</span>X Technologies Ltd<span class="hljs-tag">&lt;/<span class="hljs-name">name</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">supplier</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">contacts</span>&gt;</span>
 </code></pre>
 <hr>
 <h3>✨ بهترین روش</h3>
@@ -537,28 +497,28 @@ public class Supplier { public string Name; }
 </ul>
 <hr>
 <h3>👤 کلاس Customer</h3>
-<pre><code class="language-csharp">public class Customer
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Customer</span>
 {
-  public const string XmlName = &quot;customer&quot;;
-  public int? ID;
-  public string FirstName, LastName;
-  public Customer () { }
-  public Customer (XmlReader r) { ReadXml(r); }
+  <span class="hljs-keyword">public</span> <span class="hljs-keyword">const</span> <span class="hljs-built_in">string</span> XmlName = <span class="hljs-string">&quot;customer&quot;</span>;
+  <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span>? ID;
+  <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> FirstName, LastName;
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Customer</span> ()</span> { }
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Customer</span> (<span class="hljs-params">XmlReader r</span>)</span> { ReadXml(r); }
 
-  public void ReadXml (XmlReader r)
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ReadXml</span> (<span class="hljs-params">XmlReader r</span>)</span>
   {
-    if (r.MoveToAttribute(&quot;id&quot;)) ID = r.ReadContentAsInt();
+    <span class="hljs-keyword">if</span> (r.MoveToAttribute(<span class="hljs-string">&quot;id&quot;</span>)) ID = r.ReadContentAsInt();
     r.ReadStartElement();
-    FirstName = r.ReadElementContentAsString(&quot;firstname&quot;, &quot;&quot;);
-    LastName  = r.ReadElementContentAsString(&quot;lastname&quot;, &quot;&quot;);
+    FirstName = r.ReadElementContentAsString(<span class="hljs-string">&quot;firstname&quot;</span>, <span class="hljs-string">&quot;&quot;</span>);
+    LastName  = r.ReadElementContentAsString(<span class="hljs-string">&quot;lastname&quot;</span>, <span class="hljs-string">&quot;&quot;</span>);
     r.ReadEndElement();
   }
 
-  public void WriteXml (XmlWriter w)
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">WriteXml</span> (<span class="hljs-params">XmlWriter w</span>)</span>
   {
-    if (ID.HasValue) w.WriteAttributeString(&quot;id&quot;, &quot;&quot;, ID.ToString());
-    w.WriteElementString(&quot;firstname&quot;, FirstName);
-    w.WriteElementString(&quot;lastname&quot;, LastName);
+    <span class="hljs-keyword">if</span> (ID.HasValue) w.WriteAttributeString(<span class="hljs-string">&quot;id&quot;</span>, <span class="hljs-string">&quot;&quot;</span>, ID.ToString());
+    w.WriteElementString(<span class="hljs-string">&quot;firstname&quot;</span>, FirstName);
+    w.WriteElementString(<span class="hljs-string">&quot;lastname&quot;</span>, LastName);
   }
 }
 </code></pre>
@@ -578,54 +538,54 @@ public class Supplier { public string Name; }
 <p>مزیت دیگر این الگو این است که پیاده‌سازی شما با <strong>IXmlSerializable</strong> سازگار می‌شود.</p>
 <hr>
 <h3>🏢 کلاس Supplier</h3>
-<pre><code class="language-csharp">public class Supplier
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Supplier</span>
 {
-  public const string XmlName = &quot;supplier&quot;;
-  public string Name;
-  public Supplier () { }
-  public Supplier (XmlReader r) { ReadXml(r); }
+  <span class="hljs-keyword">public</span> <span class="hljs-keyword">const</span> <span class="hljs-built_in">string</span> XmlName = <span class="hljs-string">&quot;supplier&quot;</span>;
+  <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Name;
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Supplier</span> ()</span> { }
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Supplier</span> (<span class="hljs-params">XmlReader r</span>)</span> { ReadXml(r); }
 
-  public void ReadXml (XmlReader r)
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ReadXml</span> (<span class="hljs-params">XmlReader r</span>)</span>
   {
     r.ReadStartElement();
-    Name = r.ReadElementContentAsString(&quot;name&quot;, &quot;&quot;);
+    Name = r.ReadElementContentAsString(<span class="hljs-string">&quot;name&quot;</span>, <span class="hljs-string">&quot;&quot;</span>);
     r.ReadEndElement();
   }
 
-  public void WriteXml (XmlWriter w) =&gt;
-    w.WriteElementString(&quot;name&quot;, Name);
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">WriteXml</span> (<span class="hljs-params">XmlWriter w</span>)</span> =&gt;
+    w.WriteElementString(<span class="hljs-string">&quot;name&quot;</span>, Name);
 }
 </code></pre>
 <hr>
 <h3>📒 کلاس Contacts</h3>
 <p>در کلاس <code>Contacts</code>، باید در <code>ReadXml</code> عناصر را پیمایش کنیم و بررسی کنیم که هر زیرعنصر یک <code>customer</code> است یا یک <code>supplier</code>. همچنین باید حالت عنصر خالی <code>&lt;contacts/&gt;</code> را مدیریت کنیم:</p>
-<pre><code class="language-csharp">public void ReadXml (XmlReader r)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ReadXml</span> (<span class="hljs-params">XmlReader r</span>)</span>
 {
-  bool isEmpty = r.IsEmptyElement;  // برای جلوگیری از گیر افتادن در عنصر خالی
+  <span class="hljs-built_in">bool</span> isEmpty = r.IsEmptyElement;  <span class="hljs-comment">// برای جلوگیری از گیر افتادن در عنصر خالی</span>
   r.ReadStartElement();
-  if (isEmpty) return;
+  <span class="hljs-keyword">if</span> (isEmpty) <span class="hljs-keyword">return</span>;
 
-  while (r.NodeType == XmlNodeType.Element)
+  <span class="hljs-keyword">while</span> (r.NodeType == XmlNodeType.Element)
   {
-    if (r.Name == Customer.XmlName) 
-        Customers.Add(new Customer(r));
-    else if (r.Name == Supplier.XmlName) 
-        Suppliers.Add(new Supplier(r));
-    else
-        throw new XmlException(&quot;Unexpected node: &quot; + r.Name);
+    <span class="hljs-keyword">if</span> (r.Name == Customer.XmlName) 
+        Customers.Add(<span class="hljs-keyword">new</span> Customer(r));
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (r.Name == Supplier.XmlName) 
+        Suppliers.Add(<span class="hljs-keyword">new</span> Supplier(r));
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> XmlException(<span class="hljs-string">&quot;Unexpected node: &quot;</span> + r.Name);
   }
   r.ReadEndElement();
 }
 
-public void WriteXml (XmlWriter w)
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">WriteXml</span> (<span class="hljs-params">XmlWriter w</span>)</span>
 {
-  foreach (Customer c in Customers)
+  <span class="hljs-keyword">foreach</span> (Customer c <span class="hljs-keyword">in</span> Customers)
   {
     w.WriteStartElement(Customer.XmlName);
     c.WriteXml(w);
     w.WriteEndElement();
   }
-  foreach (Supplier s in Suppliers)
+  <span class="hljs-keyword">foreach</span> (Supplier s <span class="hljs-keyword">in</span> Suppliers)
   {
     w.WriteStartElement(Supplier.XmlName);
     s.WriteXml(w);
@@ -635,58 +595,58 @@ public void WriteXml (XmlWriter w)
 </code></pre>
 <hr>
 <h3>📤 سریال‌سازی Contacts به XML</h3>
-<pre><code class="language-csharp">var settings = new XmlWriterSettings();
-settings.Indent = true;  // برای خوانایی بیشتر
-using XmlWriter writer = XmlWriter.Create(&quot;contacts.xml&quot;, settings);
-var cts = new Contacts();
-// افزودن Customers و Suppliers...
-writer.WriteStartElement(&quot;contacts&quot;);
+<pre class="hljs"><code><span class="hljs-keyword">var</span> settings = <span class="hljs-keyword">new</span> XmlWriterSettings();
+settings.Indent = <span class="hljs-literal">true</span>;  <span class="hljs-comment">// برای خوانایی بیشتر</span>
+<span class="hljs-keyword">using</span> XmlWriter writer = XmlWriter.Create(<span class="hljs-string">&quot;contacts.xml&quot;</span>, settings);
+<span class="hljs-keyword">var</span> cts = <span class="hljs-keyword">new</span> Contacts();
+<span class="hljs-comment">// افزودن Customers و Suppliers...</span>
+writer.WriteStartElement(<span class="hljs-string">&quot;contacts&quot;</span>);
 cts.WriteXml(writer);
 writer.WriteEndElement();
 </code></pre>
 <hr>
 <h3>📥 دسریال‌سازی از همان فایل</h3>
-<pre><code class="language-csharp">var settings = new XmlReaderSettings();
-settings.IgnoreWhitespace = true;
-settings.IgnoreComments = true;
-settings.IgnoreProcessingInstructions = true;
+<pre class="hljs"><code><span class="hljs-keyword">var</span> settings = <span class="hljs-keyword">new</span> XmlReaderSettings();
+settings.IgnoreWhitespace = <span class="hljs-literal">true</span>;
+settings.IgnoreComments = <span class="hljs-literal">true</span>;
+settings.IgnoreProcessingInstructions = <span class="hljs-literal">true</span>;
 
-using XmlReader reader = XmlReader.Create(&quot;contacts.xml&quot;, settings);
+<span class="hljs-keyword">using</span> XmlReader reader = XmlReader.Create(<span class="hljs-string">&quot;contacts.xml&quot;</span>, settings);
 reader.MoveToContent();
-var cts = new Contacts();
+<span class="hljs-keyword">var</span> cts = <span class="hljs-keyword">new</span> Contacts();
 cts.ReadXml(reader);
 </code></pre>
 <hr>
 <h3>🔄 ترکیب XmlReader/XmlWriter با X-DOM</h3>
-<p>در هر نقطه از درخت XML که کار با XmlReader یا XmlWriter سخت شد، می‌توانید از <strong>X-DOM</strong> وارد شوید.
+<p>در هر نقطه از درخت XML که کار با XmlReader یا XmlWriter سخت شد، می‌توانید از <strong>X-DOM</strong> وارد شوید.<br>
 این کار اجازه می‌دهد مزیت راحتی X-DOM را با مصرف کم حافظه‌ی XmlReader/XmlWriter ترکیب کنید.</p>
 <hr>
 <h3>📖 استفاده از XmlReader همراه با XElement</h3>
 <p>برای خواندن یک عنصر جاری به یک <strong>X-DOM</strong>، از متد:</p>
-<pre><code class="language-csharp">XNode.ReadFrom(XmlReader)
+<pre class="hljs"><code>XNode.ReadFrom(XmlReader)
 </code></pre>
 <p>استفاده می‌کنیم. این متد فقط بخش جاری از زیردرخت را می‌خواند، نه کل سند را.</p>
 <p>مثال:</p>
-<pre><code class="language-xml">&lt;log&gt;
-  &lt;logentry id=&quot;1&quot;&gt;
-    &lt;date&gt;...&lt;/date&gt;
-    &lt;source&gt;...&lt;/source&gt;
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">log</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">logentry</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;1&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">date</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">date</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">source</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">source</span>&gt;</span>
     ...
-  &lt;/logentry&gt;
+  <span class="hljs-tag">&lt;/<span class="hljs-name">logentry</span>&gt;</span>
   ...
-&lt;/log&gt;
+<span class="hljs-tag">&lt;/<span class="hljs-name">log</span>&gt;</span>
 </code></pre>
 <p>اگر یک میلیون عنصر <code>&lt;logentry&gt;</code> داشته باشیم، بارگذاری کل آن در X-DOM حافظه زیادی مصرف می‌کند. راه‌حل بهتر: پیمایش تک‌به‌تک با XmlReader و پردازش هر عنصر به‌وسیله XElement:</p>
-<pre><code class="language-csharp">XmlReaderSettings settings = new XmlReaderSettings();
-settings.IgnoreWhitespace = true;
-using XmlReader r = XmlReader.Create(&quot;logfile.xml&quot;, settings);
-r.ReadStartElement(&quot;log&quot;);
-while (r.Name == &quot;logentry&quot;)
+<pre class="hljs"><code>XmlReaderSettings settings = <span class="hljs-keyword">new</span> XmlReaderSettings();
+settings.IgnoreWhitespace = <span class="hljs-literal">true</span>;
+<span class="hljs-keyword">using</span> XmlReader r = XmlReader.Create(<span class="hljs-string">&quot;logfile.xml&quot;</span>, settings);
+r.ReadStartElement(<span class="hljs-string">&quot;log&quot;</span>);
+<span class="hljs-keyword">while</span> (r.Name == <span class="hljs-string">&quot;logentry&quot;</span>)
 {
   XElement logEntry = (XElement) XNode.ReadFrom(r);
-  int id = (int) logEntry.Attribute(&quot;id&quot;);
-  DateTime date = (DateTime) logEntry.Element(&quot;date&quot;);
-  string source = (string) logEntry.Element(&quot;source&quot;);
+  <span class="hljs-built_in">int</span> id = (<span class="hljs-built_in">int</span>) logEntry.Attribute(<span class="hljs-string">&quot;id&quot;</span>);
+  DateTime date = (DateTime) logEntry.Element(<span class="hljs-string">&quot;date&quot;</span>);
+  <span class="hljs-built_in">string</span> source = (<span class="hljs-built_in">string</span>) logEntry.Element(<span class="hljs-string">&quot;source&quot;</span>);
   ...
 }
 r.ReadEndElement();
@@ -695,33 +655,33 @@ r.ReadEndElement();
 <h3>🧩 استفاده از XElement در ReadXml</h3>
 <p>اگر الگوی بالا را دنبال کنید، می‌توانید XElement را مستقیماً در متدهای <code>ReadXml</code> یا <code>WriteXml</code> استفاده کنید، بدون اینکه Caller متوجه شود.</p>
 <p>مثال بازنویسی متد <code>ReadXml</code> برای Customer:</p>
-<pre><code class="language-csharp">public void ReadXml (XmlReader r)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ReadXml</span> (<span class="hljs-params">XmlReader r</span>)</span>
 {
   XElement x = (XElement) XNode.ReadFrom(r);
-  ID = (int) x.Attribute(&quot;id&quot;);
-  FirstName = (string) x.Element(&quot;firstname&quot;);
-  LastName  = (string) x.Element(&quot;lastname&quot;);
+  ID = (<span class="hljs-built_in">int</span>) x.Attribute(<span class="hljs-string">&quot;id&quot;</span>);
+  FirstName = (<span class="hljs-built_in">string</span>) x.Element(<span class="hljs-string">&quot;firstname&quot;</span>);
+  LastName  = (<span class="hljs-built_in">string</span>) x.Element(<span class="hljs-string">&quot;lastname&quot;</span>);
 }
 </code></pre>
 <hr>
 <h3>🌐 مدیریت نام‌فضاها در XElement</h3>
 <p><strong>XElement</strong> با XmlReader همکاری می‌کند تا نام‌فضاها را حفظ کند و پیشوندها را درست گسترش دهد—even اگر در سطح بیرونی تعریف شده باشند.</p>
 <p>مثال XML:</p>
-<pre><code class="language-xml">&lt;log xmlns=&quot;http://loggingspace&quot;&gt;
-  &lt;logentry id=&quot;1&quot;&gt;
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">log</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">&quot;http://loggingspace&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">logentry</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;1&quot;</span>&gt;</span>
   ...
 </code></pre>
 <p>در این حالت، <code>XElement</code>هایی که در سطح <code>logentry</code> ساخته می‌شوند، نام‌فضای بیرونی را به‌درستی به ارث می‌برند. ✅</p>
 <h3>📄 استفاده از XmlWriter همراه با XElement</h3>
 <p>شما می‌توانید از <strong>XElement</strong> فقط برای نوشتن المنت‌های داخلی در یک <strong>XmlWriter</strong> استفاده کنید. کد زیر یک میلیون المنت <strong>logentry</strong> را داخل یک فایل XML می‌نویسد، بدون اینکه کل فایل در حافظه ذخیره شود:</p>
-<pre><code class="language-csharp">using XmlWriter w = XmlWriter.Create (&quot;logfile.xml&quot;);
-w.WriteStartElement (&quot;log&quot;);
-for (int i = 0; i &lt; 1000000; i++)
+<pre class="hljs"><code><span class="hljs-keyword">using</span> XmlWriter w = XmlWriter.Create (<span class="hljs-string">&quot;logfile.xml&quot;</span>);
+w.WriteStartElement (<span class="hljs-string">&quot;log&quot;</span>);
+<span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000000</span>; i++)
 {
-    XElement e = new XElement (&quot;logentry&quot;,
-                   new XAttribute (&quot;id&quot;, i),
-                   new XElement (&quot;date&quot;, DateTime.Today.AddDays (-1)),
-                   new XElement (&quot;source&quot;, &quot;test&quot;));
+    XElement e = <span class="hljs-keyword">new</span> XElement (<span class="hljs-string">&quot;logentry&quot;</span>,
+                   <span class="hljs-keyword">new</span> XAttribute (<span class="hljs-string">&quot;id&quot;</span>, i),
+                   <span class="hljs-keyword">new</span> XElement (<span class="hljs-string">&quot;date&quot;</span>, DateTime.Today.AddDays (<span class="hljs-number">-1</span>)),
+                   <span class="hljs-keyword">new</span> XElement (<span class="hljs-string">&quot;source&quot;</span>, <span class="hljs-string">&quot;test&quot;</span>));
     e.WriteTo (w);
 }
 w.WriteEndElement ();
@@ -730,13 +690,13 @@ w.WriteEndElement ();
 <hr>
 <h3>🌐 کار با JSON</h3>
 <p><strong>JSON</strong> به یک جایگزین محبوب برای <strong>XML</strong> تبدیل شده است. گرچه JSON امکانات پیشرفته XML (مثل <strong>namespaces</strong>، <strong>prefixes</strong> و <strong>schemas</strong>) را ندارد، اما به دلیل سادگی و خوانایی بیشتر، محبوبیت زیادی دارد. قالب آن هم شبیه چیزی است که وقتی یک شیء <strong>JavaScript</strong> را به رشته تبدیل کنید به دست می‌آید.</p>
-<p>📌 به‌صورت تاریخی، .NET هیچ پشتیبانی داخلی برای JSON نداشت و مجبور بودید از کتابخانه‌های شخص ثالث مثل <strong>Json.NET</strong> استفاده کنید. هرچند این موضوع دیگر صادق نیست، ولی کتابخانه <strong>Json.NET</strong> همچنان به دلایل زیر محبوب باقی مانده است:</p>
+<p>📌 به‌صورت تاریخی، .NET هیچ پشتیبانی داخلی برای JSON نداشت و مجبور بودید از کتابخانه‌های شخص ثالث مثل <strong><a href="http://Json.NET">Json.NET</a></strong> استفاده کنید. هرچند این موضوع دیگر صادق نیست، ولی کتابخانه <strong><a href="http://Json.NET">Json.NET</a></strong> همچنان به دلایل زیر محبوب باقی مانده است:</p>
 <ul>
 <li>📅 از سال ۲۰۱۱ تاکنون وجود دارد.</li>
 <li>🔄 همان API روی نسخه‌های قدیمی‌تر .NET هم اجرا می‌شود.</li>
 <li>⚙️ از نظر قابلیت‌ها (حداقل در گذشته) کاربردی‌تر از APIهای JSON مایکروسافت در نظر گرفته می‌شد.</li>
 </ul>
-<p>APIهای JSON مایکروسافت اما این مزیت را دارند که از پایه طراحی شده‌اند تا <strong>بسیار ساده و فوق‌العاده سریع</strong> باشند. همچنین، از .NET 6 به بعد، قابلیت‌های آن‌ها بسیار به Json.NET نزدیک شده است.</p>
+<p>APIهای JSON مایکروسافت اما این مزیت را دارند که از پایه طراحی شده‌اند تا <strong>بسیار ساده و فوق‌العاده سریع</strong> باشند. همچنین، از .NET 6 به بعد، قابلیت‌های آن‌ها بسیار به <a href="http://Json.NET">Json.NET</a> نزدیک شده است.</p>
 <p>در این بخش به موضوعات زیر می‌پردازیم:</p>
 <ul>
 <li>📖 <strong>Utf8JsonReader</strong> و <strong>Utf8JsonWriter</strong> (خواننده و نویسنده رو به جلو)</li>
@@ -748,12 +708,12 @@ w.WriteEndElement ();
 <h3>⚡ Utf8JsonReader</h3>
 <p>کلاس <strong>System.Text.Json.Utf8JsonReader</strong> یک <strong>خواننده بهینه‌شده رو به جلو</strong> برای متن JSON با <strong>کدگذاری UTF-8</strong> است. از نظر مفهومی، بسیار شبیه <strong>XmlReader</strong> است که پیش‌تر در این فصل معرفی شد و تقریباً به همان شکل استفاده می‌شود.</p>
 <p>فایل JSON زیر را در نظر بگیرید (با نام people.json):</p>
-<pre><code class="language-json">{
-  &quot;FirstName&quot;:&quot;Sara&quot;,
-  &quot;LastName&quot;:&quot;Wells&quot;,
-  &quot;Age&quot;:35,
-  &quot;Friends&quot;:[&quot;Dylan&quot;,&quot;Ian&quot;]
-}
+<pre class="hljs"><code><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;FirstName&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Sara&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;LastName&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Wells&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;Age&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">35</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;Friends&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">[</span><span class="hljs-string">&quot;Dylan&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-string">&quot;Ian&quot;</span><span class="hljs-punctuation">]</span>
+<span class="hljs-punctuation">}</span>
 </code></pre>
 <ul>
 <li>آکولادها <code>{}</code> یک <strong>شیء JSON</strong> را نشان می‌دهند (که شامل propertyهایی مثل <code>&quot;FirstName&quot;</code> و <code>&quot;LastName&quot;</code> است).</li>
@@ -768,43 +728,43 @@ w.WriteEndElement ();
 <li>نام یک property</li>
 <li>مقدار یک property یا یک آرایه (رشته، عدد، true، false یا null)</li>
 </ul>
-<pre><code class="language-csharp">byte[] data = File.ReadAllBytes (&quot;people.json&quot;);
-Utf8JsonReader reader = new Utf8JsonReader (data);
-while (reader.Read())
+<pre class="hljs"><code><span class="hljs-built_in">byte</span>[] data = File.ReadAllBytes (<span class="hljs-string">&quot;people.json&quot;</span>);
+Utf8JsonReader reader = <span class="hljs-keyword">new</span> Utf8JsonReader (data);
+<span class="hljs-keyword">while</span> (reader.Read())
 {
-    switch (reader.TokenType)
+    <span class="hljs-keyword">switch</span> (reader.TokenType)
     {
-        case JsonTokenType.StartObject:
-            Console.WriteLine ($&quot;Start of object&quot;);
-            break;
-        case JsonTokenType.EndObject:
-            Console.WriteLine ($&quot;End of object&quot;);
-            break;
-        case JsonTokenType.StartArray:
+        <span class="hljs-keyword">case</span> JsonTokenType.StartObject:
+            Console.WriteLine (<span class="hljs-string">$&quot;Start of object&quot;</span>);
+            <span class="hljs-keyword">break</span>;
+        <span class="hljs-keyword">case</span> JsonTokenType.EndObject:
+            Console.WriteLine (<span class="hljs-string">$&quot;End of object&quot;</span>);
+            <span class="hljs-keyword">break</span>;
+        <span class="hljs-keyword">case</span> JsonTokenType.StartArray:
             Console.WriteLine();
-            Console.WriteLine ($&quot;Start of array&quot;);
-            break;
-        case JsonTokenType.EndArray:
-            Console.WriteLine ($&quot;End of array&quot;);
-            break;
-        case JsonTokenType.PropertyName:
-            Console.Write ($&quot;Property: {reader.GetString()}&quot;);
-            break;
-        case JsonTokenType.String:
-            Console.WriteLine ($&quot; Value: {reader.GetString()}&quot;);
-            break;
-        case JsonTokenType.Number:
-            Console.WriteLine ($&quot; Value: {reader.GetInt32()}&quot;);
-            break;
-        default:
-            Console.WriteLine ($&quot;No support for {reader.TokenType}&quot;);
-            break;
+            Console.WriteLine (<span class="hljs-string">$&quot;Start of array&quot;</span>);
+            <span class="hljs-keyword">break</span>;
+        <span class="hljs-keyword">case</span> JsonTokenType.EndArray:
+            Console.WriteLine (<span class="hljs-string">$&quot;End of array&quot;</span>);
+            <span class="hljs-keyword">break</span>;
+        <span class="hljs-keyword">case</span> JsonTokenType.PropertyName:
+            Console.Write (<span class="hljs-string">$&quot;Property: <span class="hljs-subst">{reader.GetString()}</span>&quot;</span>);
+            <span class="hljs-keyword">break</span>;
+        <span class="hljs-keyword">case</span> JsonTokenType.String:
+            Console.WriteLine (<span class="hljs-string">$&quot; Value: <span class="hljs-subst">{reader.GetString()}</span>&quot;</span>);
+            <span class="hljs-keyword">break</span>;
+        <span class="hljs-keyword">case</span> JsonTokenType.Number:
+            Console.WriteLine (<span class="hljs-string">$&quot; Value: <span class="hljs-subst">{reader.GetInt32()}</span>&quot;</span>);
+            <span class="hljs-keyword">break</span>;
+        <span class="hljs-literal">default</span>:
+            Console.WriteLine (<span class="hljs-string">$&quot;No support for <span class="hljs-subst">{reader.TokenType}</span>&quot;</span>);
+            <span class="hljs-keyword">break</span>;
     }
 }
 </code></pre>
 <hr>
 <h3>📊 خروجی برنامه</h3>
-<pre><code>Start of object
+<pre class="hljs"><code>Start of object
 Property: FirstName Value: Sara
 Property: LastName Value: Wells
 Property: Age Value: 35
@@ -824,15 +784,15 @@ End of object
 <p>گزینه‌ها شامل موارد زیر هستند:</p>
 <ul>
 <li>
-<p><strong>توضیحات (C-Style comments)</strong>
+<p><strong>توضیحات (C-Style comments)</strong><br>
 به‌طور پیش‌فرض، وجود توضیحات در JSON یک <strong>JsonException</strong> ایجاد می‌کند. با تنظیم property به <strong>JsonCommentHandling.Skip</strong>، توضیحات نادیده گرفته می‌شوند. با مقدار <strong>JsonCommentHandling.Allow</strong>، خواننده آن‌ها را تشخیص داده و tokenهایی از نوع <strong>JsonTokenType.Comment</strong> تولید می‌کند. (توضیحات نمی‌توانند وسط tokenهای دیگر ظاهر شوند.)</p>
 </li>
 <li>
-<p><strong>ویرگول‌های انتهایی (Trailing commas)</strong>
+<p><strong>ویرگول‌های انتهایی (Trailing commas)</strong><br>
 بر اساس استاندارد، آخرین property یک شیء و آخرین عنصر یک آرایه نباید ویرگول انتهایی داشته باشند. با تنظیم <strong>AllowTrailingCommas = true</strong> این محدودیت برداشته می‌شود.</p>
 </li>
 <li>
-<p><strong>کنترل حداکثر عمق تو در تو شدن (Maximum nesting depth)</strong>
+<p><strong>کنترل حداکثر عمق تو در تو شدن (Maximum nesting depth)</strong><br>
 به‌طور پیش‌فرض، اشیاء و آرایه‌ها می‌توانند تا <strong>۶۴ سطح</strong> تو در تو شوند. با تنظیم <strong>MaxDepth</strong> می‌توانید این مقدار را تغییر دهید.</p>
 </li>
 </ul>
@@ -848,36 +808,36 @@ End of object
 <p>شما می‌توانید این داده‌ها را مطابق استاندارد JSON در قالب <strong>object</strong> سازمان‌دهی کنید. همچنین امکان نوشتن <strong>comment</strong> وجود دارد، هرچند که توضیحات بخشی از استاندارد JSON نیستند، اما اغلب توسط <strong>JSON parserها</strong> پشتیبانی می‌شوند.</p>
 <hr>
 <h3>🖥️ نمونه کد استفاده از Utf8JsonWriter</h3>
-<pre><code class="language-csharp">var options = new JsonWriterOptions { Indented = true };
-using (var stream = File.Create (&quot;MyFile.json&quot;))
-using (var writer = new Utf8JsonWriter (stream, options))
+<pre class="hljs"><code><span class="hljs-keyword">var</span> options = <span class="hljs-keyword">new</span> JsonWriterOptions { Indented = <span class="hljs-literal">true</span> };
+<span class="hljs-keyword">using</span> (<span class="hljs-keyword">var</span> stream = File.Create (<span class="hljs-string">&quot;MyFile.json&quot;</span>))
+<span class="hljs-keyword">using</span> (<span class="hljs-keyword">var</span> writer = <span class="hljs-keyword">new</span> Utf8JsonWriter (stream, options))
 {
     writer.WriteStartObject();
-    // Property name and value specified in one call
-    writer.WriteString (&quot;FirstName&quot;, &quot;Dylan&quot;);
-    writer.WriteString (&quot;LastName&quot;, &quot;Lockwood&quot;);
+    <span class="hljs-comment">// Property name and value specified in one call</span>
+    writer.WriteString (<span class="hljs-string">&quot;FirstName&quot;</span>, <span class="hljs-string">&quot;Dylan&quot;</span>);
+    writer.WriteString (<span class="hljs-string">&quot;LastName&quot;</span>, <span class="hljs-string">&quot;Lockwood&quot;</span>);
     
-    // Property name and value specified in separate calls
-    writer.WritePropertyName (&quot;Age&quot;);
-    writer.WriteNumberValue (46);
+    <span class="hljs-comment">// Property name and value specified in separate calls</span>
+    writer.WritePropertyName (<span class="hljs-string">&quot;Age&quot;</span>);
+    writer.WriteNumberValue (<span class="hljs-number">46</span>);
 
-    writer.WriteCommentValue (&quot;This is a (non-standard) comment&quot;);
+    writer.WriteCommentValue (<span class="hljs-string">&quot;This is a (non-standard) comment&quot;</span>);
     writer.WriteEndObject();
 }
 </code></pre>
 <p>📄 خروجی فایل تولیدشده به این صورت خواهد بود:</p>
-<pre><code class="language-json">{
-  &quot;FirstName&quot;: &quot;Dylan&quot;,
-  &quot;LastName&quot;: &quot;Lockwood&quot;,
-  &quot;Age&quot;: 46
-  /*This is a (non-standard) comment*/
-}
+<pre class="hljs"><code><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;FirstName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Dylan&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;LastName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Lockwood&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;Age&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">46</span>
+  <span class="hljs-comment">/*This is a (non-standard) comment*/</span>
+<span class="hljs-punctuation">}</span>
 </code></pre>
 <p>از .NET 6 به بعد، متد <strong>WriteRawValue</strong> اضافه شد که به شما اجازه می‌دهد <strong>یک رشته یا آرایه بایت</strong> را مستقیماً داخل جریان JSON بنویسید. این قابلیت در موارد خاص مفید است؛ مثلاً وقتی می‌خواهید عددی همیشه همراه با <strong>اعشار</strong> ذخیره شود (مثل <code>1.0</code> به‌جای <code>1</code>).</p>
 <hr>
 <h3>📐 تنظیمات JsonWriterOptions</h3>
 <p>در مثال بالا، ویژگی <strong>Indented = true</strong> تنظیم شده بود تا خروجی خواناتر شود. اگر این کار انجام نمی‌شد، خروجی به این شکل فشرده می‌بود:</p>
-<pre><code class="language-json">{&quot;FirstName&quot;:&quot;Dylan&quot;,&quot;LastName&quot;:&quot;Lockwood&quot;,&quot;Age&quot;:46...}
+<pre class="hljs"><code><span class="hljs-punctuation">{</span><span class="hljs-attr">&quot;FirstName&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Dylan&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;LastName&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Lockwood&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;Age&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">46.</span>..<span class="hljs-punctuation">}</span>
 </code></pre>
 <p>گزینه‌های <strong>JsonWriterOptions</strong> همچنین شامل موارد زیر هستند:</p>
 <ul>
@@ -901,27 +861,27 @@ using (var writer = new Utf8JsonWriter (stream, options))
 <p><img src="../../../assets/image/11/Table-11-3.jpeg" alt="Conventions-UsedThis-Book"></p>
 </div>
 <h3>📘 JsonDocument و مدیریت حافظه</h3>
-<p>کلاس <strong>JsonDocument</strong> کارایی خود را با استفاده از <strong>حافظه اشتراکی (pooled memory)</strong> افزایش می‌دهد تا نیاز به <strong>garbage collection</strong> کمتر شود.
+<p>کلاس <strong>JsonDocument</strong> کارایی خود را با استفاده از <strong>حافظه اشتراکی (pooled memory)</strong> افزایش می‌دهد تا نیاز به <strong>garbage collection</strong> کمتر شود.<br>
 این به این معناست که شما <strong>بعد از اتمام استفاده، باید JsonDocument را Dispose کنید</strong>؛ در غیر این صورت، حافظه آن به استخر بازگردانده نمی‌شود.</p>
-<p>👉 بنابراین، اگر یک کلاس بخواهد <strong>JsonDocument</strong> را در یک <strong>field</strong> نگه دارد، باید رابط <strong>IDisposable</strong> را هم پیاده‌سازی کند.
+<p>👉 بنابراین، اگر یک کلاس بخواهد <strong>JsonDocument</strong> را در یک <strong>field</strong> نگه دارد، باید رابط <strong>IDisposable</strong> را هم پیاده‌سازی کند.<br>
 اگر این کار برایتان سنگین و دست‌وپاگیر است، بهتر است به جای آن از <strong>JsonNode</strong> استفاده کنید.</p>
 <hr>
 <h3>🏗️ ایجاد یک JsonDocument</h3>
 <p>متد <strong>Parse</strong> به‌صورت استاتیک یک <strong>JsonDocument</strong> را از <strong>stream</strong>، <strong>string</strong> یا <strong>memory buffer</strong> می‌سازد:</p>
-<pre><code class="language-csharp">using JsonDocument document = JsonDocument.Parse (jsonString);
+<pre class="hljs"><code><span class="hljs-keyword">using</span> JsonDocument document = JsonDocument.Parse (jsonString);
 ...
 </code></pre>
 <p>هنگام فراخوانی <code>Parse</code> می‌توانید یک <strong>JsonDocumentOptions</strong> هم بدهید تا نحوه مدیریت <strong>کاماهای اضافی</strong>، <strong>کامنت‌ها</strong> و <strong>حداکثر عمق تو در تو شدن (nesting depth)</strong> کنترل شود (این موارد در بخش <strong>JsonReaderOptions</strong> صفحه 570 توضیح داده شدند).</p>
 <hr>
 <h3>🌳 دسترسی به RootElement</h3>
 <p>پس از ساخت، می‌توانید از طریق ویژگی <strong>RootElement</strong> به DOM دسترسی داشته باشید:</p>
-<pre><code class="language-csharp">using JsonDocument document = JsonDocument.Parse (&quot;123&quot;);
+<pre class="hljs"><code><span class="hljs-keyword">using</span> JsonDocument document = JsonDocument.Parse (<span class="hljs-string">&quot;123&quot;</span>);
 JsonElement root = document.RootElement;
-Console.WriteLine (root.ValueKind);   // Number
+Console.WriteLine (root.ValueKind);   <span class="hljs-comment">// Number</span>
 </code></pre>
-<p>یک <strong>JsonElement</strong> می‌تواند یک <strong>مقدار JSON</strong> (رشته، عدد، true/false، null)، یا یک <strong>آرایه</strong> یا یک <strong>شیء</strong> را نمایش دهد.
+<p>یک <strong>JsonElement</strong> می‌تواند یک <strong>مقدار JSON</strong> (رشته، عدد، true/false، null)، یا یک <strong>آرایه</strong> یا یک <strong>شیء</strong> را نمایش دهد.<br>
 ویژگی <strong>ValueKind</strong> مشخص می‌کند که نوع آن چیست.</p>
-<p>⚠️ متدهایی که در ادامه معرفی می‌شوند <strong>اگر نوع المنت مطابق انتظار نباشد، استثنا (Exception) پرتاب می‌کنند</strong>.
+<p>⚠️ متدهایی که در ادامه معرفی می‌شوند <strong>اگر نوع المنت مطابق انتظار نباشد، استثنا (Exception) پرتاب می‌کنند</strong>.<br>
 اگر از <strong>schema</strong> فایل JSON مطمئن نیستید، می‌توانید ابتدا <strong>ValueKind</strong> را بررسی کنید یا از نسخه‌های <strong>TryGet</strong>* استفاده کنید.</p>
 <p>همچنین، <strong>JsonElement</strong> دو متد عمومی برای هر نوع المنت دارد:</p>
 <ul>
@@ -931,10 +891,10 @@ Console.WriteLine (root.ValueKind);   // Number
 <hr>
 <h3>🔢 خواندن مقادیر ساده</h3>
 <p>اگر المنت یک مقدار JSON باشد، می‌توانید مقدار آن را با متدهایی مثل <code>GetString()</code>، <code>GetInt32()</code>، <code>GetBoolean()</code> و غیره بگیرید:</p>
-<pre><code class="language-csharp">using JsonDocument document = JsonDocument.Parse (&quot;123&quot;);
-int number = document.RootElement.GetInt32();
+<pre class="hljs"><code><span class="hljs-keyword">using</span> JsonDocument document = JsonDocument.Parse (<span class="hljs-string">&quot;123&quot;</span>);
+<span class="hljs-built_in">int</span> number = document.RootElement.GetInt32();
 </code></pre>
-<p>همچنین متدهایی برای تبدیل رشته‌های JSON به انواع رایج CLR مثل <strong>DateTime</strong> (و حتی داده‌های دودویی base-64) وجود دارد.
+<p>همچنین متدهایی برای تبدیل رشته‌های JSON به انواع رایج CLR مثل <strong>DateTime</strong> (و حتی داده‌های دودویی base-64) وجود دارد.<br>
 نسخه‌های <strong>TryGet</strong>* این متدها هم هستند که در صورت خطا، <strong>استثنا پرتاب نمی‌کنند</strong>.</p>
 <hr>
 <h3>📦 خواندن آرایه‌های JSON</h3>
@@ -944,9 +904,9 @@ int number = document.RootElement.GetInt32();
 <li><code>GetArrayLength()</code> → تعداد عناصر آرایه را برمی‌گرداند.</li>
 </ul>
 <p>همچنین می‌توانید با ایندکس به المنت خاصی دسترسی داشته باشید:</p>
-<pre><code class="language-csharp">using JsonDocument document = JsonDocument.Parse (@&quot;[1, 2, 3, 4, 5]&quot;);
-int length = document.RootElement.GetArrayLength();   // 5
-int value  = document.RootElement[3].GetInt32();      // 4
+<pre class="hljs"><code><span class="hljs-keyword">using</span> JsonDocument document = JsonDocument.Parse (<span class="hljs-string">@&quot;[1, 2, 3, 4, 5]&quot;</span>);
+<span class="hljs-built_in">int</span> length = document.RootElement.GetArrayLength();   <span class="hljs-comment">// 5</span>
+<span class="hljs-built_in">int</span> <span class="hljs-keyword">value</span>  = document.RootElement[<span class="hljs-number">3</span>].GetInt32();      <span class="hljs-comment">// 4</span>
 </code></pre>
 <hr>
 <h3>🗂️ خواندن اشیاء JSON</h3>
@@ -957,74 +917,74 @@ int value  = document.RootElement[3].GetInt32();      // 4
 <li><code>TryGetProperty(string propertyName, out JsonElement value)</code> → ویژگی را فقط در صورت وجود برمی‌گرداند.</li>
 </ul>
 <p>مثال:</p>
-<pre><code class="language-csharp">using JsonDocument document = JsonDocument.Parse (@&quot;{ &quot;&quot;Age&quot;&quot;: 32}&quot;);
+<pre class="hljs"><code><span class="hljs-keyword">using</span> JsonDocument document = JsonDocument.Parse (<span class="hljs-string">@&quot;{ &quot;&quot;Age&quot;&quot;: 32}&quot;</span>);
 JsonElement root = document.RootElement;
-int age = root.GetProperty (&quot;Age&quot;).GetInt32();
+<span class="hljs-built_in">int</span> age = root.GetProperty (<span class="hljs-string">&quot;Age&quot;</span>).GetInt32();
 </code></pre>
 <p>یا کشف ویژگی‌ها به‌صورت پویا:</p>
-<pre><code class="language-csharp">JsonProperty ageProp = root.EnumerateObject().First();
-string name = ageProp.Name;             // Age
-JsonElement value = ageProp.Value;
-Console.WriteLine (value.ValueKind);    // Number
-Console.WriteLine (value.GetInt32());   // 32
+<pre class="hljs"><code>JsonProperty ageProp = root.EnumerateObject().First();
+<span class="hljs-built_in">string</span> name = ageProp.Name;             <span class="hljs-comment">// Age</span>
+JsonElement <span class="hljs-keyword">value</span> = ageProp.Value;
+Console.WriteLine (<span class="hljs-keyword">value</span>.ValueKind);    <span class="hljs-comment">// Number</span>
+Console.WriteLine (<span class="hljs-keyword">value</span>.GetInt32());   <span class="hljs-comment">// 32</span>
 </code></pre>
 <h3>🔎 JsonDocument و LINQ</h3>
 <p>کلاس <strong>JsonDocument</strong> به‌خوبی با <strong>LINQ</strong> سازگار است. فرض کنید فایل JSON زیر را داریم:</p>
-<pre><code class="language-json">[
-  {
-    &quot;FirstName&quot;:&quot;Sara&quot;,
-    &quot;LastName&quot;:&quot;Wells&quot;,
-    &quot;Age&quot;:35,
-    &quot;Friends&quot;:[&quot;Ian&quot;]
-  },
-  {
-    &quot;FirstName&quot;:&quot;Ian&quot;,
-    &quot;LastName&quot;:&quot;Weems&quot;,
-    &quot;Age&quot;:42,
-    &quot;Friends&quot;:[&quot;Joe&quot;,&quot;Eric&quot;,&quot;Li&quot;]
-  },
-  {
-    &quot;FirstName&quot;:&quot;Dylan&quot;,
-    &quot;LastName&quot;:&quot;Lockwood&quot;,
-    &quot;Age&quot;:46,
-    &quot;Friends&quot;:[&quot;Sara&quot;,&quot;Ian&quot;]
-  }
-]
+<pre class="hljs"><code><span class="hljs-punctuation">[</span>
+  <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;FirstName&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Sara&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;LastName&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Wells&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;Age&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">35</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;Friends&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">[</span><span class="hljs-string">&quot;Ian&quot;</span><span class="hljs-punctuation">]</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;FirstName&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Ian&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;LastName&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Weems&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;Age&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">42</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;Friends&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">[</span><span class="hljs-string">&quot;Joe&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-string">&quot;Eric&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-string">&quot;Li&quot;</span><span class="hljs-punctuation">]</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;FirstName&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Dylan&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;LastName&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Lockwood&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;Age&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">46</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;Friends&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">[</span><span class="hljs-string">&quot;Sara&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-string">&quot;Ian&quot;</span><span class="hljs-punctuation">]</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">]</span>
 </code></pre>
 <p>می‌توانیم با استفاده از <strong>JsonDocument</strong> و <strong>LINQ</strong> داده‌ها را کوئری کنیم:</p>
-<pre><code class="language-csharp">using var stream = File.OpenRead (jsonPath);
-using JsonDocument document = JsonDocument.Parse (json);
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> stream = File.OpenRead (jsonPath);
+<span class="hljs-keyword">using</span> JsonDocument document = JsonDocument.Parse (json);
 
-var query =
-  from person in document.RootElement.EnumerateArray()
-  select new
+<span class="hljs-keyword">var</span> query =
+  <span class="hljs-keyword">from</span> person <span class="hljs-keyword">in</span> document.RootElement.EnumerateArray()
+  <span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span>
   {
-    FirstName = person.GetProperty (&quot;FirstName&quot;).GetString(),
-    Age = person.GetProperty (&quot;Age&quot;).GetInt32(),
+    FirstName = person.GetProperty (<span class="hljs-string">&quot;FirstName&quot;</span>).GetString(),
+    Age = person.GetProperty (<span class="hljs-string">&quot;Age&quot;</span>).GetInt32(),
     Friends =
-      from friend in person.GetProperty (&quot;Friends&quot;).EnumerateArray()
-      select friend.GetString()
+      <span class="hljs-keyword">from</span> friend <span class="hljs-keyword">in</span> person.GetProperty (<span class="hljs-string">&quot;Friends&quot;</span>).EnumerateArray()
+      <span class="hljs-keyword">select</span> friend.GetString()
   };
 </code></pre>
 <p>⚠️ توجه کنید: از آنجا که کوئری‌های <strong>LINQ</strong> به‌صورت <strong>Lazy</strong> اجرا می‌شوند، باید قبل از خارج شدن محدوده (scope) و <strong>Dispose شدن JsonDocument</strong> (که به دلیل استفاده از دستور <code>using</code> به‌طور خودکار اتفاق می‌افتد)، کوئری را پیمایش (enumerate) کنید.</p>
 <hr>
 <h3>✍️ ایجاد تغییر با JSON Writer</h3>
-<p>کلاس <strong>JsonDocument</strong> فقط خواندنی (read-only) است، اما می‌توانید محتوای یک <strong>JsonElement</strong> را با متد <strong>WriteTo</strong> به یک <strong>Utf8JsonWriter</strong> بفرستید.
+<p>کلاس <strong>JsonDocument</strong> فقط خواندنی (read-only) است، اما می‌توانید محتوای یک <strong>JsonElement</strong> را با متد <strong>WriteTo</strong> به یک <strong>Utf8JsonWriter</strong> بفرستید.<br>
 این روش امکانی برای تولید نسخه‌ای تغییر یافته از JSON فراهم می‌کند.</p>
 <p>برای نمونه، در این مثال، JSON قبلی را به یک فایل جدید می‌نویسیم که فقط شامل افرادی است که <strong>دو یا بیشتر دوست دارند</strong>:</p>
-<pre><code class="language-csharp">using var json = File.OpenRead (jsonPath);
-using JsonDocument document = JsonDocument.Parse (json);
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> json = File.OpenRead (jsonPath);
+<span class="hljs-keyword">using</span> JsonDocument document = JsonDocument.Parse (json);
 
-var options = new JsonWriterOptions { Indented = true };
+<span class="hljs-keyword">var</span> options = <span class="hljs-keyword">new</span> JsonWriterOptions { Indented = <span class="hljs-literal">true</span> };
 
-using (var outputStream = File.Create (&quot;NewFile.json&quot;))
-using (var writer = new Utf8JsonWriter (outputStream, options))
+<span class="hljs-keyword">using</span> (<span class="hljs-keyword">var</span> outputStream = File.Create (<span class="hljs-string">&quot;NewFile.json&quot;</span>))
+<span class="hljs-keyword">using</span> (<span class="hljs-keyword">var</span> writer = <span class="hljs-keyword">new</span> Utf8JsonWriter (outputStream, options))
 {
   writer.WriteStartArray();
-  foreach (var person in document.RootElement.EnumerateArray())
+  <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> person <span class="hljs-keyword">in</span> document.RootElement.EnumerateArray())
   {
-    int friendCount = person.GetProperty (&quot;Friends&quot;).GetArrayLength();
-    if (friendCount &gt;= 2)
+    <span class="hljs-built_in">int</span> friendCount = person.GetProperty (<span class="hljs-string">&quot;Friends&quot;</span>).GetArrayLength();
+    <span class="hljs-keyword">if</span> (friendCount &gt;= <span class="hljs-number">2</span>)
       person.WriteTo (writer);
   }
 }
@@ -1032,8 +992,8 @@ using (var writer = new Utf8JsonWriter (outputStream, options))
 <p>👉 اما اگر به <strong>قابلیت به‌روزرسانی مستقیم DOM</strong> نیاز دارید، بهتر است از <strong>JsonNode</strong> استفاده کنید.</p>
 <hr>
 <h3>🌐 JsonNode</h3>
-<p>کلاس <strong>JsonNode</strong> (در فضای نام <code>System.Text.Json.Nodes</code>) در <strong>.NET 6</strong> معرفی شد.
-هدف اصلی آن، پاسخ به نیاز یک <strong>DOM قابل ویرایش (writable DOM)</strong> بود.
+<p>کلاس <strong>JsonNode</strong> (در فضای نام <code>System.Text.Json.Nodes</code>) در <strong>.NET 6</strong> معرفی شد.<br>
+هدف اصلی آن، پاسخ به نیاز یک <strong>DOM قابل ویرایش (writable DOM)</strong> بود.<br>
 البته در سناریوهای فقط‌خواندنی هم مناسب است و یک رابط <strong>روان‌تر و شی‌گرا</strong> ارائه می‌دهد.</p>
 <ul>
 <li>در اینجا، مقادیر JSON، آرایه‌ها و اشیاء هرکدام با <strong>کلاس‌ها</strong> نمایش داده می‌شوند (تصویر 11-1 در کتاب).</li>
@@ -1043,7 +1003,7 @@ using (var writer = new Utf8JsonWriter (outputStream, options))
 <hr>
 <h3>🛠️ ساخت JsonNode</h3>
 <p>متد استاتیک <strong>Parse</strong> یک <strong>JsonNode</strong> را از <strong>stream</strong>، <strong>string</strong>، <strong>memory buffer</strong> یا <strong>Utf8JsonReader</strong> می‌سازد:</p>
-<pre><code class="language-csharp">JsonNode node = JsonNode.Parse (jsonString);
+<pre class="hljs"><code>JsonNode node = JsonNode.Parse (jsonString);
 </code></pre>
 <p>هنگام فراخوانی <code>Parse</code> می‌توانید مثل JsonDocument یک <strong>JsonDocumentOptions</strong> هم بدهید تا نحوه مدیریت <strong>کاماهای اضافی</strong>، <strong>کامنت‌ها</strong> و <strong>حداکثر عمق</strong> کنترل شود.</p>
 <p>🔑 برخلاف <strong>JsonDocument</strong>، اینجا دیگر نیازی به <strong>Dispose کردن</strong> وجود ندارد.</p>
@@ -1073,65 +1033,65 @@ using (var writer = new Utf8JsonWriter (outputStream, options))
 <li><code>AsArray()</code></li>
 </ul>
 <p>مثال:</p>
-<pre><code class="language-csharp">var node = JsonNode.Parse (&quot;123&quot;);  // Parses to a JsonValue
-int number = node.AsValue().GetValue&lt;int&gt;();
-// همانند ((JsonValue)node).GetValue&lt;int&gt;();
+<pre class="hljs"><code><span class="hljs-keyword">var</span> node = JsonNode.Parse (<span class="hljs-string">&quot;123&quot;</span>);  <span class="hljs-comment">// Parses to a JsonValue</span>
+<span class="hljs-built_in">int</span> number = node.AsValue().GetValue&lt;<span class="hljs-built_in">int</span>&gt;();
+<span class="hljs-comment">// همانند ((JsonValue)node).GetValue&lt;int&gt;();</span>
 </code></pre>
 <p>اما معمولاً لازم نیست این متدها را صدا بزنید، چون اعضای پرکاربرد مستقیماً روی خود کلاس <strong>JsonNode</strong> در دسترس‌اند:</p>
-<pre><code class="language-csharp">var node = JsonNode.Parse (&quot;123&quot;);
-int number = node.GetValue&lt;int&gt;();
-// همانند node.AsValue().GetValue&lt;int&gt;();
+<pre class="hljs"><code><span class="hljs-keyword">var</span> node = JsonNode.Parse (<span class="hljs-string">&quot;123&quot;</span>);
+<span class="hljs-built_in">int</span> number = node.GetValue&lt;<span class="hljs-built_in">int</span>&gt;();
+<span class="hljs-comment">// همانند node.AsValue().GetValue&lt;int&gt;();</span>
 </code></pre>
 <h3>خواندن مقادیر ساده 🔹</h3>
 <p>همان‌طور که دیدیم، می‌توانید یک مقدار ساده را با استفاده از متد <strong>GetValue</strong> و مشخص کردن نوع، استخراج یا تبدیل کنید. برای آسان‌تر کردن این کار، <strong>JsonNode</strong> عملگرهای تبدیل صریح (<strong>explicit cast operators</strong>) در C# را بازتعریف کرده است، که امکان استفاده از میانبر زیر را فراهم می‌کند:</p>
-<pre><code class="language-csharp">var node = JsonNode.Parse(&quot;123&quot;);
-int number = (int)node;
+<pre class="hljs"><code><span class="hljs-keyword">var</span> node = JsonNode.Parse(<span class="hljs-string">&quot;123&quot;</span>);
+<span class="hljs-built_in">int</span> number = (<span class="hljs-built_in">int</span>)node;
 </code></pre>
 <p>این روش برای انواع استاندارد عددی، از جمله <code>char</code>، <code>bool</code>، <code>DateTime</code>، <code>DateTimeOffset</code>، <code>Guid</code> (و نسخه‌های nullable آن‌ها) و همچنین <code>string</code> کار می‌کند.</p>
 <p>اگر مطمئن نیستید که تبدیل موفق خواهد بود، باید از الگوی زیر استفاده کنید:</p>
-<pre><code class="language-csharp">if (node.AsValue().TryGetValue&lt;int&gt;(out var number))
+<pre class="hljs"><code><span class="hljs-keyword">if</span> (node.AsValue().TryGetValue&lt;<span class="hljs-built_in">int</span>&gt;(<span class="hljs-keyword">out</span> <span class="hljs-keyword">var</span> number))
     Console.WriteLine(number);
 </code></pre>
 <p>از <strong>.NET 8</strong> به بعد، با فراخوانی <code>node.GetValueKind()</code> می‌توانید تشخیص دهید که نود یک رشته، عدد، آرایه، شیء یا مقدار true/false است.</p>
 <p>نودهایی که از متن JSON استخراج شده‌اند، به صورت داخلی توسط یک <strong>JsonElement</strong> پشتیبانی می‌شوند (که بخشی از API خواندنی <strong>JsonDocument</strong> است). می‌توانید <strong>JsonElement</strong> زیرین را به این شکل استخراج کنید:</p>
-<pre><code class="language-csharp">JsonElement je = node.GetValue&lt;JsonElement&gt;();
+<pre class="hljs"><code>JsonElement je = node.GetValue&lt;JsonElement&gt;();
 </code></pre>
 <p>با این حال، این روش زمانی که نود به صورت صریح ایجاد شده باشد (مثلاً هنگام به‌روزرسانی DOM) کار نمی‌کند. چنین نودهایی به جای <strong>JsonElement</strong> توسط مقدار واقعی تجزیه‌شده پشتیبانی می‌شوند (رجوع کنید به بخش «Making updates with JsonNode» در صفحه 579).</p>
 <hr>
 <h3>خواندن آرایه‌های JSON 📦</h3>
-<p>یک <strong>JsonNode</strong> که نماینده یک آرایه JSON است، از نوع <strong>JsonArray</strong> خواهد بود.
+<p>یک <strong>JsonNode</strong> که نماینده یک آرایه JSON است، از نوع <strong>JsonArray</strong> خواهد بود.<br>
 <strong>JsonArray</strong> رابط <code>IList&lt;JsonNode&gt;</code> را پیاده‌سازی می‌کند، بنابراین می‌توانید روی آن پیمایش کنید و عناصر را مانند یک آرایه یا لیست دسترسی داشته باشید:</p>
-<pre><code class="language-csharp">var node = JsonNode.Parse(@&quot;[1, 2, 3, 4, 5]&quot;);
-Console.WriteLine(node.AsArray().Count);  // 5
-foreach (JsonNode child in node.AsArray())
+<pre class="hljs"><code><span class="hljs-keyword">var</span> node = JsonNode.Parse(<span class="hljs-string">@&quot;[1, 2, 3, 4, 5]&quot;</span>);
+Console.WriteLine(node.AsArray().Count);  <span class="hljs-comment">// 5</span>
+<span class="hljs-keyword">foreach</span> (JsonNode child <span class="hljs-keyword">in</span> node.AsArray())
 {
     ...
 }
 </code></pre>
 <p>به عنوان یک میانبر، می‌توانید از اندیس‌دهنده (<strong>indexer</strong>) مستقیماً از کلاس <strong>JsonNode</strong> استفاده کنید:</p>
-<pre><code class="language-csharp">Console.WriteLine((int)node[0]);   // 1
+<pre class="hljs"><code>Console.WriteLine((<span class="hljs-built_in">int</span>)node[<span class="hljs-number">0</span>]);   <span class="hljs-comment">// 1</span>
 </code></pre>
 <p>از <strong>.NET 8</strong> به بعد، می‌توانید با متد <strong>GetValues<T></strong> داده‌ها را به صورت <code>IEnumerable&lt;T&gt;</code> دریافت کنید:</p>
-<pre><code class="language-csharp">int[] values = node.AsArray().GetValues&lt;int&gt;().ToArray();
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] values = node.AsArray().GetValues&lt;<span class="hljs-built_in">int</span>&gt;().ToArray();
 </code></pre>
 <hr>
 <h3>خواندن اشیاء JSON 🗂️</h3>
-<p>یک <strong>JsonNode</strong> که نماینده یک شیء JSON است، از نوع <strong>JsonObject</strong> خواهد بود.
+<p>یک <strong>JsonNode</strong> که نماینده یک شیء JSON است، از نوع <strong>JsonObject</strong> خواهد بود.<br>
 <strong>JsonObject</strong> رابط <code>IDictionary&lt;string, JsonNode&gt;</code> را پیاده‌سازی می‌کند، بنابراین می‌توانید یک عضو را با اندیس‌دهنده دریافت کنید و همچنین روی کلید/مقدارهای دیکشنری پیمایش کنید.</p>
 <p>همانند <strong>JsonArray</strong>، می‌توانید اندیس‌دهنده را مستقیماً از کلاس <strong>JsonNode</strong> استفاده کنید:</p>
-<pre><code class="language-csharp">var node = JsonNode.Parse(@&quot;{ &quot;&quot;Name&quot;&quot;:&quot;&quot;Alice&quot;&quot;, &quot;&quot;Age&quot;&quot;: 32}&quot;);
-string name = (string)node[&quot;Name&quot;];  // Alice
-int age = (int)node[&quot;Age&quot;];           // 32
+<pre class="hljs"><code><span class="hljs-keyword">var</span> node = JsonNode.Parse(<span class="hljs-string">@&quot;{ &quot;&quot;Name&quot;&quot;:&quot;&quot;Alice&quot;&quot;, &quot;&quot;Age&quot;&quot;: 32}&quot;</span>);
+<span class="hljs-built_in">string</span> name = (<span class="hljs-built_in">string</span>)node[<span class="hljs-string">&quot;Name&quot;</span>];  <span class="hljs-comment">// Alice</span>
+<span class="hljs-built_in">int</span> age = (<span class="hljs-built_in">int</span>)node[<span class="hljs-string">&quot;Age&quot;</span>];           <span class="hljs-comment">// 32</span>
 </code></pre>
 <p>برای «کشف» ویژگی‌ها می‌توانیم از این الگو استفاده کنیم:</p>
-<pre><code class="language-csharp">foreach (KeyValuePair&lt;string, JsonNode&gt; keyValuePair in node.AsObject())
+<pre class="hljs"><code><span class="hljs-keyword">foreach</span> (KeyValuePair&lt;<span class="hljs-built_in">string</span>, JsonNode&gt; keyValuePair <span class="hljs-keyword">in</span> node.AsObject())
 {
-    string propertyName = keyValuePair.Key;   // &quot;Name&quot; سپس &quot;Age&quot;
-    JsonNode value = keyValuePair.Value;
+    <span class="hljs-built_in">string</span> propertyName = keyValuePair.Key;   <span class="hljs-comment">// &quot;Name&quot; سپس &quot;Age&quot;</span>
+    JsonNode <span class="hljs-keyword">value</span> = keyValuePair.Value;
 }
 </code></pre>
 <p>اگر مطمئن نیستید که یک ویژگی تعریف شده است، الگوی زیر نیز کاربردی است:</p>
-<pre><code class="language-csharp">if (node.AsObject().TryGetPropertyValue(&quot;Name&quot;, out JsonNode nameNode))
+<pre class="hljs"><code><span class="hljs-keyword">if</span> (node.AsObject().TryGetPropertyValue(<span class="hljs-string">&quot;Name&quot;</span>, <span class="hljs-keyword">out</span> JsonNode nameNode))
 {
     ...
 }
@@ -1139,149 +1099,103 @@ int age = (int)node[&quot;Age&quot;];           // 32
 <hr>
 <h3>پیمایش Fluent و LINQ 🔍</h3>
 <p>می‌توانید با استفاده از اندیس‌دهنده‌ها، به عمق ساختار JSON دسترسی پیدا کنید. به عنوان مثال، با داشتن فایل JSON زیر:</p>
-<pre><code class="language-json">[
-  {
-    &quot;FirstName&quot;:&quot;Sara&quot;,
-    &quot;LastName&quot;:&quot;Wells&quot;,
-    &quot;Age&quot;:35,
-    &quot;Friends&quot;:[&quot;Ian&quot;]
-  },
-  {
-    &quot;FirstName&quot;:&quot;Ian&quot;,
-    &quot;LastName&quot;:&quot;Weems&quot;,
-    &quot;Age&quot;:42,
-    &quot;Friends&quot;:[&quot;Joe&quot;,&quot;Eric&quot;,&quot;Li&quot;]
-  },
-  {
-    &quot;FirstName&quot;:&quot;Dylan&quot;,
-    &quot;LastName&quot;:&quot;Lockwood&quot;,
-    &quot;Age&quot;:46,
-    &quot;Friends&quot;:[&quot;Sara&quot;,&quot;Ian&quot;]
-  }
-]
+<pre class="hljs"><code><span class="hljs-punctuation">[</span>
+  <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;FirstName&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Sara&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;LastName&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Wells&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;Age&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">35</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;Friends&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">[</span><span class="hljs-string">&quot;Ian&quot;</span><span class="hljs-punctuation">]</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;FirstName&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Ian&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;LastName&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Weems&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;Age&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">42</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;Friends&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">[</span><span class="hljs-string">&quot;Joe&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-string">&quot;Eric&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-string">&quot;Li&quot;</span><span class="hljs-punctuation">]</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;FirstName&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Dylan&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;LastName&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Lockwood&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;Age&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">46</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;Friends&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">[</span><span class="hljs-string">&quot;Sara&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-string">&quot;Ian&quot;</span><span class="hljs-punctuation">]</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">]</span>
 </code></pre>
 <p>می‌توانیم سومین دوست نفر دوم را این‌گونه استخراج کنیم:</p>
-<pre><code class="language-csharp">string li = (string)node[1][&quot;Friends&quot;][2];
+<pre class="hljs"><code><span class="hljs-built_in">string</span> li = (<span class="hljs-built_in">string</span>)node[<span class="hljs-number">1</span>][<span class="hljs-string">&quot;Friends&quot;</span>][<span class="hljs-number">2</span>];
 </code></pre>
 <p>همچنین این فایل به راحتی قابل پرس‌وجو با <strong>LINQ</strong> است:</p>
-<pre><code class="language-csharp">JsonNode node = JsonNode.Parse(File.ReadAllText(jsonPath));
-var query =
-    from person in node.AsArray()
-    select new
+<pre class="hljs"><code>JsonNode node = JsonNode.Parse(File.ReadAllText(jsonPath));
+<span class="hljs-keyword">var</span> query =
+    <span class="hljs-keyword">from</span> person <span class="hljs-keyword">in</span> node.AsArray()
+    <span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span>
     {
-        FirstName = (string)person[&quot;FirstName&quot;],
-        Age = (int)person[&quot;Age&quot;],
+        FirstName = (<span class="hljs-built_in">string</span>)person[<span class="hljs-string">&quot;FirstName&quot;</span>],
+        Age = (<span class="hljs-built_in">int</span>)person[<span class="hljs-string">&quot;Age&quot;</span>],
         Friends =
-            from friend in person[&quot;Friends&quot;].AsArray()
-            select (string)friend
+            <span class="hljs-keyword">from</span> friend <span class="hljs-keyword">in</span> person[<span class="hljs-string">&quot;Friends&quot;</span>].AsArray()
+            <span class="hljs-keyword">select</span> (<span class="hljs-built_in">string</span>)friend
     };
 </code></pre>
 <p>برخلاف <strong>JsonDocument</strong>، <strong>JsonNode</strong> نیازی به Dispose ندارد، بنابراین نگرانی از بابت آزادسازی حافظه هنگام پیمایش تنبل وجود ندارد.</p>
 <hr>
 <h3>به‌روزرسانی با JsonNode ✏️</h3>
-<p><strong>JsonObject</strong> و <strong>JsonArray</strong> قابل تغییر هستند، بنابراین می‌توانید محتوای آن‌ها را به‌روزرسانی کنید.
+<p><strong>JsonObject</strong> و <strong>JsonArray</strong> قابل تغییر هستند، بنابراین می‌توانید محتوای آن‌ها را به‌روزرسانی کنید.<br>
 ساده‌ترین روش برای جایگزینی یا افزودن ویژگی به یک <strong>JsonObject</strong>، استفاده از اندیس‌دهنده است:</p>
-<pre><code class="language-csharp">var node = JsonNode.Parse(@&quot;{ &quot;&quot;Color&quot;&quot;: &quot;&quot;Red&quot;&quot; }&quot;);
-node[&quot;Color&quot;] = &quot;White&quot;;
-node[&quot;Valid&quot;] = true;
-Console.WriteLine(node.ToJsonString());  // {&quot;Color&quot;:&quot;White&quot;,&quot;Valid&quot;:true}
+<pre class="hljs"><code><span class="hljs-keyword">var</span> node = JsonNode.Parse(<span class="hljs-string">@&quot;{ &quot;&quot;Color&quot;&quot;: &quot;&quot;Red&quot;&quot; }&quot;</span>);
+node[<span class="hljs-string">&quot;Color&quot;</span>] = <span class="hljs-string">&quot;White&quot;</span>;
+node[<span class="hljs-string">&quot;Valid&quot;</span>] = <span class="hljs-literal">true</span>;
+Console.WriteLine(node.ToJsonString());  <span class="hljs-comment">// {&quot;Color&quot;:&quot;White&quot;,&quot;Valid&quot;:true}</span>
 </code></pre>
 <p>خط دوم میانبری برای این دستور است:</p>
-<pre><code class="language-csharp">node[&quot;Color&quot;] = JsonValue.Create(&quot;White&quot;);
+<pre class="hljs"><code>node[<span class="hljs-string">&quot;Color&quot;</span>] = JsonValue.Create(<span class="hljs-string">&quot;White&quot;</span>);
 </code></pre>
-<p>به جای اختصاص یک مقدار ساده، می‌توانید یک <strong>JsonArray</strong> یا <strong>JsonObject</strong> اختصاص دهید.
+<p>به جای اختصاص یک مقدار ساده، می‌توانید یک <strong>JsonArray</strong> یا <strong>JsonObject</strong> اختصاص دهید.<br>
 برای حذف یک ویژگی، ابتدا به <strong>JsonObject</strong> تبدیل کنید (یا <strong>AsObject</strong> را فراخوانی کنید) و سپس متد <strong>Remove</strong> را فراخوانی کنید:</p>
-<pre><code class="language-csharp">node.AsObject().Remove(&quot;Valid&quot;);
+<pre class="hljs"><code>node.AsObject().Remove(<span class="hljs-string">&quot;Valid&quot;</span>);
 </code></pre>
 <p>(همچنین <strong>JsonObject</strong> متد <strong>Add</strong> دارد که در صورت وجود ویژگی، استثناء ایجاد می‌کند.)</p>
 <p><strong>JsonArray</strong> نیز امکان استفاده از اندیس‌دهنده برای جایگزینی عناصر را دارد:</p>
-<pre><code class="language-csharp">var node = JsonNode.Parse(&quot;[1, 2, 3]&quot;);
-node[0] = 10;
+<pre class="hljs"><code><span class="hljs-keyword">var</span> node = JsonNode.Parse(<span class="hljs-string">&quot;[1, 2, 3]&quot;</span>);
+node[<span class="hljs-number">0</span>] = <span class="hljs-number">10</span>;
 </code></pre>
 <p>فراخوانی <strong>AsArray</strong>، متدهای <strong>Add/Insert/Remove/RemoveAt</strong> را در اختیار شما می‌گذارد. برای مثال، حذف اولین عنصر و اضافه کردن یک عنصر به انتها:</p>
-<pre><code class="language-csharp">var arrayNode = JsonNode.Parse(&quot;[1, 2, 3]&quot;);
-arrayNode.AsArray().RemoveAt(0);
-arrayNode.AsArray().Add(4);
-Console.WriteLine(arrayNode.ToJsonString());  // [2,3,4]
+<pre class="hljs"><code><span class="hljs-keyword">var</span> arrayNode = JsonNode.Parse(<span class="hljs-string">&quot;[1, 2, 3]&quot;</span>);
+arrayNode.AsArray().RemoveAt(<span class="hljs-number">0</span>);
+arrayNode.AsArray().Add(<span class="hljs-number">4</span>);
+Console.WriteLine(arrayNode.ToJsonString());  <span class="hljs-comment">// [2,3,4]</span>
 </code></pre>
 <p>از <strong>.NET 8</strong> به بعد، می‌توانید یک <strong>JsonNode</strong> را با فراخوانی <strong>ReplaceWith</strong> نیز به‌روزرسانی کنید:</p>
-<pre><code class="language-csharp">var node = JsonNode.Parse(@&quot;{ &quot;&quot;Color&quot;&quot;: &quot;&quot;Red&quot;&quot; }&quot;);
-var color = node[&quot;Color&quot;];
-color.ReplaceWith(&quot;Blue&quot;);
+<pre class="hljs"><code><span class="hljs-keyword">var</span> node = JsonNode.Parse(<span class="hljs-string">@&quot;{ &quot;&quot;Color&quot;&quot;: &quot;&quot;Red&quot;&quot; }&quot;</span>);
+<span class="hljs-keyword">var</span> color = node[<span class="hljs-string">&quot;Color&quot;</span>];
+color.ReplaceWith(<span class="hljs-string">&quot;Blue&quot;</span>);
 </code></pre>
 <h3>ساخت DOM برای JsonNode به صورت برنامه‌نویسی 🏗️</h3>
 <p><strong>JsonArray</strong> و <strong>JsonObject</strong> سازندگانی دارند که از <strong>object initialization syntax</strong> پشتیبانی می‌کنند، و این امکان را می‌دهند که کل DOM یک <strong>JsonNode</strong> را در یک عبارت بسازید:</p>
-<pre><code class="language-csharp">var node = new JsonArray
+<pre class="hljs"><code><span class="hljs-keyword">var</span> node = <span class="hljs-keyword">new</span> JsonArray
 {
-    new JsonObject {
-        [&quot;Name&quot;] = &quot;Tracy&quot;,
-        [&quot;Age&quot;] = 30,
-        [&quot;Friends&quot;] = new JsonArray(&quot;Lisa&quot;, &quot;Joe&quot;)
+    <span class="hljs-keyword">new</span> JsonObject {
+        [<span class="hljs-string">&quot;Name&quot;</span>] = <span class="hljs-string">&quot;Tracy&quot;</span>,
+        [<span class="hljs-string">&quot;Age&quot;</span>] = <span class="hljs-number">30</span>,
+        [<span class="hljs-string">&quot;Friends&quot;</span>] = <span class="hljs-keyword">new</span> JsonArray(<span class="hljs-string">&quot;Lisa&quot;</span>, <span class="hljs-string">&quot;Joe&quot;</span>)
     },
-    new JsonObject {
-        [&quot;Name&quot;] = &quot;Jordyn&quot;,
-        [&quot;Age&quot;] = 25,
-        [&quot;Friends&quot;] = new JsonArray(&quot;Tracy&quot;, &quot;Li&quot;)
+    <span class="hljs-keyword">new</span> JsonObject {
+        [<span class="hljs-string">&quot;Name&quot;</span>] = <span class="hljs-string">&quot;Jordyn&quot;</span>,
+        [<span class="hljs-string">&quot;Age&quot;</span>] = <span class="hljs-number">25</span>,
+        [<span class="hljs-string">&quot;Friends&quot;</span>] = <span class="hljs-keyword">new</span> JsonArray(<span class="hljs-string">&quot;Tracy&quot;</span>, <span class="hljs-string">&quot;Li&quot;</span>)
     }
 };
 </code></pre>
 <p>نتیجه این ساختار، JSON زیر خواهد بود:</p>
-<pre><code class="language-json">[
-  {
-    &quot;Name&quot;: &quot;Tracy&quot;,
-    &quot;Age&quot;: 30,
-    &quot;Friends&quot;: [&quot;Lisa&quot;, &quot;Joe&quot;]
-  },
-  {
-    &quot;Name&quot;: &quot;Jordyn&quot;,
-    &quot;Age&quot;: 25,
-    &quot;Friends&quot;: [&quot;Tracy&quot;, &quot;Li&quot;]
-  }
-]
+<pre class="hljs"><code><span class="hljs-punctuation">[</span>
+  <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;Name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Tracy&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;Age&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">30</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;Friends&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;Lisa&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;Joe&quot;</span><span class="hljs-punctuation">]</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;Name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Jordyn&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;Age&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">25</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;Friends&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;Tracy&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;Li&quot;</span><span class="hljs-punctuation">]</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">]</span>
 </code></pre>
-
-  </main>
-
-  <!-- فوتر مشترک -->
-  <footer class="footer">
-    <div class="container">
-      <p>
-        <img src="/icone/copyright.svg" alt="کپی‌رایت" width="14" height="14"
-             style="vertical-align:middle;margin-inline:4px">
-        <span id="y"></span> Gitab — برای توسعه‌دهندگان
-      </p>
-    </div>
-  </footer>
-
-  <!-- سال + اسکریپت تم -->
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
-
-    (() => {
-      const root = document.documentElement;
-      const btn = document.getElementById('themeToggle');
-      const KEY = 'gitab-theme';
-      const media = window.matchMedia('(prefers-color-scheme: dark)');
-      const getEffective = s => s === 'auto' ? (media.matches ? 'dark' : 'light') : s;
-      function updateTheme(s) {
-        root.setAttribute('data-theme', s);
-        const mode = getEffective(s);
-        root.dataset.colorMode = mode;
-        btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
-      }
-      const saved = localStorage.getItem(KEY) || 'auto';
-      updateTheme(saved);
-      btn.addEventListener('click', () => {
-        const curr = localStorage.getItem(KEY) || 'auto';
-        const next = curr === 'auto' ? 'dark' : curr === 'dark' ? 'light' : 'auto';
-        localStorage.setItem(KEY, next);
-        updateTheme(next);
-      });
-      media.addEventListener('change', () => {
-        if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
-      });
-      window.addEventListener('DOMContentLoaded', () => updateTheme(saved));
-    })();
-  </script>
-</body>
-</html>

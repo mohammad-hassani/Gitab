@@ -1,44 +1,4 @@
-<!doctype html>
-<html lang="fa" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gitab | کتابخانهٔ ترجمه‌های دات‌نت و سی شارپ</title>
-  <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
-  <link rel="stylesheet" href="/styles/main.css">
-</head>
-<body>
-  <!-- هدر مشترک -->
-  <header class="header">
-    <div class="container nav-wrap">
-      <a class="brand" href="/">
-        <img src="/icone/logo.svg" alt="Gitab" width="28" height="28">
-        <span>Gitab</span>
-      </a>
-
-      <nav class="nav">
-        <a href="/">خانه</a>
-        <a href="/books/list-books">کتاب‌ها</a>
-        <a href="#">همکاری</a>
-        <a href="#">درباره‌ما</a>
-      </nav>
-
-     <div class="nav-actions">
-  <button id="themeToggle" class="icon-btn theme-btn" aria-label="تغییر حالت">
-    <img class="icon-sun" src="/icone/sun.svg" alt="روشن">
-    <img class="icon-moon" src="/icone/moon.svg" alt="تاریک">
-  </button>
-
-  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
-    <img src="/icone/github.svg" alt="GitHub">
-  </a>
-</div>
-
-  </header>
-
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل پنجم: مرور کلی .NET 🌐</h1>
+<h1>فصل پنجم: مرور کلی .NET 🌐</h1>
 <p>تقریباً تمام قابلیت‌های <strong>رَتایم .NET 8</strong> از طریق یک مجموعه گسترده از <strong>نوع‌های مدیریت‌شده (managed types)</strong> در دسترس هستند. این نوع‌ها در <strong>namespace</strong>های سلسله‌مراتبی سازمان‌دهی شده و در مجموعه‌ای از <strong>assembly</strong>ها بسته‌بندی شده‌اند.</p>
 <p>برخی از نوع‌های .NET مستقیماً توسط <strong>CLR</strong> استفاده می‌شوند و برای محیط میزبانی مدیریت‌شده حیاتی هستند. این نوع‌ها در <strong>assembly</strong>ای به نام <code>System.Private.CoreLib.dll</code> (در .NET Framework با نام <code>mscorlib.dll</code>) قرار دارند و شامل موارد زیر هستند:</p>
 <ul>
@@ -57,7 +17,7 @@
 <li>شبکه (<strong>networking</strong>)</li>
 <li><strong>Language-Integrated Query (LINQ)</strong></li>
 </ul>
-<p>این مجموعه‌ها <strong>Base Class Library (BCL)</strong> را تشکیل می‌دهند.
+<p>این مجموعه‌ها <strong>Base Class Library (BCL)</strong> را تشکیل می‌دهند.<br>
 در بالای این لایه، <strong>لایه‌های برنامه (application layers)</strong> قرار دارند که <strong>API</strong>هایی برای توسعه انواع خاص برنامه‌ها، مانند برنامه‌های وب یا <strong>rich client</strong> ارائه می‌کنند.</p>
 <p>در این فصل، ما موارد زیر را ارائه می‌کنیم:</p>
 <ul>
@@ -108,12 +68,12 @@
 <li><code>netstandard2.0</code> (که در بخش بعدی توضیح داده می‌شود)</li>
 </ul>
 <p>برای مثال، این‌گونه پروژه شما روی <strong>.NET 8</strong> هدف‌گذاری می‌شود:</p>
-<pre><code class="language-xml">&lt;PropertyGroup&gt;
-  &lt;TargetFramework&gt;net8.0&lt;/TargetFramework&gt;
-&lt;/PropertyGroup&gt;
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">PropertyGroup</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">TargetFramework</span>&gt;</span>net8.0<span class="hljs-tag">&lt;/<span class="hljs-name">TargetFramework</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">PropertyGroup</span>&gt;</span>
 </code></pre>
 <p>می‌توانید چند runtime را با استفاده از عنصر <code>&lt;TargetFrameworks&gt;</code> (جمع) هدف‌گذاری کنید، به‌طوری که هر TFM با <strong>سمیکولن (;)</strong> از دیگری جدا شود:</p>
-<pre><code class="language-xml">&lt;TargetFrameworks&gt;net8.0;net48&lt;/TargetFrameworks&gt;
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">TargetFrameworks</span>&gt;</span>net8.0;net48<span class="hljs-tag">&lt;/<span class="hljs-name">TargetFrameworks</span>&gt;</span>
 </code></pre>
 <p>وقتی چند هدف تعیین می‌کنید (<strong>multitargeting</strong>)، کامپایلر برای هر هدف، یک <strong>assembly خروجی جداگانه</strong> تولید می‌کند.</p>
 <p>هدف runtime در <strong>assembly خروجی</strong> با استفاده از <strong>ویژگی TargetFramework</strong> رمزگذاری می‌شود. یک assembly می‌تواند روی یک runtime جدیدتر (اما نه قدیمی‌تر) از هدفش اجرا شود.</p>
@@ -131,9 +91,9 @@
 <p>مفیدترین نسخه، <strong>.NET Standard 2.0</strong> است. یک کتابخانه که <strong>.NET Standard 2.0</strong> را هدف قرار می‌دهد، بدون نیاز به تغییر روی هر دو <strong>.NET مدرن</strong> (.NET 8/7/6/5 تا .NET Core 2) و <strong>.NET Framework (4.6.1+)</strong> اجرا می‌شود.</p>
 <p>همچنین از <strong>UWP قدیمی (نسخه 10.0.16299+)</strong> و <strong>Mono 5.4+</strong> (CLR/BCL مورد استفاده نسخه‌های قدیمی Xamarin) پشتیبانی می‌کند.</p>
 <p>برای هدف‌گیری <strong>.NET Standard 2.0</strong> کافی است این مورد را به فایل <code>.csproj</code> اضافه کنید:</p>
-<pre><code class="language-xml">&lt;PropertyGroup&gt;
-  &lt;TargetFramework&gt;netstandard2.0&lt;/TargetFramework&gt;
-&lt;/PropertyGroup&gt;
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">PropertyGroup</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">TargetFramework</span>&gt;</span>netstandard2.0<span class="hljs-tag">&lt;/<span class="hljs-name">TargetFramework</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">PropertyGroup</span>&gt;</span>
 </code></pre>
 <p>اکثر APIهایی که در این کتاب توضیح داده شده‌اند توسط <strong>.NET Standard 2.0</strong> پشتیبانی می‌شوند و آن‌هایی که پشتیبانی نمی‌شوند، اغلب به‌صورت <strong>NuGet packages</strong> قابل دسترسی هستند.</p>
 <hr>
@@ -173,7 +133,7 @@
 <div align="center">
 <p><img src="../../../assets/image/05/Table-5-1.jpeg" alt="Conventions-UsedThis-Book"></p>
 </div>
-<p>این به این دلیل است که نسخه‌های جدیدتر C# شامل ویژگی‌هایی هستند که وابسته به <strong>نوع‌هایی</strong> هستند که در runtimeهای جدیدتر معرفی شده‌اند.
+<p>این به این دلیل است که نسخه‌های جدیدتر C# شامل ویژگی‌هایی هستند که وابسته به <strong>نوع‌هایی</strong> هستند که در runtimeهای جدیدتر معرفی شده‌اند.<br>
 شما می‌توانید <strong>نسخه زبان</strong> را در فایل پروژه با عنصر <code>&lt;LangVersion&gt;</code> بازنویسی کنید. استفاده از یک runtime قدیمی‌تر (مانند .NET Framework) با نسخه زبان جدیدتر (مانند C# 12) به این معنی است که ویژگی‌های زبان که وابسته به نوع‌های جدید .NET هستند، کار نخواهند کرد (اگرچه در برخی موارد می‌توانید این نوع‌ها را خودتان تعریف کنید یا از یک بسته NuGet وارد کنید).</p>
 <hr>
 <h3>CLR و BCL ⚙️📚</h3>
@@ -189,7 +149,7 @@
 <li>کلاس‌های پایه <strong>Enum، Array، Delegate</strong></li>
 <li>نوع‌های <strong>Nullable، Type، DateTime، TimeSpan، Guid</strong></li>
 </ul>
-<p>فضای نام System همچنین شامل نوع‌هایی برای انجام عملیات ریاضی (<strong>Math</strong>)، تولید اعداد تصادفی (<strong>Random</strong>) و تبدیل بین انواع مختلف (<strong>Convert</strong> و <strong>BitConverter</strong>) است.
+<p>فضای نام System همچنین شامل نوع‌هایی برای انجام عملیات ریاضی (<strong>Math</strong>)، تولید اعداد تصادفی (<strong>Random</strong>) و تبدیل بین انواع مختلف (<strong>Convert</strong> و <strong>BitConverter</strong>) است.<br>
 فصل ۶ این نوع‌ها و رابط‌هایی که پروتکل‌های استاندارد در سراسر .NET را تعریف می‌کنند (مانند <strong>IFormattable</strong> برای فرمت‌بندی و <strong>IComparable</strong> برای مقایسه ترتیب) پوشش می‌دهد.</p>
 <p>فضای نام System همچنین <strong>رابط IDisposable</strong> و کلاس <strong>GC</strong> برای تعامل با Garbage Collector را تعریف می‌کند که در فصل ۱۲ بررسی می‌شوند.</p>
 <hr>
@@ -210,7 +170,7 @@
 </ul>
 <hr>
 <h3>پرس‌وجو (Querying) 🔍</h3>
-<p><strong>Language-Integrated Query (LINQ)</strong> اجازه می‌دهد پرس‌وجوهای نوع-ایمن روی مجموعه‌های محلی و دوردست (مثلاً جداول SQL Server) انجام دهید. این مبحث در فصل‌های ۸، ۹ و ۱۰ توضیح داده شده است.
+<p><strong>Language-Integrated Query (LINQ)</strong> اجازه می‌دهد پرس‌وجوهای نوع-ایمن روی مجموعه‌های محلی و دوردست (مثلاً جداول SQL Server) انجام دهید. این مبحث در فصل‌های ۸، ۹ و ۱۰ توضیح داده شده است.<br>
 یکی از مزایای بزرگ LINQ ارائه یک API <strong>یکسان برای پرس‌وجو</strong> در حوزه‌های مختلف است. نوع‌های اصلی در فضای نام‌های زیر قرار دارند:</p>
 <ul>
 <li><strong>System.Linq</strong>: LINQ to Objects و PLINQ</li>
@@ -240,18 +200,18 @@
 <p>در فصل ۱۳، <strong>ثبت رخدادها (Logging)</strong> و <strong>Assertion</strong> پوشش داده می‌شوند و توضیح داده می‌شود چگونه با فرآیندهای دیگر تعامل داشته باشید، در <strong>Windows Event Log</strong> بنویسید و مانیتورینگ عملکرد را مدیریت کنید. نوع‌های مرتبط در فضای نام <strong>System.Diagnostics</strong> و زیرمجموعه‌های آن تعریف شده‌اند.</p>
 <hr>
 <h3>Concurrency و Asynchrony ⏳</h3>
-<p>بسیاری از برنامه‌های مدرن نیاز دارند تا بیش از یک کار به‌صورت همزمان انجام شود. از C# 5.0 به بعد، این کار از طریق <strong>توابع ناهمگام (asynchronous)</strong> و سازه‌های سطح بالا مانند <strong>Taskها</strong> و <strong>Task Combinators</strong> ساده‌تر شده است. فصل ۱۴ همه این موارد را به‌طور مفصل توضیح می‌دهد، پس از شروع با اصول <strong>Multithreading</strong>.
+<p>بسیاری از برنامه‌های مدرن نیاز دارند تا بیش از یک کار به‌صورت همزمان انجام شود. از C# 5.0 به بعد، این کار از طریق <strong>توابع ناهمگام (asynchronous)</strong> و سازه‌های سطح بالا مانند <strong>Taskها</strong> و <strong>Task Combinators</strong> ساده‌تر شده است. فصل ۱۴ همه این موارد را به‌طور مفصل توضیح می‌دهد، پس از شروع با اصول <strong>Multithreading</strong>.<br>
 نوع‌های مرتبط با کار با <strong>Threadها</strong> و عملیات ناهمگام در فضای نام‌های <strong>System.Threading</strong> و <strong>System.Threading.Tasks</strong> قرار دارند.</p>
 <hr>
 <h3>Streams و Input/Output 💾</h3>
-<p>.NET یک مدل مبتنی بر <strong>Stream</strong> برای <strong>I/O سطح پایین</strong> ارائه می‌دهد. Streamها معمولاً برای خواندن و نوشتن مستقیم روی فایل‌ها و ارتباطات شبکه استفاده می‌شوند و می‌توان آن‌ها را <strong>زنجیره‌ای یا به صورت Decorator</strong> برای افزودن قابلیت‌های فشرده‌سازی یا رمزگذاری استفاده کرد.
-فصل ۱۵ معماری Stream و پشتیبانی خاص برای کار با فایل‌ها و دایرکتوری‌ها، فشرده‌سازی، Pipeها و Memory-mapped Files را توضیح می‌دهد. نوع‌های <strong>Stream</strong> و <strong>I/O</strong> در فضای نام <strong>System.IO</strong> و زیرمجموعه‌های آن تعریف شده‌اند.</p>
+<p>.NET یک مدل مبتنی بر <strong>Stream</strong> برای <strong>I/O سطح پایین</strong> ارائه می‌دهد. Streamها معمولاً برای خواندن و نوشتن مستقیم روی فایل‌ها و ارتباطات شبکه استفاده می‌شوند و می‌توان آن‌ها را <strong>زنجیره‌ای یا به صورت Decorator</strong> برای افزودن قابلیت‌های فشرده‌سازی یا رمزگذاری استفاده کرد.<br>
+فصل ۱۵ معماری Stream و پشتیبانی خاص برای کار با فایل‌ها و دایرکتوری‌ها، فشرده‌سازی، Pipeها و Memory-mapped Files را توضیح می‌دهد. نوع‌های <strong>Stream</strong> و <strong>I/O</strong> در فضای نام <strong><a href="http://System.IO">System.IO</a></strong> و زیرمجموعه‌های آن تعریف شده‌اند.</p>
 <hr>
 <h3>Networking 🌐</h3>
-<p>شما می‌توانید به اکثر پروتکل‌های استاندارد شبکه مانند <strong>HTTP، TCP/IP، و SMTP</strong> از طریق نوع‌های فضای نام <strong>System.Net</strong> دسترسی داشته باشید. در فصل ۱۶، نشان داده می‌شود چگونه از هر یک از این پروتکل‌ها استفاده کنید، از کارهای ساده مانند دانلود از یک وب‌سایت گرفته تا استفاده مستقیم از TCP/IP برای دریافت ایمیل POP3.
+<p>شما می‌توانید به اکثر پروتکل‌های استاندارد شبکه مانند <strong>HTTP، TCP/IP، و SMTP</strong> از طریق نوع‌های فضای نام <strong><a href="http://System.Net">System.Net</a></strong> دسترسی داشته باشید. در فصل ۱۶، نشان داده می‌شود چگونه از هر یک از این پروتکل‌ها استفاده کنید، از کارهای ساده مانند دانلود از یک وب‌سایت گرفته تا استفاده مستقیم از TCP/IP برای دریافت ایمیل POP3.<br>
 فضاهای نام پوشش داده شده:</p>
 <ul>
-<li><strong>System.Net</strong></li>
+<li><strong><a href="http://System.Net">System.Net</a></strong></li>
 <li><strong>System.Net.Http</strong> → HttpClient</li>
 <li><strong>System.Net.Mail</strong> → ارسال ایمیل با SMTP</li>
 <li><strong>System.Net.Sockets</strong> → TCP، UDP و IP</li>
@@ -259,7 +219,7 @@
 <hr>
 <h3>Assemblies، Reflection و Attributes 🔎</h3>
 <p><strong>Assemblyها</strong> که برنامه‌های C# در آن‌ها کامپایل می‌شوند شامل <strong>دستورات اجرایی (IL)</strong> و <strong>متادیتا</strong> هستند که نوع‌ها، اعضا و Attributes برنامه را توصیف می‌کند. از طریق <strong>Reflection</strong> می‌توان این متادیتا را در زمان اجرا بررسی کرده و روش‌هایی مانند <strong>فراخوانی داینامیک متدها</strong> را انجام داد. با <strong>Reflection.Emit</strong> می‌توان کد جدید را به‌صورت پویا ساخت.</p>
-<p>در فصل ۱۷، ترکیب Assemblyها و نحوه <strong>لود کردن و جداسازی داینامیک</strong> آن‌ها توضیح داده شده است. در فصل ۱۸، Reflection و Attributes بررسی می‌شوند—چگونگی بررسی متادیتا، فراخوانی داینامیک توابع، نوشتن Attributes سفارشی، Emit نوع‌های جدید و تحلیل IL خام.
+<p>در فصل ۱۷، ترکیب Assemblyها و نحوه <strong>لود کردن و جداسازی داینامیک</strong> آن‌ها توضیح داده شده است. در فصل ۱۸، Reflection و Attributes بررسی می‌شوند—چگونگی بررسی متادیتا، فراخوانی داینامیک توابع، نوشتن Attributes سفارشی، Emit نوع‌های جدید و تحلیل IL خام.<br>
 نوع‌های مرتبط در فضاهای نام زیر قرار دارند:</p>
 <ul>
 <li><strong>System</strong></li>
@@ -289,7 +249,7 @@
 <p>شما می‌توانید با هر دو نوع کد <strong>Native</strong> و <strong>Component Object Model (COM)</strong> تعامل داشته باشید.</p>
 <ul>
 <li><strong>Native Interoperability</strong> به شما اجازه می‌دهد تا <strong>توابع موجود در DLLهای unmanaged</strong> را فراخوانی کنید، <strong>Callbackها را ثبت کنید، ساختارهای داده را نگاشت (map) کنید</strong> و با <strong>نوع‌های داده بومی</strong> تعامل داشته باشید.</li>
-<li><strong>COM Interoperability</strong> اجازه می‌دهد <strong>نوع‌های COM</strong> را فراخوانی کنید (روی ماشین‌های ویندوز) و نوع‌های .NET را برای COM در دسترس قرار دهید.
+<li><strong>COM Interoperability</strong> اجازه می‌دهد <strong>نوع‌های COM</strong> را فراخوانی کنید (روی ماشین‌های ویندوز) و نوع‌های .NET را برای COM در دسترس قرار دهید.<br>
 نوع‌هایی که این عملکردها را پشتیبانی می‌کنند در فضای نام <strong>System.Runtime.InteropServices</strong> قرار دارند و در فصل ۲۴ بررسی می‌شوند.</li>
 </ul>
 <hr>
@@ -297,7 +257,7 @@
 <p>در فصل ۲۵، توضیح داده می‌شود چگونه می‌توان از <strong>Regular Expressions</strong> برای <strong>مطابقت الگوهای کاراکتری در رشته‌ها</strong> استفاده کرد.</p>
 <hr>
 <h3>Serialization 💾</h3>
-<p>.NET چندین سیستم برای <strong>ذخیره و بازیابی اشیاء</strong> به صورت <strong>باینری یا متنی</strong> ارائه می‌دهد. این سیستم‌ها می‌توانند برای <strong>ارتباط بین برنامه‌ها</strong> و همچنین <strong>ذخیره و بازیابی اشیاء روی فایل</strong> استفاده شوند.
+<p>.NET چندین سیستم برای <strong>ذخیره و بازیابی اشیاء</strong> به صورت <strong>باینری یا متنی</strong> ارائه می‌دهد. این سیستم‌ها می‌توانند برای <strong>ارتباط بین برنامه‌ها</strong> و همچنین <strong>ذخیره و بازیابی اشیاء روی فایل</strong> استفاده شوند.<br>
 در <strong>مکمل آنلاین</strong> در <a href="http://www.albahari.com/nutshell">این لینک</a> تمام چهار موتور Serialization پوشش داده شده‌اند:</p>
 <ul>
 <li><strong>Binary Serializer</strong></li>
@@ -307,8 +267,8 @@
 </ul>
 <hr>
 <h3>Roslyn Compiler ⚙️</h3>
-<p>کامپایلر C# خودش در <strong>C# نوشته شده است</strong>—پروژه آن به نام <strong>Roslyn</strong> شناخته می‌شود و کتابخانه‌های آن به صورت <strong>NuGet Packages</strong> در دسترس هستند.
-با این کتابخانه‌ها، می‌توان از عملکرد کامپایلر به روش‌های مختلفی استفاده کرد، نه تنها برای کامپایل سورس کد به Assembly، بلکه برای <strong>نوشتن ابزارهای تحلیل کد و Refactoring</strong> نیز.
+<p>کامپایلر C# خودش در <strong>C# نوشته شده است</strong>—پروژه آن به نام <strong>Roslyn</strong> شناخته می‌شود و کتابخانه‌های آن به صورت <strong>NuGet Packages</strong> در دسترس هستند.<br>
+با این کتابخانه‌ها، می‌توان از عملکرد کامپایلر به روش‌های مختلفی استفاده کرد، نه تنها برای کامپایل سورس کد به Assembly، بلکه برای <strong>نوشتن ابزارهای تحلیل کد و Refactoring</strong> نیز.<br>
 Roslyn در <strong>مکمل آنلاین</strong> در <a href="http://www.albahari.com/nutshell">این لینک</a> پوشش داده شده است.</p>
 <hr>
 <h3>Application Layers 🏗️</h3>
@@ -318,7 +278,7 @@ Roslyn در <strong>مکمل آنلاین</strong> در <a href="http://www.alba
 <li><strong>Rich Client</strong> → برنامه‌ای که کاربر باید دانلود و روی کامپیوتر یا دستگاه موبایل نصب کند</li>
 </ul>
 <h4>Thin-Client با C#</h4>
-<p>برای نوشتن برنامه‌های <strong>Thin Client</strong> در C#، از <strong>ASP.NET Core</strong> استفاده می‌کنیم که روی <strong>Windows، Linux و macOS</strong> اجرا می‌شود. ASP.NET Core همچنین برای نوشتن <strong>Web API</strong> طراحی شده است.</p>
+<p>برای نوشتن برنامه‌های <strong>Thin Client</strong> در C#، از <strong><a href="http://ASP.NET">ASP.NET</a> Core</strong> استفاده می‌کنیم که روی <strong>Windows، Linux و macOS</strong> اجرا می‌شود. <a href="http://ASP.NET">ASP.NET</a> Core همچنین برای نوشتن <strong>Web API</strong> طراحی شده است.</p>
 <h4>Rich-Client</h4>
 <p>برای برنامه‌های Rich Client، انتخاب‌های مختلفی وجود دارد:</p>
 <ul>
@@ -329,14 +289,14 @@ Roslyn در <strong>مکمل آنلاین</strong> در <a href="http://www.alba
 <li>کتابخانه‌های UI Cross-Platform شخص ثالث مانند <strong>Avalonia</strong> که برخلاف MAUI روی Linux نیز اجرا می‌شود و برای دسکتاپ به Catalyst/WinUI وابسته نیست، توسعه و دیباگ را ساده‌تر می‌کند.</li>
 </ul>
 <hr>
-<h3>ASP.NET Core 🌐</h3>
-<p><strong>ASP.NET Core</strong> جانشین سبک و مدولار ASP.NET است و مناسب برای ساخت <strong>وب‌سایت‌ها، Web APIهای مبتنی بر REST و Microservices</strong> می‌باشد. همچنین می‌تواند با دو فریم‌ورک محبوب <strong>Single-Page Application</strong> یعنی <strong>React و Angular</strong> ترکیب شود.</p>
+<h3><a href="http://ASP.NET">ASP.NET</a> Core 🌐</h3>
+<p><strong><a href="http://ASP.NET">ASP.NET</a> Core</strong> جانشین سبک و مدولار <a href="http://ASP.NET">ASP.NET</a> است و مناسب برای ساخت <strong>وب‌سایت‌ها، Web APIهای مبتنی بر REST و Microservices</strong> می‌باشد. همچنین می‌تواند با دو فریم‌ورک محبوب <strong>Single-Page Application</strong> یعنی <strong>React و Angular</strong> ترکیب شود.</p>
 <p>ویژگی‌ها:</p>
 <ul>
 <li>پشتیبانی از <strong>Model-View-Controller (MVC)</strong></li>
 <li>پشتیبانی از <strong>Blazor</strong> → اجرای کد Client-side با C# به جای JavaScript</li>
 </ul>
-<p>ASP.NET Core روی <strong>Windows، Linux و macOS</strong> اجرا می‌شود و می‌تواند به‌صورت Self-host در یک Process دلخواه اجرا شود. برخلاف ASP.NET قدیمی در .NET Framework، ASP.NET Core به <strong>System.Web</strong> و Legacy Web Forms وابسته نیست.</p>
+<p><a href="http://ASP.NET">ASP.NET</a> Core روی <strong>Windows، Linux و macOS</strong> اجرا می‌شود و می‌تواند به‌صورت Self-host در یک Process دلخواه اجرا شود. برخلاف <a href="http://ASP.NET">ASP.NET</a> قدیمی در .NET Framework، <a href="http://ASP.NET">ASP.NET</a> Core به <strong><a href="http://System.Web">System.Web</a></strong> و Legacy Web Forms وابسته نیست.</p>
 <p>مزایای Thin-Client نسبت به Rich Client:</p>
 <ul>
 <li><strong>نیاز به نصب روی کلاینت صفر است</strong></li>
@@ -348,7 +308,7 @@ Roslyn در <strong>مکمل آنلاین</strong> در <a href="http://www.alba
 <p>لایه Windows Desktop دو API UI برای نوشتن برنامه‌های <strong>Rich Client</strong> ارائه می‌دهد:</p>
 <ul>
 <li><strong>WPF</strong></li>
-<li><strong>Windows Forms</strong>
+<li><strong>Windows Forms</strong><br>
 هر دو روی Windows Desktop/Server از نسخه 7 تا 11 اجرا می‌شوند.</li>
 </ul>
 <h3>WPF 🎨</h3>
@@ -373,7 +333,7 @@ Roslyn در <strong>مکمل آنلاین</strong> در <a href="http://www.alba
 <li>اکثر کنترل‌ها <strong>Non-compositional</strong> هستند، یعنی نمی‌توانید یک کنترل تصویر را داخل هدر Tab Control قرار دهید. سفارشی‌سازی ListView، ComboBox و Tab Control که با WPF ساده است، در Windows Forms <strong>زمان‌بر و پیچیده</strong> است.</li>
 <li>اجرای Layout دینامیک به‌درستی دشوار است.</li>
 </ul>
-<p>مزیت مثبت Windows Forms این است که <strong>نسبتاً ساده است و یادگیری آن آسان است</strong> و هنوز تعداد مناسبی کنترل شخص ثالث دارد.
+<p>مزیت مثبت Windows Forms این است که <strong>نسبتاً ساده است و یادگیری آن آسان است</strong> و هنوز تعداد مناسبی کنترل شخص ثالث دارد.<br>
 نوع‌های Windows Forms در <strong>System.Windows.Forms (در System.Windows.Forms.dll)</strong> و <strong>System.Drawing (در System.Drawing.dll)</strong> قرار دارند. فضای نام دوم همچنین شامل نوع‌های GDI+ برای رسم کنترل‌های سفارشی است.</p>
 <hr>
 <h3>UWP و WinUI 3 📱</h3>
@@ -398,49 +358,3 @@ Roslyn در <strong>مکمل آنلاین</strong> در <a href="http://www.alba
 <p><strong>MAUI (سابقاً Xamarin)</strong> امکان توسعه <strong>برنامه‌های موبایل با C#</strong> برای iOS و Android را فراهم می‌کند و همچنین می‌توان برنامه‌های Cross-Platform دسکتاپ برای <strong>macOS و Windows</strong> نوشت (via Catalyst و Windows App SDK).</p>
 <p>Runtime/BCL که روی iOS و Android اجرا می‌شود <strong>Mono</strong> نام دارد (نسخه‌ای مشتق‌شده از Mono Runtime متن‌باز). تاریخی، Mono با .NET کاملاً سازگار نبود و کتابخانه‌هایی که روی هر دو اجرا می‌شدند، معمولاً <strong>.NET Standard</strong> هدف قرار می‌گرفتند. از .NET 6 به بعد، Interface عمومی Mono با .NET ادغام شد و Mono در واقع به‌عنوان یک <strong>پیاده‌سازی از .NET</strong> درآمد.</p>
 <p>MAUI شامل <strong>رابط پروژه یکپارچه، Hot Reloading، و پشتیبانی از Blazor Desktop و Hybrid Apps</strong> است. جزئیات بیشتر در <a href="https://github.com/dotnet/maui">صفحه رسمی MAUI</a> موجود است.</p>
-
-  </main>
-
-  <!-- فوتر مشترک -->
-  <footer class="footer">
-    <div class="container">
-      <p>
-        <img src="/icone/copyright.svg" alt="کپی‌رایت" width="14" height="14"
-             style="vertical-align:middle;margin-inline:4px">
-        <span id="y"></span> Gitab — برای توسعه‌دهندگان
-      </p>
-    </div>
-  </footer>
-
-  <!-- سال + اسکریپت تم -->
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
-
-    (() => {
-      const root = document.documentElement;
-      const btn = document.getElementById('themeToggle');
-      const KEY = 'gitab-theme';
-      const media = window.matchMedia('(prefers-color-scheme: dark)');
-      const getEffective = s => s === 'auto' ? (media.matches ? 'dark' : 'light') : s;
-      function updateTheme(s) {
-        root.setAttribute('data-theme', s);
-        const mode = getEffective(s);
-        root.dataset.colorMode = mode;
-        btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
-      }
-      const saved = localStorage.getItem(KEY) || 'auto';
-      updateTheme(saved);
-      btn.addEventListener('click', () => {
-        const curr = localStorage.getItem(KEY) || 'auto';
-        const next = curr === 'auto' ? 'dark' : curr === 'dark' ? 'light' : 'auto';
-        localStorage.setItem(KEY, next);
-        updateTheme(next);
-      });
-      media.addEventListener('change', () => {
-        if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
-      });
-      window.addEventListener('DOMContentLoaded', () => updateTheme(saved));
-    })();
-  </script>
-</body>
-</html>

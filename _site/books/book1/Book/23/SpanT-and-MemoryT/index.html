@@ -1,47 +1,7 @@
-<!doctype html>
-<html lang="fa" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gitab | کتابخانهٔ ترجمه‌های دات‌نت و سی شارپ</title>
-  <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
-  <link rel="stylesheet" href="/styles/main.css">
-</head>
-<body>
-  <!-- هدر مشترک -->
-  <header class="header">
-    <div class="container nav-wrap">
-      <a class="brand" href="/">
-        <img src="/icone/logo.svg" alt="Gitab" width="28" height="28">
-        <span>Gitab</span>
-      </a>
-
-      <nav class="nav">
-        <a href="/">خانه</a>
-        <a href="/books/list-books">کتاب‌ها</a>
-        <a href="#">همکاری</a>
-        <a href="#">درباره‌ما</a>
-      </nav>
-
-     <div class="nav-actions">
-  <button id="themeToggle" class="icon-btn theme-btn" aria-label="تغییر حالت">
-    <img class="icon-sun" src="/icone/sun.svg" alt="روشن">
-    <img class="icon-moon" src="/icone/moon.svg" alt="تاریک">
-  </button>
-
-  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
-    <img src="/icone/github.svg" alt="GitHub">
-  </a>
-</div>
-
-  </header>
-
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل بیست  و سوم:  Span<T> و Memory<T></h1>
+<h1>فصل بیست  و سوم:  Span<T> و Memory<T></h1>
 <p>ساختارهای <code>Span&lt;T&gt;</code> و <code>Memory&lt;T&gt;</code> به‌عنوان نمایه‌های سطح پایین روی یک آرایه، رشته یا هر بلوک پیوسته‌ای از حافظه مدیریت‌شده یا غیرمدیریت‌شده عمل می‌کنند. هدف اصلی آن‌ها کمک به برخی انواع میکروبهینه‌سازی‌ها است—به‌ویژه نوشتن کد با تخصیص حداقل حافظه که تخصیص‌های حافظه مدیریت‌شده را به حداقل می‌رساند (و در نتیجه فشار روی <strong>garbage collector</strong> را کاهش می‌دهد)، بدون اینکه نیاز باشد کد خود را برای انواع مختلف ورودی تکرار کنید.</p>
 <p>آن‌ها همچنین امکان <strong>slicing</strong> را فراهم می‌کنند—کار با بخشی از آرایه، رشته یا بلوک حافظه بدون ایجاد یک نسخه کپی.</p>
-<p><code>Span&lt;T&gt;</code> و <code>Memory&lt;T&gt;</code> به‌ویژه در <strong>نقاط داغ عملکرد</strong> مفید هستند، مانند <strong>ASP.NET Core processing pipeline</strong> یا یک <strong>JSON parser</strong> که به یک پایگاه داده شیء‌گرا سرویس می‌دهد.</p>
+<p><code>Span&lt;T&gt;</code> و <code>Memory&lt;T&gt;</code> به‌ویژه در <strong>نقاط داغ عملکرد</strong> مفید هستند، مانند <strong><a href="http://ASP.NET">ASP.NET</a> Core processing pipeline</strong> یا یک <strong>JSON parser</strong> که به یک پایگاه داده شیء‌گرا سرویس می‌دهد.</p>
 <p>اگر در یک API با این نوع‌ها مواجه شدید و نیازی به مزایای بالقوه عملکرد آن‌ها ندارید، می‌توانید به‌سادگی به شکل زیر با آن‌ها کار کنید:</p>
 <ul>
 <li>وقتی متدی انتظار یک <code>Span&lt;T&gt;</code>, <code>ReadOnlySpan&lt;T&gt;</code>, <code>Memory&lt;T&gt;</code> یا <code>ReadOnlyMemory&lt;T&gt;</code> دارد، به جای آن یک آرایه ارسال کنید؛ یعنی <code>T[]</code>. (این به لطف <strong>عملگرهای تبدیل ضمنی</strong> ممکن است.)</li>
@@ -55,20 +15,20 @@
 <li>امکان <strong>slicing</strong> فراهم می‌کند: بخش‌های قابل استفاده مجدد span را بدون ایجاد کپی در اختیار می‌گذارد.</li>
 </ul>
 <p><code>Span&lt;T&gt;</code> تنها از دو فیلد تشکیل شده است: یک اشاره‌گر و یک طول. به همین دلیل، فقط می‌تواند بلوک‌های <strong>پیوسته حافظه</strong> را نمایش دهد. (اگر نیاز به کار با حافظه غیرپیوسته دارید، کلاس <code>ReadOnlySequence&lt;T&gt;</code> به‌عنوان یک <strong>linked list</strong> در دسترس است.)</p>
-<p>از آنجایی که <code>Span&lt;T&gt;</code> می‌تواند حافظه تخصیص‌یافته روی stack را بپوشاند، محدودیت‌هایی بر نحوه ذخیره یا انتقال نمونه‌ها وجود دارد (که بخشی از آن به دلیل اینکه <code>Span&lt;T&gt;</code> یک <strong>ref struct</strong> است اعمال می‌شود).
+<p>از آنجایی که <code>Span&lt;T&gt;</code> می‌تواند حافظه تخصیص‌یافته روی stack را بپوشاند، محدودیت‌هایی بر نحوه ذخیره یا انتقال نمونه‌ها وجود دارد (که بخشی از آن به دلیل اینکه <code>Span&lt;T&gt;</code> یک <strong>ref struct</strong> است اعمال می‌شود).<br>
 <code>Memory&lt;T&gt;</code> مانند یک span عمل می‌کند اما بدون این محدودیت‌ها، با این حال نمی‌تواند حافظه اختصاص‌یافته روی stack را بپوشاند. با این حال، <code>Memory&lt;T&gt;</code> همچنان مزیت <strong>slicing</strong> را فراهم می‌کند.</p>
 <p>هر ساختار دارای یک همتای <strong>read-only</strong> است (<code>ReadOnlySpan&lt;T&gt;</code> و <code>ReadOnlyMemory&lt;T&gt;</code>). علاوه بر جلوگیری از تغییرات غیرعمدی، همتایان read-only عملکرد را با دادن آزادی بیشتر به <strong>compiler</strong> و <strong>runtime</strong> برای بهینه‌سازی افزایش می‌دهند.</p>
-<p>خود <strong>.NET</strong> (و <strong>ASP.NET Core</strong>) از این نوع‌ها برای بهبود کارایی در I/O، شبکه، پردازش رشته و <strong>JSON parsing</strong> استفاده می‌کنند.</p>
+<p>خود <strong>.NET</strong> (و <strong><a href="http://ASP.NET">ASP.NET</a> Core</strong>) از این نوع‌ها برای بهبود کارایی در I/O، شبکه، پردازش رشته و <strong>JSON parsing</strong> استفاده می‌کنند.</p>
 <p>توانایی <code>Span&lt;T&gt;</code> و <code>Memory&lt;T&gt;</code> در انجام <strong>array slicing</strong> باعث شده است کلاس قدیمی <code>ArraySegment&lt;T&gt;</code> بلااستفاده شود. برای کمک به هرگونه انتقال، <strong>عملگرهای تبدیل ضمنی</strong> از <code>ArraySegment&lt;T&gt;</code> به تمام ساختارهای span/memory و از <code>Memory&lt;T&gt;</code> و <code>ReadOnlyMemory&lt;T&gt;</code> به <code>ArraySegment&lt;T&gt;</code> موجود است.</p>
 <hr>
 <h3>✂️ Spans و Slicing</h3>
 <p>بر خلاف آرایه، یک span می‌تواند به‌سادگی <strong>slice</strong> شود تا بخش‌های مختلف داده‌های زیرین را نمایش دهد، همان‌طور که در شکل 23-1 نشان داده شده است.</p>
 <p>برای مثال عملی، فرض کنید می‌خواهید متدی برای جمع‌آوری عناصر یک آرایه از اعداد صحیح بنویسید. یک پیاده‌سازی میکروبهینه‌شده، از LINQ اجتناب کرده و از حلقه <code>foreach</code> استفاده می‌کند:</p>
-<pre><code class="language-csharp">int Sum (int[] numbers)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-built_in">int</span> <span class="hljs-title">Sum</span> (<span class="hljs-params"><span class="hljs-built_in">int</span>[] numbers</span>)</span>
 {
-    int total = 0;
-    foreach (int i in numbers) total += i;
-    return total;
+    <span class="hljs-built_in">int</span> total = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">int</span> i <span class="hljs-keyword">in</span> numbers) total += i;
+    <span class="hljs-keyword">return</span> total;
 }
 </code></pre>
  <div align="center">
@@ -81,50 +41,50 @@
 </ul>
 <p>گزینه اول ناکارآمد است و گزینه دوم باعث شلوغی و پیچیدگی می‌شود (این مشکل وقتی بدتر می‌شود که متدها نیاز داشته باشند بیش از یک آرایه را قبول کنند).</p>
 <p><code>Span</code> این مشکل را به‌خوبی حل می‌کند. تنها کاری که باید انجام دهید این است که نوع پارامتر را از <code>int[]</code> به <code>ReadOnlySpan&lt;int&gt;</code> تغییر دهید (بقیه کد همان می‌ماند):</p>
-<pre><code class="language-csharp">int Sum (ReadOnlySpan&lt;int&gt; numbers)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-built_in">int</span> <span class="hljs-title">Sum</span> (<span class="hljs-params">ReadOnlySpan&lt;<span class="hljs-built_in">int</span>&gt; numbers</span>)</span>
 {
-    int total = 0;
-    foreach (int i in numbers) total += i;
-    return total;
+    <span class="hljs-built_in">int</span> total = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">int</span> i <span class="hljs-keyword">in</span> numbers) total += i;
+    <span class="hljs-keyword">return</span> total;
 }
 </code></pre>
 <p>ما از <code>ReadOnlySpan&lt;T&gt;</code> به جای <code>Span&lt;T&gt;</code> استفاده کردیم چون نیازی به تغییر آرایه نداریم. یک <strong>تبدیل ضمنی</strong> از <code>Span&lt;T&gt;</code> به <code>ReadOnlySpan&lt;T&gt;</code> وجود دارد، بنابراین می‌توانید یک <code>Span&lt;T&gt;</code> را به متدی بدهید که انتظار یک <code>ReadOnlySpan&lt;T&gt;</code> دارد.</p>
 <p>می‌توانیم این متد را به شکل زیر تست کنیم:</p>
-<pre><code class="language-csharp">var numbers = new int[1000];
-for (int i = 0; i &lt; numbers.Length; i++) numbers[i] = i;
-int total = Sum(numbers);
+<pre class="hljs"><code><span class="hljs-keyword">var</span> numbers = <span class="hljs-keyword">new</span> <span class="hljs-built_in">int</span>[<span class="hljs-number">1000</span>];
+<span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; numbers.Length; i++) numbers[i] = i;
+<span class="hljs-built_in">int</span> total = Sum(numbers);
 </code></pre>
 <p>می‌توانیم <code>Sum</code> را با آرایه صدا بزنیم زیرا <strong>تبدیل ضمنی</strong> از <code>T[]</code> به <code>Span&lt;T&gt;</code> و <code>ReadOnlySpan&lt;T&gt;</code> وجود دارد. گزینه دیگر استفاده از <strong>متد extension</strong> <code>AsSpan</code> است:</p>
-<pre><code class="language-csharp">var span = numbers.AsSpan();
+<pre class="hljs"><code><span class="hljs-keyword">var</span> span = numbers.AsSpan();
 </code></pre>
 <p>شاخص‌گذار (<code>indexer</code>) برای <code>ReadOnlySpan&lt;T&gt;</code> از ویژگی <strong>ref readonly</strong> در C# استفاده می‌کند تا مستقیماً به داده‌های زیرین دسترسی پیدا کند. این امکان باعث می‌شود متد ما تقریباً به همان خوبی نسخه اصلی که از آرایه استفاده می‌کرد عمل کند. اما مزیت آن این است که حالا می‌توانیم آرایه را <strong>slice</strong> کنیم و فقط بخشی از عناصر را جمع بزنیم، به‌صورت زیر:</p>
-<pre><code class="language-csharp">// جمع ۵۰۰ عنصر وسط آرایه (شروع از موقعیت ۲۵۰):
-int total = Sum(numbers.AsSpan(250, 500));
+<pre class="hljs"><code><span class="hljs-comment">// جمع ۵۰۰ عنصر وسط آرایه (شروع از موقعیت ۲۵۰):</span>
+<span class="hljs-built_in">int</span> total = Sum(numbers.AsSpan(<span class="hljs-number">250</span>, <span class="hljs-number">500</span>));
 </code></pre>
 <p>اگر از قبل یک <code>Span&lt;T&gt;</code> یا <code>ReadOnlySpan&lt;T&gt;</code> دارید، می‌توانید آن را با متد <code>Slice</code> برش دهید:</p>
-<pre><code class="language-csharp">Span&lt;int&gt; span = numbers;
-int total = Sum(span.Slice(250, 500));
+<pre class="hljs"><code>Span&lt;<span class="hljs-built_in">int</span>&gt; span = numbers;
+<span class="hljs-built_in">int</span> total = Sum(span.Slice(<span class="hljs-number">250</span>, <span class="hljs-number">500</span>));
 </code></pre>
 <p>همچنین می‌توانید از <strong>indices و ranges در C# 8</strong> استفاده کنید:</p>
-<pre><code class="language-csharp">Span&lt;int&gt; span = numbers;
-Console.WriteLine(span[^1]);          // آخرین عنصر
-Console.WriteLine(Sum(span[..10]));   // ۱۰ عنصر اول
-Console.WriteLine(Sum(span[100..]));  // از عنصر ۱۰۰ تا انتها
-Console.WriteLine(Sum(span[^5..]));   // ۵ عنصر آخر
+<pre class="hljs"><code>Span&lt;<span class="hljs-built_in">int</span>&gt; span = numbers;
+Console.WriteLine(span[^<span class="hljs-number">1</span>]);          <span class="hljs-comment">// آخرین عنصر</span>
+Console.WriteLine(Sum(span[.<span class="hljs-number">.10</span>]));   <span class="hljs-comment">// ۱۰ عنصر اول</span>
+Console.WriteLine(Sum(span[<span class="hljs-number">100.</span>.]));  <span class="hljs-comment">// از عنصر ۱۰۰ تا انتها</span>
+Console.WriteLine(Sum(span[^<span class="hljs-number">5.</span>.]));   <span class="hljs-comment">// ۵ عنصر آخر</span>
 </code></pre>
 <p>اگرچه <code>Span&lt;T&gt;</code> <code>IEnumerable&lt;T&gt;</code> را پیاده‌سازی نمی‌کند (چون یک <strong>ref struct</strong> است و نمی‌تواند اینترفیس‌ها را پیاده‌سازی کند)، اما الگویی را پیاده می‌کند که اجازه می‌دهد <strong>foreach</strong> در C# روی آن کار کند (به صفحه ۲۰۳ مراجعه کنید).</p>
 <hr>
 <h3>📌 CopyTo و TryCopyTo</h3>
 <p>متد <code>CopyTo</code> عناصر یک span (یا <code>Memory&lt;T&gt;</code>) را به span دیگری کپی می‌کند. در مثال زیر، همه عناصر <code>span x</code> را در <code>span y</code> کپی می‌کنیم:</p>
-<pre><code class="language-csharp">Span&lt;int&gt; x = [1, 2, 3, 4];   // Collection expression
-Span&lt;int&gt; y = new int[4];
+<pre class="hljs"><code>Span&lt;<span class="hljs-built_in">int</span>&gt; x = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>];   <span class="hljs-comment">// Collection expression</span>
+Span&lt;<span class="hljs-built_in">int</span>&gt; y = <span class="hljs-keyword">new</span> <span class="hljs-built_in">int</span>[<span class="hljs-number">4</span>];
 x.CopyTo(y);
 </code></pre>
 <p>توجه کنید که <code>x</code> با یک <strong>collection expression</strong> مقداردهی شده است. <strong>Collection expressions</strong> (از C# 12) نه تنها یک میانبر مفید هستند، بلکه در مورد spanها اجازه می‌دهند <strong>کامپایلر نوع زیرین را انتخاب کند</strong>. وقتی تعداد عناصر کم است، کامپایلر ممکن است حافظه را روی <strong>stack</strong> تخصیص دهد (به جای ایجاد آرایه) تا از سربار تخصیص روی heap جلوگیری کند.</p>
 <p><strong>Slicing</strong> این متد را بسیار کاربردی‌تر می‌کند. در مثال بعد، نصف اول <code>span x</code> را در نصف دوم <code>span y</code> کپی می‌کنیم:</p>
-<pre><code class="language-csharp">Span&lt;int&gt; x = [1, 2, 3, 4];
-Span&lt;int&gt; y = [10, 20, 30, 40];
-x[..2].CopyTo(y[2..]);   // y اکنون [10, 20, 1, 2]
+<pre class="hljs"><code>Span&lt;<span class="hljs-built_in">int</span>&gt; x = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>];
+Span&lt;<span class="hljs-built_in">int</span>&gt; y = [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>];
+x[.<span class="hljs-number">.2</span>].CopyTo(y[<span class="hljs-number">2.</span>.]);   <span class="hljs-comment">// y اکنون [10, 20, 1, 2]</span>
 </code></pre>
 <p>اگر فضای کافی در مقصد وجود نداشته باشد، <code>CopyTo</code> <strong>exception</strong> پرتاب می‌کند، در حالی که <code>TryCopyTo</code> <strong>false</strong> برمی‌گرداند (بدون کپی کردن عناصر).</p>
 <p>ساختارهای span همچنین متدهایی برای <strong>Clear</strong> و <strong>Fill</strong> و همچنین متد <code>IndexOf</code> برای جستجوی عنصر در span ارائه می‌دهند.</p>
@@ -133,41 +93,41 @@ x[..2].CopyTo(y[2..]);   // y اکنون [10, 20, 1, 2]
 <p>کلاس <code>MemoryExtensions</code> متدهای توسعه متعددی برای جستجوی مقادیر در spanها ارائه می‌دهد، مانند: <code>Contains</code>, <code>IndexOf</code>, <code>LastIndexOf</code>, <code>BinarySearch</code> و همچنین متدهایی که spanها را تغییر می‌دهند، مانند: <code>Fill</code>, <code>Replace</code>, <code>Reverse</code>.</p>
 <p>از .NET 8، متدهایی نیز برای جستجوی <strong>هر یک از چند مقدار</strong> وجود دارد، مانند: <code>ContainsAny</code>, <code>ContainsAnyExcept</code>, <code>IndexOfAny</code>, <code>IndexOfAnyExcept</code>.</p>
 <p>با این متدها می‌توانید مقادیر مورد جستجو را به صورت یک span یا به صورت یک نمونه <code>SearchValues&lt;T&gt;</code> (در <code>System.Buffers</code>) مشخص کنید، که با <code>SearchValues.Create</code> ایجاد می‌شود:</p>
-<pre><code class="language-csharp">ReadOnlySpan&lt;char&gt; span = &quot;The quick brown fox jumps over the lazy dog.&quot;;
-var vowels = SearchValues.Create(&quot;aeiou&quot;);
-Console.WriteLine(span.IndexOfAny(vowels));   // 2
+<pre class="hljs"><code>ReadOnlySpan&lt;<span class="hljs-built_in">char</span>&gt; span = <span class="hljs-string">&quot;The quick brown fox jumps over the lazy dog.&quot;</span>;
+<span class="hljs-keyword">var</span> vowels = SearchValues.Create(<span class="hljs-string">&quot;aeiou&quot;</span>);
+Console.WriteLine(span.IndexOfAny(vowels));   <span class="hljs-comment">// 2</span>
 </code></pre>
 <p><code>SearchValues&lt;T&gt;</code> عملکرد را بهبود می‌دهد وقتی که نمونه در جستجوهای متعدد دوباره استفاده شود.</p>
 <p>می‌توانید از این متدها هنگام کار با آرایه‌ها یا رشته‌ها نیز استفاده کنید، کافی است <code>AsSpan()</code> روی آرایه یا رشته فراخوانی شود.</p>
 <h3>✍️ کار با متن (Working with Text)</h3>
 <p><code>Span</code>ها طوری طراحی شده‌اند که با رشته‌ها به‌خوبی کار کنند، که به‌عنوان <code>ReadOnlySpan&lt;char&gt;</code> در نظر گرفته می‌شوند. متد زیر تعداد کاراکترهای فاصله (whitespace) را شمارش می‌کند:</p>
-<pre><code class="language-csharp">int CountWhitespace(ReadOnlySpan&lt;char&gt; s)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-built_in">int</span> <span class="hljs-title">CountWhitespace</span>(<span class="hljs-params">ReadOnlySpan&lt;<span class="hljs-built_in">char</span>&gt; s</span>)</span>
 {
-    int count = 0;
-    foreach (char c in s)
-        if (char.IsWhiteSpace(c))
+    <span class="hljs-built_in">int</span> count = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">char</span> c <span class="hljs-keyword">in</span> s)
+        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">char</span>.IsWhiteSpace(c))
             count++;
-    return count;
+    <span class="hljs-keyword">return</span> count;
 }
 </code></pre>
 <p>می‌توانید چنین متدی را با یک رشته صدا بزنید (به لطف <strong>عملگر تبدیل ضمنی</strong>):</p>
-<pre><code class="language-csharp">int x = CountWhitespace(&quot;Word1 Word2&quot;);   // درست است
+<pre class="hljs"><code><span class="hljs-built_in">int</span> x = CountWhitespace(<span class="hljs-string">&quot;Word1 Word2&quot;</span>);   <span class="hljs-comment">// درست است</span>
 </code></pre>
 <p>یا با یک <strong>substring</strong>:</p>
-<pre><code class="language-csharp">int y = CountWhitespace(someString.AsSpan(20, 10));
+<pre class="hljs"><code><span class="hljs-built_in">int</span> y = CountWhitespace(someString.AsSpan(<span class="hljs-number">20</span>, <span class="hljs-number">10</span>));
 </code></pre>
 <p>متد <code>ToString()</code> یک <code>ReadOnlySpan&lt;char&gt;</code> را به رشته تبدیل می‌کند.</p>
 <p>متدهای توسعه (<strong>Extension Methods</strong>) تضمین می‌کنند که برخی از متدهای پرکاربرد کلاس رشته نیز برای <code>ReadOnlySpan&lt;char&gt;</code> در دسترس باشند:</p>
-<pre><code class="language-csharp">var span = &quot;This &quot;.AsSpan();                  // ReadOnlySpan&lt;char&gt;
-Console.WriteLine(span.StartsWith(&quot;This&quot;));   // True
-Console.WriteLine(span.Trim().Length);        // 4
+<pre class="hljs"><code><span class="hljs-keyword">var</span> span = <span class="hljs-string">&quot;This &quot;</span>.AsSpan();                  <span class="hljs-comment">// ReadOnlySpan&lt;char&gt;</span>
+Console.WriteLine(span.StartsWith(<span class="hljs-string">&quot;This&quot;</span>));   <span class="hljs-comment">// True</span>
+Console.WriteLine(span.Trim().Length);        <span class="hljs-comment">// 4</span>
 </code></pre>
 <blockquote>
 <p>توجه کنید که متدهایی مانند <code>StartsWith</code> از <strong>ordinal comparison</strong> استفاده می‌کنند، در حالی که متدهای معادل در کلاس رشته به‌طور پیش‌فرض از <strong>culture-sensitive comparison</strong> استفاده می‌کنند.</p>
 </blockquote>
 <p>متدهایی مانند <code>ToUpper</code> و <code>ToLower</code> در دسترس هستند، اما باید یک <strong>destination span</strong> با طول مناسب بدهید (این امکان را می‌دهد که تصمیم بگیرید حافظه را چگونه و کجا تخصیص دهید).</p>
 <p>برخی از متدهای رشته در دسترس نیستند، مانند <code>Split</code> که یک رشته را به آرایه‌ای از کلمات تقسیم می‌کند. در واقع، نوشتن معادل مستقیم <code>string.Split</code> غیرممکن است، چون نمی‌توان یک آرایه از spanها ایجاد کرد.</p>
-<p>دلیل آن این است که spanها به‌صورت <strong>ref struct</strong> تعریف شده‌اند و تنها می‌توانند روی <strong>stack</strong> وجود داشته باشند.
+<p>دلیل آن این است که spanها به‌صورت <strong>ref struct</strong> تعریف شده‌اند و تنها می‌توانند روی <strong>stack</strong> وجود داشته باشند.<br>
 (وقتی می‌گوییم &quot;فقط روی stack وجود دارد&quot;، منظور این است که خود struct تنها روی stack می‌تواند وجود داشته باشد. محتوایی که span به آن اشاره می‌کند می‌تواند—و در این مورد روی heap—وجود داشته باشد.)</p>
 <hr>
 <p>فضای نام <code>System.Buffers.Text</code> شامل نوع‌های اضافی برای کار با متن مبتنی بر span است، از جمله:</p>
@@ -182,18 +142,18 @@ Console.WriteLine(span.Trim().Length);        // 4
 <h3>💾 Memory<T></h3>
 <p><code>Span&lt;T&gt;</code> و <code>ReadOnlySpan&lt;T&gt;</code> به‌صورت <strong>ref struct</strong> تعریف شده‌اند تا بیشترین پتانسیل بهینه‌سازی را داشته باشند و بتوانند با حافظه تخصیص‌یافته روی stack به‌طور ایمن کار کنند (همان‌طور که در بخش بعدی خواهید دید). اما این محدودیت‌هایی را نیز ایجاد می‌کند:</p>
 <p>علاوه بر اینکه با آرایه‌ها چندان سازگار نیستند، نمی‌توان از آن‌ها به‌عنوان فیلد در یک کلاس استفاده کرد (چون آن‌ها را روی heap قرار می‌دهد). این محدودیت باعث می‌شود نتوان آن‌ها را در <strong>lambda expressions</strong> و به‌عنوان پارامتر در <strong>asynchronous methods</strong>, <strong>iterators</strong> و <strong>asynchronous streams</strong> استفاده کرد:</p>
-<pre><code class="language-csharp">async void Foo(Span&lt;int&gt; notAllowed)   // خطای زمان کامپایل!
-</code></pre>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">async</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Foo</span>(<span class="hljs-params">Span&lt;<span class="hljs-built_in">int</span>&gt; notAllowed</span>)   <span class="hljs-comment">// خطای زمان کامپایل!</span>
+</span></code></pre>
 <p>(به یاد داشته باشید که کامپایلر متدهای async و iterator را با نوشتن یک <strong>private state machine</strong> پردازش می‌کند، بنابراین هر پارامتر و متغیر محلی به فیلد تبدیل می‌شود. همین موضوع در lambdaهایی که روی متغیرها بسته می‌شوند نیز صادق است.)</p>
 <p>ساختارهای <code>Memory&lt;T&gt;</code> و <code>ReadOnlyMemory&lt;T&gt;</code> این محدودیت را دور می‌زنند، و مانند span عمل می‌کنند اما نمی‌توانند حافظه stack را پوشش دهند، که امکان استفاده از آن‌ها در فیلدها، lambdaها، متدهای async و غیره را فراهم می‌کند.</p>
 <p>می‌توانید یک <code>Memory&lt;T&gt;</code> یا <code>ReadOnlyMemory&lt;T&gt;</code> را از یک آرایه از طریق <strong>تبدیل ضمنی</strong> یا متد extension <code>AsMemory()</code> بدست آورید:</p>
-<pre><code class="language-csharp">Memory&lt;int&gt; mem1 = new int[] { 1, 2, 3 };
-var mem2 = new int[] { 1, 2, 3 }.AsMemory();
+<pre class="hljs"><code>Memory&lt;<span class="hljs-built_in">int</span>&gt; mem1 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span> };
+<span class="hljs-keyword">var</span> mem2 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span> }.AsMemory();
 </code></pre>
 <p>می‌توان به‌سادگی یک <code>Memory&lt;T&gt;</code> یا <code>ReadOnlyMemory&lt;T&gt;</code> را به <code>Span&lt;T&gt;</code> یا <code>ReadOnlySpan&lt;T&gt;</code> تبدیل کرد (از طریق <strong>Span property</strong>) تا مانند یک span با آن تعامل داشته باشید. این تبدیل کارآمد است و هیچ کپی انجام نمی‌دهد:</p>
-<pre><code class="language-csharp">async void Foo(Memory&lt;int&gt; memory)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">async</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Foo</span>(<span class="hljs-params">Memory&lt;<span class="hljs-built_in">int</span>&gt; memory</span>)</span>
 {
-    Span&lt;int&gt; span = memory.Span;
+    Span&lt;<span class="hljs-built_in">int</span>&gt; span = memory.Span;
     ...
 }
 </code></pre>
@@ -201,97 +161,97 @@ var mem2 = new int[] { 1, 2, 3 }.AsMemory();
 <p>راه دیگر برای بدست آوردن <code>Memory&lt;T&gt;</code>، اجاره آن از <strong>MemoryPool</strong> است، با استفاده از کلاس <code>System.Buffers.MemoryPool&lt;T&gt;</code>. این روش مانند <strong>array pooling</strong> عمل می‌کند و استراتژی دیگری برای کاهش فشار روی <strong>garbage collector</strong> ارائه می‌دهد.</p>
 <hr>
 <p>گفتیم که نمی‌توان معادل مستقیم <code>string.Split</code> برای span نوشت، زیرا نمی‌توان آرایه‌ای از spanها ایجاد کرد. این محدودیت برای <code>ReadOnlyMemory&lt;char&gt;</code> صدق نمی‌کند:</p>
-<pre><code class="language-csharp">// تقسیم یک رشته به کلمات
-IEnumerable&lt;ReadOnlyMemory&lt;char&gt;&gt; Split(ReadOnlyMemory&lt;char&gt; input)
+<pre class="hljs"><code><span class="hljs-comment">// تقسیم یک رشته به کلمات</span>
+IEnumerable&lt;ReadOnlyMemory&lt;<span class="hljs-built_in">char</span>&gt;&gt; Split(ReadOnlyMemory&lt;<span class="hljs-built_in">char</span>&gt; input)
 {
-    int wordStart = 0;
-    for (int i = 0; i &lt;= input.Length; i++)
-        if (i == input.Length || char.IsWhiteSpace(input.Span[i]))
+    <span class="hljs-built_in">int</span> wordStart = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt;= input.Length; i++)
+        <span class="hljs-keyword">if</span> (i == input.Length || <span class="hljs-built_in">char</span>.IsWhiteSpace(input.Span[i]))
         {
-            yield return input[wordStart..i];   // Slice با عملگر range در C#
-            wordStart = i + 1;
+            <span class="hljs-keyword">yield</span> <span class="hljs-keyword">return</span> input[wordStart..i];   <span class="hljs-comment">// Slice با عملگر range در C#</span>
+            wordStart = i + <span class="hljs-number">1</span>;
         }
 }
 </code></pre>
 <p>این روش به‌مراتب کارآمدتر از متد <code>Split</code> رشته است: به جای ایجاد رشته‌های جدید برای هر کلمه، برش‌هایی از رشته اصلی را بازمی‌گرداند:</p>
-<pre><code class="language-csharp">foreach (var slice in Split(&quot;The quick brown fox jumps over the lazy dog&quot;))
+<pre class="hljs"><code><span class="hljs-keyword">foreach</span> (<span class="hljs-function"><span class="hljs-keyword">var</span> slice <span class="hljs-keyword">in</span> <span class="hljs-title">Split</span>(<span class="hljs-params"><span class="hljs-string">&quot;The quick brown fox jumps over the lazy dog&quot;</span></span>))</span>
 {
-    // slice یک ReadOnlyMemory&lt;char&gt; است
+    <span class="hljs-comment">// slice یک ReadOnlyMemory&lt;char&gt; است</span>
 }
 </code></pre>
 <p>می‌توان به‌سادگی یک <code>Memory&lt;T&gt;</code> را به <code>Span&lt;T&gt;</code> تبدیل کرد (از طریق <strong>Span property</strong>) اما برعکس این کار امکان‌پذیر نیست. به همین دلیل، بهتر است متدهایی بنویسید که <code>Span&lt;T&gt;</code> و <code>ReadOnlySpan&lt;T&gt;</code> را به جای <code>Memory&lt;T&gt;</code> و <code>ReadOnlyMemory&lt;T&gt;</code> بپذیرند.</p>
 <h3>⏩ Forward-Only Enumerators</h3>
 <p>در بخش قبل، از <code>ReadOnlyMemory&lt;char&gt;</code> به‌عنوان راه‌حلی برای پیاده‌سازی متد شبیه به <code>string.Split</code> استفاده کردیم. اما با کنار گذاشتن <code>ReadOnlySpan&lt;char&gt;</code>، توانایی <strong>slicing</strong> spanهایی که روی حافظه غیرمدیریت‌شده پشتیبانی می‌شوند را از دست دادیم. بیایید دوباره به <code>ReadOnlySpan&lt;char&gt;</code> برگردیم و ببینیم آیا می‌توانیم راه‌حل دیگری پیدا کنیم.</p>
 <p>یک گزینه ممکن این است که متد <code>Split</code> را طوری بنویسیم که <strong>ranges</strong> برگرداند:</p>
-<pre><code class="language-csharp">Range[] Split(ReadOnlySpan&lt;char&gt; input)
+<pre class="hljs"><code><span class="hljs-function">Range[] <span class="hljs-title">Split</span>(<span class="hljs-params">ReadOnlySpan&lt;<span class="hljs-built_in">char</span>&gt; input</span>)</span>
 {
-    int pos = 0;
-    var list = new List&lt;Range&gt;();
-    for (int i = 0; i &lt;= input.Length; i++)
-        if (i == input.Length || char.IsWhiteSpace(input[i]))
+    <span class="hljs-built_in">int</span> pos = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">var</span> list = <span class="hljs-keyword">new</span> List&lt;Range&gt;();
+    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt;= input.Length; i++)
+        <span class="hljs-keyword">if</span> (i == input.Length || <span class="hljs-built_in">char</span>.IsWhiteSpace(input[i]))
         {
-            list.Add(new Range(pos, i));
-            pos = i + 1;
+            list.Add(<span class="hljs-keyword">new</span> Range(pos, i));
+            pos = i + <span class="hljs-number">1</span>;
         }
-    return list.ToArray();
+    <span class="hljs-keyword">return</span> list.ToArray();
 }
 </code></pre>
 <p>سپس فراخوان می‌تواند از این ranges برای <strong>slice کردن</strong> span اصلی استفاده کند:</p>
-<pre><code class="language-csharp">ReadOnlySpan&lt;char&gt; source = &quot;The quick brown fox&quot;;
-foreach (Range range in Split(source))
+<pre class="hljs"><code>ReadOnlySpan&lt;<span class="hljs-built_in">char</span>&gt; source = <span class="hljs-string">&quot;The quick brown fox&quot;</span>;
+<span class="hljs-keyword">foreach</span> (<span class="hljs-function">Range range <span class="hljs-keyword">in</span> <span class="hljs-title">Split</span>(<span class="hljs-params">source</span>))</span>
 {
-    ReadOnlySpan&lt;char&gt; wordSpan = source[range];
+    ReadOnlySpan&lt;<span class="hljs-built_in">char</span>&gt; wordSpan = source[range];
     ...
 }
 </code></pre>
 <p>این پیشرفت است، اما هنوز کامل نیست. یکی از دلایل استفاده از spans اجتناب از تخصیص حافظه است. توجه کنید که متد <code>Split</code> ما یک <code>List&lt;Range&gt;</code> ایجاد می‌کند، آیتم‌ها را به آن اضافه می‌کند و سپس لیست را به آرایه تبدیل می‌کند. این حداقل دو تخصیص حافظه و یک عملیات کپی حافظه ایجاد می‌کند.</p>
 <p>راه‌حل این است که از <strong>forward-only enumerator</strong> به جای لیست و آرایه استفاده کنیم. یک enumerator کمی دست و پاگیر است، اما می‌توان با استفاده از <strong>struct</strong> آن را بدون تخصیص حافظه ساخت:</p>
-<pre><code class="language-csharp">public readonly ref struct CharSpanSplitter
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">readonly</span> <span class="hljs-keyword">ref</span> <span class="hljs-keyword">struct</span> CharSpanSplitter
 {
-    readonly ReadOnlySpan&lt;char&gt; _input;
-    public CharSpanSplitter(ReadOnlySpan&lt;char&gt; input) =&gt; _input = input;
-    public Enumerator GetEnumerator() =&gt; new Enumerator(_input);
+    <span class="hljs-keyword">readonly</span> ReadOnlySpan&lt;<span class="hljs-built_in">char</span>&gt; _input;
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">CharSpanSplitter</span>(<span class="hljs-params">ReadOnlySpan&lt;<span class="hljs-built_in">char</span>&gt; input</span>)</span> =&gt; _input = input;
+    <span class="hljs-function"><span class="hljs-keyword">public</span> Enumerator <span class="hljs-title">GetEnumerator</span>()</span> =&gt; <span class="hljs-keyword">new</span> Enumerator(_input);
 
-    public ref struct Enumerator   // Forward-only enumerator
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">ref</span> <span class="hljs-keyword">struct</span> Enumerator   <span class="hljs-comment">// Forward-only enumerator</span>
     {
-        readonly ReadOnlySpan&lt;char&gt; _input;
-        int _wordPos;
-        public ReadOnlySpan&lt;char&gt; Current { get; private set; }
+        <span class="hljs-keyword">readonly</span> ReadOnlySpan&lt;<span class="hljs-built_in">char</span>&gt; _input;
+        <span class="hljs-built_in">int</span> _wordPos;
+        <span class="hljs-keyword">public</span> ReadOnlySpan&lt;<span class="hljs-built_in">char</span>&gt; Current { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">private</span> <span class="hljs-keyword">set</span>; }
 
-        public Enumerator(ReadOnlySpan&lt;char&gt; input)
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Enumerator</span>(<span class="hljs-params">ReadOnlySpan&lt;<span class="hljs-built_in">char</span>&gt; input</span>)</span>
         {
             _input = input;
-            _wordPos = 0;
-            Current = default;
+            _wordPos = <span class="hljs-number">0</span>;
+            Current = <span class="hljs-literal">default</span>;
         }
 
-        public bool MoveNext()
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">MoveNext</span>()</span>
         {
-            for (int i = _wordPos; i &lt;= _input.Length; i++)
-                if (i == _input.Length || char.IsWhiteSpace(_input[i]))
+            <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = _wordPos; i &lt;= _input.Length; i++)
+                <span class="hljs-keyword">if</span> (i == _input.Length || <span class="hljs-built_in">char</span>.IsWhiteSpace(_input[i]))
                 {
                     Current = _input[_wordPos..i];
-                    _wordPos = i + 1;
-                    return true;
+                    _wordPos = i + <span class="hljs-number">1</span>;
+                    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
                 }
-            return false;
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
         }
     }
 }
 
-public static class CharSpanExtensions
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title">CharSpanExtensions</span>
 {
-    public static CharSpanSplitter Split(this ReadOnlySpan&lt;char&gt; input)
-        =&gt; new CharSpanSplitter(input);
-    public static CharSpanSplitter Split(this Span&lt;char&gt; input)
-        =&gt; new CharSpanSplitter(input);
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> CharSpanSplitter <span class="hljs-title">Split</span>(<span class="hljs-params"><span class="hljs-keyword">this</span> ReadOnlySpan&lt;<span class="hljs-built_in">char</span>&gt; input</span>)</span>
+        =&gt; <span class="hljs-keyword">new</span> CharSpanSplitter(input);
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> CharSpanSplitter <span class="hljs-title">Split</span>(<span class="hljs-params"><span class="hljs-keyword">this</span> Span&lt;<span class="hljs-built_in">char</span>&gt; input</span>)</span>
+        =&gt; <span class="hljs-keyword">new</span> CharSpanSplitter(input);
 }
 </code></pre>
 <p>و نحوه فراخوانی آن:</p>
-<pre><code class="language-csharp">var span = &quot;the quick brown fox&quot;.AsSpan();
-foreach (var word in span.Split())
+<pre class="hljs"><code><span class="hljs-keyword">var</span> span = <span class="hljs-string">&quot;the quick brown fox&quot;</span>.AsSpan();
+<span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> word <span class="hljs-keyword">in</span> span.Split())
 {
-    // word یک ReadOnlySpan&lt;char&gt; است
+    <span class="hljs-comment">// word یک ReadOnlySpan&lt;char&gt; است</span>
 }
 </code></pre>
 <p>با تعریف <strong>Current</strong> و <strong>MoveNext</strong>، enumerator ما می‌تواند با دستور <code>foreach</code> در C# کار کند. نیازی به پیاده‌سازی <code>IEnumerable&lt;T&gt;</code> یا <code>IEnumerator&lt;T&gt;</code> نداریم (در واقع نمی‌توانیم؛ ref structها نمی‌توانند اینترفیس‌ها را پیاده‌سازی کنند). در اینجا ما <strong>abstraction</strong> را فدای <strong>micro optimization</strong> کرده‌ایم.</p>
@@ -299,32 +259,32 @@ foreach (var word in span.Split())
 <h3>💡 کار با حافظه stack و unmanaged</h3>
 <p>یک تکنیک موثر دیگر برای <strong>micro-optimization</strong> کاهش فشار روی <strong>garbage collector</strong> با کمینه کردن تخصیص حافظه روی heap است. این یعنی استفاده بیشتر از حافظه <strong>stack</strong> یا حتی حافظه غیرمدیریت‌شده.</p>
 <p>معمولاً این نیازمند بازنویسی کد با اشاره‌گرهاست. برای مثال جمع‌آوری عناصر یک آرایه، نیاز است نسخه دیگری از متد بنویسیم:</p>
-<pre><code class="language-csharp">unsafe int Sum(int* numbers, int length)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">unsafe</span> <span class="hljs-built_in">int</span> <span class="hljs-title">Sum</span>(<span class="hljs-params"><span class="hljs-built_in">int</span>* numbers, <span class="hljs-built_in">int</span> length</span>)</span>
 {
-    int total = 0;
-    for (int i = 0; i &lt; length; i++) total += numbers[i];
-    return total;
+    <span class="hljs-built_in">int</span> total = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; length; i++) total += numbers[i];
+    <span class="hljs-keyword">return</span> total;
 }
 </code></pre>
 <p>و سپس:</p>
-<pre><code class="language-csharp">int* numbers = stackalloc int[1000];   // تخصیص آرایه روی stack
-int total = Sum(numbers, 1000);
+<pre class="hljs"><code><span class="hljs-built_in">int</span>* numbers = <span class="hljs-keyword">stackalloc</span> <span class="hljs-built_in">int</span>[<span class="hljs-number">1000</span>];   <span class="hljs-comment">// تخصیص آرایه روی stack</span>
+<span class="hljs-built_in">int</span> total = Sum(numbers, <span class="hljs-number">1000</span>);
 </code></pre>
 <p><code>Span</code> این مشکل را حل می‌کند: می‌توان یک <code>Span&lt;T&gt;</code> یا <code>ReadOnlySpan&lt;T&gt;</code> را مستقیماً از یک اشاره‌گر ساخت:</p>
-<pre><code class="language-csharp">int* numbers = stackalloc int[1000];
-var span = new Span&lt;int&gt;(numbers, 1000);
+<pre class="hljs"><code><span class="hljs-built_in">int</span>* numbers = <span class="hljs-keyword">stackalloc</span> <span class="hljs-built_in">int</span>[<span class="hljs-number">1000</span>];
+<span class="hljs-keyword">var</span> span = <span class="hljs-keyword">new</span> Span&lt;<span class="hljs-built_in">int</span>&gt;(numbers, <span class="hljs-number">1000</span>);
 </code></pre>
 <p>یا در یک مرحله:</p>
-<pre><code class="language-csharp">Span&lt;int&gt; numbers = stackalloc int[1000];
+<pre class="hljs"><code>Span&lt;<span class="hljs-built_in">int</span>&gt; numbers = <span class="hljs-keyword">stackalloc</span> <span class="hljs-built_in">int</span>[<span class="hljs-number">1000</span>];
 </code></pre>
 <p>(توجه: این نیازی به استفاده از <code>unsafe</code> ندارد.)</p>
 <p>متد قبلی <code>Sum</code> با <code>ReadOnlySpan&lt;int&gt;</code> نیز برای spanهای تخصیص‌یافته روی stack به همان خوبی کار می‌کند:</p>
-<pre><code class="language-csharp">int Sum(ReadOnlySpan&lt;int&gt; numbers)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-built_in">int</span> <span class="hljs-title">Sum</span>(<span class="hljs-params">ReadOnlySpan&lt;<span class="hljs-built_in">int</span>&gt; numbers</span>)</span>
 {
-    int total = 0;
-    int len = numbers.Length;
-    for (int i = 0; i &lt; len; i++) total += numbers[i];
-    return total;
+    <span class="hljs-built_in">int</span> total = <span class="hljs-number">0</span>;
+    <span class="hljs-built_in">int</span> len = numbers.Length;
+    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; len; i++) total += numbers[i];
+    <span class="hljs-keyword">return</span> total;
 }
 </code></pre>
 <p>این روش سه مزیت دارد:</p>
@@ -333,71 +293,25 @@ var span = new Span&lt;int&gt;(numbers, 1000);
 <li>می‌توان حافظه stack را با حداقل استفاده از اشاره‌گرها استفاده کرد</li>
 <li>span می‌تواند slice شود</li>
 </ul>
-<p>کامپایلر به اندازه کافی هوشمند است که اجازه ندهد متدی بنویسید که حافظه روی stack تخصیص دهد و آن را از طریق <code>Span&lt;T&gt;</code> یا <code>ReadOnlySpan&lt;T&gt;</code> به فراخواننده برگرداند.
+<p>کامپایلر به اندازه کافی هوشمند است که اجازه ندهد متدی بنویسید که حافظه روی stack تخصیص دهد و آن را از طریق <code>Span&lt;T&gt;</code> یا <code>ReadOnlySpan&lt;T&gt;</code> به فراخواننده برگرداند.<br>
 (با این حال، در سناریوهای دیگر، می‌توانید قانونی یک <code>Span&lt;T&gt;</code> یا <code>ReadOnlySpan&lt;T&gt;</code> برگردانید.)</p>
 <p>همچنین می‌توانید از spans برای پوشش حافظه‌ای که از heap غیرمدیریت‌شده تخصیص داده‌اید استفاده کنید. مثال زیر:</p>
-<pre><code class="language-csharp">var source = &quot;The quick brown fox&quot;.AsSpan();
-var ptr = Marshal.AllocHGlobal(source.Length * sizeof(char));
+<pre class="hljs"><code><span class="hljs-keyword">var</span> source = <span class="hljs-string">&quot;The quick brown fox&quot;</span>.AsSpan();
+<span class="hljs-keyword">var</span> ptr = Marshal.AllocHGlobal(source.Length * <span class="hljs-keyword">sizeof</span>(<span class="hljs-built_in">char</span>));
 
-try
+<span class="hljs-keyword">try</span>
 {
-    var unmanaged = new Span&lt;char&gt;((char*)ptr, source.Length);
-    source.CopyTo(unmanaged);
-    foreach (var word in unmanaged.Split())
+    <span class="hljs-keyword">var</span> <span class="hljs-keyword">unmanaged</span> = <span class="hljs-keyword">new</span> Span&lt;<span class="hljs-built_in">char</span>&gt;((<span class="hljs-built_in">char</span>*)ptr, source.Length);
+    source.CopyTo(<span class="hljs-keyword">unmanaged</span>);
+    <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> word <span class="hljs-keyword">in</span> <span class="hljs-keyword">unmanaged</span>.Split())
         Console.WriteLine(word.ToString());
 }
-finally
+<span class="hljs-keyword">finally</span>
 {
     Marshal.FreeHGlobal(ptr);
 }
 </code></pre>
 <p>یک مزیت جانبی: <strong>indexer</strong> <code>Span&lt;T&gt;</code> بررسی محدوده انجام می‌دهد و از overflow جلوگیری می‌کند. این محافظت تنها در صورتی اعمال می‌شود که <code>Span&lt;T&gt;</code> را به‌درستی مقداردهی کرده باشید؛ مثلاً اگر اشتباهاً طول span را دو برابر کنید، این محافظت از بین می‌رود:</p>
-<pre><code class="language-csharp">var span = new Span&lt;char&gt;((char*)ptr, source.Length * 2); // خطرناک!
+<pre class="hljs"><code><span class="hljs-keyword">var</span> span = <span class="hljs-keyword">new</span> Span&lt;<span class="hljs-built_in">char</span>&gt;((<span class="hljs-built_in">char</span>*)ptr, source.Length * <span class="hljs-number">2</span>); <span class="hljs-comment">// خطرناک!</span>
 </code></pre>
 <p>همچنین هیچ محافظتی در برابر <strong>dangling pointer</strong> وجود ندارد، بنابراین باید مراقب باشید پس از آزاد کردن حافظه unmanaged با <code>Marshal.FreeHGlobal</code> به span دسترسی نداشته باشید.</p>
-
-  </main>
-
-  <!-- فوتر مشترک -->
-  <footer class="footer">
-    <div class="container">
-      <p>
-        <img src="/icone/copyright.svg" alt="کپی‌رایت" width="14" height="14"
-             style="vertical-align:middle;margin-inline:4px">
-        <span id="y"></span> Gitab — برای توسعه‌دهندگان
-      </p>
-    </div>
-  </footer>
-
-  <!-- سال + اسکریپت تم -->
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
-
-    (() => {
-      const root = document.documentElement;
-      const btn = document.getElementById('themeToggle');
-      const KEY = 'gitab-theme';
-      const media = window.matchMedia('(prefers-color-scheme: dark)');
-      const getEffective = s => s === 'auto' ? (media.matches ? 'dark' : 'light') : s;
-      function updateTheme(s) {
-        root.setAttribute('data-theme', s);
-        const mode = getEffective(s);
-        root.dataset.colorMode = mode;
-        btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
-      }
-      const saved = localStorage.getItem(KEY) || 'auto';
-      updateTheme(saved);
-      btn.addEventListener('click', () => {
-        const curr = localStorage.getItem(KEY) || 'auto';
-        const next = curr === 'auto' ? 'dark' : curr === 'dark' ? 'light' : 'auto';
-        localStorage.setItem(KEY, next);
-        updateTheme(next);
-      });
-      media.addEventListener('change', () => {
-        if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
-      });
-      window.addEventListener('DOMContentLoaded', () => updateTheme(saved));
-    })();
-  </script>
-</body>
-</html>

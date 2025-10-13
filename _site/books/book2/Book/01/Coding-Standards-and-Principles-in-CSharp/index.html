@@ -1,44 +1,4 @@
-<!doctype html>
-<html lang="fa" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gitab | کتابخانهٔ ترجمه‌های دات‌نت و سی شارپ</title>
-  <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
-  <link rel="stylesheet" href="/styles/main.css">
-</head>
-<body>
-  <!-- هدر مشترک -->
-  <header class="header">
-    <div class="container nav-wrap">
-      <a class="brand" href="/">
-        <img src="/icone/logo.svg" alt="Gitab" width="28" height="28">
-        <span>Gitab</span>
-      </a>
-
-      <nav class="nav">
-        <a href="/">خانه</a>
-        <a href="/books/list-books">کتاب‌ها</a>
-        <a href="#">همکاری</a>
-        <a href="#">درباره‌ما</a>
-      </nav>
-
-     <div class="nav-actions">
-  <button id="themeToggle" class="icon-btn theme-btn" aria-label="تغییر حالت">
-    <img class="icon-sun" src="/icone/sun.svg" alt="روشن">
-    <img class="icon-moon" src="/icone/moon.svg" alt="تاریک">
-  </button>
-
-  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
-    <img src="/icone/github.svg" alt="GitHub">
-  </a>
-</div>
-
-  </header>
-
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>۱</h1>
+<h1>۱</h1>
 <h1>استانداردهای کدنویسی و اصول در سی‌شارپ</h1>
 <p>هدف اصلی استانداردهای کدنویسی و اصول در C# این است که برنامه‌نویسان با تولید کدی که هم عملکرد بهتری دارد و هم نگهداری آن آسان‌تر است، در حرفه خود ارتقا یابند. در این فصل، به بررسی نمونه‌هایی از کدهای خوب در مقابل کدهای بد خواهیم پرداخت. این موضوع ما را به بحث درباره اینکه چرا به استانداردهای کدنویسی، اصول و متدولوژی‌ها نیاز داریم، سوق می‌دهد. سپس به بررسی قراردادهای نام‌گذاری، کامنت‌گذاری و فرمت‌بندی کد منبع، شامل کلاس‌ها، متدها و متغیرها خواهیم پرداخت.</p>
 <p>یک برنامه بزرگ می‌تواند برای درک و نگهداری بسیار پیچیده و دشوار باشد. برای برنامه‌نویسان تازه‌کار، شناخت کد و درک عملکرد آن می‌تواند چشم‌اندازی دلهره‌آور باشد. تیم‌ها ممکن است در کار گروهی روی چنین پروژه‌هایی با مشکل مواجه شوند. و از دیدگاه تست، می‌تواند کارها را بسیار دشوار کند. به همین دلیل، بررسی خواهیم کرد که چگونه از ماژولار بودن (modularity) استفاده می‌کنید تا برنامه‌ها را به ماژول‌های کوچک‌تر تقسیم کنید که همگی با هم کار می‌کنند تا یک راه‌حل کاملاً کارآمد و قابل تست را ارائه دهند، که می‌تواند به صورت همزمان توسط چندین تیم روی آن کار شود و خواندن، درک و مستندسازی آن بسیار آسان‌تر است.</p>
@@ -117,13 +77,13 @@
 <p>تورفتگی نامناسب می‌تواند باعث شود خواندن کد واقعاً دشوار شود، به خصوص اگر متدها بزرگ باشند. برای اینکه کد برای انسان‌ها به راحتی قابل خواندن باشد، به تورفتگی مناسب نیاز داریم. اگر کد فاقد تورفتگی صحیح باشد، تشخیص اینکه کدام قسمت از کد متعلق به کدام بلوک است، بسیار دشوار خواهد بود.</p>
 <p>به طور پیش‌فرض، Visual Studio 2019 کد شما را هنگام بسته شدن پرانتزها و براکت‌ها (آکولادها) به درستی فرمت و تورفتگی می‌دهد. اما گاهی اوقات، به اشتباه کد را فرمت می‌کند تا به شما هشدار دهد که کدی که نوشته‌اید حاوی یک استثنا است. اما اگر از یک ویرایشگر متن ساده استفاده می‌کنید، باید فرمت‌بندی خود را به صورت دستی انجام دهید.</p>
 <p>کد دارای تورفتگی نادرست همچنین زمان‌بر برای تصحیح است و هدر دادن ناامیدکننده زمان برنامه‌نویسی است، در حالی که به راحتی می‌توان از آن اجتناب کرد. بیایید به یک مثال کد ساده نگاه کنیم:</p>
-<pre><code class="language-C#">
-public void DoSomething()
+<pre class="hljs"><code>
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">DoSomething</span>()</span>
 {
-    for (var i = 0; i &lt; 1000; i++)
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000</span>; i++)
     {
-        var productCode = $&quot;PRC000{i}&quot;;
-        //...implementation
+        <span class="hljs-keyword">var</span> productCode = <span class="hljs-string">$&quot;PRC000<span class="hljs-subst">{i}</span>&quot;</span>;
+        <span class="hljs-comment">//...implementation</span>
     }
 }
 </code></pre>
@@ -132,41 +92,41 @@ public void DoSomething()
 <h2>کامنت‌هایی که بدیهیات را بیان می‌کنند (Comments that state the obvious)</h2>
 <p>من دیده‌ام که برنامه‌نویسان واقعاً از کامنت‌هایی که بدیهیات را بیان می‌کنند عصبانی می‌شوند، زیرا آنها را تحقیرآمیز می‌دانند. در بحث‌های برنامه‌نویسی که من در آنها شرکت کرده‌ام، برنامه‌نویسان اظهار داشته‌اند که چقدر از کامنت‌ها بیزارند و چگونه معتقدند که کد باید خود-مستندساز (self-documenting) باشد.</p>
 <p>من احساسات آنها را درک می‌کنم. اگر می‌توانید کد را بدون کامنت بخوانید، مانند زمانی که یک کتاب را می‌خوانید و آن را درک می‌کنید، پس آن یک قطعه کد واقعاً خوب است. اگر یک متغیر به عنوان رشته (string) اعلان شده است، پس چرا کامنتی مانند // string اضافه کنید؟ بیایید به یک مثال نگاه کنیم:</p>
-<pre><code class="language-C#">
-public int _value; // This is used for storing integer values.
+<pre class="hljs"><code>
+<span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> _value; <span class="hljs-comment">// This is used for storing integer values.</span>
 </code></pre>
 <p>در اینجا می‌دانیم که value یک عدد صحیح را توسط نوع int خود نگه می‌دارد. بنابراین واقعاً نیازی به بیان بدیهیات نیست. تنها کاری که انجام می‌دهید هدر دادن زمان و انرژی و شلوغ کردن کد است.</p>
 <h2>کامنت‌هایی که کد بد را توجیه می‌کنند (Comments that excuse bad code)</h2>
 <p>ممکن است مهلت تنگی برای رسیدگی داشته باشید، اما کامنت‌هایی مانند // I know this code sucks but hey at least it works! واقعاً وحشتناک هستند. این کار را نکنید. این نشان‌دهنده عدم حرفه‌ای‌گری است و می‌تواند واقعاً باعث نارضایتی همکاران برنامه‌نویس شود.</p>
 <p>اگر واقعاً برای اینکه چیزی را به سرعت کارساز کنید تحت فشار هستید، یک تیکت بازسازی (refactor ticket) ایجاد کنید و آن را به عنوان بخشی از یک کامنت TODO اضافه کنید، مانند // TODO: PBI23154 Refactor Code to meet company coding practices. سپس شما یا سایر توسعه‌دهندگانی که برای کار روی بدهی فنی (technical debt) تعیین شده‌اند، می‌توانند آن آیتم بک‌لاگ محصول (Product Backlog Item - PBI) را برداشته و کد را بازسازی (refactor) کنند.</p>
 <p>در اینجا یک مثال دیگر آورده شده است:</p>
-<pre><code class="language-C#">
+<pre class="hljs"><code>
 ...
-int value = GetDataValue(); // This sometimes causes a divide by zero error. Don't know why!
+<span class="hljs-built_in">int</span> <span class="hljs-keyword">value</span> = GetDataValue(); <span class="hljs-comment">// This sometimes causes a divide by zero error. Don&#x27;t know why!</span>
 ...
 </code></pre>
 <p>این یکی واقعاً بد است. بسیار خب، از اینکه به ما اطلاع دادید خطاهای تقسیم بر صفر در اینجا رخ می‌دهند، متشکریم. اما آیا یک تیکت باگ (bug ticket) ایجاد کرده‌اید؟ آیا سعی کرده‌اید به ریشه مشکل برسید و آن را برطرف کنید؟ اگر هر کسی که فعالانه روی پروژه کار می‌کند به آن کد دست نزند، چگونه متوجه می‌شوند که کد مشکل‌دار در آنجا وجود دارد؟</p>
 <p>در حداقل حالت، حداقل باید یک کامنت // TODO: در محل داشته باشید. سپس حداقل کامنت در لیست وظایف (Task List) ظاهر می‌شود تا توسعه‌دهندگان مطلع شده و روی آن کار کنند.</p>
 <h2>خطوط کد کامنت‌شده (Commented-out lines of code)</h2>
 <p>اگر برای امتحان کردن چیزی، خطوط کد را کامنت می‌کنید (comment out)، اشکالی ندارد. اما اگر قصد دارید از کد جایگزین به جای کد کامنت‌شده استفاده کنید، قبل از اینکه آن را چک‌این کنید (check it in)، کد کامنت‌شده را حذف کنید. یک یا دو خط کامنت‌شده آنقدر هم بد نیست. اما وقتی خطوط زیادی از کد کامنت‌شده دارید، حواس‌پرتی ایجاد می‌کند و نگهداری کد را دشوار می‌کند؛ حتی می‌تواند منجر به سردرگمی شود:</p>
-<pre><code class="language-C#">
-/* No longer used as has been replaced by DoSomethinElse().
+<pre class="hljs"><code>
+<span class="hljs-comment">/* No longer used as has been replaced by DoSomethinElse().
 public void DoSomething()
 {
     // ...implementation...
 }
-*/
+*/</span>
 </code></pre>
 <p>چرا؟ فقط چرا؟ اگر جایگزین شده و دیگر مورد نیاز نیست، پس فقط آن را حذف کنید. اگر کد شما در سیستم کنترل نسخه (version control) است و نیاز دارید متد را برگردانید، همیشه می‌توانید تاریخچه فایل را مشاهده کرده و متد را برگردانید.</p>
 <h2>سازماندهی نامناسب فضای نام‌ها (Improper organization of namespaces)</h2>
 <p>هنگام استفاده از فضاهای نام (namespaces)، کدهایی را که باید در جای دیگری باشند، در آن نگنجانید. این کار می‌تواند یافتن کد صحیح را به خصوص در پایگاه‌های کد بزرگ، بسیار دشوار یا غیرممکن کند. بیایید به این مثال نگاه کنیم:</p>
-<pre><code class="language-C#">
-namespace MyProject.TextFileMonitor
+<pre class="hljs"><code>
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">MyProject.TextFileMonitor</span>
 {
-    + public class Program { ... }
-    + public class DateTime { ... }
-    + public class FileMonitorService { ... }
-    + public class Cryptography { ... }
+    + <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Program</span> { ... }
+    + <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">DateTime</span> { ... }
+    + <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">FileMonitorService</span> { ... }
+    + <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Cryptography</span> { ... }
 }
 </code></pre>
 <p>می‌بینیم که تمام کلاس‌های موجود در کد بالا تحت یک فضای نام قرار دارند. با این حال، ما این فرصت را داریم که سه فضای نام دیگر برای سازماندهی بهتر این کد اضافه کنیم:</p>
@@ -190,89 +150,89 @@ namespace MyProject.TextFileMonitor
 <h2>کلاس‌هایی که چندین کار انجام می‌دهند (Classes that do multiple jobs)</h2>
 <p>یک کلاس خوب باید فقط یک کار را انجام دهد. داشتن کلاسی که به پایگاه داده متصل می‌شود، داده‌ها را دریافت می‌کند، آن داده‌ها را دستکاری می‌کند، یک گزارش را بارگذاری می‌کند، داده‌ها را به گزارش اختصاص می‌دهد، گزارش را نمایش می‌دهد، گزارش را ذخیره می‌کند، گزارش‌ها را چاپ می‌کند و گزارش را اکسپورت می‌کند، کارهای زیادی انجام می‌دهد. باید آن را به کلاس‌های کوچک‌تر و بهتر سازمان‌یافته بازسازی (refactored) کرد. کلاس‌های جامع مانند این برای خواندن بسیار آزاردهنده هستند. من شخصاً آنها را دلهره‌آور می‌یابم. اگر با چنین کلاس‌هایی مواجه شدید، قابلیت‌ها را به بخش‌ها (regions) سازماندهی کنید. سپس کد موجود در آن بخش‌ها را به کلاس‌های جدیدی منتقل کنید که یک کار را انجام می‌دهند.</p>
 <p>بیایید به مثالی از کلاسی که چندین کار را انجام می‌دهد نگاه کنیم:</p>
-<pre><code class="language-C#">
-public class DbAndFileManager
+<pre class="hljs"><code>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">DbAndFileManager</span>
 {
-    #region Database Operations
-    [ 13 ]
-    Coding Standards and Principles in C#
-    Chapter 1
-    public void OpenDatabaseConnection() { throw new
+    <span class="hljs-meta">#<span class="hljs-keyword">region</span> Database Operations</span>
+    [ <span class="hljs-number">13</span> ]
+    Coding Standards <span class="hljs-keyword">and</span> Principles <span class="hljs-keyword">in</span> C<span class="hljs-meta">#</span>
+    Chapter <span class="hljs-number">1</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OpenDatabaseConnection</span>()</span> { <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span>
         NotImplementedException(); }
-    public void CloseDatabaseConnection() { throw new
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">CloseDatabaseConnection</span>()</span> { <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span>
         NotImplementedException(); }
-    public int ExecuteSql(string sql) { throw new
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> <span class="hljs-title">ExecuteSql</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> sql</span>)</span> { <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span>
         NotImplementedException(); }
-    public SqlDataReader SelectSql(string sql) { throw new
+    <span class="hljs-function"><span class="hljs-keyword">public</span> SqlDataReader <span class="hljs-title">SelectSql</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> sql</span>)</span> { <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span>
         NotImplementedException(); }
-    public int UpdateSql(string sql) { throw new
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> <span class="hljs-title">UpdateSql</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> sql</span>)</span> { <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span>
         NotImplementedException(); }
-    public int DeleteSql(string sql) { throw new
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> <span class="hljs-title">DeleteSql</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> sql</span>)</span> { <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span>
         NotImplementedException(); }
-    public int InsertSql(string sql) { throw new
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> <span class="hljs-title">InsertSql</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> sql</span>)</span> { <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span>
         NotImplementedException(); }
-    #endregion
-    #region File Operations
-    public string ReadText(string filename) { throw new
+    <span class="hljs-meta">#<span class="hljs-keyword">endregion</span></span>
+    <span class="hljs-meta">#<span class="hljs-keyword">region</span> File Operations</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> <span class="hljs-title">ReadText</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> filename</span>)</span> { <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span>
         NotImplementedException(); }
-    public void WriteText(string filename, string text) { throw new
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">WriteText</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> filename, <span class="hljs-built_in">string</span> text</span>)</span> { <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span>
         NotImplementedException(); }
-    public byte[] ReadFile(string filename) { throw new
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">byte</span>[] <span class="hljs-title">ReadFile</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> filename</span>)</span> { <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span>
         NotImplementedException(); }
-    public void WriteFile(string filename, byte[] binaryData) { throw new
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">WriteFile</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> filename, <span class="hljs-built_in">byte</span>[] binaryData</span>)</span> { <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span>
         NotImplementedException(); }
-    #endregion
+    <span class="hljs-meta">#<span class="hljs-keyword">endregion</span></span>
 }
 </code></pre>
 <p>همانطور که در کد بالا می‌بینید، کلاس دو کار اصلی انجام می‌دهد: عملیات پایگاه داده و عملیات فایل را انجام می‌دهد. اکنون کد به طور مرتب در بخش‌های (regions) نام‌گذاری شده صحیح سازماندهی شده است که برای جداسازی منطقی کد در یک کلاس استفاده می‌شوند. اما اصل مسئولیت واحد (Single Responsibility Principle - SRP) نقض شده است. ما باید با بازسازی این کد شروع کنیم تا عملیات پایگاه داده را به کلاسی جداگانه، مانند DatabaseManager، منتقل کنیم.</p>
 <p>سپس، عملیات پایگاه داده را از کلاس DbAndFileManager حذف می‌کنیم، فقط عملیات فایل را باقی می‌گذاریم و سپس کلاس DbAndFileManager را به FileManager تغییر نام می‌دهیم. همچنین باید فضای نام هر فایل را در نظر بگیریم و اینکه آیا باید تغییر کند تا DatabaseManager در فضای نام Data و FileManager در فضای نام FileSystem (یا معادل‌های آنها در برنامه شما) قرار گیرد.</p>
 <p>کد زیر نتیجه استخراج کد پایگاه داده از کلاس DbAndFileManager به کلاس جداگانه خود و در فضای نام صحیح است:</p>
-<pre><code class="language-C#">
-using System;
-using System.Data.SqlClient;
-namespace CH01_CodingStandardsAndPrinciples.GoodCode.Data
+<pre class="hljs"><code>
+<span class="hljs-keyword">using</span> System;
+<span class="hljs-keyword">using</span> System.Data.SqlClient;
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">CH01_CodingStandardsAndPrinciples.GoodCode.Data</span>
 {
-    public class DatabaseManager
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">DatabaseManager</span>
     {
-        #region Database Operations
-        public void OpenDatabaseConnection() { throw new
+        <span class="hljs-meta">#<span class="hljs-keyword">region</span> Database Operations</span>
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OpenDatabaseConnection</span>()</span> { <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span>
             NotImplementedException(); }
-        public void CloseDatabaseConnection() { throw new
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">CloseDatabaseConnection</span>()</span> { <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span>
             NotImplementedException(); }
-        public int ExecuteSql(string sql) { throw new
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> <span class="hljs-title">ExecuteSql</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> sql</span>)</span> { <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span>
             NotImplementedException(); }
-        public SqlDataReader SelectSql(string sql) { throw new
+        <span class="hljs-function"><span class="hljs-keyword">public</span> SqlDataReader <span class="hljs-title">SelectSql</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> sql</span>)</span> { <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span>
             NotImplementedException(); }
-        public int UpdateSql(string sql) { throw new
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> <span class="hljs-title">UpdateSql</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> sql</span>)</span> { <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span>
             NotImplementedException(); }
-        public int DeleteSql(string sql) { throw new
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> <span class="hljs-title">DeleteSql</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> sql</span>)</span> { <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span>
             NotImplementedException(); }
-        public int InsertSql(string sql) { throw new
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> <span class="hljs-title">InsertSql</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> sql</span>)</span> { <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span>
             NotImplementedException(); }
-        #endregion
+        <span class="hljs-meta">#<span class="hljs-keyword">endregion</span></span>
     }
 }
 </code></pre>
 <p>بازسازی کد سیستم فایل منجر به کلاس FileManager در فضای نام FileSystem می‌شود، همانطور که در کد زیر نشان داده شده است:</p>
-<pre><code class="language-C#">
-using System;
-namespace CH01_CodingStandardsAndPrinciples.GoodCode.FileSystem
+<pre class="hljs"><code>
+<span class="hljs-keyword">using</span> System;
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">CH01_CodingStandardsAndPrinciples.GoodCode.FileSystem</span>
 {
-    public class FileManager
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">FileManager</span>
     {
-        #region File Operations
-        public string ReadText(string filename) { throw new
+        <span class="hljs-meta">#<span class="hljs-keyword">region</span> File Operations</span>
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> <span class="hljs-title">ReadText</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> filename</span>)</span> { <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span>
             NotImplementedException(); }
-        public void WriteText(string filename, string text) { throw new
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">WriteText</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> filename, <span class="hljs-built_in">string</span> text</span>)</span> { <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span>
             NotImplementedException(); }
-        public byte[] ReadFile(string filename) { throw new
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">byte</span>[] <span class="hljs-title">ReadFile</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> filename</span>)</span> { <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span>
             NotImplementedException(); }
-        [ 15 ]
-        Coding Standards and Principles in C#
-        Chapter 1
-        public void WriteFile(string filename, byte[] binaryData) { throw
-            new NotImplementedException(); }
-        #endregion
+        [ <span class="hljs-number">15</span> ]
+        Coding Standards <span class="hljs-keyword">and</span> Principles <span class="hljs-keyword">in</span> C<span class="hljs-meta">#</span>
+        Chapter <span class="hljs-number">1</span>
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">WriteFile</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> filename, <span class="hljs-built_in">byte</span>[] binaryData</span>)</span> { <span class="hljs-keyword">throw</span>
+            <span class="hljs-keyword">new</span> NotImplementedException(); }
+        <span class="hljs-meta">#<span class="hljs-keyword">endregion</span></span>
     }
 }
 </code></pre>
@@ -280,47 +240,47 @@ namespace CH01_CodingStandardsAndPrinciples.GoodCode.FileSystem
 <h2>متدهایی که کارهای زیادی انجام می‌دهند (Methods that do many things)</h2>
 <p>من خودم را بارها در متدهایی گم کرده‌ام که سطوح تورفتگی بسیار زیادی دارند و کارهای زیادی را در آن تورفتگی‌های مختلف انجام می‌دهند. ترکیبات (permutations) گیج‌کننده بودند. می‌خواستم کد را بازسازی کنم تا نگهداری آن آسان‌تر شود، اما سرپرستم این کار را ممنوع کرد. من به وضوح می‌توانستم ببینم که چگونه می‌توانست با تقسیم کردن کد به متدهای مختلف، متد کوچک‌تر شود.</p>
 <p>وقت یک مثال است. در این مثال، متد یک رشته را می‌پذیرد. آن رشته سپس رمزگذاری (encrypted) و رمزگشایی (decrypted) می‌شود. همچنین طولانی است تا بتوانید ببینید چرا متدها باید کوچک نگه داشته شوند:</p>
-<pre><code class="language-C#">
-public string security(string plainText)
+<pre class="hljs"><code>
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> <span class="hljs-title">security</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> plainText</span>)</span>
 {
-    try
+    <span class="hljs-keyword">try</span>
     {
-        byte[] encrypted;
-        using (AesManaged aes = new AesManaged())
+        <span class="hljs-built_in">byte</span>[] encrypted;
+        <span class="hljs-keyword">using</span> (AesManaged aes = <span class="hljs-keyword">new</span> AesManaged())
         {
             ICryptoTransform encryptor = aes.CreateEncryptor(Key, IV);
-            using (MemoryStream ms = new MemoryStream())
-                using (CryptoStream cs = new CryptoStream(ms, encryptor,
+            <span class="hljs-keyword">using</span> (MemoryStream ms = <span class="hljs-keyword">new</span> MemoryStream())
+                <span class="hljs-keyword">using</span> (CryptoStream cs = <span class="hljs-keyword">new</span> CryptoStream(ms, encryptor,
                     CryptoStreamMode.Write))
                 {
-                    using (StreamWriter sw = new StreamWriter(cs))
+                    <span class="hljs-keyword">using</span> (StreamWriter sw = <span class="hljs-keyword">new</span> StreamWriter(cs))
                         sw.Write(plainText);
                     encrypted = ms.ToArray();
                 }
         }
-        Console.WriteLine($&quot;Encrypted data:
-            {System.Text.Encoding.UTF8.GetString(encrypted)}&quot;);
-        using (AesManaged aesm = new AesManaged())
+        Console.WriteLine(<span class="hljs-string">$&quot;Encrypted data:
+            <span class="hljs-subst">{System.Text.Encoding.UTF8.GetString(encrypted)}</span>&quot;</span>);
+        <span class="hljs-keyword">using</span> (AesManaged aesm = <span class="hljs-keyword">new</span> AesManaged())
         {
             ICryptoTransform decryptor = aesm.CreateDecryptor(Key, IV);
-            using (MemoryStream ms = new MemoryStream(encrypted))
+            <span class="hljs-keyword">using</span> (MemoryStream ms = <span class="hljs-keyword">new</span> MemoryStream(encrypted))
             {
-                using (CryptoStream cs = new CryptoStream(ms, decryptor,
+                <span class="hljs-keyword">using</span> (CryptoStream cs = <span class="hljs-keyword">new</span> CryptoStream(ms, decryptor,
                     CryptoStreamMode.Read))
                 {
-                    using (StreamReader reader = new StreamReader(cs))
+                    <span class="hljs-keyword">using</span> (StreamReader reader = <span class="hljs-keyword">new</span> StreamReader(cs))
                         plainText = reader.ReadToEnd();
                 }
             }
         }
-        Console.WriteLine($&quot;Decrypted data: {plainText}&quot;);
+        Console.WriteLine(<span class="hljs-string">$&quot;Decrypted data: <span class="hljs-subst">{plainText}</span>&quot;</span>);
     }
-    catch (Exception exp)
+    <span class="hljs-keyword">catch</span> (Exception exp)
     {
         Console.WriteLine(exp.Message);
     }
     Console.ReadKey();
-    return plainText;
+    <span class="hljs-keyword">return</span> plainText;
 }
 </code></pre>
 <p>همانطور که در متد بالا می‌بینید، ۱۰ خط کد دارد و خواندن آن دشوار است. به علاوه، بیش از یک کار را انجام می‌دهد. این کد را می‌توان به دو متد تقسیم کرد که هر یک یک وظیفه را انجام می‌دهند. یک متد یک رشته را رمزگذاری می‌کند و متد دیگر رشته را رمزگشایی می‌کند. این ما را به خوبی به این بحث می‌رساند که چرا متدها نباید بیش از ۱۰ خط کد داشته باشند.</p>
@@ -336,28 +296,28 @@ public string security(string plainText)
 <p>استفاده از استثناها (Exceptions) برای کنترل جریان برنامه (program flow) ممکن است هدف کد را پنهان کند. آن‌ها همچنین می‌توانند منجر به نتایج غیرمنتظره و ناخواسته شوند. این واقعیت که کد شما برای انتظار یک یا چند استثنا برنامه‌ریزی شده است، نشان‌دهنده اشتباه بودن طراحی شماست. یک سناریوی معمول که در فصل ۵، &quot;مدیریت استثنا (Exception Handling)&quot; با جزئیات بیشتر پوشش داده شده است.</p>
 <p>یک سناریوی معمول زمانی است که یک کسب‌وکار از استثناهای قوانین تجاری (Business Rule Exceptions - BREs) استفاده می‌کند. یک متد عملی را با انتظار اینکه یک استثنا پرتاب شود، انجام می‌دهد. جریان برنامه توسط اینکه آیا استثنا پرتاب می‌شود یا خیر، تعیین خواهد شد. راه بسیار بهتر، استفاده از ساختارهای زبان (language constructs) موجود برای انجام اعتبارسنجی‌ها (validation checks) است که یک مقدار بولین (Boolean) را برمی‌گرداند.</p>
 <p>کد زیر استفاده از یک BRE را برای کنترل جریان برنامه نشان می‌دهد:</p>
-<pre><code class="language-C#">
-public void BreFlowControlExample(BusinessRuleException bre)
+<pre class="hljs"><code>
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">BreFlowControlExample</span>(<span class="hljs-params">BusinessRuleException bre</span>)</span>
 {
-    switch (bre.Message)
+    <span class="hljs-keyword">switch</span> (bre.Message)
     {
-        case &quot;OutOfAcceptableRange&quot;:
+        <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;OutOfAcceptableRange&quot;</span>:
             DoOutOfAcceptableRangeWork();
-            break;
-        default:
+            <span class="hljs-keyword">break</span>;
+        <span class="hljs-literal">default</span>:
             DoInAcceptableRangeWork();
-            break;
+            <span class="hljs-keyword">break</span>;
     }
 }
 </code></pre>
 <p>متد BusinessRuleException را می‌پذیرد. بسته به پیام در استثنا، BreFlowControlExample() یا متد DoOutOfAcceptableRangeWork() را فراخوانی می‌کند یا متد DoInAcceptableRangeWork() را.</p>
 <p>راه بسیار بهتر برای کنترل جریان از طریق منطق بولین (Boolean logic) است. بیایید به متد BetterFlowControlExample() زیر نگاه کنیم:</p>
-<pre><code class="language-C#">
-public void BetterFlowControlExample(bool isInAcceptableRange)
+<pre class="hljs"><code>
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">BetterFlowControlExample</span>(<span class="hljs-params"><span class="hljs-built_in">bool</span> isInAcceptableRange</span>)</span>
 {
-    if (isInAcceptableRange)
+    <span class="hljs-keyword">if</span> (isInAcceptableRange)
         DoInAcceptableRangeWork();
-    else
+    <span class="hljs-keyword">else</span>
         DoOutOfAcceptableRangeWork();
 }
 </code></pre>
@@ -375,11 +335,11 @@ public void BetterFlowControlExample(bool isInAcceptableRange)
 <p>هرچه تعداد مشتریان بیشتر باشد، نسخه‌های بیشتری از کد مورد نیاز است. این به زودی غیرقابل نگهداری و کابوسی واقعی برای نگهداری می‌شود. تصور کنید که کلاس اتصال به پایگاه داده شما ۱۰۰,۰۰۰ مشتری مختلف دارد که از ۱ از ۳۰ نوع مختلف کلاس استفاده می‌کنند، و همه آن‌ها یک باگ یکسان دارند که شناسایی شده و بر همه آن‌ها تأثیر می‌گذارد. این یعنی ۳۰ کلاس باید همان اصلاح را دریافت کنند، تست شوند، بسته‌بندی شده و دیپلو (deployed) شوند. این یک هزینه نگهداری بسیار زیاد و از نظر مالی بسیار گران است.</p>
 <p>این سناریوی خاص را می‌توان با ارجاع به یک نوع اینترفیس (interface type) و سپس استفاده از یک فکتوری پایگاه داده (database factory) برای ساخت شیء اتصال مورد نیاز، برطرف کرد. سپس رشته اتصال (connection string) را می‌توان در یک فایل پیکربندی (configuration file) توسط مشتری تنظیم کرد و به فکتوری پاس داد. فکتوری سپس یک کلاس اتصال کانکریت تولید می‌کند که یک اینترفیس اتصال را برای نوع خاص پایگاه داده مشخص شده در رشته اتصال پیاده‌سازی می‌کند.</p>
 <p>در اینجا یک مثال بد از کد با اتصال محکم آورده شده است:</p>
-<pre><code class="language-C#">
-public class Database
+<pre class="hljs"><code>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Database</span>
 {
-    private SqlServerConnection _databaseConnection;
-    public Database(SqlServerConnection databaseConnection)
+    <span class="hljs-keyword">private</span> SqlServerConnection _databaseConnection;
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Database</span>(<span class="hljs-params">SqlServerConnection databaseConnection</span>)</span>
     
     {
         _databaseConnection = databaseConnection;
@@ -414,38 +374,38 @@ public class Database
 <p>کلاس‌های بزرگ با بخش‌های زیاد، خواندن و دنبال کردنشان بسیار دشوار است، به خصوص زمانی که متدهای مرتبط با هم گروه‌بندی نشده‌اند. بخش‌ها برای گروه‌بندی اعضای مشابه درون یک کلاس بزرگ بسیار خوب هستند. اما اگر از آن‌ها استفاده نکنید، هیچ فایده‌ای ندارند!</p>
 <h2>کد با هدف گمشده (Lost-intention code)</h2>
 <p>اگر در حال مشاهده یک کلاس هستید و چندین کار را انجام می‌دهد، چگونه می‌دانید هدف اصلی آن چه بوده است؟ برای مثال، اگر به دنبال یک متد تاریخ هستید و آن را در یک کلاس فایل در فضای نام ورودی/خروجی کد خود پیدا می‌کنید، آیا متد تاریخ در مکان صحیح قرار دارد؟ خیر. آیا برای سایر توسعه‌دهندگانی که کد شما را نمی‌شناسند، یافتن آن متد دشوار خواهد بود؟ البته که همینطور است. به این کد نگاهی بیندازید:</p>
-<pre><code class="language-C#">
-public class MyClass
+<pre class="hljs"><code>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">MyClass</span>
 {
-    public void MyMethod()
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">MyMethod</span>()</span>
     {
-        // ...implementation...
+        <span class="hljs-comment">// ...implementation...</span>
     }
-    public DateTime AddDates(DateTime date1, DateTime date2)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> DateTime <span class="hljs-title">AddDates</span>(<span class="hljs-params">DateTime date1, DateTime date2</span>)
     [ 23 ]
-    Coding Standards and Principles in C#
-    Chapter 1
+    Coding Standards <span class="hljs-keyword">and</span> Principles <span class="hljs-keyword">in</span> C#
+    Chapter 1</span>
     {
     }
-        //...implementation...
-    public Product GetData(int id)
+        <span class="hljs-comment">//...implementation...</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> Product <span class="hljs-title">GetData</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> id</span>)</span>
     {
-        //...implementation...
+        <span class="hljs-comment">//...implementation...</span>
     }
 }
 </code></pre>
 <p>هدف این کلاس چیست؟ نام آن هیچ نشانی نمی‌دهد، و MyMethod چه کاری انجام می‌دهد؟ همچنین به نظر می‌رسد کلاس در حال دستکاری تاریخ و دریافت داده محصول است. متد AddDates باید در کلاسی باشد که منحصراً برای مدیریت تاریخ‌ها است. و متد GetData باید در مدل ویو (view model) محصول باشد.</p>
 <h2>افشای مستقیم اطلاعات (Directly exposing information)</h2>
 <p>کلاس‌هایی که اطلاعات را به طور مستقیم افشا می‌کنند، بد هستند. جدا از ایجاد اتصال محکم (tight coupling) که می‌تواند منجر به باگ شود، اگر بخواهید نوع اطلاعات را تغییر دهید، باید نوع آن را در هر جایی که استفاده شده است، تغییر دهید. همچنین، اگر بخواهید قبل از انتساب، اعتبارسنجی داده (data validation) انجام دهید چه؟ در اینجا مثالی آورده شده است:</p>
-<pre><code class="language-C#">
-public class Product
+<pre class="hljs"><code>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Product</span>
 {
-    public int Id;
-    public int Name;
-    public int Description;
-    public string ProductCode;
-    public decimal Price;
-    public long UnitsInStock
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> Id;
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> Name;
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> Description;
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> ProductCode;
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">decimal</span> Price;
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">long</span> UnitsInStock
 }
 </code></pre>
 <p>در کد بالا، اگر می‌خواستید UnitsInStock را از نوع long به نوع int تغییر دهید، باید کد را در هر جایی که به آن ارجاع داده شده است، تغییر می‌دادید. همین کار را باید برای ProductCode نیز انجام می‌دادید. اگر کدهای محصول جدید باید از یک فرمت سخت‌گیرانه پیروی می‌کردند، نمی‌توانستید کدهای محصول را اعتبارسنجی کنید اگر رشته مستقیماً توسط کلاس فراخواننده قابل انتساب بود.</p>
@@ -453,13 +413,13 @@ public class Product
 <p>حالا که می‌دانید چه کارهایی را نباید انجام داد، وقت آن است که به اختصار به برخی از شیوه‌های کدنویسی خوب نگاه کنیم تا بتوانیم کدی دلپذیر و با عملکرد بالا بنویسیم.</p>
 <h2>تورفتگی مناسب (Proper indentation)</h2>
 <p>وقتی از تورفتگی مناسب (proper indentation) استفاده می‌کنید، خواندن کد بسیار آسان‌تر می‌شود. با تورفتگی می‌توانید تشخیص دهید که بلوک‌های کد (code blocks) کجا شروع و به پایان می‌رسند و کدام کد متعلق به آن بلوک‌های کد است:</p>
-<pre><code class="language-C#">
-public void DoSomething()
+<pre class="hljs"><code>
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">DoSomething</span>()</span>
 {
-    for (var i = 0; i &lt; 1000; i++)
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000</span>; i++)
     {
-        var productCode = $&quot;PRC000{i}&quot;;
-        //...implementation
+        <span class="hljs-keyword">var</span> productCode = <span class="hljs-string">$&quot;PRC000<span class="hljs-subst">{i}</span>&quot;</span>;
+        <span class="hljs-comment">//...implementation</span>
     }
 }
 </code></pre>
@@ -468,55 +428,55 @@ public void DoSomething()
 <p>کامنت‌های معنادار (Meaningful comments) کامنت‌هایی هستند که نیت برنامه‌نویس را بیان می‌کنند. چنین کامنت‌هایی زمانی مفید هستند که کد صحیح باشد اما ممکن است به راحتی توسط هر کسی که تازه با کد آشنا شده است، یا حتی توسط خود برنامه‌نویس در چند هفته آینده، درک نشود. چنین کامنت‌هایی می‌توانند واقعاً کمک‌کننده باشند.</p>
 <h2>کامنت‌های مستندسازی API (API documentation comments)</h2>
 <p>یک API خوب، API است که دارای مستندات خوب و قابل فهمی باشد. کامنت‌های API (API comments)، کامنت‌های XML (XML comments) هستند که می‌توان از آنها برای تولید مستندات HTML (HTML documentation) استفاده کرد. مستندات HTML برای توسعه‌دهندگانی که می‌خواهند از API شما استفاده کنند، مهم است. هرچه مستندات بهتر باشد، احتمال اینکه توسعه‌دهندگان بیشتری بخواهند از API شما استفاده کنند، بیشتر است. در اینجا مثالی آورده شده است:</p>
-<pre><code class="language-C#">
-/// &lt;summary&gt;
-/// Create a new &lt;see cref=&quot;KustoCode&quot;/&gt; instance from the text and
-/// globals. Does not perform
-/// semantic analysis.
-/// &lt;/summary&gt;
-/// &lt;param name=&quot;text&quot;&gt;The code text&lt;/param&gt;
-/// &lt;param name=&quot;globals&quot;&gt;
-///   The globals to use for parsing and semantic analysis. Defaults to
-///   &lt;see langword=&quot;null&quot;/&gt;
-/// &lt;/param&gt;
-public static KustoCode Parse(string text, GlobalState globals = null) {
+<pre class="hljs"><code>
+<span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;summary&gt;</span></span>
+<span class="hljs-comment"><span class="hljs-doctag">///</span> Create a new <span class="hljs-doctag">&lt;see cref=&quot;KustoCode&quot;/&gt;</span> instance from the text and</span>
+<span class="hljs-comment"><span class="hljs-doctag">///</span> globals. Does not perform</span>
+<span class="hljs-comment"><span class="hljs-doctag">///</span> semantic analysis.</span>
+<span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;/summary&gt;</span></span>
+<span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;param name=&quot;text&quot;&gt;</span>The code text<span class="hljs-doctag">&lt;/param&gt;</span></span>
+<span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;param name=&quot;globals&quot;&gt;</span></span>
+<span class="hljs-comment"><span class="hljs-doctag">///</span>   The globals to use for parsing and semantic analysis. Defaults to</span>
+<span class="hljs-comment"><span class="hljs-doctag">///</span>   <span class="hljs-doctag">&lt;see langword=&quot;null&quot;/&gt;</span></span>
+<span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;/param&gt;</span></span>
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> KustoCode <span class="hljs-title">Parse</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> text, GlobalState globals = <span class="hljs-literal">null</span></span>)</span> {
 ... }
 </code></pre>
 <p>این گزیده از پروژه زبان پرس‌وجوی کاستو (Kusto Query Language) نمونه خوبی از یک کامنت مستندسازی API است.</p>
 <h2>سازماندهی مناسب با استفاده از فضای نام‌ها (Proper organization using namespaces)</h2>
 <p>کدی که به درستی سازماندهی شده و در فضاهای نام (namespaces) مناسب قرار گرفته باشد، می‌تواند مقدار زیادی از زمان توسعه‌دهندگان را هنگام جستجو برای یک قطعه کد خاص، صرفه‌جویی کند. به عنوان مثال، اگر به دنبال کلاس‌ها و متدهایی هستید که به تاریخ و زمان مربوط می‌شوند، ایده خوبی است که یک فضای نام به نام DateTime، یک کلاس به نام Time برای متدهای مرتبط با زمان، و یک کلاس به نام Date برای متدهای مرتبط با تاریخ داشته باشید.</p>
-<p>مثال زیر نمونه‌ای از سازماندهی مناسب فضای نام‌ها است:
+<p>مثال زیر نمونه‌ای از سازماندهی مناسب فضای نام‌ها است:<br>
 <img src="../../assets/image/01/Table%201-2.png" alt="Conventions-UsedThis-Book"></p>
 <h2>قوانین نام‌گذاری خوب (Good naming conventions)</h2>
 <p>پیروی از قوانین نام‌گذاری C# مایکروسافت (Microsoft C# naming conventions) خوب است. از حالت پاسکال (Pascal casing) برای فضاهای نام (namespaces)، کلاس‌ها (classes)، اینترفیس‌ها (interfaces)، enumها (enums) و متدها (methods) استفاده کنید. از حالت شتری (camel case) برای نام متغیرها و نام آرگومان‌ها استفاده کنید، و مطمئن شوید که متغیرهای عضو را با یک آندرلاین پیشوندگذاری کنید.</p>
 <p>به این مثال کد نگاهی بیندازید:</p>
-<pre><code class="language-C#">
-using System;
-using System.Text.RegularExpressions;
-namespace CompanyName.ProductName.RegEx
+<pre class="hljs"><code>
+<span class="hljs-keyword">using</span> System;
+<span class="hljs-keyword">using</span> System.Text.RegularExpressions;
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">CompanyName.ProductName.RegEx</span>
 {
-    /// &lt;summary&gt;
-    /// An extension class for providing regular expression extensions
-    /// methods.
-    /// &lt;/summary&gt;
-    public static class RegularExpressions
+    <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;summary&gt;</span></span>
+    <span class="hljs-comment"><span class="hljs-doctag">///</span> An extension class for providing regular expression extensions</span>
+    <span class="hljs-comment"><span class="hljs-doctag">///</span> methods.</span>
+    <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;/summary&gt;</span></span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title">RegularExpressions</span>
     {
-        private static string _preprocessed;
-        public static string RegularExpression { get; set; }
-        public static bool IsValidEmail(this string email)
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">string</span> _preprocessed;
+        <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">string</span> RegularExpression { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">IsValidEmail</span>(<span class="hljs-params"><span class="hljs-keyword">this</span> <span class="hljs-built_in">string</span> email</span>)</span>
         {
-            // &lt;summary&gt;
-            // Email address: RFC 2822 Format.
-            // Matches a normal email address. Does not check the
-            // top-level domain.
-            // Requires the &quot;case insensitive&quot; option to be ON.
-            // &lt;/summary&gt;
-            var exp = @&quot;\A(?:[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+(?:\.
-             [a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+)@(?:[a-z0-9](?:[a-z0-9-]
-             [a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z&quot;;
-            bool isEmail = Regex.IsMatch(email, exp, RegexOptions.IgnoreCase);
-            return isEmail;
-        // ... rest of the implementation ...
+            <span class="hljs-comment">// &lt;summary&gt;</span>
+            <span class="hljs-comment">// Email address: RFC 2822 Format.</span>
+            <span class="hljs-comment">// Matches a normal email address. Does not check the</span>
+            <span class="hljs-comment">// top-level domain.</span>
+            <span class="hljs-comment">// Requires the &quot;case insensitive&quot; option to be ON.</span>
+            <span class="hljs-comment">// &lt;/summary&gt;</span>
+            <span class="hljs-keyword">var</span> exp = <span class="hljs-string">@&quot;\A(?:[a-z0-9!#$%&amp;&#x27;*+/=?^_`{|}~-]+(?:\.
+             [a-z0-9!#$%&amp;&#x27;*+/=?^_`{|}~-]+)@(?:[a-z0-9](?:[a-z0-9-]
+             [a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z&quot;</span>;
+            <span class="hljs-built_in">bool</span> isEmail = Regex.IsMatch(email, exp, RegexOptions.IgnoreCase);
+            <span class="hljs-keyword">return</span> isEmail;
+        <span class="hljs-comment">// ... rest of the implementation ...</span>
         }
     }
 }
@@ -552,11 +512,11 @@ namespace CompanyName.ProductName.RegEx
 <h2>کدی که اتصال سست (Loosely Coupled) دارد</h2>
 <p>کد با اتصال سست (Loosely coupled code) آسان‌تر تست و بازسازی می‌شود. همچنین می‌توانید کد با اتصال سست را در صورت نیاز آسان‌تر عوض و جابه‌جا (swap and change) کنید. قابلیت استفاده مجدد کد (code reuse) یکی دیگر از مزایای کد با اتصال سست است.</p>
 <p>بیایید از مثال بد قبلی خود یعنی یک پایگاه داده که اتصال SQL Server به آن پاس داده می‌شود، استفاده کنیم. می‌توانیم همان کلاس را با ارجاع به یک اینترفیس (interface) به جای یک نوع کانکریت (concrete type)، با اتصال سست بسازیم. بیایید به یک مثال خوب از بازسازی مثال بد قبلی نگاهی بیندازیم:</p>
-<pre><code class="language-C#">
-public class Database
+<pre class="hljs"><code>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Database</span>
 {
-    private IDatabaseConnection _databaseConnection;
-    public Database(IDatabaseConnection databaseConnection)
+    <span class="hljs-keyword">private</span> IDatabaseConnection _databaseConnection;
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Database</span>(<span class="hljs-params">IDatabaseConnection databaseConnection</span>)</span>
     {
         _databaseConnection = datbaseConnection;
     }
@@ -569,12 +529,12 @@ public class Database
 <p>هنگام استفاده از کلاس‌های قابل دور انداختن (disposable classes)، همیشه باید متد Dispose() را برای دور انداختن تمیز هر منبعی که در حال استفاده است، فراخوانی کنید. این به خنثی کردن احتمال نشت حافظه (memory leaks) کمک می‌کند.</p>
 <p>مواقعی وجود دارد که ممکن است نیاز باشد یک شیء را null کنید تا از محدوده (scope) خارج شود. یک مثال می‌تواند یک متغیر استاتیک باشد که ارجاعی به شیء‌ای که دیگر نیازی به آن ندارید، نگه می‌دارد.</p>
 <p>دستور using (using statement) نیز یک راه تمیز خوب برای استفاده از اشیاء قابل دور انداختن است، زیرا وقتی شیء دیگر در محدوده نباشد، به طور خودکار دور انداخته می‌شود، بنابراین نیازی به فراخوانی صریح متد Dispose() نیست. بیایید به کد زیر نگاهی بیندازیم:</p>
-<pre><code class="language-C#">
-using (var unitOfWork = new UnitOfWork())
+<pre class="hljs"><code>
+<span class="hljs-keyword">using</span> (<span class="hljs-keyword">var</span> unitOfWork = <span class="hljs-keyword">new</span> UnitOfWork())
 {
-    // Perform unit of work here.
+    <span class="hljs-comment">// Perform unit of work here.</span>
 }
-// At this point the unit of work object has been disposed of.
+<span class="hljs-comment">// At this point the unit of work object has been disposed of.</span>
 </code></pre>
 <p>کد یک شیء قابل دور انداختن را در دستور using تعریف می‌کند و کاری را که باید بین براکت‌های باز و بسته انجام دهد، انجام می‌دهد. شیء به طور خودکار قبل از خروج از براکت‌ها دور انداخته می‌شود. و بنابراین نیازی به فراخوانی دستی متد Dispose() نیست، زیرا به طور خودکار فراخوانی می‌شود.</p>
 <h2>اجتناب از متد Finalize() (Avoiding the Finalize() method)</h2>
@@ -699,49 +659,3 @@ using (var unitOfWork = new UnitOfWork())
 <p>اطلاعات خوب در مورد الگوهای طراحی (design patterns)، با لیستی از الگوهای طراحی که به نمودارها (diagrams) و کد منبع پیاده‌سازی (implementation source code) لینک می‌شوند، را می‌توانید در الگوی طراحی نرم‌افزار در Wikipedia پیدا کنید.<a href="https://en.wikipedia.org/wiki/Software_design_pattern">https://en.wikipedia.org/wiki/Software_design_pattern</a>.</p>
 </li>
 </ul>
-
-  </main>
-
-  <!-- فوتر مشترک -->
-  <footer class="footer">
-    <div class="container">
-      <p>
-        <img src="/icone/copyright.svg" alt="کپی‌رایت" width="14" height="14"
-             style="vertical-align:middle;margin-inline:4px">
-        <span id="y"></span> Gitab — برای توسعه‌دهندگان
-      </p>
-    </div>
-  </footer>
-
-  <!-- سال + اسکریپت تم -->
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
-
-    (() => {
-      const root = document.documentElement;
-      const btn = document.getElementById('themeToggle');
-      const KEY = 'gitab-theme';
-      const media = window.matchMedia('(prefers-color-scheme: dark)');
-      const getEffective = s => s === 'auto' ? (media.matches ? 'dark' : 'light') : s;
-      function updateTheme(s) {
-        root.setAttribute('data-theme', s);
-        const mode = getEffective(s);
-        root.dataset.colorMode = mode;
-        btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
-      }
-      const saved = localStorage.getItem(KEY) || 'auto';
-      updateTheme(saved);
-      btn.addEventListener('click', () => {
-        const curr = localStorage.getItem(KEY) || 'auto';
-        const next = curr === 'auto' ? 'dark' : curr === 'dark' ? 'light' : 'auto';
-        localStorage.setItem(KEY, next);
-        updateTheme(next);
-      });
-      media.addEventListener('change', () => {
-        if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
-      });
-      window.addEventListener('DOMContentLoaded', () => updateTheme(saved));
-    })();
-  </script>
-</body>
-</html>

@@ -1,44 +1,4 @@
-<!doctype html>
-<html lang="fa" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gitab | کتابخانهٔ ترجمه‌های دات‌نت و سی شارپ</title>
-  <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
-  <link rel="stylesheet" href="/styles/main.css">
-</head>
-<body>
-  <!-- هدر مشترک -->
-  <header class="header">
-    <div class="container nav-wrap">
-      <a class="brand" href="/">
-        <img src="/icone/logo.svg" alt="Gitab" width="28" height="28">
-        <span>Gitab</span>
-      </a>
-
-      <nav class="nav">
-        <a href="/">خانه</a>
-        <a href="/books/list-books">کتاب‌ها</a>
-        <a href="#">همکاری</a>
-        <a href="#">درباره‌ما</a>
-      </nav>
-
-     <div class="nav-actions">
-  <button id="themeToggle" class="icon-btn theme-btn" aria-label="تغییر حالت">
-    <img class="icon-sun" src="/icone/sun.svg" alt="روشن">
-    <img class="icon-moon" src="/icone/moon.svg" alt="تاریک">
-  </button>
-
-  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
-    <img src="/icone/github.svg" alt="GitHub">
-  </a>
-</div>
-
-  </header>
-
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل بیستم:  رمزنگاری</h1>
+<h1>فصل بیستم:  رمزنگاری</h1>
 <p>در این فصل، ما به بررسی APIهای اصلی <strong>Cryptography</strong> در .NET می‌پردازیم:</p>
 <ul>
 <li><strong>Windows Data Protection API (DPAPI)</strong></li>
@@ -47,7 +7,7 @@
 <li><strong>Public key encryption and signing</strong></li>
 </ul>
 <p>انواع (Types) پوشش داده شده در این فصل در <strong>namespace</strong>های زیر تعریف شده‌اند:</p>
-<pre><code>System.Security;
+<pre class="hljs"><code>System.Security;
 System.Security.Cryptography;
 </code></pre>
 <hr>
@@ -62,19 +22,19 @@ System.Security.Cryptography;
 <h3>Windows Data Protection 🪟🔐</h3>
 <p>ویژگی <strong>Windows Data Protection</strong> فقط روی ویندوز در دسترس است و در سیستم‌عامل‌های دیگر یک استثناء از نوع <code>PlatformNotSupportedException</code> ایجاد می‌کند.</p>
 <p>در بخش <strong>“File and Directory Operations”</strong> در صفحه ۷۲۳ توضیح دادیم که چگونه می‌توانید از <code>File.Encrypt</code> برای درخواست رمزنگاری شفاف (transparent) فایل توسط سیستم‌عامل استفاده کنید:</p>
-<pre><code class="language-csharp">File.WriteAllText (&quot;myfile.txt&quot;, &quot;&quot;);
-File.Encrypt (&quot;myfile.txt&quot;);
-File.AppendAllText (&quot;myfile.txt&quot;, &quot;sensitive data&quot;);
+<pre class="hljs"><code>File.WriteAllText (<span class="hljs-string">&quot;myfile.txt&quot;</span>, <span class="hljs-string">&quot;&quot;</span>);
+File.Encrypt (<span class="hljs-string">&quot;myfile.txt&quot;</span>);
+File.AppendAllText (<span class="hljs-string">&quot;myfile.txt&quot;</span>, <span class="hljs-string">&quot;sensitive data&quot;</span>);
 </code></pre>
 <p>🔑 در این حالت، رمزنگاری از کلیدی استفاده می‌کند که از <strong>رمز عبور کاربر لاگین‌شده</strong> استخراج شده است. شما می‌توانید همین کلید استخراج‌شده ضمنی را برای رمزنگاری یک <strong>آرایه‌ی بایت</strong> با استفاده از <strong>Windows Data Protection API (DPAPI)</strong> به‌کار بگیرید.</p>
 <p>DPAPI از طریق کلاس <code>ProtectedData</code> در دسترس قرار گرفته است؛ کلاسی ساده با دو متد <strong>static</strong>:</p>
-<pre><code class="language-csharp">public static byte[] Protect
- (byte[] userData, byte[] optionalEntropy, DataProtectionScope scope);
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">byte</span>[] <span class="hljs-title">Protect</span>
+ (<span class="hljs-params"><span class="hljs-built_in">byte</span>[] userData, <span class="hljs-built_in">byte</span>[] optionalEntropy, DataProtectionScope scope</span>)</span>;
 
-public static byte[] Unprotect
- (byte[] encryptedData, byte[] optionalEntropy, DataProtectionScope scope);
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">byte</span>[] <span class="hljs-title">Unprotect</span>
+ (<span class="hljs-params"><span class="hljs-built_in">byte</span>[] encryptedData, <span class="hljs-built_in">byte</span>[] optionalEntropy, DataProtectionScope scope</span>)</span>;
 </code></pre>
-<p>🔒 هر چیزی که در <code>optionalEntropy</code> قرار دهید به کلید اضافه می‌شود و امنیت آن را افزایش می‌دهد.
+<p>🔒 هر چیزی که در <code>optionalEntropy</code> قرار دهید به کلید اضافه می‌شود و امنیت آن را افزایش می‌دهد.<br>
 پارامتر <code>DataProtectionScope</code> دو گزینه دارد:</p>
 <ul>
 <li><strong>CurrentUser</strong> → کلید از اطلاعات کاربری (credentials) کاربر فعلی استخراج می‌شود.</li>
@@ -83,35 +43,35 @@ public static byte[] Unprotect
 <p>➡️ این یعنی اگر <strong>CurrentUser</strong> انتخاب شود، داده‌های رمزنگاری‌شده توسط یک کاربر قابل رمزگشایی توسط کاربر دیگر نخواهند بود. در حالی‌که کلید <strong>LocalMachine</strong> امنیت کمتری دارد، اما برای سرویس‌های ویندوز یا برنامه‌هایی که باید تحت حساب‌های مختلف کار کنند، مناسب است.</p>
 <hr>
 <h3>نمونه‌ای ساده از رمزنگاری و رمزگشایی 🧩</h3>
-<pre><code class="language-csharp">byte[] original = {1, 2, 3, 4, 5};
+<pre class="hljs"><code><span class="hljs-built_in">byte</span>[] original = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>};
 DataProtectionScope scope = DataProtectionScope.CurrentUser;
-byte[] encrypted = ProtectedData.Protect (original, null, scope);
-byte[] decrypted = ProtectedData.Unprotect (encrypted, null, scope);
-// decrypted is now {1, 2, 3, 4, 5}
+<span class="hljs-built_in">byte</span>[] encrypted = ProtectedData.Protect (original, <span class="hljs-literal">null</span>, scope);
+<span class="hljs-built_in">byte</span>[] decrypted = ProtectedData.Unprotect (encrypted, <span class="hljs-literal">null</span>, scope);
+<span class="hljs-comment">// decrypted is now {1, 2, 3, 4, 5}</span>
 </code></pre>
-<p>🛡 Windows Data Protection امنیت متوسطی در برابر مهاجمی که دسترسی کامل به رایانه دارد فراهم می‌کند؛ این موضوع بستگی به قدرت رمز عبور کاربر دارد.
+<p>🛡 Windows Data Protection امنیت متوسطی در برابر مهاجمی که دسترسی کامل به رایانه دارد فراهم می‌کند؛ این موضوع بستگی به قدرت رمز عبور کاربر دارد.<br>
 با <strong>LocalMachine</strong>، این روش فقط در برابر کسانی که دسترسی فیزیکی یا الکترونیکی محدود دارند مؤثر است.</p>
 <hr>
 <h3>Hashing 🔑📊</h3>
-<p>یک <strong>الگوریتم Hashing</strong> حجم بزرگی از داده‌ها را به یک <strong>کد ثابت و کوچک (hashcode)</strong> تبدیل می‌کند.
+<p>یک <strong>الگوریتم Hashing</strong> حجم بزرگی از داده‌ها را به یک <strong>کد ثابت و کوچک (hashcode)</strong> تبدیل می‌کند.<br>
 این الگوریتم‌ها طوری طراحی شده‌اند که حتی اگر تنها یک بیت در داده‌ی اصلی تغییر کند، نتیجه‌ی <strong>hashcode</strong> کاملاً متفاوت خواهد بود.</p>
 <p>📂 این ویژگی باعث می‌شود که hashing برای <strong>مقایسه فایل‌ها</strong> یا <strong>تشخیص خرابی‌های تصادفی (یا مخرب) در فایل یا جریان داده (data stream)</strong> بسیار مناسب باشد.</p>
-<p>علاوه بر این، <strong>Hashing نوعی رمزنگاری یک‌طرفه</strong> محسوب می‌شود، زیرا بازگرداندن hashcode به داده اصلی تقریباً غیرممکن است.
-به همین دلیل، ذخیره‌سازی رمز عبور در پایگاه داده به‌صورت hash یک روش ایمن است.
-🔐 اگر پایگاه داده شما به خطر بیفتد، مهاجم به رمز عبورهای متنی ساده (plain-text) دسترسی پیدا نخواهد کرد.
+<p>علاوه بر این، <strong>Hashing نوعی رمزنگاری یک‌طرفه</strong> محسوب می‌شود، زیرا بازگرداندن hashcode به داده اصلی تقریباً غیرممکن است.<br>
+به همین دلیل، ذخیره‌سازی رمز عبور در پایگاه داده به‌صورت hash یک روش ایمن است.<br>
+🔐 اگر پایگاه داده شما به خطر بیفتد، مهاجم به رمز عبورهای متنی ساده (plain-text) دسترسی پیدا نخواهد کرد.<br>
 برای احراز هویت، کافی است ورودی کاربر را hash کرده و با مقدار ذخیره‌شده در پایگاه داده مقایسه کنید.</p>
 <hr>
 <h3>استفاده از ComputeHash 🖥</h3>
 <p>برای تولید hash، متد <code>ComputeHash</code> از یکی از زیرکلاس‌های <code>HashAlgorithm</code> (مثل <code>SHA1</code> یا <code>SHA256</code>) فراخوانی می‌شود:</p>
-<pre><code class="language-csharp">byte[] hash;
-using (Stream fs = File.OpenRead (&quot;checkme.doc&quot;))
-  hash = SHA1.Create().ComputeHash (fs);   // SHA1 hash is 20 bytes long
+<pre class="hljs"><code><span class="hljs-built_in">byte</span>[] hash;
+<span class="hljs-keyword">using</span> (Stream fs = File.OpenRead (<span class="hljs-string">&quot;checkme.doc&quot;</span>))
+  hash = SHA1.Create().ComputeHash (fs);   <span class="hljs-comment">// SHA1 hash is 20 bytes long</span>
 </code></pre>
 <p>متد <code>ComputeHash</code> همچنین یک <strong>آرایه‌ی بایت</strong> را می‌پذیرد که برای hash کردن رمزهای عبور بسیار کاربردی است (روش امن‌تر در بخش <strong>“Hashing Passwords”</strong> در صفحه ۸۷۸ توضیح داده شده است):</p>
-<pre><code class="language-csharp">byte[] data = System.Text.Encoding.UTF8.GetBytes (&quot;stRhong%pword&quot;);
-byte[] hash = SHA256.Create().ComputeHash (data);
+<pre class="hljs"><code><span class="hljs-built_in">byte</span>[] data = System.Text.Encoding.UTF8.GetBytes (<span class="hljs-string">&quot;stRhong%pword&quot;</span>);
+<span class="hljs-built_in">byte</span>[] hash = SHA256.Create().ComputeHash (data);
 </code></pre>
-<p>📌 متد <code>GetBytes</code> در یک شیء از نوع <code>Encoding</code>، یک رشته (string) را به آرایه‌ی بایت تبدیل می‌کند؛ متد <code>GetString</code> آن را برعکس برمی‌گرداند.
+<p>📌 متد <code>GetBytes</code> در یک شیء از نوع <code>Encoding</code>، یک رشته (string) را به آرایه‌ی بایت تبدیل می‌کند؛ متد <code>GetString</code> آن را برعکس برمی‌گرداند.<br>
 اما یک شیء <code>Encoding</code> نمی‌تواند یک آرایه‌ی بایت رمزنگاری‌شده یا hash شده را به رشته برگرداند، چون داده‌ی scramble شده معمولاً قوانین encoding متنی را نقض می‌کند.</p>
 <p>به جای آن باید از متدهای زیر استفاده کنید:</p>
 <ul>
@@ -121,7 +81,7 @@ byte[] hash = SHA256.Create().ComputeHash (data);
 <p>این‌ها تبدیل بین هر <strong>آرایه‌ی بایت</strong> و یک رشته معتبر (و سازگار با XML یا JSON) را انجام می‌دهند.</p>
 <hr>
 <h3>الگوریتم‌های Hash در .NET 🧮</h3>
-<p><code>SHA1</code> و <code>SHA256</code> دو نمونه از زیرنوع‌های <code>HashAlgorithm</code> هستند که توسط .NET ارائه شده‌اند.
+<p><code>SHA1</code> و <code>SHA256</code> دو نمونه از زیرنوع‌های <code>HashAlgorithm</code> هستند که توسط .NET ارائه شده‌اند.<br>
 مهم‌ترین الگوریتم‌ها، به ترتیب <strong>افزایش امنیت</strong> عبارت‌اند از: …</p>
  <div align="center">
 <p><img src="../../../assets/image/20/Table-20-2.jpeg" alt="Conventions-UsedThis-Book"></p>
@@ -140,13 +100,13 @@ byte[] hash = SHA256.Create().ComputeHash (data);
 <li><code>SHA3_384</code></li>
 <li><code>SHA3_512</code></li>
 </ul>
-<p>الگوریتم‌های SHA-3 از الگوریتم‌های قبلی <strong>امن‌تر (و البته کندتر)</strong> هستند، اما به <strong>Windows Build 25324+</strong> یا <strong>Linux با OpenSSL 1.1.1+</strong> نیاز دارند.
+<p>الگوریتم‌های SHA-3 از الگوریتم‌های قبلی <strong>امن‌تر (و البته کندتر)</strong> هستند، اما به <strong>Windows Build 25324+</strong> یا <strong>Linux با OpenSSL 1.1.1+</strong> نیاز دارند.<br>
 می‌توانید پشتیبانی سیستم‌عامل را از طریق ویژگی <strong>static</strong> به نام <code>IsSupported</code> در این کلاس‌ها بررسی کنید.</p>
 <hr>
 <h3>Hashing Passwords 🔑🧂</h3>
-<p>الگوریتم‌های SHA با طول بیشتر برای hash کردن رمز عبورها مناسب‌اند، به شرطی که یک <strong>سیاست رمز عبور قوی</strong> اعمال کنید تا از حمله‌ی <strong>dictionary attack</strong> جلوگیری شود.
+<p>الگوریتم‌های SHA با طول بیشتر برای hash کردن رمز عبورها مناسب‌اند، به شرطی که یک <strong>سیاست رمز عبور قوی</strong> اعمال کنید تا از حمله‌ی <strong>dictionary attack</strong> جلوگیری شود.<br>
 📖 در این نوع حمله، مهاجم جدولی از رمزها ایجاد می‌کند که شامل hash تمام کلمات موجود در یک فرهنگ لغت است.</p>
-<p>✅ یک تکنیک استاندارد هنگام hash کردن رمزها، استفاده از <strong>salt</strong> است:
+<p>✅ یک تکنیک استاندارد هنگام hash کردن رمزها، استفاده از <strong>salt</strong> است:<br>
 یک دنباله‌ی طولانی از بایت‌ها که ابتدا با یک <strong>تولیدکننده اعداد تصادفی</strong> به دست می‌آید و سپس پیش از hash شدن، با رمز عبور ترکیب می‌شود.</p>
 <p>این کار دو مزیت مهم دارد:</p>
 <ul>
@@ -156,7 +116,7 @@ byte[] hash = SHA256.Create().ComputeHash (data);
 <hr>
 <h3>Password Stretching ⏳</h3>
 <p>می‌توانید امنیت را با تکنیک <strong>stretching</strong> تقویت کنید؛ یعنی با <strong>تکرار چندباره hash کردن</strong>، فرآیند تولید hash را محاسباتی‌تر کنید.</p>
-<p>به‌عنوان مثال:
+<p>به‌عنوان مثال:<br>
 اگر ۱۰۰ بار rehash کنید، حمله‌ی dictionary که شاید یک ماه طول بکشد، اکنون حدود <strong>۸ سال</strong> زمان خواهد برد.</p>
 <p>کلاس‌های زیر دقیقاً همین نوع stretching را پیاده‌سازی می‌کنند و همچنین امکان استفاده آسان از salting را فراهم می‌آورند:</p>
 <ul>
@@ -164,19 +124,19 @@ byte[] hash = SHA256.Create().ComputeHash (data);
 <li><code>Rfc2898DeriveBytes</code></li>
 <li><code>PasswordDeriveBytes</code></li>
 </ul>
-<p>از میان آن‌ها، بهترین انتخاب:
+<p>از میان آن‌ها، بهترین انتخاب:<br>
 <strong><code>KeyDerivation.Pbkdf2</code></strong> ✅</p>
 <p>مثال:</p>
-<pre><code class="language-csharp">byte[] encrypted = KeyDerivation.Pbkdf2 (
-   password: &quot;stRhong%pword&quot;,
-   salt: Encoding.UTF8.GetBytes (&quot;j78Y#p)/saREN!y3@&quot;),
+<pre class="hljs"><code><span class="hljs-built_in">byte</span>[] encrypted = KeyDerivation.Pbkdf2 (
+   password: <span class="hljs-string">&quot;stRhong%pword&quot;</span>,
+   salt: Encoding.UTF8.GetBytes (<span class="hljs-string">&quot;j78Y#p)/saREN!y3@&quot;</span>),
    prf: KeyDerivationPrf.HMACSHA512,
-   iterationCount: 100,
-   numBytesRequested: 64);
+   iterationCount: <span class="hljs-number">100</span>,
+   numBytesRequested: <span class="hljs-number">64</span>);
 </code></pre>
-<p>📦 <code>KeyDerivation.Pbkdf2</code> نیازمند نصب بسته‌ی NuGet به نام:
-<code>Microsoft.AspNetCore.Cryptography.KeyDerivation</code> است.
-اگرچه این کلاس در <strong>namespace</strong> مربوط به ASP.NET Core قرار دارد، اما هر برنامه‌ی .NET می‌تواند از آن استفاده کند.</p>
+<p>📦 <code>KeyDerivation.Pbkdf2</code> نیازمند نصب بسته‌ی NuGet به نام:<br>
+<code>Microsoft.AspNetCore.Cryptography.KeyDerivation</code> است.<br>
+اگرچه این کلاس در <strong>namespace</strong> مربوط به <a href="http://ASP.NET">ASP.NET</a> Core قرار دارد، اما هر برنامه‌ی .NET می‌تواند از آن استفاده کند.</p>
 <hr>
 <h3>Symmetric Encryption 🔒⚖️</h3>
 <p>در <strong>رمزنگاری متقارن (Symmetric Encryption)</strong>، یک کلید یکسان برای <strong>رمزنگاری (encryption)</strong> و <strong>رمزگشایی (decryption)</strong> استفاده می‌شود.</p>
@@ -186,42 +146,42 @@ byte[] hash = SHA256.Create().ComputeHash (data);
 <li><code>Rijndael</code></li>
 <li><code>Aes</code></li>
 </ul>
-<p>این دو تقریباً مشابه‌اند؛ با این تفاوت که <code>Aes</code> اجازه نمی‌دهد اندازه‌ی بلوک (block size) را تغییر دهید و رمزنگاری را ضعیف کنید.
+<p>این دو تقریباً مشابه‌اند؛ با این تفاوت که <code>Aes</code> اجازه نمی‌دهد اندازه‌ی بلوک (block size) را تغییر دهید و رمزنگاری را ضعیف کنید.<br>
 🔐 تیم امنیت CLR استفاده از <strong>Aes</strong> را توصیه می‌کند.</p>
 <p>هر دو الگوریتم کلیدهای متقارن با طول <strong>۱۶، ۲۴ یا ۳۲ بایت</strong> را پشتیبانی می‌کنند که همگی در حال حاضر ایمن محسوب می‌شوند.</p>
 <hr>
 <h3>نمونه رمزنگاری 📝</h3>
 <p>رمزنگاری یک آرایه‌ی بایت هنگام نوشتن در فایل با کلید ۱۶ بایتی:</p>
-<pre><code class="language-csharp">byte[] key = {145,12,32,245,98,132,98,214,6,77,131,44,221,3,9,50};
-byte[] iv  = {15,122,132,5,93,198,44,31,9,39,241,49,250,188,80,7};
-byte[] data = { 1, 2, 3, 4, 5 };   // داده‌ای که رمزنگاری می‌کنیم.
-using (SymmetricAlgorithm algorithm = Aes.Create())
-using (ICryptoTransform encryptor = algorithm.CreateEncryptor (key, iv))
-using (Stream f = File.Create (&quot;encrypted.bin&quot;))
-using (Stream c = new CryptoStream (f, encryptor, CryptoStreamMode.Write))
- c.Write (data, 0, data.Length);
+<pre class="hljs"><code><span class="hljs-built_in">byte</span>[] key = {<span class="hljs-number">145</span>,<span class="hljs-number">12</span>,<span class="hljs-number">32</span>,<span class="hljs-number">245</span>,<span class="hljs-number">98</span>,<span class="hljs-number">132</span>,<span class="hljs-number">98</span>,<span class="hljs-number">214</span>,<span class="hljs-number">6</span>,<span class="hljs-number">77</span>,<span class="hljs-number">131</span>,<span class="hljs-number">44</span>,<span class="hljs-number">221</span>,<span class="hljs-number">3</span>,<span class="hljs-number">9</span>,<span class="hljs-number">50</span>};
+<span class="hljs-built_in">byte</span>[] iv  = {<span class="hljs-number">15</span>,<span class="hljs-number">122</span>,<span class="hljs-number">132</span>,<span class="hljs-number">5</span>,<span class="hljs-number">93</span>,<span class="hljs-number">198</span>,<span class="hljs-number">44</span>,<span class="hljs-number">31</span>,<span class="hljs-number">9</span>,<span class="hljs-number">39</span>,<span class="hljs-number">241</span>,<span class="hljs-number">49</span>,<span class="hljs-number">250</span>,<span class="hljs-number">188</span>,<span class="hljs-number">80</span>,<span class="hljs-number">7</span>};
+<span class="hljs-built_in">byte</span>[] data = { <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span> };   <span class="hljs-comment">// داده‌ای که رمزنگاری می‌کنیم.</span>
+<span class="hljs-keyword">using</span> (SymmetricAlgorithm algorithm = Aes.Create())
+<span class="hljs-keyword">using</span> (ICryptoTransform encryptor = algorithm.CreateEncryptor (key, iv))
+<span class="hljs-keyword">using</span> (Stream f = File.Create (<span class="hljs-string">&quot;encrypted.bin&quot;</span>))
+<span class="hljs-keyword">using</span> (Stream c = <span class="hljs-keyword">new</span> CryptoStream (f, encryptor, CryptoStreamMode.Write))
+ c.Write (data, <span class="hljs-number">0</span>, data.Length);
 </code></pre>
 <hr>
 <h3>نمونه رمزگشایی 🔓</h3>
-<pre><code class="language-csharp">byte[] key = {145,12,32,245,98,132,98,214,6,77,131,44,221,3,9,50};
-byte[] iv  = {15,122,132,5,93,198,44,31,9,39,241,49,250,188,80,7};
-byte[] decrypted = new byte[5];
-using (SymmetricAlgorithm algorithm = Aes.Create())
-using (ICryptoTransform decryptor = algorithm.CreateDecryptor (key, iv))
-using (Stream f = File.OpenRead (&quot;encrypted.bin&quot;))
-using (Stream c = new CryptoStream (f, decryptor, CryptoStreamMode.Read))
- for (int b; (b = c.ReadByte()) &gt; -1;)
-   Console.Write (b + &quot; &quot;);   // خروجی: 1 2 3 4 5
+<pre class="hljs"><code><span class="hljs-built_in">byte</span>[] key = {<span class="hljs-number">145</span>,<span class="hljs-number">12</span>,<span class="hljs-number">32</span>,<span class="hljs-number">245</span>,<span class="hljs-number">98</span>,<span class="hljs-number">132</span>,<span class="hljs-number">98</span>,<span class="hljs-number">214</span>,<span class="hljs-number">6</span>,<span class="hljs-number">77</span>,<span class="hljs-number">131</span>,<span class="hljs-number">44</span>,<span class="hljs-number">221</span>,<span class="hljs-number">3</span>,<span class="hljs-number">9</span>,<span class="hljs-number">50</span>};
+<span class="hljs-built_in">byte</span>[] iv  = {<span class="hljs-number">15</span>,<span class="hljs-number">122</span>,<span class="hljs-number">132</span>,<span class="hljs-number">5</span>,<span class="hljs-number">93</span>,<span class="hljs-number">198</span>,<span class="hljs-number">44</span>,<span class="hljs-number">31</span>,<span class="hljs-number">9</span>,<span class="hljs-number">39</span>,<span class="hljs-number">241</span>,<span class="hljs-number">49</span>,<span class="hljs-number">250</span>,<span class="hljs-number">188</span>,<span class="hljs-number">80</span>,<span class="hljs-number">7</span>};
+<span class="hljs-built_in">byte</span>[] decrypted = <span class="hljs-keyword">new</span> <span class="hljs-built_in">byte</span>[<span class="hljs-number">5</span>];
+<span class="hljs-keyword">using</span> (SymmetricAlgorithm algorithm = Aes.Create())
+<span class="hljs-keyword">using</span> (ICryptoTransform decryptor = algorithm.CreateDecryptor (key, iv))
+<span class="hljs-keyword">using</span> (Stream f = File.OpenRead (<span class="hljs-string">&quot;encrypted.bin&quot;</span>))
+<span class="hljs-keyword">using</span> (Stream c = <span class="hljs-keyword">new</span> CryptoStream (f, decryptor, CryptoStreamMode.Read))
+ <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> b; (b = c.ReadByte()) &gt; <span class="hljs-number">-1</span>;)
+   Console.Write (b + <span class="hljs-string">&quot; &quot;</span>);   <span class="hljs-comment">// خروجی: 1 2 3 4 5</span>
 </code></pre>
 <p>➡️ در این مثال، یک کلید ۱۶ بایتی به‌طور تصادفی ساخته شده است. اگر کلید اشتباه برای رمزگشایی استفاده شود، <code>CryptoStream</code> یک استثناء از نوع <code>CryptographicException</code> ایجاد می‌کند. گرفتن این استثناء تنها راه برای بررسی درستی کلید است.</p>
 <hr>
 <h3>نقش IV (Initialization Vector) 🎲</h3>
-<p>علاوه بر کلید، ما یک <strong>IV (Initialization Vector)</strong> هم ایجاد کردیم.
+<p>علاوه بر کلید، ما یک <strong>IV (Initialization Vector)</strong> هم ایجاد کردیم.<br>
 این دنباله‌ی ۱۶ بایتی بخشی از الگوریتم رمزنگاری است؛ شبیه به کلید، اما محرمانه محسوب نمی‌شود.</p>
-<p>📩 اگر پیامی رمزنگاری‌شده را منتقل کنید، معمولاً IV را به‌صورت <strong>plain text</strong> (مثلاً در هدر پیام) ارسال کرده و در هر پیام آن را تغییر می‌دهید.
+<p>📩 اگر پیامی رمزنگاری‌شده را منتقل کنید، معمولاً IV را به‌صورت <strong>plain text</strong> (مثلاً در هدر پیام) ارسال کرده و در هر پیام آن را تغییر می‌دهید.<br>
 این کار باعث می‌شود هر پیام رمزنگاری‌شده با پیام‌های قبلی غیرقابل تشخیص باشد—even اگر نسخه‌ی متنی (unencrypted) آن‌ها مشابه یا یکسان باشند.</p>
 <ul>
-<li>اگر نمی‌خواهید از IV استفاده کنید، می‌توانید یک مقدار ۱۶ بایتی یکسان را هم به‌عنوان کلید و هم به‌عنوان IV به کار ببرید.
+<li>اگر نمی‌خواهید از IV استفاده کنید، می‌توانید یک مقدار ۱۶ بایتی یکسان را هم به‌عنوان کلید و هم به‌عنوان IV به کار ببرید.<br>
 ⚠️ اما استفاده از یک IV ثابت در چند پیام، رمزنگاری را ضعیف کرده و ممکن است آن را قابل نفوذ کند.</li>
 </ul>
 <hr>
@@ -231,7 +191,7 @@ using (Stream c = new CryptoStream (f, decryptor, CryptoStreamMode.Read))
 <li><strong>CryptoStream</strong> → لوله‌کش است؛ مدیریت جریان داده (stream plumbing) را بر عهده دارد.</li>
 </ul>
 <p>شما می‌توانید <strong>Aes</strong> را با یک الگوریتم متقارن دیگر جایگزین کنید، اما همچنان از <strong>CryptoStream</strong> استفاده کنید.</p>
-<p>🔄 <code>CryptoStream</code> دوطرفه است؛ بسته به انتخاب شما (<code>CryptoStreamMode.Read</code> یا <code>CryptoStreamMode.Write</code>) می‌تواند برای خواندن یا نوشتن استفاده شود.
+<p>🔄 <code>CryptoStream</code> دوطرفه است؛ بسته به انتخاب شما (<code>CryptoStreamMode.Read</code> یا <code>CryptoStreamMode.Write</code>) می‌تواند برای خواندن یا نوشتن استفاده شود.<br>
 هر دو Encryptor و Decryptor توانایی خواندن و نوشتن دارند و چهار ترکیب ممکن ایجاد می‌کنند—این می‌تواند گاهی موجب گیج شدن شما شود!</p>
 <p>📌 اگر مطمئن نیستید:</p>
 <ul>
@@ -241,60 +201,60 @@ using (Stream c = new CryptoStream (f, decryptor, CryptoStreamMode.Read))
 <p>این حالت معمولاً طبیعی‌ترین انتخاب است.</p>
 <hr>
 <h3>تولید کلید و IV تصادفی 🎲</h3>
-<p>برای تولید یک کلید یا IV تصادفی، از <code>RandomNumberGenerator</code> در <code>System.Cryptography</code> استفاده کنید.
+<p>برای تولید یک کلید یا IV تصادفی، از <code>RandomNumberGenerator</code> در <code>System.Cryptography</code> استفاده کنید.<br>
 اعدادی که این کلاس تولید می‌کند واقعاً غیرقابل پیش‌بینی و <strong>cryptographically strong</strong> هستند (برخلاف <code>System.Random</code>).</p>
 <p>مثال:</p>
-<pre><code class="language-csharp">byte[] key = new byte [16];
-byte[] iv  = new byte [16];
+<pre class="hljs"><code><span class="hljs-built_in">byte</span>[] key = <span class="hljs-keyword">new</span> <span class="hljs-built_in">byte</span> [<span class="hljs-number">16</span>];
+<span class="hljs-built_in">byte</span>[] iv  = <span class="hljs-keyword">new</span> <span class="hljs-built_in">byte</span> [<span class="hljs-number">16</span>];
 RandomNumberGenerator rand = RandomNumberGenerator.Create();
 rand.GetBytes (key);
 rand.GetBytes (iv);
 </code></pre>
 <p>از .NET 6 به بعد:</p>
-<pre><code class="language-csharp">byte[] key = RandomNumberGenerator.GetBytes (16);
-byte[] iv = RandomNumberGenerator.GetBytes (16);
+<pre class="hljs"><code><span class="hljs-built_in">byte</span>[] key = RandomNumberGenerator.GetBytes (<span class="hljs-number">16</span>);
+<span class="hljs-built_in">byte</span>[] iv = RandomNumberGenerator.GetBytes (<span class="hljs-number">16</span>);
 </code></pre>
-<p>اگر کلید و IV مشخص نکنید، مقادیر تصادفی قوی به‌طور خودکار تولید می‌شوند.
+<p>اگر کلید و IV مشخص نکنید، مقادیر تصادفی قوی به‌طور خودکار تولید می‌شوند.<br>
 می‌توانید این مقادیر را از طریق ویژگی‌های <code>Key</code> و <code>IV</code> در شیء <code>Aes</code> دریافت کنید.</p>
 <h3>🔐 رمزنگاری در حافظه</h3>
 <p>از <strong>.NET 6</strong> به بعد، می‌توانید برای ساده‌سازی فرآیند رمزنگاری و رمزگشایی آرایه‌های بایت از متدهای <strong>EncryptCbc</strong> و <strong>DecryptCbc</strong> استفاده کنید:</p>
-<pre><code class="language-csharp">public static byte[] Encrypt (byte[] data, byte[] key, byte[] iv)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">byte</span>[] <span class="hljs-title">Encrypt</span> (<span class="hljs-params"><span class="hljs-built_in">byte</span>[] data, <span class="hljs-built_in">byte</span>[] key, <span class="hljs-built_in">byte</span>[] iv</span>)</span>
 {
-    using Aes algorithm = Aes.Create();
+    <span class="hljs-keyword">using</span> Aes algorithm = Aes.Create();
     algorithm.Key = key;
-    return algorithm.EncryptCbc(data, iv);
+    <span class="hljs-keyword">return</span> algorithm.EncryptCbc(data, iv);
 }
 
-public static byte[] Decrypt (byte[] data, byte[] key, byte[] iv)
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">byte</span>[] <span class="hljs-title">Decrypt</span> (<span class="hljs-params"><span class="hljs-built_in">byte</span>[] data, <span class="hljs-built_in">byte</span>[] key, <span class="hljs-built_in">byte</span>[] iv</span>)</span>
 {
-    using Aes algorithm = Aes.Create();
+    <span class="hljs-keyword">using</span> Aes algorithm = Aes.Create();
     algorithm.Key = key;
-    return algorithm.DecryptCbc(data, iv);
+    <span class="hljs-keyword">return</span> algorithm.DecryptCbc(data, iv);
 }
 </code></pre>
 <hr>
 <h3>⚙️ معادل سازگار با همه نسخه‌های .NET</h3>
 <p>در نسخه‌های قدیمی‌تر، باید از <strong>ICryptoTransform</strong> و <strong>CryptoStream</strong> استفاده کنیم:</p>
-<pre><code class="language-csharp">public static byte[] Encrypt (byte[] data, byte[] key, byte[] iv)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">byte</span>[] <span class="hljs-title">Encrypt</span> (<span class="hljs-params"><span class="hljs-built_in">byte</span>[] data, <span class="hljs-built_in">byte</span>[] key, <span class="hljs-built_in">byte</span>[] iv</span>)</span>
 {
-    using (Aes algorithm = Aes.Create())
-    using (ICryptoTransform encryptor = algorithm.CreateEncryptor(key, iv))
-        return Crypt(data, encryptor);
+    <span class="hljs-keyword">using</span> (Aes algorithm = Aes.Create())
+    <span class="hljs-keyword">using</span> (ICryptoTransform encryptor = algorithm.CreateEncryptor(key, iv))
+        <span class="hljs-keyword">return</span> Crypt(data, encryptor);
 }
 
-public static byte[] Decrypt (byte[] data, byte[] key, byte[] iv)
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">byte</span>[] <span class="hljs-title">Decrypt</span> (<span class="hljs-params"><span class="hljs-built_in">byte</span>[] data, <span class="hljs-built_in">byte</span>[] key, <span class="hljs-built_in">byte</span>[] iv</span>)</span>
 {
-    using (Aes algorithm = Aes.Create())
-    using (ICryptoTransform decryptor = algorithm.CreateDecryptor(key, iv))
-        return Crypt(data, decryptor);
+    <span class="hljs-keyword">using</span> (Aes algorithm = Aes.Create())
+    <span class="hljs-keyword">using</span> (ICryptoTransform decryptor = algorithm.CreateDecryptor(key, iv))
+        <span class="hljs-keyword">return</span> Crypt(data, decryptor);
 }
 
-static byte[] Crypt (byte[] data, ICryptoTransform cryptor)
+<span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-built_in">byte</span>[] <span class="hljs-title">Crypt</span> (<span class="hljs-params"><span class="hljs-built_in">byte</span>[] data, ICryptoTransform cryptor</span>)</span>
 {
-    MemoryStream m = new MemoryStream();
-    using (Stream c = new CryptoStream(m, cryptor, CryptoStreamMode.Write))
-        c.Write(data, 0, data.Length);
-    return m.ToArray();
+    MemoryStream m = <span class="hljs-keyword">new</span> MemoryStream();
+    <span class="hljs-keyword">using</span> (Stream c = <span class="hljs-keyword">new</span> CryptoStream(m, cryptor, CryptoStreamMode.Write))
+        c.Write(data, <span class="hljs-number">0</span>, data.Length);
+    <span class="hljs-keyword">return</span> m.ToArray();
 }
 </code></pre>
 <blockquote>
@@ -302,54 +262,54 @@ static byte[] Crypt (byte[] data, ICryptoTransform cryptor)
 </blockquote>
 <hr>
 <h3>📝 نسخه مخصوص رشته‌ها (String)</h3>
-<pre><code class="language-csharp">public static string Encrypt (string data, byte[] key, byte[] iv)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">string</span> <span class="hljs-title">Encrypt</span> (<span class="hljs-params"><span class="hljs-built_in">string</span> data, <span class="hljs-built_in">byte</span>[] key, <span class="hljs-built_in">byte</span>[] iv</span>)</span>
 {
-    return Convert.ToBase64String(
+    <span class="hljs-keyword">return</span> Convert.ToBase64String(
         Encrypt(Encoding.UTF8.GetBytes(data), key, iv));
 }
 
-public static string Decrypt (string data, byte[] key, byte[] iv)
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">string</span> <span class="hljs-title">Decrypt</span> (<span class="hljs-params"><span class="hljs-built_in">string</span> data, <span class="hljs-built_in">byte</span>[] key, <span class="hljs-built_in">byte</span>[] iv</span>)</span>
 {
-    return Encoding.UTF8.GetString(
+    <span class="hljs-keyword">return</span> Encoding.UTF8.GetString(
         Decrypt(Convert.FromBase64String(data), key, iv));
 }
 </code></pre>
 <p><strong>نمونه استفاده:</strong></p>
-<pre><code class="language-csharp">byte[] key = new byte[16];
-byte[] iv = new byte[16];
-var cryptoRng = RandomNumberGenerator.Create();
+<pre class="hljs"><code><span class="hljs-built_in">byte</span>[] key = <span class="hljs-keyword">new</span> <span class="hljs-built_in">byte</span>[<span class="hljs-number">16</span>];
+<span class="hljs-built_in">byte</span>[] iv = <span class="hljs-keyword">new</span> <span class="hljs-built_in">byte</span>[<span class="hljs-number">16</span>];
+<span class="hljs-keyword">var</span> cryptoRng = RandomNumberGenerator.Create();
 cryptoRng.GetBytes(key);
 cryptoRng.GetBytes(iv);
 
-string encrypted = Encrypt(&quot;Yeah!&quot;, key, iv);
-Console.WriteLine(encrypted);   // R1/5gYvcxyR2vzPjnT7yaQ==
-string decrypted = Decrypt(encrypted, key, iv);
-Console.WriteLine(decrypted);   // Yeah!
+<span class="hljs-built_in">string</span> encrypted = Encrypt(<span class="hljs-string">&quot;Yeah!&quot;</span>, key, iv);
+Console.WriteLine(encrypted);   <span class="hljs-comment">// R1/5gYvcxyR2vzPjnT7yaQ==</span>
+<span class="hljs-built_in">string</span> decrypted = Decrypt(encrypted, key, iv);
+Console.WriteLine(decrypted);   <span class="hljs-comment">// Yeah!</span>
 </code></pre>
 <hr>
 <h3>⛓️ زنجیره‌سازی استریم‌ها (Chaining Streams)</h3>
 <p>از آن‌جایی که <strong>CryptoStream یک دکوریتور</strong> است، می‌توانید آن را با سایر استریم‌ها زنجیره کنید. در مثال زیر، یک متن فشرده و رمزنگاری‌شده را در فایل ذخیره کرده و سپس بازیابی می‌کنیم:</p>
-<pre><code class="language-csharp">byte[] key = new byte[16];
-byte[] iv = new byte[16];
-var cryptoRng = RandomNumberGenerator.Create();
+<pre class="hljs"><code><span class="hljs-built_in">byte</span>[] key = <span class="hljs-keyword">new</span> <span class="hljs-built_in">byte</span>[<span class="hljs-number">16</span>];
+<span class="hljs-built_in">byte</span>[] iv = <span class="hljs-keyword">new</span> <span class="hljs-built_in">byte</span>[<span class="hljs-number">16</span>];
+<span class="hljs-keyword">var</span> cryptoRng = RandomNumberGenerator.Create();
 cryptoRng.GetBytes(key);
 cryptoRng.GetBytes(iv);
 
-using (Aes algorithm = Aes.Create())
+<span class="hljs-keyword">using</span> (Aes algorithm = Aes.Create())
 {
-    using (ICryptoTransform encryptor = algorithm.CreateEncryptor(key, iv))
-    using (Stream f = File.Create(&quot;serious.bin&quot;))
-    using (Stream c = new CryptoStream(f, encryptor, CryptoStreamMode.Write))
-    using (Stream d = new DeflateStream(c, CompressionMode.Compress))
-    using (StreamWriter w = new StreamWriter(d))
-        await w.WriteLineAsync(&quot;Small and secure!&quot;);
+    <span class="hljs-keyword">using</span> (ICryptoTransform encryptor = algorithm.CreateEncryptor(key, iv))
+    <span class="hljs-keyword">using</span> (Stream f = File.Create(<span class="hljs-string">&quot;serious.bin&quot;</span>))
+    <span class="hljs-keyword">using</span> (Stream c = <span class="hljs-keyword">new</span> CryptoStream(f, encryptor, CryptoStreamMode.Write))
+    <span class="hljs-keyword">using</span> (Stream d = <span class="hljs-keyword">new</span> DeflateStream(c, CompressionMode.Compress))
+    <span class="hljs-keyword">using</span> (StreamWriter w = <span class="hljs-keyword">new</span> StreamWriter(d))
+        <span class="hljs-keyword">await</span> w.WriteLineAsync(<span class="hljs-string">&quot;Small and secure!&quot;</span>);
 
-    using (ICryptoTransform decryptor = algorithm.CreateDecryptor(key, iv))
-    using (Stream f = File.OpenRead(&quot;serious.bin&quot;))
-    using (Stream c = new CryptoStream(f, decryptor, CryptoStreamMode.Read))
-    using (Stream d = new DeflateStream(c, CompressionMode.Decompress))
-    using (StreamReader r = new StreamReader(d))
-        Console.WriteLine(await r.ReadLineAsync());   // Small and secure!
+    <span class="hljs-keyword">using</span> (ICryptoTransform decryptor = algorithm.CreateDecryptor(key, iv))
+    <span class="hljs-keyword">using</span> (Stream f = File.OpenRead(<span class="hljs-string">&quot;serious.bin&quot;</span>))
+    <span class="hljs-keyword">using</span> (Stream c = <span class="hljs-keyword">new</span> CryptoStream(f, decryptor, CryptoStreamMode.Read))
+    <span class="hljs-keyword">using</span> (Stream d = <span class="hljs-keyword">new</span> DeflateStream(c, CompressionMode.Decompress))
+    <span class="hljs-keyword">using</span> (StreamReader r = <span class="hljs-keyword">new</span> StreamReader(d))
+        Console.WriteLine(<span class="hljs-keyword">await</span> r.ReadLineAsync());   <span class="hljs-comment">// Small and secure!</span>
 }
 </code></pre>
 <p>📌 در این مثال، همه متغیرهای یک‌حرفی بخشی از زنجیره هستند. اجزای اصلی مثل <strong>algorithm</strong>، <strong>encryptor</strong> و <strong>decryptor</strong> در واقع به <strong>CryptoStream</strong> کمک می‌کنند تا عملیات رمزنگاری و رمزگشایی انجام شود.</p>
@@ -365,9 +325,9 @@ using (Aes algorithm = Aes.Create())
 <li>متد <strong>Flush</strong> در CryptoStream هیچ کاری انجام نمی‌دهد.</li>
 <li>برای <em>فلاش کردن بدون Dispose کردن</em> باید از <strong>FlushFinalBlock</strong> استفاده کنید. این متد فقط یک بار قابل فراخوانی است و بعد از آن دیگر نمی‌توانید داده‌ای بنویسید.</li>
 </ul>
-<p>ما همچنین اشیای <strong>Aes</strong> و <strong>ICryptoTransform</strong> (یعنی <code>algorithm</code>, <code>encryptor</code>, <code>decryptor</code>) را Dispose می‌کنیم. وقتی این Transformها Dispose شوند، کلید متقارن و داده‌های مرتبط از حافظه پاک می‌شوند. این کار جلوی کشف کلید توسط نرم‌افزارهای مخرب را می‌گیرد.
+<p>ما همچنین اشیای <strong>Aes</strong> و <strong>ICryptoTransform</strong> (یعنی <code>algorithm</code>, <code>encryptor</code>, <code>decryptor</code>) را Dispose می‌کنیم. وقتی این Transformها Dispose شوند، کلید متقارن و داده‌های مرتبط از حافظه پاک می‌شوند. این کار جلوی کشف کلید توسط نرم‌افزارهای مخرب را می‌گیرد.<br>
 به <strong>Garbage Collector</strong> نمی‌توان اعتماد کرد، چون آن فقط حافظه را <em>آزاد</em> می‌کند، نه اینکه بایت‌ها را صفر کند.</p>
-<p>👉 ساده‌ترین راه برای Dispose کردن یک شیء <strong>Aes</strong> خارج از <code>using</code>، فراخوانی متد <strong>Clear</strong> است.
+<p>👉 ساده‌ترین راه برای Dispose کردن یک شیء <strong>Aes</strong> خارج از <code>using</code>، فراخوانی متد <strong>Clear</strong> است.<br>
 متد <strong>Dispose</strong> آن به صورت explicit پیاده‌سازی شده تا نشان دهد این Dispose غیرمعمول است (پاک کردن حافظه به‌جای آزادسازی منابع unmanaged).</p>
 <h4>🔒 نکات امنیتی برای جلوگیری از نشت داده‌های حساس</h4>
 <ul>
@@ -382,7 +342,7 @@ using (Aes algorithm = Aes.Create())
 <li>کلیدها را در برابر دسترسی غیرمجاز محافظت کنید.</li>
 <li>نسخه‌های پشتیبان داشته باشید (برای مواقع خرابی سخت‌افزار).</li>
 </ul>
-<p>🚫 توصیه نمی‌شود کلیدها را <strong>سخت‌کد (hardcode)</strong> کنید، چون ابزارهای ساده‌ای برای دیکامپایل اسمبلی‌ها وجود دارد.
+<p>🚫 توصیه نمی‌شود کلیدها را <strong>سخت‌کد (hardcode)</strong> کنید، چون ابزارهای ساده‌ای برای دیکامپایل اسمبلی‌ها وجود دارد.<br>
 ✅ راه بهتر در ویندوز: تولید کلید تصادفی برای هر نصب و ذخیره آن با استفاده از <strong>Windows Data Protection</strong>.</p>
 <p>در <strong>ابر (Cloud)</strong>، سرویس‌هایی مثل <strong>Azure</strong> و <strong>AWS</strong> سیستم‌های مدیریت کلید (KMS) ارائه می‌دهند که قابلیت‌هایی مثل ثبت لاگ دسترسی‌ها (audit trails) دارند.</p>
 <hr>
@@ -414,7 +374,7 @@ using (Aes algorithm = Aes.Create())
 <p>اما بدون کلید خصوصی Target، نمی‌تواند پیام را رمزگشایی کند.</p>
 <hr>
 <h3>⚠️ نکته امنیتی: حمله مرد میانی (MITM)</h3>
-<p>Origin مطمئن نیست که Target واقعی است یا فرد مخرب!
+<p>Origin مطمئن نیست که Target واقعی است یا فرد مخرب!<br>
 راه‌حل:</p>
 <ul>
 <li>از قبل کلید عمومی Target را بشناسد.</li>
@@ -422,7 +382,7 @@ using (Aes algorithm = Aes.Create())
 </ul>
 <hr>
 <h3>🚀 ترکیب کلید عمومی و متقارن</h3>
-<p>رمزنگاری کلید عمومی کند است و اندازه پیام محدود دارد.
+<p>رمزنگاری کلید عمومی کند است و اندازه پیام محدود دارد.<br>
 به همین دلیل معمولاً پیام اولیه فقط شامل یک کلید متقارن تازه است.</p>
 <p>📌 روند:</p>
 <ul>
@@ -433,21 +393,21 @@ using (Aes algorithm = Aes.Create())
 <p>اگر برای هر جلسه یک جفت کلید عمومی/خصوصی تازه ساخته شود، امنیت بالاتر می‌رود چون دیگر نیازی به ذخیره‌سازی کلیدها در هیچ‌کدام از کامپیوترها نیست.</p>
 <hr>
 <h3>🛑 محدودیت کلید عمومی</h3>
-<p>الگوریتم‌های کلید عمومی فقط پیام‌هایی را رمز می‌کنند که از خود کلید <strong>کوچک‌تر باشند</strong>.
+<p>الگوریتم‌های کلید عمومی فقط پیام‌هایی را رمز می‌کنند که از خود کلید <strong>کوچک‌تر باشند</strong>.<br>
 بنابراین برای پیام‌های بزرگ (بیشتر از نصف اندازه کلید)، استثنا (Exception) پرتاب می‌شود.</p>
 <h3>🔑 کلاس RSA در .NET</h3>
 <p>در .NET چندین الگوریتم نامتقارن وجود دارد که <strong>RSA</strong> محبوب‌ترین آن‌هاست.</p>
 <h4>🔒 رمزنگاری و رمزگشایی با RSA</h4>
-<pre><code class="language-csharp">byte[] data = { 1, 2, 3, 4, 5 };   // داده‌ای که می‌خواهیم رمز کنیم
-using (var rsa = new RSACryptoServiceProvider())
+<pre class="hljs"><code><span class="hljs-built_in">byte</span>[] data = { <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span> };   <span class="hljs-comment">// داده‌ای که می‌خواهیم رمز کنیم</span>
+<span class="hljs-keyword">using</span> (<span class="hljs-keyword">var</span> rsa = <span class="hljs-keyword">new</span> RSACryptoServiceProvider())
 {
-    byte[] encrypted = rsa.Encrypt(data, true);
-    byte[] decrypted = rsa.Decrypt(encrypted, true);
+    <span class="hljs-built_in">byte</span>[] encrypted = rsa.Encrypt(data, <span class="hljs-literal">true</span>);
+    <span class="hljs-built_in">byte</span>[] decrypted = rsa.Decrypt(encrypted, <span class="hljs-literal">true</span>);
 }
 </code></pre>
-<p>چون هیچ کلید عمومی یا خصوصی‌ای مشخص نکردیم، فراهم‌کننده رمزنگاری به‌طور خودکار یک جفت کلید (Key Pair) با طول پیش‌فرض <strong>١٠٢٤ بیت</strong> ساخت.
+<p>چون هیچ کلید عمومی یا خصوصی‌ای مشخص نکردیم، فراهم‌کننده رمزنگاری به‌طور خودکار یک جفت کلید (Key Pair) با طول پیش‌فرض <strong>١٠٢٤ بیت</strong> ساخت.<br>
 می‌توانید کلیدهای بلندتر (در مضارب ٨ بایت) بخواهید. برای برنامه‌های امنیتی حساس، استفاده از <strong>٢٠٤٨ بیت</strong> توصیه می‌شود:</p>
-<pre><code class="language-csharp">var rsa = new RSACryptoServiceProvider(2048);
+<pre class="hljs"><code><span class="hljs-keyword">var</span> rsa = <span class="hljs-keyword">new</span> RSACryptoServiceProvider(<span class="hljs-number">2048</span>);
 </code></pre>
 <p>ساخت کلید محاسباتی سنگین است (حدود <strong>١٠ میلی‌ثانیه</strong> طول می‌کشد). به همین دلیل، پیاده‌سازی RSA تولید کلید را تا زمانی که واقعاً لازم باشد (مثلاً هنگام فراخوانی <code>Encrypt</code>) به تأخیر می‌اندازد. این فرصت را می‌دهد که اگر کلید موجودی دارید، آن را بارگذاری کنید.</p>
 <hr>
@@ -458,62 +418,62 @@ using (var rsa = new RSACryptoServiceProvider())
 </ul>
 <p>پارامتر بولی تعیین می‌کند که کلید خصوصی هم ذخیره شود یا نه.</p>
 <p>مثال: ساخت یک جفت کلید و ذخیره آن روی دیسک:</p>
-<pre><code class="language-csharp">using (var rsa = new RSACryptoServiceProvider())
+<pre class="hljs"><code><span class="hljs-keyword">using</span> (<span class="hljs-keyword">var</span> rsa = <span class="hljs-keyword">new</span> RSACryptoServiceProvider())
 {
-    File.WriteAllText(&quot;PublicKeyOnly.xml&quot;, rsa.ToXmlString(false));
-    File.WriteAllText(&quot;PublicPrivate.xml&quot;, rsa.ToXmlString(true));
+    File.WriteAllText(<span class="hljs-string">&quot;PublicKeyOnly.xml&quot;</span>, rsa.ToXmlString(<span class="hljs-literal">false</span>));
+    File.WriteAllText(<span class="hljs-string">&quot;PublicPrivate.xml&quot;</span>, rsa.ToXmlString(<span class="hljs-literal">true</span>));
 }
 </code></pre>
 <p>چون کلیدی نداشتیم، اولین بار <code>ToXmlString</code> مجبور شد یک جفت کلید تازه بسازد.</p>
 <p>بارگذاری مجدد و استفاده از آن‌ها:</p>
-<pre><code class="language-csharp">byte[] data = Encoding.UTF8.GetBytes(&quot;Message to encrypt&quot;);
-string publicKeyOnly = File.ReadAllText(&quot;PublicKeyOnly.xml&quot;);
-string publicPrivate = File.ReadAllText(&quot;PublicPrivate.xml&quot;);
-byte[] encrypted, decrypted;
+<pre class="hljs"><code><span class="hljs-built_in">byte</span>[] data = Encoding.UTF8.GetBytes(<span class="hljs-string">&quot;Message to encrypt&quot;</span>);
+<span class="hljs-built_in">string</span> publicKeyOnly = File.ReadAllText(<span class="hljs-string">&quot;PublicKeyOnly.xml&quot;</span>);
+<span class="hljs-built_in">string</span> publicPrivate = File.ReadAllText(<span class="hljs-string">&quot;PublicPrivate.xml&quot;</span>);
+<span class="hljs-built_in">byte</span>[] encrypted, decrypted;
 
-using (var rsaPublicOnly = new RSACryptoServiceProvider())
+<span class="hljs-keyword">using</span> (<span class="hljs-keyword">var</span> rsaPublicOnly = <span class="hljs-keyword">new</span> RSACryptoServiceProvider())
 {
     rsaPublicOnly.FromXmlString(publicKeyOnly);
-    encrypted = rsaPublicOnly.Encrypt(data, true);
+    encrypted = rsaPublicOnly.Encrypt(data, <span class="hljs-literal">true</span>);
 
-    // خطا: چون کلید خصوصی نداریم نمی‌توانیم Decrypt کنیم:
-    // decrypted = rsaPublicOnly.Decrypt(encrypted, true);
+    <span class="hljs-comment">// خطا: چون کلید خصوصی نداریم نمی‌توانیم Decrypt کنیم:</span>
+    <span class="hljs-comment">// decrypted = rsaPublicOnly.Decrypt(encrypted, true);</span>
 }
 
-using (var rsaPublicPrivate = new RSACryptoServiceProvider())
+<span class="hljs-keyword">using</span> (<span class="hljs-keyword">var</span> rsaPublicPrivate = <span class="hljs-keyword">new</span> RSACryptoServiceProvider())
 {
     rsaPublicPrivate.FromXmlString(publicPrivate);
-    decrypted = rsaPublicPrivate.Decrypt(encrypted, true); // موفقیت‌آمیز
+    decrypted = rsaPublicPrivate.Decrypt(encrypted, <span class="hljs-literal">true</span>); <span class="hljs-comment">// موفقیت‌آمیز</span>
 }
 </code></pre>
 <hr>
 <h3>🖊️ امضای دیجیتال (Digital Signing)</h3>
-<p>الگوریتم‌های کلید عمومی برای <strong>امضای دیجیتال</strong> هم استفاده می‌شوند.
+<p>الگوریتم‌های کلید عمومی برای <strong>امضای دیجیتال</strong> هم استفاده می‌شوند.<br>
 امضا مثل Hash است، با این تفاوت که تولید آن به کلید خصوصی نیاز دارد و جعل‌پذیر نیست. کلید عمومی برای تأیید امضا استفاده می‌شود.</p>
 <p>مثال:</p>
-<pre><code class="language-csharp">byte[] data = Encoding.UTF8.GetBytes(&quot;Message to sign&quot;);
-byte[] publicKey;
-byte[] signature;
-object hasher = SHA1.Create(); // الگوریتم هش انتخابی ما
+<pre class="hljs"><code><span class="hljs-built_in">byte</span>[] data = Encoding.UTF8.GetBytes(<span class="hljs-string">&quot;Message to sign&quot;</span>);
+<span class="hljs-built_in">byte</span>[] publicKey;
+<span class="hljs-built_in">byte</span>[] signature;
+<span class="hljs-built_in">object</span> hasher = SHA1.Create(); <span class="hljs-comment">// الگوریتم هش انتخابی ما</span>
 
-// تولید جفت کلید جدید و امضای داده:
-using (var publicPrivate = new RSACryptoServiceProvider())
+<span class="hljs-comment">// تولید جفت کلید جدید و امضای داده:</span>
+<span class="hljs-keyword">using</span> (<span class="hljs-keyword">var</span> publicPrivate = <span class="hljs-keyword">new</span> RSACryptoServiceProvider())
 {
     signature = publicPrivate.SignData(data, hasher);
-    publicKey = publicPrivate.ExportCspBlob(false); // گرفتن کلید عمومی
+    publicKey = publicPrivate.ExportCspBlob(<span class="hljs-literal">false</span>); <span class="hljs-comment">// گرفتن کلید عمومی</span>
 }
 
-// ساخت RSA جدید با کلید عمومی و تست امضا:
-using (var publicOnly = new RSACryptoServiceProvider())
+<span class="hljs-comment">// ساخت RSA جدید با کلید عمومی و تست امضا:</span>
+<span class="hljs-keyword">using</span> (<span class="hljs-keyword">var</span> publicOnly = <span class="hljs-keyword">new</span> RSACryptoServiceProvider())
 {
     publicOnly.ImportCspBlob(publicKey);
-    Console.Write(publicOnly.VerifyData(data, hasher, signature)); // True
+    Console.Write(publicOnly.VerifyData(data, hasher, signature)); <span class="hljs-comment">// True</span>
 
-    // تغییر داده و تست دوباره:
-    data[0] = 0;
-    Console.Write(publicOnly.VerifyData(data, hasher, signature)); // False
+    <span class="hljs-comment">// تغییر داده و تست دوباره:</span>
+    data[<span class="hljs-number">0</span>] = <span class="hljs-number">0</span>;
+    Console.Write(publicOnly.VerifyData(data, hasher, signature)); <span class="hljs-comment">// False</span>
 
-    // خطا: چون کلید خصوصی نداریم نمی‌توانیم امضا تولید کنیم:
+    <span class="hljs-comment">// خطا: چون کلید خصوصی نداریم نمی‌توانیم امضا تولید کنیم:</span>
     signature = publicOnly.SignData(data, hasher);
 }
 </code></pre>
@@ -526,10 +486,10 @@ using (var publicOnly = new RSACryptoServiceProvider())
 </ol>
 <p>از آنجا که هش اندازه کوچکی دارد، امضای اسناد بزرگ سریع انجام می‌شود (چون RSA به‌تنهایی پرهزینه‌تر است).</p>
 <p>می‌توانید هش را خودتان محاسبه کنید و سپس از <strong>SignHash</strong> به‌جای <code>SignData</code> استفاده کنید:</p>
-<pre><code class="language-csharp">using (var rsa = new RSACryptoServiceProvider())
+<pre class="hljs"><code><span class="hljs-keyword">using</span> (<span class="hljs-keyword">var</span> rsa = <span class="hljs-keyword">new</span> RSACryptoServiceProvider())
 {
-    byte[] hash = SHA1.Create().ComputeHash(data);
-    signature = rsa.SignHash(hash, CryptoConfig.MapNameToOID(&quot;SHA1&quot;));
+    <span class="hljs-built_in">byte</span>[] hash = SHA1.Create().ComputeHash(data);
+    signature = rsa.SignHash(hash, CryptoConfig.MapNameToOID(<span class="hljs-string">&quot;SHA1&quot;</span>));
 }
 </code></pre>
 <p><code>SignHash</code> باید بداند از چه الگوریتمی برای هش استفاده کرده‌اید. متد <code>CryptoConfig.MapNameToOID</code> این اطلاعات را از یک نام ساده مثل <code>&quot;SHA1&quot;</code> فراهم می‌کند.</p>
@@ -544,49 +504,3 @@ using (var publicOnly = new RSACryptoServiceProvider())
 </ul>
 <p>🔐 یک گواهی دیجیتال رکورد الکترونیکی کلید عمومی و نام فرستنده است که خودش توسط یک مرجع معتبر مستقل امضا شده است.</p>
 <p>📦 فضای نام <code>System.Security.Cryptography.X509Certificates</code> انواع لازم برای کار با گواهی‌ها را فراهم می‌کند.</p>
-
-  </main>
-
-  <!-- فوتر مشترک -->
-  <footer class="footer">
-    <div class="container">
-      <p>
-        <img src="/icone/copyright.svg" alt="کپی‌رایت" width="14" height="14"
-             style="vertical-align:middle;margin-inline:4px">
-        <span id="y"></span> Gitab — برای توسعه‌دهندگان
-      </p>
-    </div>
-  </footer>
-
-  <!-- سال + اسکریپت تم -->
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
-
-    (() => {
-      const root = document.documentElement;
-      const btn = document.getElementById('themeToggle');
-      const KEY = 'gitab-theme';
-      const media = window.matchMedia('(prefers-color-scheme: dark)');
-      const getEffective = s => s === 'auto' ? (media.matches ? 'dark' : 'light') : s;
-      function updateTheme(s) {
-        root.setAttribute('data-theme', s);
-        const mode = getEffective(s);
-        root.dataset.colorMode = mode;
-        btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
-      }
-      const saved = localStorage.getItem(KEY) || 'auto';
-      updateTheme(saved);
-      btn.addEventListener('click', () => {
-        const curr = localStorage.getItem(KEY) || 'auto';
-        const next = curr === 'auto' ? 'dark' : curr === 'dark' ? 'light' : 'auto';
-        localStorage.setItem(KEY, next);
-        updateTheme(next);
-      });
-      media.addEventListener('change', () => {
-        if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
-      });
-      window.addEventListener('DOMContentLoaded', () => updateTheme(saved));
-    })();
-  </script>
-</body>
-</html>

@@ -1,44 +1,4 @@
-<!doctype html>
-<html lang="fa" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gitab | کتابخانهٔ ترجمه‌های دات‌نت و سی شارپ</title>
-  <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
-  <link rel="stylesheet" href="/styles/main.css">
-</head>
-<body>
-  <!-- هدر مشترک -->
-  <header class="header">
-    <div class="container nav-wrap">
-      <a class="brand" href="/">
-        <img src="/icone/logo.svg" alt="Gitab" width="28" height="28">
-        <span>Gitab</span>
-      </a>
-
-      <nav class="nav">
-        <a href="/">خانه</a>
-        <a href="/books/list-books">کتاب‌ها</a>
-        <a href="#">همکاری</a>
-        <a href="#">درباره‌ما</a>
-      </nav>
-
-     <div class="nav-actions">
-  <button id="themeToggle" class="icon-btn theme-btn" aria-label="تغییر حالت">
-    <img class="icon-sun" src="/icone/sun.svg" alt="روشن">
-    <img class="icon-moon" src="/icone/moon.svg" alt="تاریک">
-  </button>
-
-  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
-    <img src="/icone/github.svg" alt="GitHub">
-  </a>
-</div>
-
-  </header>
-
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1><em>۴</em></h1>
+<h1><em>۴</em></h1>
 <h2>نوشتن توابع تمیز</h2>
 <p>توابع تمیز (Clean functions) متدهایی هستند که کوچک بوده (دارای دو یا کمتر آرگومان هستند) و از تکرار (duplication) اجتناب می‌کنند. متد ایده‌آل هیچ پارامتری ندارد و وضعیت برنامه (program's state) را تغییر نمی‌دهد. متدهای کوچک کمتر مستعد استثناها (exceptions) هستند، بنابراین شما کدی بسیار مستحکم‌تر (robust) خواهید نوشت که در بلندمدت به نفع شما خواهد بود، زیرا باگ‌های کمتری برای رفع کردن خواهید داشت.</p>
 <p>برنامه‌نویسی تابعی (Functional programming) یک متدولوژی کدنویسی نرم‌افزار است که محاسبات را به عنوان ارزیابی ریاضیاتی محاسبات (mathematical evaluation of computations) در نظر می‌گیرد. این فصل مزایای در نظر گرفتن محاسبات به عنوان ارزیابی توابع ریاضیاتی را به شما آموزش می‌دهد تا از تغییر وضعیت یک شیء (object's state) جلوگیری کنید.</p>
@@ -66,20 +26,20 @@
 <p>پس از اینکه یک شیء داده تغییرناپذیر (immutable data object) یا ساختار داده (data structure) مقداردهی اولیه شد، مقادیر داده موجود در آن اصلاح نخواهند شد. از آنجایی که داده فقط تنظیم می‌شود و تغییر نمی‌کند، می‌توانید به راحتی در مورد اینکه داده چیست، چگونه تنظیم می‌شود و با ورودی‌های داده شده، نتیجه هر عملیاتی چه خواهد بود، استدلال کنید. داده‌های تغییرناپذیر نیز برای تست آسان‌تر هستند، زیرا می‌دانید ورودی‌های شما چه هستند و چه خروجی‌هایی انتظار می‌رود. این کار نوشتن سناریوهای تست (test cases) را بسیار آسان‌تر می‌کند، زیرا نیازی به در نظر گرفتن موارد زیادی مانند وضعیت شیء (object state) ندارید. مزیت اشیاء و ساختارهای تغییرناپذیر این است که آن‌ها Thread-safe هستند. اشیاء و ساختارهای Thread-safe برای اشیاء انتقال داده (data transfer objects - DTOs) که می‌توانند بین Threadها پاس داده شوند، مناسب هستند.</p>
 <p>اما ساختارها (structs) همچنان می‌توانند تغییرپذیر (mutable) باشند اگر حاوی انواع مرجع (reference types) باشند. یک راه حل برای این مشکل، تغییرناپذیر ساختن نوع مرجع خواهد بود. C# 7.2 پشتیبانی از readonly struct و ImmutableStruct را اضافه کرد. بنابراین، حتی اگر ساختارهای ما حاوی انواع مرجع باشند، اکنون می‌توانیم از این ساختارهای جدید C# 7.2 برای ساختن ساختارهایی با انواع مرجع تغییرناپذیر استفاده کنیم.</p>
 <p>حالا، بیایید به یک مثال از تابع خالص (pure function) نگاهی بیندازیم. تنها راه برای تنظیم خصوصیات یک شیء، از طریق سازنده (constructor) در زمان ساخت است. این کلاس، یک کلاس Player است که تنها وظیفه‌اش نگهداری نام بازیکن و بالاترین امتیاز اوست. یک متد ارائه شده است که بالاترین امتیاز بازیکن را به‌روزرسانی می‌کند:</p>
-<pre><code class="language-csharp">public class Player
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Player</span>
 {
-    public string PlayerName { get; }
-    public long HighScore { get; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> PlayerName { <span class="hljs-keyword">get</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">long</span> HighScore { <span class="hljs-keyword">get</span>; }
 
-    public Player(string playerName, long highScore)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Player</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> playerName, <span class="hljs-built_in">long</span> highScore</span>)</span>
     {
         PlayerName = playerName;
         HighScore = highScore;
     }
 
-    public Player UpdateHighScore(long highScore)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> Player <span class="hljs-title">UpdateHighScore</span>(<span class="hljs-params"><span class="hljs-built_in">long</span> highScore</span>)</span>
     {
-        return new Player(PlayerName, highScore);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Player(PlayerName, highScore);
     }
 }
 </code></pre>
@@ -87,12 +47,12 @@
 <p>برنامه‌نویسی تابعی (Functional programming) موضوع بسیار گسترده‌ای است و نیاز به تغییر طرز فکر دارد که می‌تواند برای برنامه‌نویسان رویه محور (procedural) و شیءگرا (object-oriented) بسیار دشوار باشد. از آنجایی که پرداختن عمیق به موضوع برنامه‌نویسی تابعی (functional programming) خارج از محدوده این کتاب است، شما به طور فعال تشویق می‌شوید که منابع برنامه‌نویسی تابعی (functional programming) ارائه شده توسط PacktPub را برای خودتان بررسی کنید.</p>
 <p>Packt برخی کتاب‌ها و ویدئوهای بسیار خوبی دارد که در آموزش سطوح بالای برنامه‌نویسی تابعی (functional programming) تخصص دارند. لینک‌های برخی از منابع برنامه‌نویسی تابعی (functional programming) Packt را در انتهای این فصل، در بخش مطالعه بیشتر (Further reading) خواهید یافت.</p>
 <p>قبل از اینکه ادامه دهیم، به چند مثال LINQ نگاهی خواهیم انداخت، زیرا LINQ نمونه‌ای از برنامه‌نویسی تابعی (functional programming) در C# است. داشتن یک مجموعه داده مثالی خوب خواهد بود. کد زیر لیستی از فروشندگان و محصولات را می‌سازد. با نوشتن ساختار Product شروع می‌کنیم:</p>
-<pre><code class="language-csharp">public struct Product
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">struct</span> Product
 {
-    public string Vendor { get; }
-    public string ProductName { get; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Vendor { <span class="hljs-keyword">get</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> ProductName { <span class="hljs-keyword">get</span>; }
 
-    public Product(string vendor, string productName)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Product</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> vendor, <span class="hljs-built_in">string</span> productName</span>)</span>
     {
         Vendor = vendor;
         ProductName = productName;
@@ -100,36 +60,36 @@
 }
 </code></pre>
 <p>اکنون که ساختار خود را داریم، مقداری داده نمونه را درون متد GetProducts() اضافه خواهیم کرد:</p>
-<pre><code class="language-csharp">public static List&lt;Product&gt; GetProducts()
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> List&lt;Product&gt; <span class="hljs-title">GetProducts</span>()</span>
 {
-    return new List&lt;Products&gt;
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> List&lt;Products&gt;
     {
-        new Product(&quot;Microsoft&quot;, &quot;Microsoft Office&quot;),
-        new Product(&quot;Oracle&quot;, &quot;Oracle Database&quot;),
-        new Product(&quot;IBM&quot;, &quot;IBM DB2 Express&quot;),
-        new Product(&quot;IBM&quot;, &quot;IBM DB2 Express&quot;),
-        new Product(&quot;Microsoft&quot;, &quot;SQL Server 2017 Express&quot;),
-        new Product(&quot;Microsoft&quot;, &quot;Visual Studio 2019 Community Edition&quot;),
-        new Product(&quot;Oracle&quot;, &quot;Oracle JDeveloper&quot;),
-        new Product(&quot;Microsoft&quot;, &quot;Azure&quot;),
-        new Product(&quot;Microsoft&quot;, &quot;Azure&quot;),
-        new Product(&quot;Microsoft&quot;, &quot;Azure Stack&quot;),
-        new Product(&quot;Google&quot;, &quot;Google Cloud Platform&quot;),
-        new Product(&quot;Amazon&quot;, &quot;Amazon Web Services&quot;)
+        <span class="hljs-keyword">new</span> Product(<span class="hljs-string">&quot;Microsoft&quot;</span>, <span class="hljs-string">&quot;Microsoft Office&quot;</span>),
+        <span class="hljs-keyword">new</span> Product(<span class="hljs-string">&quot;Oracle&quot;</span>, <span class="hljs-string">&quot;Oracle Database&quot;</span>),
+        <span class="hljs-keyword">new</span> Product(<span class="hljs-string">&quot;IBM&quot;</span>, <span class="hljs-string">&quot;IBM DB2 Express&quot;</span>),
+        <span class="hljs-keyword">new</span> Product(<span class="hljs-string">&quot;IBM&quot;</span>, <span class="hljs-string">&quot;IBM DB2 Express&quot;</span>),
+        <span class="hljs-keyword">new</span> Product(<span class="hljs-string">&quot;Microsoft&quot;</span>, <span class="hljs-string">&quot;SQL Server 2017 Express&quot;</span>),
+        <span class="hljs-keyword">new</span> Product(<span class="hljs-string">&quot;Microsoft&quot;</span>, <span class="hljs-string">&quot;Visual Studio 2019 Community Edition&quot;</span>),
+        <span class="hljs-keyword">new</span> Product(<span class="hljs-string">&quot;Oracle&quot;</span>, <span class="hljs-string">&quot;Oracle JDeveloper&quot;</span>),
+        <span class="hljs-keyword">new</span> Product(<span class="hljs-string">&quot;Microsoft&quot;</span>, <span class="hljs-string">&quot;Azure&quot;</span>),
+        <span class="hljs-keyword">new</span> Product(<span class="hljs-string">&quot;Microsoft&quot;</span>, <span class="hljs-string">&quot;Azure&quot;</span>),
+        <span class="hljs-keyword">new</span> Product(<span class="hljs-string">&quot;Microsoft&quot;</span>, <span class="hljs-string">&quot;Azure Stack&quot;</span>),
+        <span class="hljs-keyword">new</span> Product(<span class="hljs-string">&quot;Google&quot;</span>, <span class="hljs-string">&quot;Google Cloud Platform&quot;</span>),
+        <span class="hljs-keyword">new</span> Product(<span class="hljs-string">&quot;Amazon&quot;</span>, <span class="hljs-string">&quot;Amazon Web Services&quot;</span>)
     };
 }
 </code></pre>
 <p>در نهایت، می‌توانیم شروع به استفاده از LINQ روی لیست خود کنیم. در مثال قبلی، یک لیست متمایز از محصولات را به دست می‌آوریم که بر اساس نام فروشنده مرتب شده‌اند، و نتایج را چاپ می‌کنیم:</p>
-<pre><code class="language-csharp">class Program
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title">Program</span>
 {
-    static void Main(string[] args)
+    <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Main</span>(<span class="hljs-params"><span class="hljs-built_in">string</span>[] <span class="hljs-keyword">args</span></span>)</span>
     {
-        var vendors = (from p in GetProducts()
-                       select p.Vendor)
-                      .Distinct()
-                      .OrderBy(x =&gt; x);
+        <span class="hljs-keyword">var</span> vendors = (<span class="hljs-function"><span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> <span class="hljs-title">GetProducts</span>()
+                       <span class="hljs-keyword">select</span> p.Vendor)
+                      .<span class="hljs-title">Distinct</span>()
+                      .<span class="hljs-title">OrderBy</span>(<span class="hljs-params">x =&gt; x</span>)</span>;
 
-        foreach(var vendor in vendors)
+        <span class="hljs-keyword">foreach</span>(<span class="hljs-keyword">var</span> vendor <span class="hljs-keyword">in</span> vendors)
             Console.WriteLine(vendor);
 
         Console.ReadKey();
@@ -141,21 +101,21 @@
 <h2>کوچک نگه داشتن متدها (Keeping methods small)</h2>
 <p>هنگام برنامه‌نویسی کد تمیز و خوانا، مهم است که متدها را کوچک نگه داریم. ترجیحاً، در دنیای C#، بهتر است متدها را زیر ۱۰ خط نگه داریم. طول ایده‌آل بیش از ۴ خط نیست. یک راه خوب برای کوچک نگه داشتن متدها این است که در نظر بگیرید آیا باید خطاها را گرفتار کنید (trapping for errors) یا آن‌ها را بیشتر در پشته فراخوانی (call stack) بالا ببرید (bubbling them further up). با برنامه‌نویسی دفاعی (defensive programming)، ممکن است کمی بیش از حد دفاعی شوید، و این می‌تواند به میزان کدی که می‌نویسید، اضافه کند. علاوه بر این، متدهایی که خطاها را می‌گیرند، طولانی‌تر از متدهایی خواهند بود که این کار را نمی‌کنند.</p>
 <p>بیایید کد زیر را در نظر بگیریم که می‌تواند یک ArgumentNullException را پرتاب کند:</p>
-<pre><code class="language-csharp">public UpdateView(MyEntities context, DataItem dataItem)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">UpdateView</span>(<span class="hljs-params">MyEntities context, DataItem dataItem</span>)</span>
 {
     InitializeComponent();
-    try
+    <span class="hljs-keyword">try</span>
     {
-        DataContext = this;
+        DataContext = <span class="hljs-keyword">this</span>;
         _dataItem = dataItem;
         _context = context;
         nameTextBox.Text = _dataItem.Name;
         DescriptionTextBox.Text = _dataItem.Description;
     }
-    catch (Exception ex)
+    <span class="hljs-keyword">catch</span> (Exception ex)
     {
         Debug.WriteLine(ex);
-        throw;
+        <span class="hljs-keyword">throw</span>;
     }
 }
 </code></pre>
@@ -163,41 +123,41 @@
 <p>توجه داشته باشید که از دیدگاه خوانایی انسانی، ۸ خط کد بلوک try/catch را تشکیل می‌دهند.</p>
 <p>شما می‌توانید مدیریت استثنای try/catch را به طور کامل با یک خط متن با نوشتن اعتبارسنج آرگومان (argument validator) خودتان جایگزین کنید. برای توضیح این موضوع، یک مثال ارائه خواهیم داد.</p>
 <p>بیایید با نگاهی به کلاس ArgumentValidator شروع کنیم. هدف این کلاس، پرتاب یک ArgumentNullException با نام متدی است که حاوی آرگومان null است:</p>
-<pre><code class="language-csharp">using System;
+<pre class="hljs"><code><span class="hljs-keyword">using</span> System;
 
-namespace CH04.Validators
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">CH04.Validators</span>
 {
-    internal static class ArgumentValidator
+    <span class="hljs-keyword">internal</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ArgumentValidator</span>
     {
-        public static void NotNull(
-            string name,
-            [ValidatedNotNull] object value
-        )
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">NotNull</span>(<span class="hljs-params">
+            <span class="hljs-built_in">string</span> name,
+            [ValidatedNotNull] <span class="hljs-built_in">object</span> <span class="hljs-keyword">value</span>
+        </span>)</span>
         {
-            if (value == null)
-                throw new ArgumentNullException(name);
+            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">value</span> == <span class="hljs-literal">null</span>)
+                <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ArgumentNullException(name);
         }
     }
 
-    [AttributeUsage(
+    [<span class="hljs-meta">AttributeUsage(
         AttributeTargets.All,
         Inherited = false,
         AllowMultiple = true)
-    ]
-    internal sealed class ValidatedNotNullAttribute : Attribute
+    </span>]
+    <span class="hljs-keyword">internal</span> <span class="hljs-keyword">sealed</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ValidatedNotNullAttribute</span> : <span class="hljs-title">Attribute</span>
     {
     }
 }
 </code></pre>
 <p>اکنون که کلاس اعتبارسنجی null (null validation) خود را داریم، می‌توانیم روش جدید اعتبارسنجی پارامترها برای مقادیر null را در متدهای خود انجام دهیم. پس، بیایید به یک مثال ساده نگاه کنیم:</p>
-<pre><code class="language-csharp">public ItemsUpdateView(
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">ItemsUpdateView</span>(<span class="hljs-params">
     Entities context,
     ItemsView itemView
-)
+</span>)</span>
 {
     InitializeComponent();
-    ArgumentValidator.NotNull(&quot;ItemsUpdateView&quot;, itemView);
-    // ### implementation omitted ###
+    ArgumentValidator.NotNull(<span class="hljs-string">&quot;ItemsUpdateView&quot;</span>, itemView);
+    <span class="hljs-comment">// ### implementation omitted ###</span>
 }
 </code></pre>
 <p>همانطور که به وضوح می‌توانید ببینید، ما تمام بلوک try catch را با یک خط کد در بالای متد جایگزین کرده‌ایم. هنگامی که این اعتبارسنجی یک آرگومان null را تشخیص دهد، یک ArgumentNullException پرتاب می‌شود و از ادامه اجرای کد جلوگیری می‌کند. این کار خوانایی کد را بسیار آسان‌تر می‌کند و همچنین به اشکال‌زدایی (debugging) کمک می‌کند.</p>
@@ -205,30 +165,30 @@ namespace CH04.Validators
 <h2>تورفتگی کد (Indenting code)</h2>
 <p>یک متد بسیار طولانی در بهترین حالت هم خواندن و دنبال کردنش دشوار است، به خصوص وقتی مجبور باشید بارها در متد اسکرول کنید تا به انتهای آن برسید. اما انجام این کار با متدهایی که به درستی با سطوح صحیح تورفتگی (indentation) فرمت‌بندی نشده‌اند، می‌تواند یک کابوس واقعی باشد.</p>
 <p>اگر تا به حال با کد متدی مواجه شدید که به درستی فرمت‌بندی نشده است، به عنوان یک برنامه‌نویس حرفه‌ای، مسئولیت خودتان بدانید که قبل از انجام هر کار دیگری، کد را مرتب کنید. هر کدی که بین آکولادها ({}) قرار می‌گیرد، به عنوان یک بلوک کد (code block) شناخته می‌شود. کد درون یک بلوک کد (code block) باید به اندازه یک سطح تورفتگی (indented) داشته باشد. بلوک‌های کد (code blocks) درون بلوک‌های کد (code blocks) نیز باید به اندازه یک سطح تورفتگی (indented) داشته باشند، همانطور که در مثال زیر نشان داده شده است:</p>
-<pre><code class="language-csharp">public Student Find(List&lt;Student&gt; list, int id)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> Student <span class="hljs-title">Find</span>(<span class="hljs-params">List&lt;Student&gt; list, <span class="hljs-built_in">int</span> id</span>)</span>
 {
-    Student r = null;
-    foreach (var i in list)
+    Student r = <span class="hljs-literal">null</span>;
+    <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> i <span class="hljs-keyword">in</span> list)
     {
-        if (i.Id == id)
+        <span class="hljs-keyword">if</span> (i.Id == id)
             r = i;
     }
-    return r;
+    <span class="hljs-keyword">return</span> r;
 }
 </code></pre>
 <p>مثال بالا تورفتگی بد (bad indentation) و همچنین برنامه‌نویسی حلقه بد (bad loop programming) را نشان می‌دهد. در اینجا، می‌توانید ببینید که لیستی از دانشجویان در حال جستجو است تا دانشجویی با ID مشخص شده که به عنوان پارامتر پاس داده شده، پیدا و برگردانده شود. آنچه برخی برنامه‌نویسان را آزار می‌دهد و عملکرد برنامه را کاهش می‌دهد این است که حلقه در کد بالا، حتی پس از پیدا شدن دانشجو، ادامه می‌یابد. ما می‌توانیم تورفتگی (indentation) و عملکرد کد بالا را به صورت زیر بهبود ببخشیم:</p>
-<pre><code class="language-csharp">public Student Find(List&lt;Student&gt; list, int id)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> Student <span class="hljs-title">Find</span>(<span class="hljs-params">List&lt;Student&gt; list, <span class="hljs-built_in">int</span> id</span>)</span>
 {
-    Student r = null;
-    foreach (var i in list)
+    Student r = <span class="hljs-literal">null</span>;
+    <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> i <span class="hljs-keyword">in</span> list)
     {
-        if (i.Id == id)
+        <span class="hljs-keyword">if</span> (i.Id == id)
         {
             r = i;
-            break;
+            <span class="hljs-keyword">break</span>;
         }
     }
-    return r;
+    <span class="hljs-keyword">return</span> r;
 }
 </code></pre>
 <p>در کد بالا، ما فرمت‌بندی را بهبود بخشیده‌ایم و اطمینان حاصل کرده‌ایم که کد به درستی تورفتگی (indented) دارد. ما یک break به حلقه for اضافه کرده‌ایم تا حلقه foreach هنگام پیدا شدن تطابق، پایان یابد.</p>
@@ -239,16 +199,16 @@ namespace CH04.Validators
 <p>اکنون، ما کد WET خود را با حذف تکرار (duplication)، DRY می‌کنیم. یک راه برای انجام این کار، استخراج کد (extracting the code) و قرار دادن آن در یک متد و سپس متمرکز کردن متد (centralizing the method) به گونه‌ای است که برای تمام بخش‌های برنامه کامپیوتری که به آن نیاز دارند، قابل دسترسی باشد.</p>
 <p>وقت یک مثال است. تصور کنید مجموعه‌ای از آیتم‌های هزینه دارید که شامل خصوصیات Name و Amount هستند. حالا، در نظر بگیرید که باید مقدار decimal Amount را برای یک آیتم هزینه بر اساس Name به دست آورید.</p>
 <p>فرض کنید مجبور بودید این کار را ۱۰۰ بار انجام دهید. برای این کار، می‌توانید کد زیر را بنویسید:</p>
-<pre><code class="language-csharp">var amount = ViewModel
+<pre class="hljs"><code><span class="hljs-keyword">var</span> amount = ViewModel
     .ExpenseLines
-    .Where(e =&gt; e.Name.Equals(&quot;Life Insurance&quot;))
+    .Where(e =&gt; e.Name.Equals(<span class="hljs-string">&quot;Life Insurance&quot;</span>))
     .FirstOrDefault()
     .Amount;
 </code></pre>
 <p>هیچ دلیلی وجود ندارد که نتوانید همان کد را ۱۰۰ بار بنویسید. اما راهی وجود دارد که آن را فقط یک بار بنویسید، بنابراین اندازه پایگاه کد (codebase) خود را کاهش داده و بهره‌وری بیشتری داشته باشید. بیایید نگاهی بیندازیم که چگونه می‌توانیم این کار را انجام دهیم:</p>
-<pre><code class="language-csharp">public decimal GetValueByName(string name)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">decimal</span> <span class="hljs-title">GetValueByName</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> name</span>)</span>
 {
-    return ViewModel
+    <span class="hljs-keyword">return</span> ViewModel
         .ExpenseLines
         .Where(e =&gt; e.Name.Equals(name))
         .FirstOrDefault()
@@ -256,16 +216,16 @@ namespace CH04.Validators
 }
 </code></pre>
 <p>هیچ دلیلی وجود ندارد که نتوانید همان کد را ۱۰۰ بار بنویسید. اما راهی وجود دارد که آن را فقط یک بار بنویسید، بنابراین اندازه پایگاه کد (codebase) خود را کاهش داده و بهره‌وری بیشتری داشته باشید. بیایید نگاهی بیندازیم که چگونه می‌توانیم این کار را انجام دهیم:</p>
-<p>public decimal GetValueByName(string name)
-{
-return ViewModel
-.ExpenseLines
-.Where(e =&gt; e.Name.Equals(name))
-.FirstOrDefault()
-.Amount;
+<p>public decimal GetValueByName(string name)<br>
+{<br>
+return ViewModel<br>
+.ExpenseLines<br>
+.Where(e =&gt; e.Name.Equals(name))<br>
+.FirstOrDefault()<br>
+.Amount;<br>
 }</p>
 <p>برای استخراج مقدار مورد نیاز از مجموعه ExpenseLines در ViewModel خود، تنها کاری که باید انجام دهید این است که نام مقداری را که نیاز دارید به متد GetValueName(string name) پاس دهید، همانطور که در کد زیر نشان داده شده است:</p>
-<pre><code class="language-csharp">var amount = GetValueByName(&quot;Life Insurance&quot;);
+<pre class="hljs"><code><span class="hljs-keyword">var</span> amount = GetValueByName(<span class="hljs-string">&quot;Life Insurance&quot;</span>);
 </code></pre>
 <p>آن یک خط کد بسیار خوانا است، و خطوط کد برای به دست آوردن مقدار در یک متد واحد قرار دارند. بنابراین، اگر متد به هر دلیلی (مانند رفع باگ) نیاز به تغییر داشته باشد، شما تنها باید کد را در یک مکان اصلاح کنید.</p>
 <p>گام منطقی بعدی برای نوشتن توابع خوب، داشتن کمترین تعداد پارامتر ممکن است. در بخش بعدی، به این موضوع خواهیم پرداخت که چرا نباید بیش از دو پارامتر داشته باشیم، و همچنین چگونه حتی اگر به تعداد بیشتری نیاز داریم، فقط با تعداد کمی پارامتر کار کنیم.</p>
@@ -273,72 +233,72 @@ return ViewModel
 <p>متدهای نیلادیک (Niladic) نوع ایده‌آل متدها در C# هستند. چنین متدهایی هیچ پارامتری (که به آن‌ها آرگومان (arguments) نیز گفته می‌شود) ندارند. متدهای مونادیک (Monadic) تنها یک پارامتر دارند. متدهای دیادیک (Dyadic) دو پارامتر دارند. متدهای تریادیک (Triadic) سه پارامتر دارند. متدهایی که بیش از سه پارامتر دارند، به عنوان متدهای پلیادیک (Polyadic) شناخته می‌شوند. شما باید هدف خود را بر روی حداقل نگه داشتن تعداد پارامترها (ترجیحاً کمتر از سه) قرار دهید.</p>
 <p>در دنیای ایده‌آل برنامه‌نویسی C#، باید تمام تلاش خود را برای اجتناب از متدهای تریادیک (triadic) و پلیادیک (polyadic) به کار بگیرید. دلیل این امر نه به خاطر برنامه‌نویسی بد، بلکه به این خاطر است که کد شما را خواناتر و قابل فهم‌تر می‌کند. متدهایی با پارامترهای زیاد می‌توانند باعث استرس بصری (visual stress) برای برنامه‌نویسان شوند و همچنین می‌توانند منبع آزار باشند. IntelliSense نیز با اضافه کردن پارامترهای بیشتر، می‌تواند برای خواندن و درک دشوار شود.</p>
 <p>بیایید به یک مثال بد از یک متد پلیادیک (polyadic) نگاه کنیم که اطلاعات حساب کاربری را به‌روزرسانی می‌کند:</p>
-<pre><code class="language-csharp">public void UpdateUserInfo(int id, string username, string firstName,
-string lastName, string addressLine1, string addressLine2, string
-addressLine3, string addressLine3, string addressLine4, string city, string
-postcode, string region, string country, string homePhone, string
-workPhone, string mobilePhone, string personalEmail, string workEmail,
-string notes)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">UpdateUserInfo</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> id, <span class="hljs-built_in">string</span> username, <span class="hljs-built_in">string</span> firstName,
+<span class="hljs-built_in">string</span> lastName, <span class="hljs-built_in">string</span> addressLine1, <span class="hljs-built_in">string</span> addressLine2, <span class="hljs-built_in">string</span>
+addressLine3, <span class="hljs-built_in">string</span> addressLine3, <span class="hljs-built_in">string</span> addressLine4, <span class="hljs-built_in">string</span> city, <span class="hljs-built_in">string</span>
+postcode, <span class="hljs-built_in">string</span> region, <span class="hljs-built_in">string</span> country, <span class="hljs-built_in">string</span> homePhone, <span class="hljs-built_in">string</span>
+workPhone, <span class="hljs-built_in">string</span> mobilePhone, <span class="hljs-built_in">string</span> personalEmail, <span class="hljs-built_in">string</span> workEmail,
+<span class="hljs-built_in">string</span> notes</span>)</span>
 {
-    // ### implementation omitted ###
+    <span class="hljs-comment">// ### implementation omitted ###</span>
 }
 </code></pre>
 <p>همانطور که متد UpdateUserInfo نشان می‌دهد، کد برای خواندن وحشتناک است. چگونه می‌توانیم متد را طوری اصلاح کنیم که از یک متد پلیادیک (polyadic) به یک متد مونادیک (monadic) تبدیل شود؟ پاسخ ساده است – ما یک شیء UserInfo را به آن پاس می‌دهیم. ابتدا، قبل از اینکه متد را اصلاح کنیم، بیایید نگاهی به کلاس UserInfo خود بیندازیم:</p>
-<pre><code class="language-csharp">public class UserInfo
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">UserInfo</span>
 {
-    public int Id { get; set; }
-    public string Username { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string AddressLine1 { get; set; }
-    public string AddressLine2 { get; set; }
-    public string AddressLine3 { get; set; }
-    public string AddressLine4 { get; set; }
-    public string City { get; set; }
-    public string Region { get; set; }
-    public string Country { get; set; }
-    public string HomePhone { get; set; }
-    public string WorkPhone { get; set; }
-    public string MobilePhone { get; set; }
-    public string PersonalEmail { get; set; }
-    public string WorkEmail { get; set; }
-    public string Notes { get; set; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> Id { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Username { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> FirstName { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> LastName { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> AddressLine1 { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> AddressLine2 { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> AddressLine3 { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> AddressLine4 { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> City { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Region { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Country { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> HomePhone { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> WorkPhone { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> MobilePhone { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> PersonalEmail { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> WorkEmail { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Notes { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
 }
 </code></pre>
 <p>اکنون ما کلاسی داریم که تمام اطلاعات مورد نیاز برای پاس دادن به متد UpdateUserInfo را شامل می‌شود. متد UpdateUserInfo اکنون می‌تواند از یک متد پلیادیک (polyadic) به یک متد مونادیک (monadic) تبدیل شود، به صورت زیر:</p>
-<pre><code class="language-csharp">public void UpdateUserInfo(UserInfo userInfo)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">UpdateUserInfo</span>(<span class="hljs-params">UserInfo userInfo</span>)</span>
 {
-    // ### implementation omitted ###
+    <span class="hljs-comment">// ### implementation omitted ###</span>
 }
 </code></pre>
 <p>کد بالا چقدر بهتر به نظر می‌رسد؟ کوچک‌تر و بسیار خواناتر است. قاعده کلی (rule of thumb) باید این باشد که کمتر از سه پارامتر داشته باشیم، و در حالت ایده‌آل هیچ پارامتری نداشته باشیم. اگر کلاس شما از اصل تک‌مسئولیتی (SRP) پیروی می‌کند، آنگاه پیاده‌سازی الگوی شیء پارامتر (parameter object pattern) را در نظر بگیرید، همانطور که در اینجا انجام داده‌ایم.</p>
 <h1>پیاده‌سازی SRP (Implementing SRP)</h1>
 <p>تمام اشیاء و متدهایی که می‌نویسید، باید حداکثر یک مسئولیت داشته باشند و نه بیشتر. اشیاء می‌توانند متدهای متعددی داشته باشند، اما آن متدها، در مجموع، باید همگی در راستای هدف واحد شیئی که به آن تعلق دارند، کار کنند. متدها می‌توانند چندین متد را فراخوانی کنند که هر کدام کارهای متفاوتی انجام می‌دهند. اما خود متد باید فقط یک کار را انجام دهد.</p>
 <p>متدی که بیش از حد می‌داند و انجام می‌دهد، به عنوان متد خدا (God method) شناخته می‌شود. و به همین ترتیب، شیئی که بیش از حد می‌داند و انجام می‌دهد، به عنوان شیء خدا (God object) شناخته می‌شود. اشیاء خدا (God objects) و متدهای خدا (God methods) خواندن، نگهداری و اشکال‌زدایی آن‌ها دشوار است. چنین اشیاء و متدهایی اغلب می‌توانند همان باگ را بارها تکرار کنند. افرادی که در هنر برنامه‌نویسی مهارت دارند، از اشیاء خدا (God objects) و متدهای خدا (God methods) اجتناب می‌کنند. بیایید به متدی نگاه کنیم که بیش از یک کار را انجام می‌دهد:</p>
-<pre><code class="language-csharp">public void SrpBrokenMethod(string folder, string filename, string text,
-emailFrom, password, emailTo, subject, message, mediaType)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SrpBrokenMethod</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> folder, <span class="hljs-built_in">string</span> filename, <span class="hljs-built_in">string</span> text,
+emailFrom, password, emailTo, subject, message, mediaType</span>)</span>
 {
-    var file = $&quot;{folder}{filename}&quot;;
-    File.WriteAllText(file, text);
-    MailMessage message = new MailMessage();
-    SmtpClient smtp = new SmtpClient();
-    message.From = new MailAddress(emailFrom);
-    message.To.Add(new MailAddress(emailTo));
+    <span class="hljs-keyword">var</span> <span class="hljs-keyword">file</span> = <span class="hljs-string">$&quot;<span class="hljs-subst">{folder}</span><span class="hljs-subst">{filename}</span>&quot;</span>;
+    File.WriteAllText(<span class="hljs-keyword">file</span>, text);
+    MailMessage message = <span class="hljs-keyword">new</span> MailMessage();
+    SmtpClient smtp = <span class="hljs-keyword">new</span> SmtpClient();
+    message.From = <span class="hljs-keyword">new</span> MailAddress(emailFrom);
+    message.To.Add(<span class="hljs-keyword">new</span> MailAddress(emailTo));
     message.Subject = subject;
-    message.IsBodyHtml = true;
+    message.IsBodyHtml = <span class="hljs-literal">true</span>;
     message.Body = message;
-    Attachment emailAttachment = new Attachment(file);
-    emailAttachment.ContentDisposition.Inline = false;
+    Attachment emailAttachment = <span class="hljs-keyword">new</span> Attachment(<span class="hljs-keyword">file</span>);
+    emailAttachment.ContentDisposition.Inline = <span class="hljs-literal">false</span>;
     emailAttachment.ContentDisposition.DispositionType =
     DispositionTypeNames.Attachment;
     emailAttachment.ContentType.MediaType = mediaType;
     emailAttachment.ContentType.Name = Path.GetFileName(filename);
     message.Attachments.Add(emailAttachment);
-    smtp.Port = 587;
-    smtp.Host = &quot;smtp.gmail.com&quot;;
-    smtp.EnableSsl = true;
-    smtp.UseDefaultCredentials = false;
-    smtp.Credentials = new NetworkCredential(emailFrom, password);
+    smtp.Port = <span class="hljs-number">587</span>;
+    smtp.Host = <span class="hljs-string">&quot;smtp.gmail.com&quot;</span>;
+    smtp.EnableSsl = <span class="hljs-literal">true</span>;
+    smtp.UseDefaultCredentials = <span class="hljs-literal">false</span>;
+    smtp.Credentials = <span class="hljs-keyword">new</span> NetworkCredential(emailFrom, password);
     smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
     smtp.Send(message);
 }
@@ -351,70 +311,70 @@ emailFrom, password, emailTo, subject, message, mediaType)
 <p>ارسال ایمیل</p>
 <p>با نگاهی به متد فعلی، ما چهار پارامتر داریم که برای نوشتن متن در یک فایل به آن پاس داده می‌شوند: یکی برای پوشه، یکی برای نام فایل، یکی برای متن، و یکی برای نوع رسانه (media type). پوشه و نام فایل را می‌توان در یک پارامتر واحد به نام filename ترکیب کرد. اگر filename و folder دو متغیر جداگانه باشند که در کد فراخواننده استفاده می‌شوند، می‌توانند به عنوان یک رشته درون‌یابی شده (interpolated string) واحد، مانند $&quot;‌{folder}{filename}&quot;، به متد پاس داده شوند.</p>
 <p>در مورد نوع رسانه، این می‌تواند به صورت خصوصی در یک ساختار (struct) در زمان ساخت تنظیم شود. می‌توانیم از آن ساختار برای تنظیم خصوصیات مورد نیاز خود استفاده کنیم تا بتوانیم ساختار را با سه خصوصیت به عنوان یک پارامتر واحد پاس دهیم. بیایید نگاهی به کدی بیندازیم که این کار را انجام می‌دهد:</p>
-<pre><code class="language-csharp">public struct TextFileData
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">struct</span> TextFileData
 {
-    public string FileName { get; private set; }
-    public string Text { get; private set; }
-    public MimeType MimeType { get; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> FileName { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">private</span> <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Text { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">private</span> <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> MimeType MimeType { <span class="hljs-keyword">get</span>; }
 
-    public TextFileData(string filename, string text)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">TextFileData</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> filename, <span class="hljs-built_in">string</span> text</span>)</span>
     {
         Text = text;
         MimeType = MimeType.TextPlain;
-        FileName = $&quot;{filename}-{GetFileTimestamp()}&quot;;
+        FileName = <span class="hljs-string">$&quot;<span class="hljs-subst">{filename}</span>-<span class="hljs-subst">{GetFileTimestamp()}</span>&quot;</span>;
     }
 
-    public void SaveTextFile()
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SaveTextFile</span>()</span>
     {
         File.WriteAllText(FileName, Text);
     }
 
-    private static string GetFileTimestamp()
+    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">string</span> <span class="hljs-title">GetFileTimestamp</span>()</span>
     {
-        var year = DateTime.Now.Year;
-        var month = DateTime.Now.Month;
-        var day = DateTime.Now.Day;
-        var hour = DateTime.Now.Hour;
-        var minutes = DateTime.Now.Minute;
-        var seconds = DateTime.Now.Second;
-        var milliseconds = DateTime.Now.Millisecond;
-        return
-            $&quot;{year}{month}{day}@{hour}{minutes}{seconds}{milliseconds}&quot;;
+        <span class="hljs-keyword">var</span> year = DateTime.Now.Year;
+        <span class="hljs-keyword">var</span> month = DateTime.Now.Month;
+        <span class="hljs-keyword">var</span> day = DateTime.Now.Day;
+        <span class="hljs-keyword">var</span> hour = DateTime.Now.Hour;
+        <span class="hljs-keyword">var</span> minutes = DateTime.Now.Minute;
+        <span class="hljs-keyword">var</span> seconds = DateTime.Now.Second;
+        <span class="hljs-keyword">var</span> milliseconds = DateTime.Now.Millisecond;
+        <span class="hljs-keyword">return</span>
+            <span class="hljs-string">$&quot;<span class="hljs-subst">{year}</span><span class="hljs-subst">{month}</span><span class="hljs-subst">{day}</span>@<span class="hljs-subst">{hour}</span><span class="hljs-subst">{minutes}</span><span class="hljs-subst">{seconds}</span><span class="hljs-subst">{milliseconds}</span>&quot;</span>;
     }
 }
 </code></pre>
 <p>سازنده TextFileData اطمینان حاصل می‌کند که مقدار FileName با فراخوانی متد GetFileTimestamp() و افزودن آن به انتهای FileName، منحصر به فرد باشد. برای ذخیره فایل متنی، متد SaveTextFile() را فراخوانی می‌کنیم. توجه داشته باشید که MimeType به صورت داخلی تنظیم شده و روی MimeType.TextPlain قرار گرفته است. می‌توانستیم به سادگی MimeType را به صورت سخت‌کد شده به شکل MimeType = &quot;text/plain&quot;; تنظیم کنیم، اما مزیت استفاده از Enum این است که کد قابل استفاده مجدد است، با این مزیت اضافی که نیازی نیست متن مربوط به یک MimeType خاص را به خاطر بسپارید یا آن را در اینترنت جستجو کنید. حالا، Enum را کدنویسی کرده و یک توضیح (description) به مقدار Enum اضافه می‌کنیم:</p>
-<pre><code class="language-csharp">[Flags]
-public enum MimeType
+<pre class="hljs"><code>[<span class="hljs-meta">Flags</span>]
+<span class="hljs-keyword">public</span> <span class="hljs-built_in">enum</span> MimeType
 {
-    [Description(&quot;text/plain&quot;)]
+    [<span class="hljs-meta">Description(<span class="hljs-string">&quot;text/plain&quot;</span>)</span>]
     TextPlain
 }
 </code></pre>
 <p>خب، ما Enum خود را داریم، اما اکنون به راهی برای استخراج توضیح (description) نیاز داریم تا بتوان آن را به راحتی به یک متغیر اختصاص داد. بنابراین، یک کلاس توسعه (extension class) ایجاد خواهیم کرد که به ما امکان می‌دهد توضیح یک Enum را به دست آوریم. این کار به ما امکان می‌دهد MimeType را به صورت زیر تنظیم کنیم:</p>
-<pre><code class="language-csharp">MimeType = MimeType.TextPlain;
+<pre class="hljs"><code>MimeType = MimeType.TextPlain;
 </code></pre>
 <p>بدون متد توسعه (extension method)، مقدار MimeType برابر با 0 خواهد بود. اما با متد توسعه (extension method)، مقدار MimeType برابر با &quot;text/plain&quot; است. اکنون می‌توانید این توسعه (extension) را در پروژه‌های دیگر خود نیز استفاده مجدد کرده و آن را بر اساس نیاز خود توسعه دهید.</p>
 <p>کلاس بعدی که خواهیم نوشت، کلاس Smtp است که مسئولیت آن ارسال ایمیل از طریق پروتکل Smtp است:</p>
-<pre><code class="language-csharp">public class Smtp
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Smtp</span>
 {
-    private readonly SmtpClient _smtp;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> SmtpClient _smtp;
 
-    public Smtp(Credential credential)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Smtp</span>(<span class="hljs-params">Credential credential</span>)</span>
     {
-        _smtp = new SmtpClient
+        _smtp = <span class="hljs-keyword">new</span> SmtpClient
         {
-            Port = 587,
-            Host = &quot;smtp.gmail.com&quot;,
-            EnableSsl = true,
-            UseDefaultCredentials = false,
-            Credentials = new NetworkCredential(
+            Port = <span class="hljs-number">587</span>,
+            Host = <span class="hljs-string">&quot;smtp.gmail.com&quot;</span>,
+            EnableSsl = <span class="hljs-literal">true</span>,
+            UseDefaultCredentials = <span class="hljs-literal">false</span>,
+            Credentials = <span class="hljs-keyword">new</span> NetworkCredential(
                 credential.EmailAddress, credential.Password),
             DeliveryMethod = SmtpDeliveryMethod.Network
         };
     }
 
-    public void SendMessage(MailMessage mailMessage)
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SendMessage</span>(<span class="hljs-params">MailMessage mailMessage</span>)</span>
     {
         _smtp.Send(mailMessage);
     }
@@ -422,53 +382,53 @@ public enum MimeType
 </code></pre>
 <p>کلاس Smtp دارای یک سازنده (constructor) است که یک پارامتر از نوع Credential می‌گیرد. این اعتبارنامه (credential) برای ورود به سرور ایمیل استفاده می‌شود. سرور در سازنده پیکربندی شده است. هنگامی که متد SendMessage(MailMessage mailMessage) فراخوانی می‌شود، پیام ارسال می‌گردد.</p>
 <p>بیایید یک کلاس DemoWorker بنویسیم که کار را به متدهای مختلف تقسیم می‌کند:</p>
-<pre><code class="language-csharp">public class DemoWorker
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">DemoWorker</span>
 {
     TextFileData _textFileData;
 
-    public void DoWork()
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">DoWork</span>()</span>
     {
         SaveTextFile();
         SendEmail();
     }
 
-    public void SendEmail()
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SendEmail</span>()</span>
     {
-        Smtp smtp = new Smtp(new Credential(&quot;fakegmail@gmail.com&quot;,
-            &quot;fakeP@55w0rd&quot;));
+        Smtp smtp = <span class="hljs-keyword">new</span> Smtp(<span class="hljs-keyword">new</span> Credential(<span class="hljs-string">&quot;fakegmail@gmail.com&quot;</span>,
+            <span class="hljs-string">&quot;fakeP@55w0rd&quot;</span>));
         smtp.SendMessage(GetMailMessage());
     }
 
-    private MailMessage GetMailMessage()
+    <span class="hljs-function"><span class="hljs-keyword">private</span> MailMessage <span class="hljs-title">GetMailMessage</span>()</span>
     {
-        var msg = new MailMessage();
-        msg.From = new MailAddress(&quot;fakegmail@gmail.com&quot;);
-        msg.To.Add(new MailAddress(&quot;fakehotmail@hotmail.com&quot;));
-        msg.Subject = &quot;Some subject&quot;;
-        msg.IsBodyHtml = true;
-        msg.Body = &quot;Hello World!&quot;;
+        <span class="hljs-keyword">var</span> msg = <span class="hljs-keyword">new</span> MailMessage();
+        msg.From = <span class="hljs-keyword">new</span> MailAddress(<span class="hljs-string">&quot;fakegmail@gmail.com&quot;</span>);
+        msg.To.Add(<span class="hljs-keyword">new</span> MailAddress(<span class="hljs-string">&quot;fakehotmail@hotmail.com&quot;</span>));
+        msg.Subject = <span class="hljs-string">&quot;Some subject&quot;</span>;
+        msg.IsBodyHtml = <span class="hljs-literal">true</span>;
+        msg.Body = <span class="hljs-string">&quot;Hello World!&quot;</span>;
         msg.Attachments.Add(GetAttachment());
-        return msg;
+        <span class="hljs-keyword">return</span> msg;
     }
 
-    private Attachment GetAttachment()
+    <span class="hljs-function"><span class="hljs-keyword">private</span> Attachment <span class="hljs-title">GetAttachment</span>()</span>
     {
-        var attachment = new Attachment(_textFileData.FileName);
-        attachment.ContentDisposition.Inline = false;
+        <span class="hljs-keyword">var</span> attachment = <span class="hljs-keyword">new</span> Attachment(_textFileData.FileName);
+        attachment.ContentDisposition.Inline = <span class="hljs-literal">false</span>;
         attachment.ContentDisposition.DispositionType =
             DispositionTypeNames.Attachment;
         attachment.ContentType.MediaType =
             MimeType.TextPlain.Description();
         attachment.ContentType.Name =
             Path.GetFileName(_textFileData.FileName);
-        return attachment;
+        <span class="hljs-keyword">return</span> attachment;
     }
 
-    private void SaveTextFile()
+    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SaveTextFile</span>()</span>
     {
-        _textFileData = new TextFileData(
-            $&quot;{Environment.SpecialFolder.MyDocuments}attachment&quot;,
-            &quot;Here is some demo text!&quot;
+        _textFileData = <span class="hljs-keyword">new</span> TextFileData(
+            <span class="hljs-string">$&quot;<span class="hljs-subst">{Environment.SpecialFolder.MyDocuments}</span>attachment&quot;</span>,
+            <span class="hljs-string">&quot;Here is some demo text!&quot;</span>
         );
         _textFileData.SaveTextFile();
     }
@@ -496,51 +456,5 @@ public enum MimeType
 <p>کد WET چیست و چرا باید از آن اجتناب کرد؟</p>
 <h1>مطالعه بیشتر (Further reading)</h1>
 <p>در اینجا منابع اضافی برای شما آورده شده است تا بتوانید عمیق‌تر به قلمرو برنامه‌نویسی تابعی C# بپردازید:</p>
-<p>Functional C# اثر Wisnu Anggoro: https://www.packtpub.com/application-development/functional-c. این کتاب به برنامه‌نویسی تابعی C# اختصاص دارد و اگر می‌خواهید بیشتر بدانید، جای خوبی برای شروع است.</p>
-<p>Functional Programming in C# اثر Jovan Poppavic (MSFT): https://www.codeproject.com/Articles/375166/Functional-programming-in-Csharp. این یک مقاله عمیق در مورد برنامه‌نویسی تابعی C# است. حاوی نمودار است و دارای امتیاز ۵ ستاره است.</p>
-
-  </main>
-
-  <!-- فوتر مشترک -->
-  <footer class="footer">
-    <div class="container">
-      <p>
-        <img src="/icone/copyright.svg" alt="کپی‌رایت" width="14" height="14"
-             style="vertical-align:middle;margin-inline:4px">
-        <span id="y"></span> Gitab — برای توسعه‌دهندگان
-      </p>
-    </div>
-  </footer>
-
-  <!-- سال + اسکریپت تم -->
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
-
-    (() => {
-      const root = document.documentElement;
-      const btn = document.getElementById('themeToggle');
-      const KEY = 'gitab-theme';
-      const media = window.matchMedia('(prefers-color-scheme: dark)');
-      const getEffective = s => s === 'auto' ? (media.matches ? 'dark' : 'light') : s;
-      function updateTheme(s) {
-        root.setAttribute('data-theme', s);
-        const mode = getEffective(s);
-        root.dataset.colorMode = mode;
-        btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
-      }
-      const saved = localStorage.getItem(KEY) || 'auto';
-      updateTheme(saved);
-      btn.addEventListener('click', () => {
-        const curr = localStorage.getItem(KEY) || 'auto';
-        const next = curr === 'auto' ? 'dark' : curr === 'dark' ? 'light' : 'auto';
-        localStorage.setItem(KEY, next);
-        updateTheme(next);
-      });
-      media.addEventListener('change', () => {
-        if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
-      });
-      window.addEventListener('DOMContentLoaded', () => updateTheme(saved));
-    })();
-  </script>
-</body>
-</html>
+<p>Functional C# اثر Wisnu Anggoro: <a href="https://www.packtpub.com/application-development/functional-c">https://www.packtpub.com/application-development/functional-c</a>. این کتاب به برنامه‌نویسی تابعی C# اختصاص دارد و اگر می‌خواهید بیشتر بدانید، جای خوبی برای شروع است.</p>
+<p>Functional Programming in C# اثر Jovan Poppavic (MSFT): <a href="https://www.codeproject.com/Articles/375166/Functional-programming-in-Csharp">https://www.codeproject.com/Articles/375166/Functional-programming-in-Csharp</a>. این یک مقاله عمیق در مورد برنامه‌نویسی تابعی C# است. حاوی نمودار است و دارای امتیاز ۵ ستاره است.</p>

@@ -1,44 +1,4 @@
-<!doctype html>
-<html lang="fa" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gitab | کتابخانهٔ ترجمه‌های دات‌نت و سی شارپ</title>
-  <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
-  <link rel="stylesheet" href="/styles/main.css">
-</head>
-<body>
-  <!-- هدر مشترک -->
-  <header class="header">
-    <div class="container nav-wrap">
-      <a class="brand" href="/">
-        <img src="/icone/logo.svg" alt="Gitab" width="28" height="28">
-        <span>Gitab</span>
-      </a>
-
-      <nav class="nav">
-        <a href="/">خانه</a>
-        <a href="/books/list-books">کتاب‌ها</a>
-        <a href="#">همکاری</a>
-        <a href="#">درباره‌ما</a>
-      </nav>
-
-     <div class="nav-actions">
-  <button id="themeToggle" class="icon-btn theme-btn" aria-label="تغییر حالت">
-    <img class="icon-sun" src="/icone/sun.svg" alt="روشن">
-    <img class="icon-moon" src="/icone/moon.svg" alt="تاریک">
-  </button>
-
-  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
-    <img src="/icone/github.svg" alt="GitHub">
-  </a>
-</div>
-
-  </header>
-
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل نهم:  LINQ Operators</h1>
+<h1>فصل نهم:  LINQ Operators</h1>
 <p>این فصل به بررسی تک‌تک <strong>عملگرهای LINQ</strong> می‌پردازد. علاوه بر اینکه به‌عنوان یک مرجع عمل می‌کند، دو بخش <strong>«Projecting»</strong> (در صفحه ۴۷۳) و <strong>«Joining»</strong> (در صفحه ۴۷۳) مفاهیم مهمی را پوشش می‌دهند:</p>
 <ul>
 <li>📌 <strong>Projecting object hierarchies</strong> (ایجاد و نمایش سلسله‌مراتب اشیاء)</li>
@@ -48,28 +8,28 @@
 <hr>
 <h3>🔤 مثال پایه</h3>
 <p>تمامی مثال‌های این فصل فرض می‌کنند که یک آرایه از نام‌ها تعریف شده است:</p>
-<pre><code class="language-csharp">string[] names = { &quot;Tom&quot;, &quot;Dick&quot;, &quot;Harry&quot;, &quot;Mary&quot;, &quot;Jay&quot; };
+<pre class="hljs"><code><span class="hljs-built_in">string</span>[] names = { <span class="hljs-string">&quot;Tom&quot;</span>, <span class="hljs-string">&quot;Dick&quot;</span>, <span class="hljs-string">&quot;Harry&quot;</span>, <span class="hljs-string">&quot;Mary&quot;</span>, <span class="hljs-string">&quot;Jay&quot;</span> };
 </code></pre>
 <p>مثال‌هایی که مربوط به پایگاه‌داده هستند فرض می‌کنند شیء زیر ساخته شده است:</p>
-<pre><code class="language-csharp">var dbContext = new NutshellContext();
+<pre class="hljs"><code><span class="hljs-keyword">var</span> dbContext = <span class="hljs-keyword">new</span> NutshellContext();
 </code></pre>
 <p>که کلاس <code>NutshellContext</code> به شکل زیر تعریف شده است:</p>
-<pre><code class="language-csharp">public class NutshellContext : DbContext
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">NutshellContext</span> : <span class="hljs-title">DbContext</span>
 {
-    public DbSet&lt;Customer&gt; Customers { get; set; }
-    public DbSet&lt;Purchase&gt; Purchases { get; set; }
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">DbSet</span>&lt;<span class="hljs-title">Customer</span>&gt; Customers</span> { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">DbSet</span>&lt;<span class="hljs-title">Purchase</span>&gt; Purchases</span> { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnModelCreating</span>(<span class="hljs-params">ModelBuilder modelBuilder</span>)</span>
     {
         modelBuilder.Entity&lt;Customer&gt;(entity =&gt;
         {
-            entity.ToTable(&quot;Customer&quot;);
-            entity.Property(e =&gt; e.Name).IsRequired();  // ستون غیرقابل تهی
+            entity.ToTable(<span class="hljs-string">&quot;Customer&quot;</span>);
+            entity.Property(e =&gt; e.Name).IsRequired();  <span class="hljs-comment">// ستون غیرقابل تهی</span>
         });
 
         modelBuilder.Entity&lt;Purchase&gt;(entity =&gt;
         {
-            entity.ToTable(&quot;Purchase&quot;);
+            entity.ToTable(<span class="hljs-string">&quot;Purchase&quot;</span>);
             entity.Property(e =&gt; e.Date).IsRequired();
             entity.Property(e =&gt; e.Description).IsRequired();
         });
@@ -78,52 +38,52 @@
 </code></pre>
 <hr>
 <h3>🧑‍💻 تعریف کلاس‌ها</h3>
-<pre><code class="language-csharp">public class Customer
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Customer</span>
 {
-    public int ID { get; set; }
-    public string Name { get; set; }
-    public virtual List&lt;Purchase&gt; Purchases { get; set; }
-        = new List&lt;Purchase&gt;();
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> ID { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Name { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">virtual</span> List&lt;Purchase&gt; Purchases { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+        = <span class="hljs-keyword">new</span> List&lt;Purchase&gt;();
 }
 
-public class Purchase
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Purchase</span>
 {        
-    public int ID { get; set; }
-    public int? CustomerID { get; set; }
-    public DateTime Date { get; set; }
-    public string Description { get; set; }
-    public decimal Price { get; set; }
-    public virtual Customer Customer { get; set; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> ID { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span>? CustomerID { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> DateTime Date { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Description { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">decimal</span> Price { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">virtual</span> Customer Customer { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
 }
 </code></pre>
 <hr>
 <h3>🛠 ابزار LINQPad</h3>
-<p>تمامی مثال‌های این فصل در <strong>LINQPad</strong> از پیش بارگذاری شده‌اند، همراه با یک پایگاه‌داده نمونه که <strong>Schema</strong> مشابهی دارد.
+<p>تمامی مثال‌های این فصل در <strong>LINQPad</strong> از پیش بارگذاری شده‌اند، همراه با یک پایگاه‌داده نمونه که <strong>Schema</strong> مشابهی دارد.<br>
 📥 می‌توانید LINQPad را از <a href="http://www.linqpad.net">www.linqpad.net</a> دانلود کنید.</p>
 <hr>
 <h3>🗄 تعریف جدول‌های SQL Server متناظر</h3>
-<pre><code class="language-sql">CREATE TABLE Customer (
-    ID int NOT NULL IDENTITY PRIMARY KEY,
-    Name nvarchar(30) NOT NULL
+<pre class="hljs"><code><span class="hljs-keyword">CREATE TABLE</span> Customer (
+    ID <span class="hljs-type">int</span> <span class="hljs-keyword">NOT NULL</span> <span class="hljs-keyword">IDENTITY</span> <span class="hljs-keyword">PRIMARY KEY</span>,
+    Name nvarchar(<span class="hljs-number">30</span>) <span class="hljs-keyword">NOT NULL</span>
 )
 
-CREATE TABLE Purchase (
-    ID int NOT NULL IDENTITY PRIMARY KEY,
-    CustomerID int NOT NULL REFERENCES Customer(ID),
-    Date datetime NOT NULL,
-    Description nvarchar(30) NOT NULL,
-    Price decimal NOT NULL
+<span class="hljs-keyword">CREATE TABLE</span> Purchase (
+    ID <span class="hljs-type">int</span> <span class="hljs-keyword">NOT NULL</span> <span class="hljs-keyword">IDENTITY</span> <span class="hljs-keyword">PRIMARY KEY</span>,
+    CustomerID <span class="hljs-type">int</span> <span class="hljs-keyword">NOT NULL</span> <span class="hljs-keyword">REFERENCES</span> Customer(ID),
+    <span class="hljs-type">Date</span> datetime <span class="hljs-keyword">NOT NULL</span>,
+    Description nvarchar(<span class="hljs-number">30</span>) <span class="hljs-keyword">NOT NULL</span>,
+    Price <span class="hljs-type">decimal</span> <span class="hljs-keyword">NOT NULL</span>
 )
 </code></pre>
 <hr>
 <h2>🔎 مرور کلی (Overview)</h2>
 <p>در این بخش، یک مرور کلی بر <strong>عملگرهای استاندارد کوئری</strong> ارائه می‌دهیم. این عملگرها در سه دسته تقسیم می‌شوند:</p>
 <ol>
-<li>📌 <strong>Sequence in, sequence out (sequence → sequence)</strong>
+<li>📌 <strong>Sequence in, sequence out (sequence → sequence)</strong><br>
 ➝ یعنی ورودی یک دنباله (sequence) است و خروجی هم یک دنباله.</li>
-<li>📌 <strong>Sequence in, single element or scalar value out</strong>
+<li>📌 <strong>Sequence in, single element or scalar value out</strong><br>
 ➝ یعنی ورودی یک دنباله است اما خروجی فقط یک عنصر یا یک مقدار منفرد.</li>
-<li>📌 <strong>Nothing in, sequence out (generation methods)</strong>
+<li>📌 <strong>Nothing in, sequence out (generation methods)</strong><br>
 ➝ یعنی هیچ ورودی وجود ندارد اما خروجی یک دنباله تولید می‌شود.</li>
 </ol>
 <hr>
@@ -139,111 +99,111 @@ CREATE TABLE Purchase (
 <p>در این بخش، عملگرهای LINQ را بر اساس نوع ورودی و خروجی مرور می‌کنیم. هر دسته با مثال‌ها و توضیح کوتاه معرفی می‌شود.</p>
 <hr>
 <h2>🔍 Filtering (فیلتر کردن)</h2>
-<p><strong>ورودی:</strong> <code>IEnumerable&lt;TSource&gt;</code>
+<p><strong>ورودی:</strong> <code>IEnumerable&lt;TSource&gt;</code><br>
 <strong>خروجی:</strong> <code>IEnumerable&lt;TSource&gt;</code></p>
 <p>🔹 وظیفه: برگرداندن یک زیرمجموعه از عناصر اصلی.</p>
-<p>📌 عملگرها:
-<code>Where</code>, <code>Take</code>, <code>TakeLast</code>, <code>TakeWhile</code>, <code>Skip</code>, <code>SkipLast</code>, <code>SkipWhile</code>,
+<p>📌 عملگرها:<br>
+<code>Where</code>, <code>Take</code>, <code>TakeLast</code>, <code>TakeWhile</code>, <code>Skip</code>, <code>SkipLast</code>, <code>SkipWhile</code>,<br>
 <code>Distinct</code>, <code>DistinctBy</code></p>
 <hr>
 <h2>🎨 Projecting (تبدیل/نمایش)</h2>
-<p><strong>ورودی:</strong> <code>IEnumerable&lt;TSource&gt;</code>
+<p><strong>ورودی:</strong> <code>IEnumerable&lt;TSource&gt;</code><br>
 <strong>خروجی:</strong> <code>IEnumerable&lt;TResult&gt;</code></p>
 <p>🔹 وظیفه: تغییر شکل هر عنصر با استفاده از یک <strong>lambda function</strong>.</p>
 <ul>
 <li><code>SelectMany</code> دنباله‌های تو در تو (nested sequences) را <strong>مسطح‌سازی (flatten)</strong> می‌کند.</li>
 <li><code>Select</code> و <code>SelectMany</code> می‌توانند انواع مختلف <strong>Join</strong> (مانند inner join, left outer join, cross join, non-equi join) را با <strong>EF Core</strong> انجام دهند.</li>
 </ul>
-<p>📌 عملگرها:
+<p>📌 عملگرها:<br>
 <code>Select</code>, <code>SelectMany</code></p>
 <hr>
 <h2>🔗 Joining (اتصال/ترکیب)</h2>
-<p><strong>ورودی:</strong>
-<code>IEnumerable&lt;TOuter&gt;, IEnumerable&lt;TInner&gt;</code>
-<strong>خروجی:</strong>
+<p><strong>ورودی:</strong><br>
+<code>IEnumerable&lt;TOuter&gt;, IEnumerable&lt;TInner&gt;</code><br>
+<strong>خروجی:</strong><br>
 <code>IEnumerable&lt;TResult&gt;</code></p>
 <p>🔹 وظیفه: ترکیب عناصر یک دنباله با دنباله‌ای دیگر.</p>
 <ul>
 <li><code>Join</code> و <code>GroupJoin</code> برای کارایی بهتر در کوئری‌های محلی طراحی شده‌اند و از <strong>inner join</strong> و <strong>left outer join</strong> پشتیبانی می‌کنند.</li>
 <li><code>Zip</code> دو دنباله را هم‌زمان پیمایش کرده و روی هر جفت عنصر یک تابع اعمال می‌کند.</li>
 </ul>
-<p>📌 عملگرها:
+<p>📌 عملگرها:<br>
 <code>Join</code>, <code>GroupJoin</code>, <code>Zip</code></p>
 <hr>
 <h2>📑 Ordering (مرتب‌سازی)</h2>
-<p><strong>ورودی:</strong> <code>IEnumerable&lt;TSource&gt;</code>
+<p><strong>ورودی:</strong> <code>IEnumerable&lt;TSource&gt;</code><br>
 <strong>خروجی:</strong> <code>IOrderedEnumerable&lt;TSource&gt;</code></p>
 <p>🔹 وظیفه: بازگرداندن یک دنباله با ترتیب جدید.</p>
-<p>📌 عملگرها:
+<p>📌 عملگرها:<br>
 <code>OrderBy</code>, <code>OrderByDescending</code>, <code>ThenBy</code>, <code>ThenByDescending</code>, <code>Reverse</code></p>
 <hr>
 <h2>🗂 Grouping (گروه‌بندی)</h2>
-<p><strong>ورودی:</strong> <code>IEnumerable&lt;TSource&gt;</code>
+<p><strong>ورودی:</strong> <code>IEnumerable&lt;TSource&gt;</code><br>
 <strong>خروجی:</strong></p>
 <ul>
 <li><code>IEnumerable&lt;IGrouping&lt;TKey,TElement&gt;&gt;</code></li>
 <li>یا <code>IEnumerable&lt;TElement[]&gt;</code></li>
 </ul>
 <p>🔹 وظیفه: تقسیم یک دنباله به زیر‌دنباله‌ها.</p>
-<p>📌 عملگرها:
+<p>📌 عملگرها:<br>
 <code>GroupBy</code>, <code>Chunk</code></p>
 <hr>
 <h2>🔀 Set Operators (عملگرهای مجموعه‌ای)</h2>
-<p><strong>ورودی:</strong>
-<code>IEnumerable&lt;TSource&gt;, IEnumerable&lt;TSource&gt;</code>
-<strong>خروجی:</strong>
+<p><strong>ورودی:</strong><br>
+<code>IEnumerable&lt;TSource&gt;, IEnumerable&lt;TSource&gt;</code><br>
+<strong>خروجی:</strong><br>
 <code>IEnumerable&lt;TSource&gt;</code></p>
 <p>🔹 وظیفه: گرفتن دو دنباله هم‌نوع و برگرداندن اشتراک، اجتماع یا تفاوت آن‌ها.</p>
-<p>📌 عملگرها:
+<p>📌 عملگرها:<br>
 <code>Concat</code>, <code>Union</code>, <code>UnionBy</code>, <code>Intersect</code>, <code>IntersectBy</code>, <code>Except</code>, <code>ExceptBy</code></p>
 <hr>
 <h2>🔄 Conversion Methods (تبدیل)</h2>
 <h3>🛠 Import</h3>
-<p><strong>ورودی:</strong> <code>IEnumerable</code>
+<p><strong>ورودی:</strong> <code>IEnumerable</code><br>
 <strong>خروجی:</strong> <code>IEnumerable&lt;TResult&gt;</code></p>
-<p>📌 عملگرها:
+<p>📌 عملگرها:<br>
 <code>OfType</code>, <code>Cast</code></p>
 <h3>📤 Export</h3>
-<p><strong>ورودی:</strong> <code>IEnumerable&lt;TSource&gt;</code>
+<p><strong>ورودی:</strong> <code>IEnumerable&lt;TSource&gt;</code><br>
 <strong>خروجی:</strong> یک آرایه، لیست، دیکشنری، Lookup یا دنباله</p>
-<p>📌 عملگرها:
+<p>📌 عملگرها:<br>
 <code>ToArray</code>, <code>ToList</code>, <code>ToDictionary</code>, <code>ToLookup</code>, <code>AsEnumerable</code>, <code>AsQueryable</code></p>
 <hr>
 <h2>🎯 Sequence → Element or Value</h2>
 <h3>🔹 Element Operators (انتخاب عنصر)</h3>
-<p><strong>ورودی:</strong> <code>IEnumerable&lt;TSource&gt;</code>
+<p><strong>ورودی:</strong> <code>IEnumerable&lt;TSource&gt;</code><br>
 <strong>خروجی:</strong> <code>TSource</code></p>
-<p>📌 عملگرها:
-<code>First</code>, <code>FirstOrDefault</code>, <code>Last</code>, <code>LastOrDefault</code>,
-<code>Single</code>, <code>SingleOrDefault</code>, <code>ElementAt</code>, <code>ElementAtOrDefault</code>,
+<p>📌 عملگرها:<br>
+<code>First</code>, <code>FirstOrDefault</code>, <code>Last</code>, <code>LastOrDefault</code>,<br>
+<code>Single</code>, <code>SingleOrDefault</code>, <code>ElementAt</code>, <code>ElementAtOrDefault</code>,<br>
 <code>MinBy</code>, <code>MaxBy</code>, <code>DefaultIfEmpty</code></p>
 <hr>
 <h3>🔹 Aggregation Methods (تجمیع)</h3>
-<p><strong>ورودی:</strong> <code>IEnumerable&lt;TSource&gt;</code>
+<p><strong>ورودی:</strong> <code>IEnumerable&lt;TSource&gt;</code><br>
 <strong>خروجی:</strong> یک مقدار منفرد (scalar)</p>
 <p>📌 وظیفه: انجام محاسبه روی یک دنباله و بازگرداندن یک مقدار عددی یا مشابه آن.</p>
-<p>📌 عملگرها:
+<p>📌 عملگرها:<br>
 <code>Aggregate</code>, <code>Average</code>, <code>Count</code>, <code>LongCount</code>, <code>Sum</code>, <code>Max</code>, <code>Min</code></p>
 <hr>
 <h3>🔹 Quantifiers (کوانتیفایرها)</h3>
-<p><strong>ورودی:</strong> <code>IEnumerable&lt;TSource&gt;</code>
+<p><strong>ورودی:</strong> <code>IEnumerable&lt;TSource&gt;</code><br>
 <strong>خروجی:</strong> <code>bool</code></p>
 <p>📌 وظیفه: برگرداندن نتیجه <strong>true/false</strong> به‌عنوان یک تجمیع.</p>
-<p>📌 عملگرها:
+<p>📌 عملگرها:<br>
 <code>All</code>, <code>Any</code>, <code>Contains</code>, <code>SequenceEqual</code></p>
 <hr>
 <h2>🌀 Void → Sequence</h2>
 <h3>🔹 Generation Methods (تولید)</h3>
-<p><strong>ورودی:</strong> <code>void</code>
+<p><strong>ورودی:</strong> <code>void</code><br>
 <strong>خروجی:</strong> <code>IEnumerable&lt;TResult&gt;</code></p>
 <p>📌 وظیفه: ساخت یک دنباله ساده از صفر.</p>
-<p>📌 عملگرها:
+<p>📌 عملگرها:<br>
 <code>Empty</code>, <code>Range</code>, <code>Repeat</code></p>
 <div align="center">
 <p><img src="../../../assets/image/09/Table-9-2.jpeg" alt="Conventions-UsedThis-Book"></p>
 </div>
 <h3>📖 نکته درباره ستون «SQL equivalents»</h3>
-<p>در جدول‌های مرجع این فصل، ستون <strong>«SQL equivalents»</strong> لزوماً همان چیزی نیست که یک پیاده‌سازی <code>IQueryable</code> مثل <strong>EF Core</strong> تولید می‌کند.
+<p>در جدول‌های مرجع این فصل، ستون <strong>«SQL equivalents»</strong> لزوماً همان چیزی نیست که یک پیاده‌سازی <code>IQueryable</code> مثل <strong>EF Core</strong> تولید می‌کند.<br>
 بلکه این ستون نشان می‌دهد اگر خودتان می‌خواستید معادل آن کوئری را به زبان <strong>SQL</strong> بنویسید، معمولاً از چه چیزی استفاده می‌کردید.</p>
 <ul>
 <li>اگر معادل ساده‌ای برای آن وجود نداشته باشد، ستون خالی رها می‌شود.</li>
@@ -258,8 +218,8 @@ CREATE TABLE Purchase (
 </ul>
 <hr>
 <h3>🔍 درباره متدهای Filtering</h3>
-<p>در هر یک از متدهای <strong>Filtering</strong>، همیشه خروجی شامل همان تعداد یا <strong>کمتر</strong> از عناصری است که در ورودی داشتید.
-⚠️ هیچ‌وقت نمی‌توانید عناصر بیشتری از آنچه وارد کرده‌اید به دست بیاورید!
+<p>در هر یک از متدهای <strong>Filtering</strong>، همیشه خروجی شامل همان تعداد یا <strong>کمتر</strong> از عناصری است که در ورودی داشتید.<br>
+⚠️ هیچ‌وقت نمی‌توانید عناصر بیشتری از آنچه وارد کرده‌اید به دست بیاورید!<br>
 علاوه بر این، عناصری که در خروجی دریافت می‌کنید <strong>تبدیل یا تغییر شکل داده نمی‌شوند</strong>؛ آن‌ها دقیقاً همان عناصری هستند که در ورودی وجود داشتند.</p>
 <hr>
 <h2>📝 Where</h2>
@@ -274,18 +234,18 @@ CREATE TABLE Purchase (
 </ul>
 <hr>
 <h3>📝 سینتکس کوئری</h3>
-<pre><code class="language-csharp">where bool-expression
+<pre class="hljs"><code><span class="hljs-keyword">where</span> <span class="hljs-built_in">bool</span>-expression
 </code></pre>
 <hr>
 <h3>🔧 پیاده‌سازی Enumerable.Where</h3>
 <p>نسخه داخلی <code>Enumerable.Where</code> (بدون بررسی null) معادل کدی شبیه زیر است:</p>
-<pre><code class="language-csharp">public static IEnumerable&lt;TSource&gt; Where&lt;TSource&gt;(
-    this IEnumerable&lt;TSource&gt; source,
-    Func&lt;TSource, bool&gt; predicate)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">IEnumerable</span>&lt;<span class="hljs-title">TSource</span>&gt; <span class="hljs-title">Where</span>&lt;<span class="hljs-title">TSource</span>&gt;(<span class="hljs-params">
+    <span class="hljs-keyword">this</span> IEnumerable&lt;TSource&gt; source,
+    Func&lt;TSource, <span class="hljs-built_in">bool</span>&gt; predicate</span>)</span>
 {
-    foreach (TSource element in source)
-        if (predicate(element))
-            yield return element;
+    <span class="hljs-keyword">foreach</span> (TSource element <span class="hljs-keyword">in</span> source)
+        <span class="hljs-keyword">if</span> (predicate(element))
+            <span class="hljs-keyword">yield</span> <span class="hljs-keyword">return</span> element;
 }
 </code></pre>
 <hr>
@@ -293,44 +253,44 @@ CREATE TABLE Purchase (
 <p><code>Where</code> عناصری از دنباله ورودی را برمی‌گرداند که شرط داده‌شده (<strong>predicate</strong>) را برآورده می‌کنند.</p>
 <hr>
 <h3>✨ مثال ساده</h3>
-<pre><code class="language-csharp">string[] names = { &quot;Tom&quot;, &quot;Dick&quot;, &quot;Harry&quot;, &quot;Mary&quot;, &quot;Jay&quot; };
+<pre class="hljs"><code><span class="hljs-built_in">string</span>[] names = { <span class="hljs-string">&quot;Tom&quot;</span>, <span class="hljs-string">&quot;Dick&quot;</span>, <span class="hljs-string">&quot;Harry&quot;</span>, <span class="hljs-string">&quot;Mary&quot;</span>, <span class="hljs-string">&quot;Jay&quot;</span> };
 
-IEnumerable&lt;string&gt; query = names.Where(name =&gt; name.EndsWith(&quot;y&quot;));
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query = names.Where(name =&gt; name.EndsWith(<span class="hljs-string">&quot;y&quot;</span>));
 
-// خروجی:
-// Harry
-// Mary
-// Jay
+<span class="hljs-comment">// خروجی:</span>
+<span class="hljs-comment">// Harry</span>
+<span class="hljs-comment">// Mary</span>
+<span class="hljs-comment">// Jay</span>
 </code></pre>
 <p>🔹 معادل در <strong>Query Syntax</strong>:</p>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query =
-    from n in names
-    where n.EndsWith(&quot;y&quot;)
-    select n;
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query =
+    <span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> names
+    <span class="hljs-keyword">where</span> n.EndsWith(<span class="hljs-string">&quot;y&quot;</span>)
+    <span class="hljs-keyword">select</span> n;
 </code></pre>
 <hr>
 <h3>🌀 چند شرط Where در یک کوئری</h3>
 <p>یک عبارت <code>where</code> می‌تواند چند بار در کوئری ظاهر شود و با <code>let</code>, <code>orderby</code>, یا <code>join</code> ترکیب شود:</p>
-<pre><code class="language-csharp">from n in names
-where n.Length &gt; 3
-let u = n.ToUpper()
-where u.EndsWith(&quot;Y&quot;)
-select u;
+<pre class="hljs"><code><span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> names
+<span class="hljs-keyword">where</span> n.Length &gt; <span class="hljs-number">3</span>
+<span class="hljs-keyword">let</span> u = n.ToUpper()
+<span class="hljs-keyword">where</span> u.EndsWith(<span class="hljs-string">&quot;Y&quot;</span>)
+<span class="hljs-keyword">select</span> u;
 
-// خروجی:
-// HARRY
-// MARY
+<span class="hljs-comment">// خروجی:</span>
+<span class="hljs-comment">// HARRY</span>
+<span class="hljs-comment">// MARY</span>
 </code></pre>
 <p>🔸 قوانین <strong>scoping</strong> استاندارد #C اعمال می‌شوند. یعنی نمی‌توانید قبل از تعریف یک متغیر (با <code>range variable</code> یا <code>let</code>) به آن ارجاع دهید.</p>
 <hr>
 <h3>🔢 Indexed Filtering (فیلترگذاری بر اساس ایندکس)</h3>
 <p><code>Where</code> می‌تواند به‌صورت اختیاری آرگومان دوم از نوع <code>int</code> دریافت کند (نمایانگر <strong>موقعیت عنصر</strong> در دنباله). این ویژگی اجازه می‌دهد تصمیم‌گیری براساس موقعیت انجام شود.</p>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query = names.Where((n, i) =&gt; i % 2 == 0);
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query = names.Where((n, i) =&gt; i % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>);
 
-// خروجی:
-// Tom
-// Harry
-// Jay
+<span class="hljs-comment">// خروجی:</span>
+<span class="hljs-comment">// Tom</span>
+<span class="hljs-comment">// Harry</span>
+<span class="hljs-comment">// Jay</span>
 </code></pre>
 <p>⚠️ در <strong>EF Core</strong> استفاده از این قابلیت باعث <strong>Exception</strong> می‌شود.</p>
 <hr>
@@ -342,38 +302,38 @@ select u;
 <li><code>EndsWith</code></li>
 </ul>
 <p>مثال:</p>
-<pre><code class="language-csharp">c.Name.Contains(&quot;abc&quot;)
+<pre class="hljs"><code>c.Name.Contains(<span class="hljs-string">&quot;abc&quot;</span>)
 </code></pre>
 <p>به SQL معادل زیر تبدیل می‌شود:</p>
-<pre><code class="language-sql">customer.Name LIKE '%abc%'
+<pre class="hljs"><code>customer.Name <span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;%abc%&#x27;</span>
 </code></pre>
 <blockquote>
 <p>(در واقع نسخه <strong>پارامتری‌شده</strong> ساخته می‌شود، نه رشته مستقیم.)</p>
 </blockquote>
 <p>🔹 برای مقایسه با <strong>ستون دیگر</strong> باید از متد <code>EF.Functions.Like</code> استفاده کنید:</p>
-<pre><code class="language-csharp">where EF.Functions.Like(c.Description, &quot;%&quot; + c.Name + &quot;%&quot;)
+<pre class="hljs"><code><span class="hljs-keyword">where</span> EF.Functions.Like(c.Description, <span class="hljs-string">&quot;%&quot;</span> + c.Name + <span class="hljs-string">&quot;%&quot;</span>)
 </code></pre>
 <p>این متد امکان مقایسه‌های پیچیده‌تر را هم می‌دهد، مثل:</p>
-<pre><code class="language-sql">LIKE 'abc%def%'
+<pre class="hljs"><code><span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;abc%def%&#x27;</span>
 </code></pre>
 <hr>
 <h3>🔠 مقایسه رشته‌ای با &lt; و &gt; در EF Core</h3>
 <p>برای مقایسه ترتیبی رشته‌ها از متد <code>string.CompareTo</code> استفاده کنید:</p>
-<pre><code class="language-csharp">dbContext.Purchases
-    .Where(p =&gt; p.Description.CompareTo(&quot;C&quot;) &lt; 0);
+<pre class="hljs"><code>dbContext.Purchases
+    .Where(p =&gt; p.Description.CompareTo(<span class="hljs-string">&quot;C&quot;</span>) &lt; <span class="hljs-number">0</span>);
 </code></pre>
 <p>📌 این کد به عملگرهای <code>&lt;</code> و <code>&gt;</code> در SQL نگاشت می‌شود.</p>
 <hr>
 <h3>🗂 استفاده از IN در EF Core</h3>
 <p>در EF Core می‌توانید <code>Contains</code> را روی یک مجموعه محلی استفاده کنید:</p>
-<pre><code class="language-csharp">string[] chosenOnes = { &quot;Tom&quot;, &quot;Jay&quot; };
+<pre class="hljs"><code><span class="hljs-built_in">string</span>[] chosenOnes = { <span class="hljs-string">&quot;Tom&quot;</span>, <span class="hljs-string">&quot;Jay&quot;</span> };
 
-from c in dbContext.Customers
-where chosenOnes.Contains(c.Name)
-select c;
+<span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+<span class="hljs-keyword">where</span> chosenOnes.Contains(c.Name)
+<span class="hljs-keyword">select</span> c;
 </code></pre>
 <p>معادل SQL:</p>
-<pre><code class="language-sql">WHERE customer.Name IN (&quot;Tom&quot;, &quot;Jay&quot;)
+<pre class="hljs"><code><span class="hljs-keyword">WHERE</span> customer.Name <span class="hljs-keyword">IN</span> (&quot;Tom&quot;, &quot;Jay&quot;)
 </code></pre>
 <p>⚠️ اگر مجموعه محلی آرایه‌ای از <strong>entity</strong> یا نوع غیر scalar باشد، EF Core ممکن است به‌جای آن <strong>EXISTS</strong> تولید کند.</p>
 <hr>
@@ -399,17 +359,17 @@ select c;
 <h3>🌐 مثال کاربردی (Paging در EF Core)</h3>
 <p>فرض کن کاربر توی دیتابیس کتاب‌ها دنبال عبارت <code>&quot;mercury&quot;</code> می‌گرده و <strong>۱۰۰ نتیجه</strong> پیدا می‌شه.</p>
 <p>📌 برای گرفتن <strong>۲۰ نتیجه اول</strong>:</p>
-<pre><code class="language-csharp">IQueryable&lt;Book&gt; query = dbContext.Books
-    .Where(b =&gt; b.Title.Contains(&quot;mercury&quot;))
+<pre class="hljs"><code>IQueryable&lt;Book&gt; query = dbContext.Books
+    .Where(b =&gt; b.Title.Contains(<span class="hljs-string">&quot;mercury&quot;</span>))
     .OrderBy(b =&gt; b.Title)
-    .Take(20);
+    .Take(<span class="hljs-number">20</span>);
 </code></pre>
 <p>📌 برای گرفتن <strong>کتاب‌های شماره ۲۱ تا ۴۰</strong>:</p>
-<pre><code class="language-csharp">IQueryable&lt;Book&gt; query = dbContext.Books
-    .Where(b =&gt; b.Title.Contains(&quot;mercury&quot;))
+<pre class="hljs"><code>IQueryable&lt;Book&gt; query = dbContext.Books
+    .Where(b =&gt; b.Title.Contains(<span class="hljs-string">&quot;mercury&quot;</span>))
     .OrderBy(b =&gt; b.Title)
-    .Skip(20)
-    .Take(20);
+    .Skip(<span class="hljs-number">20</span>)
+    .Take(<span class="hljs-number">20</span>);
 </code></pre>
 <hr>
 <h3>⚙️ نحوه ترجمه در SQL</h3>
@@ -428,11 +388,11 @@ select c;
 <h3>🚀 قابلیت جدید از .NET 6</h3>
 <p>از نسخه <strong>.NET 6</strong>، متد <code>Take</code> یک نسخه overload جدید داره که متغیر <code>Range</code> رو قبول می‌کنه. این نسخه می‌تونه جایگزین تمام چهار متد بشه.</p>
 <p>📌 مثال‌ها:</p>
-<pre><code class="language-csharp">Take(5..)
-// معادل Skip(5)
+<pre class="hljs"><code>Take(<span class="hljs-number">5.</span>.)
+<span class="hljs-comment">// معادل Skip(5)</span>
 
-Take(..^5)
-// معادل SkipLast(5)
+Take(..^<span class="hljs-number">5</span>)
+<span class="hljs-comment">// معادل SkipLast(5)</span>
 </code></pre>
 <p>یعنی می‌تونی خیلی تمیزتر و کوتاه‌تر کد بزنی ✨</p>
 <hr>
@@ -447,28 +407,28 @@ Take(..^5)
 <h3>🔹 TakeWhile و SkipWhile</h3>
 <hr>
 <h3>⚙️ TakeWhile</h3>
-<p><code>TakeWhile</code> عناصر دنباله ورودی را <strong>به ترتیب پیمایش</strong> می‌کند و هر عنصر را <strong>تا زمانی که شرط داده‌شده true باشد</strong> برمی‌گرداند.
+<p><code>TakeWhile</code> عناصر دنباله ورودی را <strong>به ترتیب پیمایش</strong> می‌کند و هر عنصر را <strong>تا زمانی که شرط داده‌شده true باشد</strong> برمی‌گرداند.<br>
 به محض اینکه شرط false شود، بقیه عناصر نادیده گرفته می‌شوند.</p>
-<pre><code class="language-csharp">int[] numbers = { 3, 5, 2, 234, 4, 1 };
-var takeWhileSmall = numbers.TakeWhile(n =&gt; n &lt; 100); // خروجی: { 3, 5, 2 }
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] numbers = { <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">2</span>, <span class="hljs-number">234</span>, <span class="hljs-number">4</span>, <span class="hljs-number">1</span> };
+<span class="hljs-keyword">var</span> takeWhileSmall = numbers.TakeWhile(n =&gt; n &lt; <span class="hljs-number">100</span>); <span class="hljs-comment">// خروجی: { 3, 5, 2 }</span>
 </code></pre>
 <hr>
 <h3>⚙️ SkipWhile</h3>
-<p><code>SkipWhile</code> هم دنباله ورودی را پیمایش می‌کند، ولی <strong>عناصر را تا زمانی که شرط true باشد نادیده می‌گیرد</strong>.
+<p><code>SkipWhile</code> هم دنباله ورودی را پیمایش می‌کند، ولی <strong>عناصر را تا زمانی که شرط true باشد نادیده می‌گیرد</strong>.<br>
 بعد از اولین عنصری که شرط false شد، بقیه عناصر <strong>برگردانده می‌شوند</strong>.</p>
-<pre><code class="language-csharp">int[] numbers = { 3, 5, 2, 234, 4, 1 };
-var skipWhileSmall = numbers.SkipWhile(n =&gt; n &lt; 100); // خروجی: { 234, 4, 1 }
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] numbers = { <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">2</span>, <span class="hljs-number">234</span>, <span class="hljs-number">4</span>, <span class="hljs-number">1</span> };
+<span class="hljs-keyword">var</span> skipWhileSmall = numbers.SkipWhile(n =&gt; n &lt; <span class="hljs-number">100</span>); <span class="hljs-comment">// خروجی: { 234, 4, 1 }</span>
 </code></pre>
-<p>⚠️ توجه:
+<p>⚠️ توجه:<br>
 <code>TakeWhile</code> و <code>SkipWhile</code> هیچ معادل SQL ندارند و در کوئری‌های <strong>EF Core</strong> استفاده از آن‌ها باعث <strong>Exception</strong> می‌شود.</p>
 <hr>
 <h3>🔹 Distinct و DistinctBy</h3>
 <hr>
 <h3>✅ Distinct</h3>
-<p><code>Distinct</code> دنباله ورودی را بدون <strong>تکراری‌ها</strong> برمی‌گرداند.
+<p><code>Distinct</code> دنباله ورودی را بدون <strong>تکراری‌ها</strong> برمی‌گرداند.<br>
 می‌توانید <strong>custom equality comparer</strong> هم به آن بدهید.</p>
-<pre><code class="language-csharp">char[] distinctLetters = &quot;HelloWorld&quot;.Distinct().ToArray();
-string s = new string(distinctLetters); // خروجی: &quot;HeloWrd&quot;
+<pre class="hljs"><code><span class="hljs-built_in">char</span>[] distinctLetters = <span class="hljs-string">&quot;HelloWorld&quot;</span>.Distinct().ToArray();
+<span class="hljs-built_in">string</span> s = <span class="hljs-keyword">new</span> <span class="hljs-built_in">string</span>(distinctLetters); <span class="hljs-comment">// خروجی: &quot;HeloWrd&quot;</span>
 </code></pre>
 <blockquote>
 <p>می‌توانیم مستقیماً متدهای LINQ را روی <code>string</code> صدا بزنیم، چون <code>string</code> پیاده‌سازی‌کننده <code>IEnumerable&lt;char&gt;</code> است.</p>
@@ -480,8 +440,8 @@ string s = new string(distinctLetters); // خروجی: &quot;HeloWrd&quot;
 <li>امکان مشخص کردن یک <strong>key selector</strong> قبل از مقایسه تساوی را فراهم می‌کند.</li>
 </ul>
 <p>مثال:</p>
-<pre><code class="language-csharp">new[] { 1.0, 1.1, 2.0, 2.1, 3.0, 3.1 }
-    .DistinctBy(n =&gt; Math.Round(n, 0)); // خروجی: { 1, 2, 3 }
+<pre class="hljs"><code><span class="hljs-keyword">new</span>[] { <span class="hljs-number">1.0</span>, <span class="hljs-number">1.1</span>, <span class="hljs-number">2.0</span>, <span class="hljs-number">2.1</span>, <span class="hljs-number">3.0</span>, <span class="hljs-number">3.1</span> }
+    .DistinctBy(n =&gt; Math.Round(n, <span class="hljs-number">0</span>)); <span class="hljs-comment">// خروجی: { 1, 2, 3 }</span>
 </code></pre>
 <div align="center">
 <p><img src="../../../assets/image/09/Table-9-6.jpeg" alt="Conventions-UsedThis-Book"></p>
@@ -489,7 +449,7 @@ string s = new string(distinctLetters); // خروجی: &quot;HeloWrd&quot;
 <h3>🎨 Select و SelectMany در LINQ</h3>
 <hr>
 <h3>⚙️ توضیح کلی</h3>
-<p>وقتی <strong>روی پایگاه داده کوئری می‌زنیم</strong>، <code>Select</code> و <code>SelectMany</code> <strong>انعطاف‌پذیرترین ابزارها برای انجام join</strong> هستند.
+<p>وقتی <strong>روی پایگاه داده کوئری می‌زنیم</strong>، <code>Select</code> و <code>SelectMany</code> <strong>انعطاف‌پذیرترین ابزارها برای انجام join</strong> هستند.<br>
 اما برای <strong>کوئری‌های محلی (Local queries)</strong>، <code>Join</code> و <code>GroupJoin</code> <strong>کارآمدترین و سریع‌ترین ابزارها برای join</strong> محسوب می‌شوند.</p>
 <div align="center">
 <p><img src="../../../assets/image/09/Table-9-7.jpeg" alt="Conventions-UsedThis-Book"></p>
@@ -504,17 +464,17 @@ string s = new string(distinctLetters); // خروجی: &quot;HeloWrd&quot;
 </ul>
 <hr>
 <h3>📝 سینتکس کوئری</h3>
-<pre><code class="language-csharp">select projection-expression
+<pre class="hljs"><code><span class="hljs-keyword">select</span> projection-expression
 </code></pre>
 <hr>
 <h3>🔧 پیاده‌سازی Enumerable</h3>
 <p>نسخه داخلی <code>Enumerable.Select</code> به شکل زیر است:</p>
-<pre><code class="language-csharp">public static IEnumerable&lt;TResult&gt; Select&lt;TSource,TResult&gt;(
-    this IEnumerable&lt;TSource&gt; source,
-    Func&lt;TSource,TResult&gt; selector)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">IEnumerable</span>&lt;<span class="hljs-title">TResult</span>&gt; <span class="hljs-title">Select</span>&lt;<span class="hljs-title">TSource</span>,<span class="hljs-title">TResult</span>&gt;(<span class="hljs-params">
+    <span class="hljs-keyword">this</span> IEnumerable&lt;TSource&gt; source,
+    Func&lt;TSource,TResult&gt; selector</span>)</span>
 {
-    foreach (TSource element in source)
-        yield return selector(element);
+    <span class="hljs-keyword">foreach</span> (TSource element <span class="hljs-keyword">in</span> source)
+        <span class="hljs-function"><span class="hljs-keyword">yield</span> <span class="hljs-keyword">return</span> <span class="hljs-title">selector</span>(<span class="hljs-params">element</span>)</span>;
 }
 </code></pre>
 <hr>
@@ -525,30 +485,30 @@ string s = new string(distinctLetters); // خروجی: &quot;HeloWrd&quot;
 </ul>
 <hr>
 <h3>🔹 مثال پایه‌ای: گرفتن نام فونت‌ها</h3>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query = from f in FontFamily.Families
-                            select f.Name;
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query = <span class="hljs-keyword">from</span> f <span class="hljs-keyword">in</span> FontFamily.Families
+                            <span class="hljs-keyword">select</span> f.Name;
 
-foreach (string name in query) 
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">string</span> name <span class="hljs-keyword">in</span> query) 
     Console.WriteLine(name);
 </code></pre>
 <p>🔹 معادل <strong>Lambda Syntax</strong>:</p>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query = FontFamily.Families.Select(f =&gt; f.Name);
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query = FontFamily.Families.Select(f =&gt; f.Name);
 </code></pre>
 <hr>
 <h3>🔹 پروژه کردن به انواع ناشناس (Anonymous Types)</h3>
-<pre><code class="language-csharp">var query = from f in FontFamily.Families
-            select new { f.Name, LineSpacing = f.GetLineSpacing(FontStyle.Bold) };
+<pre class="hljs"><code><span class="hljs-keyword">var</span> query = <span class="hljs-keyword">from</span> f <span class="hljs-keyword">in</span> FontFamily.Families
+            <span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> { f.Name, LineSpacing = f.GetLineSpacing(FontStyle.Bold) };
 </code></pre>
 <ul>
-<li>گاهی اوقات projection بدون هیچ تغییر خاصی انجام می‌شود، فقط برای اینکه کوئری با <code>select</code> یا <code>group</code> پایان یابد.
+<li>گاهی اوقات projection بدون هیچ تغییر خاصی انجام می‌شود، فقط برای اینکه کوئری با <code>select</code> یا <code>group</code> پایان یابد.<br>
 مثال: انتخاب فونت‌هایی که <strong>strikeout</strong> را پشتیبانی می‌کنند:</li>
 </ul>
-<pre><code class="language-csharp">IEnumerable&lt;FontFamily&gt; query =
-    from f in FontFamily.Families
-    where f.IsStyleAvailable(FontStyle.Strikeout)
-    select f;
+<pre class="hljs"><code>IEnumerable&lt;FontFamily&gt; query =
+    <span class="hljs-keyword">from</span> f <span class="hljs-keyword">in</span> FontFamily.Families
+    <span class="hljs-keyword">where</span> f.IsStyleAvailable(FontStyle.Strikeout)
+    <span class="hljs-keyword">select</span> f;
 
-foreach (FontFamily ff in query)
+<span class="hljs-keyword">foreach</span> (FontFamily ff <span class="hljs-keyword">in</span> query)
     Console.WriteLine(ff.Name);
 </code></pre>
 <blockquote>
@@ -560,9 +520,9 @@ foreach (FontFamily ff in query)
 <li><code>selector</code> می‌تواند آرگومان اختیاری دوم از نوع <strong>int</strong> بگیرد که نمایانگر <strong>موقعیت عنصر</strong> در دنباله است.</li>
 <li>⚠️ این قابلیت فقط در <strong>کوئری‌های محلی</strong> کار می‌کند.</li>
 </ul>
-<pre><code class="language-csharp">string[] names = { &quot;Tom&quot;, &quot;Dick&quot;, &quot;Harry&quot;, &quot;Mary&quot;, &quot;Jay&quot; };
-IEnumerable&lt;string&gt; query = names.Select((s, i) =&gt; i + &quot;=&quot; + s);
-// خروجی: { &quot;0=Tom&quot;, &quot;1=Dick&quot;, &quot;2=Harry&quot;, &quot;3=Mary&quot;, &quot;4=Jay&quot; }
+<pre class="hljs"><code><span class="hljs-built_in">string</span>[] names = { <span class="hljs-string">&quot;Tom&quot;</span>, <span class="hljs-string">&quot;Dick&quot;</span>, <span class="hljs-string">&quot;Harry&quot;</span>, <span class="hljs-string">&quot;Mary&quot;</span>, <span class="hljs-string">&quot;Jay&quot;</span> };
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query = names.Select((s, i) =&gt; i + <span class="hljs-string">&quot;=&quot;</span> + s);
+<span class="hljs-comment">// خروجی: { &quot;0=Tom&quot;, &quot;1=Dick&quot;, &quot;2=Harry&quot;, &quot;3=Mary&quot;, &quot;4=Jay&quot; }</span>
 </code></pre>
 <hr>
 <h3>🔹 Subqueries و Object Hierarchies</h3>
@@ -570,25 +530,25 @@ IEnumerable&lt;string&gt; query = names.Select((s, i) =&gt; i + &quot;=&quot; + 
 <li>می‌توان یک <strong>subquery</strong> را در <code>Select</code> جای داد تا <strong>ساختار شیء (Object Hierarchy)</strong> بسازیم.</li>
 <li>مثال: دریافت هر دایرکتوری در مسیر <code>Path.GetTempPath()</code> همراه با لیست فایل‌های آن:</li>
 </ul>
-<pre><code class="language-csharp">string tempPath = Path.GetTempPath();
-DirectoryInfo[] dirs = new DirectoryInfo(tempPath).GetDirectories();
+<pre class="hljs"><code><span class="hljs-built_in">string</span> tempPath = Path.GetTempPath();
+DirectoryInfo[] dirs = <span class="hljs-keyword">new</span> DirectoryInfo(tempPath).GetDirectories();
 
-var query = from d in dirs
-            where (d.Attributes &amp; FileAttributes.System) == 0
-            select new
+<span class="hljs-keyword">var</span> query = <span class="hljs-function"><span class="hljs-keyword">from</span> d <span class="hljs-keyword">in</span> dirs
+            <span class="hljs-title">where</span> (<span class="hljs-params">d.Attributes &amp; FileAttributes.System</span>)</span> == <span class="hljs-number">0</span>
+            <span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span>
             {
                 DirectoryName = d.FullName,
                 Created = d.CreationTime,
-                Files = from f in d.GetFiles()
-                        where (f.Attributes &amp; FileAttributes.Hidden) == 0
-                        select new { FileName = f.Name, f.Length }
+                Files = <span class="hljs-keyword">from</span> f <span class="hljs-keyword">in</span> d.GetFiles()
+                        <span class="hljs-keyword">where</span> (f.Attributes &amp; FileAttributes.Hidden) == <span class="hljs-number">0</span>
+                        <span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> { FileName = f.Name, f.Length }
             };
 
-foreach (var dirFiles in query)
+<span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> dirFiles <span class="hljs-keyword">in</span> query)
 {
-    Console.WriteLine(&quot;Directory: &quot; + dirFiles.DirectoryName);
-    foreach (var file in dirFiles.Files)
-        Console.WriteLine(&quot;  &quot; + file.FileName + &quot; Len: &quot; + file.Length);
+    Console.WriteLine(<span class="hljs-string">&quot;Directory: &quot;</span> + dirFiles.DirectoryName);
+    <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> <span class="hljs-keyword">file</span> <span class="hljs-keyword">in</span> dirFiles.Files)
+        Console.WriteLine(<span class="hljs-string">&quot;  &quot;</span> + <span class="hljs-keyword">file</span>.FileName + <span class="hljs-string">&quot; Len: &quot;</span> + <span class="hljs-keyword">file</span>.Length);
 }
 </code></pre>
 <ul>
@@ -608,22 +568,22 @@ foreach (var dirFiles in query)
 <li><strong>Projection با subquery</strong> در EF Core به خوبی کار می‌کند و می‌تواند جایگزین <strong>SQL-style joins</strong> باشد.</li>
 <li>مثال: دریافت نام هر مشتری به همراه <strong>خریدهای با ارزش بالای ۱۰۰۰</strong>:</li>
 </ul>
-<pre><code class="language-csharp">var query =
-    from c in dbContext.Customers
-    select new {
+<pre class="hljs"><code><span class="hljs-keyword">var</span> query =
+    <span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+    <span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> {
         c.Name,
         Purchases = (
-            from p in dbContext.Purchases
-            where p.CustomerID == c.ID &amp;&amp; p.Price &gt; 1000
-            select new { p.Description, p.Price }
+            <span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> dbContext.Purchases
+            <span class="hljs-keyword">where</span> p.CustomerID == c.ID &amp;&amp; p.Price &gt; <span class="hljs-number">1000</span>
+            <span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> { p.Description, p.Price }
         ).ToList()
     };
 
-foreach (var namePurchases in query)
+<span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> namePurchases <span class="hljs-keyword">in</span> query)
 {
-    Console.WriteLine(&quot;Customer: &quot; + namePurchases.Name);
-    foreach (var purchaseDetail in namePurchases.Purchases)
-        Console.WriteLine(&quot;  - $$$: &quot; + purchaseDetail.Price);
+    Console.WriteLine(<span class="hljs-string">&quot;Customer: &quot;</span> + namePurchases.Name);
+    <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> purchaseDetail <span class="hljs-keyword">in</span> namePurchases.Purchases)
+        Console.WriteLine(<span class="hljs-string">&quot;  - $$$: &quot;</span> + purchaseDetail.Price);
 }
 </code></pre>
 <blockquote>
@@ -661,13 +621,13 @@ foreach (var namePurchases in query)
 <hr>
 <h3>🔹 استفاده از Navigation Property</h3>
 <p>مثال ساده‌تر با استفاده از Navigation Property <code>Purchases</code> در <code>Customer</code>:</p>
-<pre><code class="language-csharp">from c in dbContext.Customers
-select new
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span>
 {
     c.Name,
-    Purchases = from p in c.Purchases  // Purchases نوع List&lt;Purchase&gt; است
-                where p.Price &gt; 1000
-                select new { p.Description, p.Price }
+    Purchases = <span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> c.Purchases  <span class="hljs-comment">// Purchases نوع List&lt;Purchase&gt; است</span>
+                <span class="hljs-keyword">where</span> p.Price &gt; <span class="hljs-number">1000</span>
+                <span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> { p.Description, p.Price }
 };
 </code></pre>
 <blockquote>
@@ -681,13 +641,13 @@ select new
 <ul>
 <li>برای حذف مشتری‌هایی که خرید با ارزش بالا ندارند، می‌توان شرط اضافه کرد:</li>
 </ul>
-<pre><code class="language-csharp">from c in dbContext.Customers
-where c.Purchases.Any(p =&gt; p.Price &gt; 1000)
-select new {
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+<span class="hljs-keyword">where</span> c.Purchases.Any(p =&gt; p.Price &gt; <span class="hljs-number">1000</span>)
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> {
     c.Name,
-    Purchases = from p in c.Purchases
-                where p.Price &gt; 1000
-                select new { p.Description, p.Price }
+    Purchases = <span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> c.Purchases
+                <span class="hljs-keyword">where</span> p.Price &gt; <span class="hljs-number">1000</span>
+                <span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> { p.Description, p.Price }
 };
 </code></pre>
 <ul>
@@ -698,18 +658,18 @@ select new {
 <p>با استفاده از <code>let</code> می‌توان تکرار را حذف کرد:</p>
 </li>
 </ul>
-<pre><code class="language-csharp">from c in dbContext.Customers
-let highValueP = from p in c.Purchases
-                 where p.Price &gt; 1000
-                 select new { p.Description, p.Price }
-where highValueP.Any()
-select new { c.Name, Purchases = highValueP };
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+<span class="hljs-keyword">let</span> highValueP = <span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> c.Purchases
+                 <span class="hljs-keyword">where</span> p.Price &gt; <span class="hljs-number">1000</span>
+                 <span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> { p.Description, p.Price }
+<span class="hljs-keyword">where</span> highValueP.Any()
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> { c.Name, Purchases = highValueP };
 </code></pre>
 <ul>
 <li>این سبک <strong>انعطاف‌پذیر</strong> است؛ برای مثال با تغییر <code>Any()</code> به <code>Count()</code> می‌توان فقط مشتری‌هایی با حداقل دو خرید با ارزش بالا را گرفت:</li>
 </ul>
-<pre><code class="language-csharp">where highValueP.Count() &gt;= 2
-select new { c.Name, Purchases = highValueP };
+<pre class="hljs"><code><span class="hljs-keyword">where</span> highValueP.Count() &gt;= <span class="hljs-number">2</span>
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> { c.Name, Purchases = highValueP };
 </code></pre>
 <hr>
 <h3>🔹 Projection به Types مشخص</h3>
@@ -719,15 +679,15 @@ select new { c.Name, Purchases = highValueP };
 <li>این کلاس‌ها می‌توانند <strong>منطق سفارشی</strong> داشته باشند و بین متدها و Assemblyها منتقل شوند.</li>
 <li>نمونه معمول: <strong>Custom Business Entity / DTO</strong></li>
 </ul>
-<pre><code class="language-csharp">IQueryable&lt;CustomerEntity&gt; query =
-    from c in dbContext.Customers
-    select new CustomerEntity
+<pre class="hljs"><code>IQueryable&lt;CustomerEntity&gt; query =
+    <span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+    <span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> CustomerEntity
     {
         Name = c.Name,
         Purchases = (
-            from p in c.Purchases
-            where p.Price &gt; 1000
-            select new PurchaseEntity
+            <span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> c.Purchases
+            <span class="hljs-keyword">where</span> p.Price &gt; <span class="hljs-number">1000</span>
+            <span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> PurchaseEntity
             {
                 Description = p.Description,
                 Value = p.Price
@@ -735,7 +695,7 @@ select new { c.Name, Purchases = highValueP };
         ).ToList()
     };
 
-// اجرای کوئری و تبدیل خروجی به List
+<span class="hljs-comment">// اجرای کوئری و تبدیل خروجی به List</span>
 List&lt;CustomerEntity&gt; result = query.ToList();
 </code></pre>
 <blockquote>
@@ -757,8 +717,8 @@ List&lt;CustomerEntity&gt; result = query.ToList();
 <h3>🌊 SelectMany در LINQ – جزئیات و مثال‌ها</h3>
 <hr>
 <h3>🔹 Query Syntax</h3>
-<pre><code class="language-csharp">from identifier1 in enumerable-expression1
-from identifier2 in enumerable-expression2
+<pre class="hljs"><code><span class="hljs-keyword">from</span> identifier1 <span class="hljs-keyword">in</span> enumerable-expression1
+<span class="hljs-keyword">from</span> identifier2 <span class="hljs-keyword">in</span> enumerable-expression2
 ...
 </code></pre>
 <ul>
@@ -766,13 +726,13 @@ from identifier2 in enumerable-expression2
 </ul>
 <hr>
 <h3>🔹 Enumerable Implementation</h3>
-<pre><code class="language-csharp">public static IEnumerable&lt;TResult&gt; SelectMany&lt;TSource,TResult&gt;
-    (IEnumerable&lt;TSource&gt; source,
-     Func&lt;TSource,IEnumerable&lt;TResult&gt;&gt; selector)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">IEnumerable</span>&lt;<span class="hljs-title">TResult</span>&gt; <span class="hljs-title">SelectMany</span>&lt;<span class="hljs-title">TSource</span>,<span class="hljs-title">TResult</span>&gt;
+    (<span class="hljs-params">IEnumerable&lt;TSource&gt; source,
+     Func&lt;TSource,IEnumerable&lt;TResult&gt;&gt; selector</span>)</span>
 {
-    foreach (TSource element in source)
-        foreach (TResult subElement in selector(element))
-            yield return subElement;
+    <span class="hljs-keyword">foreach</span> (TSource element <span class="hljs-keyword">in</span> source)
+        <span class="hljs-keyword">foreach</span> (<span class="hljs-function">TResult subElement <span class="hljs-keyword">in</span> <span class="hljs-title">selector</span>(<span class="hljs-params">element</span>))
+            <span class="hljs-keyword">yield</span> <span class="hljs-keyword">return</span> subElement</span>;
 }
 </code></pre>
 <ul>
@@ -790,44 +750,44 @@ from identifier2 in enumerable-expression2
 </ul>
 <hr>
 <h3>🔹 مثال ساده: flatten کردن کلمات از fullNames</h3>
-<pre><code class="language-csharp">string[] fullNames = { &quot;Anne Williams&quot;, &quot;John Fred Smith&quot;, &quot;Sue Green&quot; };
+<pre class="hljs"><code><span class="hljs-built_in">string</span>[] fullNames = { <span class="hljs-string">&quot;Anne Williams&quot;</span>, <span class="hljs-string">&quot;John Fred Smith&quot;</span>, <span class="hljs-string">&quot;Sue Green&quot;</span> };
 
-IEnumerable&lt;string&gt; query = fullNames.SelectMany(name =&gt; name.Split());
-foreach (string name in query)
-    Console.Write(name + &quot;|&quot;);  
-// خروجی: Anne|Williams|John|Fred|Smith|Sue|Green|
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query = fullNames.SelectMany(name =&gt; name.Split());
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">string</span> name <span class="hljs-keyword">in</span> query)
+    Console.Write(name + <span class="hljs-string">&quot;|&quot;</span>);  
+<span class="hljs-comment">// خروجی: Anne|Williams|John|Fred|Smith|Sue|Green|</span>
 </code></pre>
 <ul>
 <li>اگر به جای <code>SelectMany</code> از <code>Select</code> استفاده کنید، خروجی <strong>سلسله‌مراتبی (nested arrays)</strong> خواهد بود و نیاز به <code>foreach</code> تو در تو دارید:</li>
 </ul>
-<pre><code class="language-csharp">IEnumerable&lt;string[]&gt; query = fullNames.Select(name =&gt; name.Split());
-foreach (string[] stringArray in query)
-    foreach (string name in stringArray)
-        Console.Write(name + &quot;|&quot;);
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>[]&gt; query = fullNames.Select(name =&gt; name.Split());
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">string</span>[] stringArray <span class="hljs-keyword">in</span> query)
+    <span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">string</span> name <span class="hljs-keyword">in</span> stringArray)
+        Console.Write(name + <span class="hljs-string">&quot;|&quot;</span>);
 </code></pre>
 <ul>
 <li>مزیت <code>SelectMany</code> این است که <strong>یک دنباله‌ی تخت (flat)</strong> تولید می‌کند.</li>
 </ul>
 <hr>
 <h3>🔹 Query Syntax و چند متغیره بودن</h3>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query =
-    from fullName in fullNames
-    from name in fullName.Split()   // ترجمه به SelectMany
-    select name;
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query =
+    <span class="hljs-keyword">from</span> fullName <span class="hljs-keyword">in</span> fullNames
+    <span class="hljs-keyword">from</span> name <span class="hljs-keyword">in</span> fullName.Split()   <span class="hljs-comment">// ترجمه به SelectMany</span>
+    <span class="hljs-keyword">select</span> name;
 </code></pre>
 <ul>
 <li>متغیر جدید <code>name</code> معرفی می‌شود، اما متغیر قدیمی <code>fullName</code> همچنان در دسترس است.</li>
 <li>می‌توانیم از هر دو در projection نهایی استفاده کنیم:</li>
 </ul>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query =
-    from fullName in fullNames
-    from name in fullName.Split()
-    select name + &quot; came from &quot; + fullName;
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query =
+    <span class="hljs-keyword">from</span> fullName <span class="hljs-keyword">in</span> fullNames
+    <span class="hljs-keyword">from</span> name <span class="hljs-keyword">in</span> fullName.Split()
+    <span class="hljs-keyword">select</span> name + <span class="hljs-string">&quot; came from &quot;</span> + fullName;
 </code></pre>
 <ul>
 <li>خروجی نمونه:</li>
 </ul>
-<pre><code>Anne came from Anne Williams
+<pre class="hljs"><code>Anne came from Anne Williams
 Williams came from Anne Williams
 John came from John Fred Smith
 ...
@@ -838,20 +798,20 @@ John came from John Fred Smith
 <li>وقتی <code>SelectMany</code> را مستقیماً در <strong>fluent syntax</strong> بنویسیم و بخواهیم هر دو متغیر outer و inner را داشته باشیم، مشکل ایجاد می‌شود.</li>
 <li>راه‌حل: <strong>هر child element را در یک anonymous type بسته‌بندی کنیم</strong> که outer element را هم نگه دارد:</li>
 </ul>
-<pre><code class="language-csharp">from fullName in fullNames
-from x in fullName.Split().Select(name =&gt; new { name, fullName })
-orderby x.fullName, x.name
-select x.name + &quot; came from &quot; + x.fullName;
+<pre class="hljs"><code><span class="hljs-keyword">from</span> fullName <span class="hljs-keyword">in</span> fullNames
+<span class="hljs-keyword">from</span> x <span class="hljs-keyword">in</span> fullName.Split().Select(name =&gt; <span class="hljs-keyword">new</span> { name, fullName })
+<span class="hljs-keyword">orderby</span> x.fullName, x.name
+<span class="hljs-keyword">select</span> x.name + <span class="hljs-string">&quot; came from &quot;</span> + x.fullName;
 </code></pre>
 <ul>
 <li>معادل Fluent Syntax:</li>
 </ul>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query = fullNames
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query = fullNames
     .SelectMany(fName =&gt; fName.Split()
-        .Select(name =&gt; new { name, fName }))
+        .Select(name =&gt; <span class="hljs-keyword">new</span> { name, fName }))
     .OrderBy(x =&gt; x.fName)
     .ThenBy(x =&gt; x.name)
-    .Select(x =&gt; x.name + &quot; came from &quot; + x.fName);
+    .Select(x =&gt; x.name + <span class="hljs-string">&quot; came from &quot;</span> + x.fName);
 </code></pre>
 <ul>
 <li>🔹 نکته: این تکنیک مشابه <strong>resolve کردن let clause</strong> در query syntax است.</li>
@@ -868,21 +828,21 @@ select x.name + &quot; came from &quot; + x.fullName;
 <ul>
 <li>با فراخوانی یک <strong>property یا method</strong> روی یک متغیر دامنه موجود در generator اضافی، می‌توان subsequenceها را گسترش داد.</li>
 </ul>
-<pre><code class="language-csharp">from fullName in fullNames
-from name in fullName.Split()
+<pre class="hljs"><code><span class="hljs-keyword">from</span> fullName <span class="hljs-keyword">in</span> fullNames
+<span class="hljs-keyword">from</span> name <span class="hljs-keyword">in</span> fullName.Split()
 </code></pre>
 <ul>
 <li>مثال مشابه در EF Core:</li>
 </ul>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query = 
-    from c in dbContext.Customers
-    from p in c.Purchases
-    select c.Name + &quot; bought a &quot; + p.Description;
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query = 
+    <span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+    <span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> c.Purchases
+    <span class="hljs-keyword">select</span> c.Name + <span class="hljs-string">&quot; bought a &quot;</span> + p.Description;
 </code></pre>
 <ul>
 <li>خروجی نمونه:</li>
 </ul>
-<pre><code>Tom bought a Bike
+<pre class="hljs"><code>Tom bought a Bike
 Tom bought a Holiday
 Dick bought a Phone
 Harry bought a Car
@@ -896,14 +856,14 @@ Harry bought a Car
 <ul>
 <li>هر عنصر از یک دنباله با هر عنصر دنباله دیگر ترکیب می‌شود.</li>
 </ul>
-<pre><code class="language-csharp">int[] numbers = { 1, 2, 3 };
-string[] letters = { &quot;a&quot;, &quot;b&quot; };
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] numbers = { <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span> };
+<span class="hljs-built_in">string</span>[] letters = { <span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-string">&quot;b&quot;</span> };
 
-IEnumerable&lt;string&gt; query = 
-    from n in numbers
-    from l in letters
-    select n.ToString() + l;
-// خروجی: { &quot;1a&quot;, &quot;1b&quot;, &quot;2a&quot;, &quot;2b&quot;, &quot;3a&quot;, &quot;3b&quot; }
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query = 
+    <span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> numbers
+    <span class="hljs-keyword">from</span> l <span class="hljs-keyword">in</span> letters
+    <span class="hljs-keyword">select</span> n.ToString() + l;
+<span class="hljs-comment">// خروجی: { &quot;1a&quot;, &quot;1b&quot;, &quot;2a&quot;, &quot;2b&quot;, &quot;3a&quot;, &quot;3b&quot; }</span>
 </code></pre>
 <ul>
 <li>این الگو پایه‌ای برای <strong>SelectMany-style joins</strong> است.</li>
@@ -913,16 +873,16 @@ IEnumerable&lt;string&gt; query =
 <ul>
 <li>می‌توان با <strong>اضافه کردن شرط فیلتر</strong> روی نتیجه cross product، join ساخت:</li>
 </ul>
-<pre><code class="language-csharp">string[] players = { &quot;Tom&quot;, &quot;Jay&quot;, &quot;Mary&quot; };
+<pre class="hljs"><code><span class="hljs-built_in">string</span>[] players = { <span class="hljs-string">&quot;Tom&quot;</span>, <span class="hljs-string">&quot;Jay&quot;</span>, <span class="hljs-string">&quot;Mary&quot;</span> };
 
-IEnumerable&lt;string&gt; query = 
-    from name1 in players
-    from name2 in players
-    where name1.CompareTo(name2) &lt; 0
-    orderby name1, name2
-    select name1 + &quot; vs &quot; + name2;
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query = 
+    <span class="hljs-keyword">from</span> name1 <span class="hljs-keyword">in</span> players
+    <span class="hljs-keyword">from</span> name2 <span class="hljs-keyword">in</span> players
+    <span class="hljs-keyword">where</span> name1.CompareTo(name2) &lt; <span class="hljs-number">0</span>
+    <span class="hljs-keyword">orderby</span> name1, name2
+    <span class="hljs-keyword">select</span> name1 + <span class="hljs-string">&quot; vs &quot;</span> + name2;
 
-// خروجی: { &quot;Jay vs Mary&quot;, &quot;Jay vs Tom&quot;, &quot;Mary vs Tom&quot; }
+<span class="hljs-comment">// خروجی: { &quot;Jay vs Mary&quot;, &quot;Jay vs Tom&quot;, &quot;Mary vs Tom&quot; }</span>
 </code></pre>
 <ul>
 <li>🔹 این یک <strong>non-equi join</strong> است چون شرط join از مقایسه نابرابری استفاده می‌کند.</li>
@@ -935,17 +895,17 @@ IEnumerable&lt;string&gt; query =
 <li>تفاوت با Select: <strong>SelectMany دنباله‌ای تخت (flat) برمی‌گرداند، نه سلسله‌مراتبی</strong>.</li>
 </ul>
 <h4>مثال Cross Join</h4>
-<pre><code class="language-csharp">var query = 
-    from c in dbContext.Customers
-    from p in dbContext.Purchases
-    select c.Name + &quot; might have bought a &quot; + p.Description;
+<pre class="hljs"><code><span class="hljs-keyword">var</span> query = 
+    <span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+    <span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> dbContext.Purchases
+    <span class="hljs-keyword">select</span> c.Name + <span class="hljs-string">&quot; might have bought a &quot;</span> + p.Description;
 </code></pre>
 <h4>مثال Equi-Join (SQL-style)</h4>
-<pre><code class="language-csharp">var query = 
-    from c in dbContext.Customers
-    from p in dbContext.Purchases
-    where c.ID == p.CustomerID
-    select c.Name + &quot; bought a &quot; + p.Description;
+<pre class="hljs"><code><span class="hljs-keyword">var</span> query = 
+    <span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+    <span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> dbContext.Purchases
+    <span class="hljs-keyword">where</span> c.ID == p.CustomerID
+    <span class="hljs-keyword">select</span> c.Name + <span class="hljs-string">&quot; bought a &quot;</span> + p.Description;
 </code></pre>
 <ul>
 <li>🔹 این ترجمه خوبی به SQL دارد و اجرای outer joins نیز با تغییرات کوچک ممکن است.</li>
@@ -955,9 +915,9 @@ IEnumerable&lt;string&gt; query =
 <ul>
 <li>می‌توان به جای فیلتر روی cross product، <strong>subcollectionها را گسترش داد</strong>:</li>
 </ul>
-<pre><code class="language-csharp">from c in dbContext.Customers
-from p in c.Purchases
-select new { c.Name, p.Description };
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+<span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> c.Purchases
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> { c.Name, p.Description };
 </code></pre>
 <ul>
 <li>مزیت: <strong>نیازی به شرط join نیست</strong> و از فیلتر روی cross product خلاص می‌شویم.</li>
@@ -967,10 +927,10 @@ select new { c.Name, p.Description };
 <ul>
 <li>مثال: مشتریانی که نامشان با &quot;T&quot; شروع می‌شود:</li>
 </ul>
-<pre><code class="language-csharp">from c in dbContext.Customers
-where c.Name.StartsWith(&quot;T&quot;)
-from p in c.Purchases
-select new { c.Name, p.Description };
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+<span class="hljs-keyword">where</span> c.Name.StartsWith(<span class="hljs-string">&quot;T&quot;</span>)
+<span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> c.Purchases
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> { c.Name, p.Description };
 </code></pre>
 <ul>
 <li>در EF Core، جابجایی where clause یک خط پایین‌تر هم کار می‌کند.</li>
@@ -981,10 +941,10 @@ select new { c.Name, p.Description };
 <ul>
 <li>مثال: هر خرید دارای چند PurchaseItem است:</li>
 </ul>
-<pre><code class="language-csharp">from c in dbContext.Customers
-from p in c.Purchases
-from pi in p.PurchaseItems
-select new { c.Name, p.Description, pi.Detail };
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+<span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> c.Purchases
+<span class="hljs-keyword">from</span> pi <span class="hljs-keyword">in</span> p.PurchaseItems
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> { c.Name, p.Description, pi.Detail };
 </code></pre>
 <ul>
 <li>هر <code>from</code> جدید یک <strong>child table</strong> اضافه می‌کند.</li>
@@ -994,8 +954,8 @@ select new { c.Name, p.Description, pi.Detail };
 <ul>
 <li>برای دسترسی به داده‌های والد، نیازی به from جدید نیست:</li>
 </ul>
-<pre><code class="language-csharp">from c in dbContext.Customers
-select new { Name = c.Name, SalesPerson = c.SalesPerson.Name };
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> { Name = c.Name, SalesPerson = c.SalesPerson.Name };
 </code></pre>
 <ul>
 <li>🔹 اینجا SelectMany لازم نیست چون <strong>subcollection برای flatten کردن وجود ندارد</strong>.</li>
@@ -1006,12 +966,12 @@ select new { Name = c.Name, SalesPerson = c.SalesPerson.Name };
 <ul>
 <li>یک <strong>Select subquery</strong> مشابه <strong>left outer join</strong> رفتار می‌کند:</li>
 </ul>
-<pre><code class="language-csharp">from c in dbContext.Customers
-select new {
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> {
     c.Name,
-    Purchases = from p in c.Purchases
-                where p.Price &gt; 1000
-                select new { p.Description, p.Price }
+    Purchases = <span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> c.Purchases
+                <span class="hljs-keyword">where</span> p.Price &gt; <span class="hljs-number">1000</span>
+                <span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> { p.Description, p.Price }
 };
 </code></pre>
 <ul>
@@ -1023,13 +983,13 @@ select new {
 <ul>
 <li>اگر بخواهیم خروجی <strong>flat</strong> داشته باشیم:</li>
 </ul>
-<pre><code class="language-csharp">from c in dbContext.Customers
-from p in c.Purchases
-where p.Price &gt; 1000
-select new { c.Name, p.Description, p.Price };
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+<span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> c.Purchases
+<span class="hljs-keyword">where</span> p.Price &gt; <span class="hljs-number">1000</span>
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> { c.Name, p.Description, p.Price };
 </code></pre>
 <ul>
-<li>🔹 اینجا join <strong>به inner join تبدیل می‌شود</strong>:
+<li>🔹 اینجا join <strong>به inner join تبدیل می‌شود</strong>:<br>
 مشتریان فقط زمانی ظاهر می‌شوند که <strong>یک یا چند خرید با ارزش بالا</strong> داشته باشند.</li>
 </ul>
 <hr>
@@ -1038,9 +998,9 @@ select new { c.Name, p.Description, p.Price };
 <li>از <code>DefaultIfEmpty()</code> روی <strong>inner sequence</strong> استفاده می‌کنیم.</li>
 <li>این متد اگر sequence خالی باشد، یک عنصر null تولید می‌کند:</li>
 </ul>
-<pre><code class="language-csharp">from c in dbContext.Customers
-from p in c.Purchases.DefaultIfEmpty()
-select new { c.Name, p.Description, Price = (decimal?)p.Price };
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+<span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> c.Purchases.DefaultIfEmpty()
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> { c.Name, p.Description, Price = (<span class="hljs-built_in">decimal</span>?)p.Price };
 </code></pre>
 <ul>
 <li>✅ EF Core همه مشتریان را برمی‌گرداند، حتی اگر خریدی نداشته باشند.</li>
@@ -1048,12 +1008,12 @@ select new { c.Name, p.Description, Price = (decimal?)p.Price };
 </ul>
 <hr>
 <h3>🔹 نسخه مقاوم (Robust)</h3>
-<pre><code class="language-csharp">from c in dbContext.Customers
-from p in c.Purchases.DefaultIfEmpty()
-select new {
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+<span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> c.Purchases.DefaultIfEmpty()
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> {
     c.Name,
-    Descript = p == null ? null : p.Description,
-    Price = p == null ? (decimal?) null : p.Price
+    Descript = p == <span class="hljs-literal">null</span> ? <span class="hljs-literal">null</span> : p.Description,
+    Price = p == <span class="hljs-literal">null</span> ? (<span class="hljs-built_in">decimal</span>?) <span class="hljs-literal">null</span> : p.Price
 };
 </code></pre>
 <ul>
@@ -1065,12 +1025,12 @@ select new {
 <li>نمی‌توانیم <code>where</code> را بعد از DefaultIfEmpty قرار دهیم، چون فیلتر بعد از اضافه کردن null اجرا می‌شود.</li>
 <li>راه حل: فیلتر را قبل از DefaultIfEmpty با یک subquery اعمال کنیم:</li>
 </ul>
-<pre><code class="language-csharp">from c in dbContext.Customers
-from p in c.Purchases.Where(p =&gt; p.Price &gt; 1000).DefaultIfEmpty()
-select new {
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+<span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> c.Purchases.Where(p =&gt; p.Price &gt; <span class="hljs-number">1000</span>).DefaultIfEmpty()
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> {
     c.Name,
-    Descript = p == null ? null : p.Description,
-    Price = p == null ? (decimal?) null : p.Price
+    Descript = p == <span class="hljs-literal">null</span> ? <span class="hljs-literal">null</span> : p.Description,
+    Price = p == <span class="hljs-literal">null</span> ? (<span class="hljs-built_in">decimal</span>?) <span class="hljs-literal">null</span> : p.Price
 };
 </code></pre>
 <ul>
@@ -1084,7 +1044,7 @@ select new {
 <p><img src="../../../assets/image/09/Table-9-11.jpeg" alt="Conventions-UsedThis-Book"></p>
 </div>
 <h3>✨ نحوۀ Query در LINQ</h3>
-<pre><code>from outer-var in outer-enumerable
+<pre class="hljs"><code>from outer-var in outer-enumerable
 join inner-var in inner-enumerable on outer-key-expr equals inner-key-expr
 [ into identifier ]
 </code></pre>
@@ -1105,13 +1065,13 @@ join inner-var in inner-enumerable on outer-key-expr equals inner-key-expr
 <h3>🔗 Join</h3>
 <p>اپراتور <strong>Join</strong> یک <strong>inner join</strong> انجام می‌دهد و یک توالی خروجی مسطح (flat output sequence) تولید می‌کند.</p>
 <p>🔹 مثال زیر، همۀ مشتریان (customers) را همراه با خریدهایشان (purchases) فهرست می‌کند، بدون اینکه از ویژگی ناوبری (navigation property) استفاده شود:</p>
-<pre><code class="language-csharp">IQueryable&lt;string&gt; query =
-  from c in dbContext.Customers
-  join p in dbContext.Purchases on c.ID equals p.CustomerID
-  select c.Name + &quot; bought a &quot; + p.Description;
+<pre class="hljs"><code>IQueryable&lt;<span class="hljs-built_in">string</span>&gt; query =
+  <span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+  <span class="hljs-keyword">join</span> p <span class="hljs-keyword">in</span> dbContext.Purchases <span class="hljs-keyword">on</span> c.ID <span class="hljs-keyword">equals</span> p.CustomerID
+  <span class="hljs-keyword">select</span> c.Name + <span class="hljs-string">&quot; bought a &quot;</span> + p.Description;
 </code></pre>
 <p>📋 نتایج دقیقاً همان چیزی است که با یک کوئری به سبک <strong>SelectMany</strong> به دست می‌آید:</p>
-<pre><code>Tom bought a Bike
+<pre class="hljs"><code>Tom bought a Bike
 Tom bought a Holiday
 Dick bought a Phone
 Harry bought a Car
@@ -1120,77 +1080,77 @@ Harry bought a Car
 <h3>⚡ مزیت Join در برابر SelectMany</h3>
 <p>برای دیدن مزیت <strong>Join</strong> در مقایسه با <strong>SelectMany</strong>، باید کوئری را به حالت محلی (local query) تبدیل کنیم.</p>
 <p>اول، تمام مشتریان و خریدها را در آرایه‌ها کپی می‌کنیم و سپس روی آرایه‌ها کوئری می‌زنیم:</p>
-<pre><code class="language-csharp">Customer[] customers = dbContext.Customers.ToArray();
+<pre class="hljs"><code>Customer[] customers = dbContext.Customers.ToArray();
 Purchase[] purchases = dbContext.Purchases.ToArray();
 
-var slowQuery = from c in customers
-                from p in purchases
-                where c.ID == p.CustomerID
-                select c.Name + &quot; bought a &quot; + p.Description;
+<span class="hljs-keyword">var</span> slowQuery = <span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> customers
+                <span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> purchases
+                <span class="hljs-keyword">where</span> c.ID == p.CustomerID
+                <span class="hljs-keyword">select</span> c.Name + <span class="hljs-string">&quot; bought a &quot;</span> + p.Description;
 
-var fastQuery = from c in customers
-                join p in purchases on c.ID equals p.CustomerID
-                select c.Name + &quot; bought a &quot; + p.Description;
+<span class="hljs-keyword">var</span> fastQuery = <span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> customers
+                <span class="hljs-keyword">join</span> p <span class="hljs-keyword">in</span> purchases <span class="hljs-keyword">on</span> c.ID <span class="hljs-keyword">equals</span> p.CustomerID
+                <span class="hljs-keyword">select</span> c.Name + <span class="hljs-string">&quot; bought a &quot;</span> + p.Description;
 </code></pre>
 <p>هر دو کوئری نتیجه یکسانی برمی‌گردانند، اما کوئری با <strong>Join</strong> به‌مراتب سریع‌تر است. دلیلش این است که پیاده‌سازی در <strong>Enumerable</strong>، مجموعه داخلی (purchases) را ابتدا به‌صورت یک <strong>keyed lookup</strong> بارگذاری می‌کند.</p>
 <hr>
 <h3>📝 نحوۀ کلی Join</h3>
 <p>نحوۀ نوشتن <strong>join</strong> به‌طور کلی به شکل زیر است:</p>
-<pre><code>join inner-var in inner-sequence on outer-key-expr equals inner-key-expr
+<pre class="hljs"><code>join inner-var in inner-sequence on outer-key-expr equals inner-key-expr
 </code></pre>
 <p>اپراتورهای <strong>Join</strong> در LINQ بین توالی بیرونی (outer sequence) و توالی درونی (inner sequence) تمایز قائل می‌شوند.</p>
 <ul>
 <li>✅ <strong>outer sequence</strong> → همان توالی ورودی است (در این مثال، customers).</li>
 <li>✅ <strong>inner sequence</strong> → مجموعه جدیدی است که معرفی می‌کنید (در این مثال، purchases).</li>
 </ul>
-<p>📌 <strong>Join</strong> فقط <strong>inner join</strong> انجام می‌دهد؛ یعنی مشتریانی که خریدی ندارند از خروجی حذف می‌شوند.
+<p>📌 <strong>Join</strong> فقط <strong>inner join</strong> انجام می‌دهد؛ یعنی مشتریانی که خریدی ندارند از خروجی حذف می‌شوند.<br>
 در <strong>inner join</strong> می‌توانید توالی بیرونی و درونی را با هم جابه‌جا کنید و همچنان نتیجه یکسانی بگیرید:</p>
-<pre><code class="language-csharp">from p in purchases                                // p حالا outer است
-join c in customers on p.CustomerID equals c.ID    // c حالا inner است
+<pre class="hljs"><code><span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> purchases                                <span class="hljs-comment">// p حالا outer است</span>
+<span class="hljs-keyword">join</span> c <span class="hljs-keyword">in</span> customers <span class="hljs-keyword">on</span> p.CustomerID <span class="hljs-keyword">equals</span> c.ID    <span class="hljs-comment">// c حالا inner است</span>
 ...
 </code></pre>
 <hr>
 <h3>🧩 چندین Join در یک کوئری</h3>
-<p>شما می‌توانید چندین عبارت <strong>join</strong> در یک کوئری اضافه کنید.
+<p>شما می‌توانید چندین عبارت <strong>join</strong> در یک کوئری اضافه کنید.<br>
 مثلاً اگر هر خرید (purchase) یک یا چند آیتم خرید (purchase items) داشته باشد:</p>
-<pre><code class="language-csharp">from c in customers
-join p in purchases on c.ID equals p.CustomerID           // first join
-join pi in purchaseItems on p.ID equals pi.PurchaseID     // second join
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> customers
+<span class="hljs-keyword">join</span> p <span class="hljs-keyword">in</span> purchases <span class="hljs-keyword">on</span> c.ID <span class="hljs-keyword">equals</span> p.CustomerID           <span class="hljs-comment">// first join</span>
+<span class="hljs-keyword">join</span> pi <span class="hljs-keyword">in</span> purchaseItems <span class="hljs-keyword">on</span> p.ID <span class="hljs-keyword">equals</span> pi.PurchaseID     <span class="hljs-comment">// second join</span>
 ...
 </code></pre>
 <p>📌 در اینجا، <code>purchases</code> در اولین join به‌عنوان <strong>inner sequence</strong> عمل می‌کند و در دومین join به‌عنوان <strong>outer sequence</strong>.</p>
 <p>معادل ناکارآمد همین کار با <strong>foreach</strong> به شکل زیر است:</p>
-<pre><code class="language-csharp">foreach (Customer c in customers)
-  foreach (Purchase p in purchases)
-    if (c.ID == p.CustomerID)
-      foreach (PurchaseItem pi in purchaseItems)
-        if (p.ID == pi.PurchaseID)
-          Console.WriteLine (c.Name + &quot;,&quot; + p.Price + &quot;,&quot; + pi.Detail);
+<pre class="hljs"><code><span class="hljs-keyword">foreach</span> (Customer c <span class="hljs-keyword">in</span> customers)
+  <span class="hljs-keyword">foreach</span> (Purchase p <span class="hljs-keyword">in</span> purchases)
+    <span class="hljs-keyword">if</span> (c.ID == p.CustomerID)
+      <span class="hljs-keyword">foreach</span> (PurchaseItem pi <span class="hljs-keyword">in</span> purchaseItems)
+        <span class="hljs-keyword">if</span> (p.ID == pi.PurchaseID)
+          Console.WriteLine (c.Name + <span class="hljs-string">&quot;,&quot;</span> + p.Price + <span class="hljs-string">&quot;,&quot;</span> + pi.Detail);
 </code></pre>
-<p>در نحوۀ Query، متغیرهای joinهای قبلی همچنان در دسترس هستند—دقیقاً مثل کاری که در کوئری‌های به سبک <strong>SelectMany</strong> اتفاق می‌افتد.
+<p>در نحوۀ Query، متغیرهای joinهای قبلی همچنان در دسترس هستند—دقیقاً مثل کاری که در کوئری‌های به سبک <strong>SelectMany</strong> اتفاق می‌افتد.<br>
 همچنین می‌توانید بین joinها، از <strong>where</strong> و <strong>let</strong> استفاده کنید.</p>
 <hr>
 <h3>🔑 Join با چند کلید</h3>
 <p>می‌توانید روی چند کلید به‌طور همزمان join انجام دهید. برای این کار از <strong>anonymous types</strong> استفاده می‌شود:</p>
-<pre><code class="language-csharp">from x in sequenceX
-join y in sequenceY on new { K1 = x.Prop1, K2 = x.Prop2 }
-                   equals new { K1 = y.Prop3, K2 = y.Prop4 }
+<pre class="hljs"><code><span class="hljs-keyword">from</span> x <span class="hljs-keyword">in</span> sequenceX
+<span class="hljs-keyword">join</span> y <span class="hljs-keyword">in</span> sequenceY <span class="hljs-keyword">on</span> <span class="hljs-keyword">new</span> { K1 = x.Prop1, K2 = x.Prop2 }
+                   <span class="hljs-keyword">equals</span> <span class="hljs-keyword">new</span> { K1 = y.Prop3, K2 = y.Prop4 }
 ...
 </code></pre>
-<p>برای اینکه این کار درست انجام شود، دو <strong>anonymous type</strong> باید دقیقاً یک ساختار (structure) داشته باشند.
+<p>برای اینکه این کار درست انجام شود، دو <strong>anonymous type</strong> باید دقیقاً یک ساختار (structure) داشته باشند.<br>
 کامپایلر هر دو را با یک نوع داخلی یکسان پیاده‌سازی می‌کند، بنابراین کلیدهای join با هم سازگار می‌شوند.</p>
 <h3>🔗 Join در <strong>Fluent Syntax</strong></h3>
 <p>🔹 کوئری زیر در نحوۀ Query:</p>
-<pre><code class="language-csharp">from c in customers
-join p in purchases on c.ID equals p.CustomerID
-select new { c.Name, p.Description, p.Price };
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> customers
+<span class="hljs-keyword">join</span> p <span class="hljs-keyword">in</span> purchases <span class="hljs-keyword">on</span> c.ID <span class="hljs-keyword">equals</span> p.CustomerID
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> { c.Name, p.Description, p.Price };
 </code></pre>
 <p>به شکل <strong>Fluent Syntax</strong> این‌طور نوشته می‌شود:</p>
-<pre><code class="language-csharp">customers.Join(                // outer collection
-    purchases,                 // inner collection
-    c =&gt; c.ID,                 // outer key selector
-    p =&gt; p.CustomerID,         // inner key selector
-    (c, p) =&gt; new              // result selector
+<pre class="hljs"><code>customers.Join(                <span class="hljs-comment">// outer collection</span>
+    purchases,                 <span class="hljs-comment">// inner collection</span>
+    c =&gt; c.ID,                 <span class="hljs-comment">// outer key selector</span>
+    p =&gt; p.CustomerID,         <span class="hljs-comment">// inner key selector</span>
+    (c, p) =&gt; <span class="hljs-keyword">new</span>              <span class="hljs-comment">// result selector</span>
         { c.Name, p.Description, p.Price }
 );
 </code></pre>
@@ -1198,58 +1158,58 @@ select new { c.Name, p.Description, p.Price };
 <hr>
 <h3>📑 افزودن عبارات دیگر (orderby و …)</h3>
 <p>اگر قبل از بخش <strong>select</strong> عباراتی مثل <strong>orderby</strong> داشته باشیم:</p>
-<pre><code class="language-csharp">from c in customers
-join p in purchases on c.ID equals p.CustomerID
-orderby p.Price
-select c.Name + &quot; bought a &quot; + p.Description;
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> customers
+<span class="hljs-keyword">join</span> p <span class="hljs-keyword">in</span> purchases <span class="hljs-keyword">on</span> c.ID <span class="hljs-keyword">equals</span> p.CustomerID
+<span class="hljs-keyword">orderby</span> p.Price
+<span class="hljs-keyword">select</span> c.Name + <span class="hljs-string">&quot; bought a &quot;</span> + p.Description;
 </code></pre>
 <p>در <strong>Fluent Syntax</strong> باید یک نوع ناشناس موقت (temporary anonymous type) بسازیم تا هر دو متغیر <code>c</code> و <code>p</code> پس از join در دسترس باشند:</p>
-<pre><code class="language-csharp">customers.Join(                  // outer collection
-    purchases,                   // inner collection
-    c =&gt; c.ID,                   // outer key selector
-    p =&gt; p.CustomerID,           // inner key selector
-    (c, p) =&gt; new { c, p })      // result selector
+<pre class="hljs"><code>customers.Join(                  <span class="hljs-comment">// outer collection</span>
+    purchases,                   <span class="hljs-comment">// inner collection</span>
+    c =&gt; c.ID,                   <span class="hljs-comment">// outer key selector</span>
+    p =&gt; p.CustomerID,           <span class="hljs-comment">// inner key selector</span>
+    (c, p) =&gt; <span class="hljs-keyword">new</span> { c, p })      <span class="hljs-comment">// result selector</span>
     .OrderBy(x =&gt; x.p.Price)
-    .Select(x =&gt; x.c.Name + &quot; bought a &quot; + x.p.Description);
+    .Select(x =&gt; x.c.Name + <span class="hljs-string">&quot; bought a &quot;</span> + x.p.Description);
 </code></pre>
 <p>✅ در عمل، نحوۀ Query برای join معمولاً ترجیح داده می‌شود، چون ساده‌تر و خواناتر است.</p>
 <hr>
 <h2>👥 GroupJoin</h2>
-<p>🔹 <strong>GroupJoin</strong> همان کار <strong>Join</strong> را انجام می‌دهد، اما به‌جای اینکه خروجی مسطح بدهد، یک خروجی سلسله‌مراتبی (hierarchical result) تولید می‌کند که بر اساس هر عنصر بیرونی (outer element) گروه‌بندی شده است.
-همچنین امکان <strong>left outer join</strong> را فراهم می‌کند.
+<p>🔹 <strong>GroupJoin</strong> همان کار <strong>Join</strong> را انجام می‌دهد، اما به‌جای اینکه خروجی مسطح بدهد، یک خروجی سلسله‌مراتبی (hierarchical result) تولید می‌کند که بر اساس هر عنصر بیرونی (outer element) گروه‌بندی شده است.<br>
+همچنین امکان <strong>left outer join</strong> را فراهم می‌کند.<br>
 📌 توجه: <strong>GroupJoin</strong> در حال حاضر در <strong>EF Core</strong> پشتیبانی نمی‌شود.</p>
 <hr>
 <h3>✍️ نحوۀ Query برای GroupJoin</h3>
 <p>نحوۀ Query برای <strong>GroupJoin</strong> مثل <strong>Join</strong> است، اما با کلمۀ کلیدی <strong>into</strong> دنبال می‌شود.</p>
 <p>🔹 یک مثال ساده با کوئری محلی:</p>
-<pre><code class="language-csharp">Customer[] customers = dbContext.Customers.ToArray();
+<pre class="hljs"><code>Customer[] customers = dbContext.Customers.ToArray();
 Purchase[] purchases = dbContext.Purchases.ToArray();
 
 IEnumerable&lt;IEnumerable&lt;Purchase&gt;&gt; query =
-  from c in customers
-  join p in purchases on c.ID equals p.CustomerID
-  into custPurchases
-  select custPurchases;   // custPurchases یک توالی است
+  <span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> customers
+  <span class="hljs-keyword">join</span> p <span class="hljs-keyword">in</span> purchases <span class="hljs-keyword">on</span> c.ID <span class="hljs-keyword">equals</span> p.CustomerID
+  <span class="hljs-keyword">into</span> custPurchases
+  <span class="hljs-keyword">select</span> custPurchases;   <span class="hljs-comment">// custPurchases یک توالی است</span>
 </code></pre>
-<p>📌 عبارت <code>into</code> تنها زمانی به <strong>GroupJoin</strong> تبدیل می‌شود که <strong>بلافاصله بعد از یک join</strong> بیاید.
-اگر بعد از <strong>select</strong> یا <strong>group</strong> بیاید، معنایش <strong>query continuation</strong> است.
+<p>📌 عبارت <code>into</code> تنها زمانی به <strong>GroupJoin</strong> تبدیل می‌شود که <strong>بلافاصله بعد از یک join</strong> بیاید.<br>
+اگر بعد از <strong>select</strong> یا <strong>group</strong> بیاید، معنایش <strong>query continuation</strong> است.<br>
 هر دو مورد یک ویژگی مشترک دارند: معرفی یک متغیر جدید (range variable).</p>
 <p>🔹 خروجی یک <strong>توالی از توالی‌ها</strong> است که می‌توانیم آن را این‌طور پیمایش کنیم:</p>
-<pre><code class="language-csharp">foreach (IEnumerable&lt;Purchase&gt; purchaseSequence in query)
-    foreach (Purchase p in purchaseSequence)
+<pre class="hljs"><code><span class="hljs-keyword">foreach</span> (IEnumerable&lt;Purchase&gt; purchaseSequence <span class="hljs-keyword">in</span> query)
+    <span class="hljs-keyword">foreach</span> (Purchase p <span class="hljs-keyword">in</span> purchaseSequence)
         Console.WriteLine(p.Description);
 </code></pre>
 <hr>
 <h3>👤 استفاده کاربردی‌تر از GroupJoin</h3>
 <p>در حالت معمول، کوئری را این‌طور می‌نویسیم تا ارتباط مشتری با خریدهایش حفظ شود:</p>
-<pre><code class="language-csharp">from c in customers
-join p in purchases on c.ID equals p.CustomerID
-into custPurchases
-select new { CustName = c.Name, custPurchases };
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> customers
+<span class="hljs-keyword">join</span> p <span class="hljs-keyword">in</span> purchases <span class="hljs-keyword">on</span> c.ID <span class="hljs-keyword">equals</span> p.CustomerID
+<span class="hljs-keyword">into</span> custPurchases
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> { CustName = c.Name, custPurchases };
 </code></pre>
 <p>این معادل است با این کوئری (که ناکارآمد است):</p>
-<pre><code class="language-csharp">from c in customers
-select new
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> customers
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span>
 {
     CustName = c.Name,
     custPurchases = purchases.Where(p =&gt; c.ID == p.CustomerID)
@@ -1257,20 +1217,20 @@ select new
 </code></pre>
 <hr>
 <h3>🔄 Left Outer Join در GroupJoin</h3>
-<p>به‌طور پیش‌فرض، <strong>GroupJoin</strong> معادل یک <strong>left outer join</strong> است.
+<p>به‌طور پیش‌فرض، <strong>GroupJoin</strong> معادل یک <strong>left outer join</strong> است.<br>
 برای گرفتن <strong>inner join</strong> (حذف مشتریانی که خریدی ندارند)، باید روی <code>custPurchases</code> فیلتر بزنید:</p>
-<pre><code class="language-csharp">from c in customers
-join p in purchases on c.ID equals p.CustomerID
-into custPurchases
-where custPurchases.Any()
-select ...
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> customers
+<span class="hljs-keyword">join</span> p <span class="hljs-keyword">in</span> purchases <span class="hljs-keyword">on</span> c.ID <span class="hljs-keyword">equals</span> p.CustomerID
+<span class="hljs-keyword">into</span> custPurchases
+<span class="hljs-keyword">where</span> custPurchases.Any()
+<span class="hljs-keyword">select</span> ...
 </code></pre>
-<p>📌 عبارات بعد از <strong>group-join into</strong> روی <strong>زیرتوالی‌ها (subsequences)</strong> عمل می‌کنند، نه روی تک‌تک عناصر.
+<p>📌 عبارات بعد از <strong>group-join into</strong> روی <strong>زیرتوالی‌ها (subsequences)</strong> عمل می‌کنند، نه روی تک‌تک عناصر.<br>
 پس اگر بخواهید روی خریدهای منفرد فیلتر کنید، باید قبل از join از <strong>Where</strong> استفاده کنید:</p>
-<pre><code class="language-csharp">from c in customers
-join p in purchases.Where(p2 =&gt; p2.Price &gt; 1000)
-     on c.ID equals p.CustomerID
-into custPurchases ...
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> customers
+<span class="hljs-keyword">join</span> p <span class="hljs-keyword">in</span> purchases.Where(p2 =&gt; p2.Price &gt; <span class="hljs-number">1000</span>)
+     <span class="hljs-keyword">on</span> c.ID <span class="hljs-keyword">equals</span> p.CustomerID
+<span class="hljs-keyword">into</span> custPurchases ...
 </code></pre>
 <p>همچنین می‌توانید کوئری‌های <strong>lambda</strong> با <strong>GroupJoin</strong> درست مثل <strong>Join</strong> بسازید.</p>
 <hr>
@@ -1281,16 +1241,16 @@ into custPurchases ...
 <li><strong>Join</strong> → خروجی مسطح می‌دهد.</li>
 </ul>
 <p>📌 راه‌حل: اول <strong>GroupJoin</strong>، بعد <strong>DefaultIfEmpty</strong> روی هر زیرتوالی، و در نهایت <strong>SelectMany</strong>:</p>
-<pre><code class="language-csharp">from c in customers
-join p in purchases on c.ID equals p.CustomerID into custPurchases
-from cp in custPurchases.DefaultIfEmpty()
-select new
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> customers
+<span class="hljs-keyword">join</span> p <span class="hljs-keyword">in</span> purchases <span class="hljs-keyword">on</span> c.ID <span class="hljs-keyword">equals</span> p.CustomerID <span class="hljs-keyword">into</span> custPurchases
+<span class="hljs-keyword">from</span> cp <span class="hljs-keyword">in</span> custPurchases.DefaultIfEmpty()
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span>
 {
     CustName = c.Name,
-    Price = cp == null ? (decimal?) null : cp.Price
+    Price = cp == <span class="hljs-literal">null</span> ? (<span class="hljs-built_in">decimal</span>?) <span class="hljs-literal">null</span> : cp.Price
 };
 </code></pre>
-<p>✅ اگر زیرتوالی خریدها خالی باشد، <strong>DefaultIfEmpty</strong> یک توالی با مقدار null تولید می‌کند.
+<p>✅ اگر زیرتوالی خریدها خالی باشد، <strong>DefaultIfEmpty</strong> یک توالی با مقدار null تولید می‌کند.<br>
 عبارت دوم <strong>from</strong> به <strong>SelectMany</strong> ترجمه می‌شود و همه زیرتوالی‌های خرید را گسترش داده و در یک توالی واحد از عناصر خرید مسطح می‌کند.</p>
 <h3>🔍 Joining with Lookups</h3>
 <p>اپراتورهای <strong>Join</strong> و <strong>GroupJoin</strong> در کلاس <strong>Enumerable</strong> در دو مرحله عمل می‌کنند:</p>
@@ -1300,20 +1260,20 @@ select new
 </ol>
 <hr>
 <h3>📦 Lookup چیست؟</h3>
-<p>یک <strong>lookup</strong> در واقع مجموعه‌ای از گروه‌ها (groupings) است که می‌توان به‌طور مستقیم با کلید (key) به آن‌ها دسترسی داشت.
+<p>یک <strong>lookup</strong> در واقع مجموعه‌ای از گروه‌ها (groupings) است که می‌توان به‌طور مستقیم با کلید (key) به آن‌ها دسترسی داشت.<br>
 می‌توانید آن را مثل یک <strong>دیکشنری از توالی‌ها</strong> تصور کنید—یک دیکشنری که می‌تواند چندین عنصر را زیر یک کلید نگه دارد (گاهی به آن <strong>multidictionary</strong> می‌گویند).</p>
 <p>📌 Lookup فقط خواندنی (read-only) است و رابط آن به شکل زیر تعریف می‌شود:</p>
-<pre><code class="language-csharp">public interface ILookup&lt;TKey, TElement&gt; :
-    IEnumerable&lt;IGrouping&lt;TKey, TElement&gt;&gt;, IEnumerable
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title">ILookup</span>&lt;<span class="hljs-title">TKey</span>, <span class="hljs-title">TElement</span>&gt; :
+    <span class="hljs-title">IEnumerable</span>&lt;<span class="hljs-title">IGrouping</span>&lt;<span class="hljs-title">TKey</span>, <span class="hljs-title">TElement</span>&gt;&gt;, <span class="hljs-title">IEnumerable</span>
 {
-    int Count { get; }
-    bool Contains(TKey key);
-    IEnumerable&lt;TElement&gt; this[TKey key] { get; }
+    <span class="hljs-built_in">int</span> Count { <span class="hljs-keyword">get</span>; }
+    <span class="hljs-function"><span class="hljs-built_in">bool</span> <span class="hljs-title">Contains</span>(<span class="hljs-params">TKey key</span>)</span>;
+    IEnumerable&lt;TElement&gt; <span class="hljs-keyword">this</span>[TKey key] { <span class="hljs-keyword">get</span>; }
 }
 </code></pre>
 <hr>
 <h3>⏳ اجرای Lazy</h3>
-<p>مثل سایر اپراتورهای LINQ که خروجی تولید می‌کنند، اپراتورهای join نیز <strong>Deferred Execution</strong> یا <strong>Lazy Execution</strong> دارند.
+<p>مثل سایر اپراتورهای LINQ که خروجی تولید می‌کنند، اپراتورهای join نیز <strong>Deferred Execution</strong> یا <strong>Lazy Execution</strong> دارند.<br>
 یعنی <strong>lookup</strong> ساخته نمی‌شود تا زمانی که پیمایش (enumeration) خروجی شروع شود—و در آن لحظه کل lookup یکجا ساخته می‌شود.</p>
 <hr>
 <h3>🛠 ساختن Lookup دستی</h3>
@@ -1323,7 +1283,7 @@ select new
 <li>✅ پرس‌وجو (query) از lookup یک راه عالی برای درک نحوۀ کار <strong>Join</strong> و <strong>GroupJoin</strong> است.</li>
 </ul>
 <p>🔹 متد <strong>ToLookup</strong> یک lookup می‌سازد. مثال: بارگذاری تمام خریدها (purchases) در یک lookup که بر اساس <strong>CustomerID</strong> کلیدگذاری شده است:</p>
-<pre><code class="language-csharp">ILookup&lt;int?, Purchase&gt; purchLookup =
+<pre class="hljs"><code>ILookup&lt;<span class="hljs-built_in">int</span>?, Purchase&gt; purchLookup =
     purchases.ToLookup(p =&gt; p.CustomerID, p =&gt; p);
 </code></pre>
 <ul>
@@ -1333,7 +1293,7 @@ select new
 <hr>
 <h3>📖 خواندن از Lookup</h3>
 <p>خواندن از یک lookup شبیه خواندن از یک دیکشنری است، با این تفاوت که <strong>Indexer</strong> یک توالی از آیتم‌های منطبق برمی‌گرداند (نه فقط یک آیتم).</p>
-<pre><code class="language-csharp">foreach (Purchase p in purchLookup[1])
+<pre class="hljs"><code><span class="hljs-keyword">foreach</span> (Purchase p <span class="hljs-keyword">in</span> purchLookup[<span class="hljs-number">1</span>])
     Console.WriteLine(p.Description);
 </code></pre>
 <p>این کد تمام خریدهای مشتری با ID برابر 1 را نمایش می‌دهد.</p>
@@ -1341,12 +1301,12 @@ select new
 <h3>⚡ کارایی Lookup مثل Join/GroupJoin</h3>
 <p>وقتی یک lookup داشته باشید، می‌توانید کوئری‌های <strong>SelectMany/Select</strong> بنویسید که به‌اندازۀ کوئری‌های <strong>Join/GroupJoin</strong> کارآمد هستند.</p>
 <p>🔹 <strong>Join</strong> معادل استفاده از <strong>SelectMany</strong> روی یک lookup است:</p>
-<pre><code class="language-csharp">from c in customers
-from p in purchLookup[c.ID]
-select new { c.Name, p.Description, p.Price };
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> customers
+<span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> purchLookup[c.ID]
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> { c.Name, p.Description, p.Price };
 </code></pre>
 <p>📋 خروجی:</p>
-<pre><code>Tom Bike 500
+<pre class="hljs"><code>Tom Bike 500
 Tom Holiday 2000
 Dick Bike 600
 Dick Phone 300
@@ -1355,20 +1315,20 @@ Dick Phone 300
 <hr>
 <h3>🪄 Outer Join با DefaultIfEmpty</h3>
 <p>اضافه‌کردن <strong>DefaultIfEmpty</strong> باعث می‌شود کوئری معادل یک <strong>outer join</strong> شود:</p>
-<pre><code class="language-csharp">from c in customers
-from p in purchLookup[c.ID].DefaultIfEmpty()
-select new
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> customers
+<span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> purchLookup[c.ID].DefaultIfEmpty()
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span>
 {
     c.Name,
-    Descript = p == null ? null : p.Description,
-    Price = p == null ? (decimal?) null : p.Price
+    Descript = p == <span class="hljs-literal">null</span> ? <span class="hljs-literal">null</span> : p.Description,
+    Price = p == <span class="hljs-literal">null</span> ? (<span class="hljs-built_in">decimal</span>?) <span class="hljs-literal">null</span> : p.Price
 };
 </code></pre>
 <hr>
 <h3>🧩 GroupJoin معادل Lookup</h3>
 <p><strong>GroupJoin</strong> معادل این است که lookup را داخل projection بخوانیم:</p>
-<pre><code class="language-csharp">from c in customers
-select new
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> customers
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span>
 {
     CustName = c.Name,
     CustPurchases = purchLookup[c.ID]
@@ -1377,61 +1337,61 @@ select new
 <hr>
 <h2>⚙️ پیاده‌سازی Enumerable.Join</h2>
 <p>ساده‌ترین پیاده‌سازی معتبر <strong>Enumerable.Join</strong> (بدون درنظر گرفتن null-check):</p>
-<pre><code class="language-csharp">public static IEnumerable&lt;TResult&gt; Join
-    &lt;TOuter, TInner, TKey, TResult&gt;(
-        this IEnumerable&lt;TOuter&gt; outer,
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">IEnumerable</span>&lt;<span class="hljs-title">TResult</span>&gt; <span class="hljs-title">Join</span>
+    &lt;TOuter, TInner, TKey, TResult&gt;(<span class="hljs-params">
+        <span class="hljs-keyword">this</span> IEnumerable&lt;TOuter&gt; outer,
         IEnumerable&lt;TInner&gt; inner,
         Func&lt;TOuter, TKey&gt; outerKeySelector,
         Func&lt;TInner, TKey&gt; innerKeySelector,
-        Func&lt;TOuter, TInner, TResult&gt; resultSelector)
+        Func&lt;TOuter, TInner, TResult&gt; resultSelector</span>)</span>
 {
     ILookup&lt;TKey, TInner&gt; lookup = inner.ToLookup(innerKeySelector);
-    return
-        from outerItem in outer
-        from innerItem in lookup[outerKeySelector(outerItem)]
-        select resultSelector(outerItem, innerItem);
+    <span class="hljs-keyword">return</span>
+        <span class="hljs-keyword">from</span> outerItem <span class="hljs-keyword">in</span> outer
+        <span class="hljs-keyword">from</span> innerItem <span class="hljs-keyword">in</span> lookup[outerKeySelector(outerItem)]
+        <span class="hljs-function"><span class="hljs-keyword">select</span> <span class="hljs-title">resultSelector</span>(<span class="hljs-params">outerItem, innerItem</span>)</span>;
 }
 </code></pre>
 <hr>
 <h2>⚙️ پیاده‌سازی Enumerable.GroupJoin</h2>
 <p>پیاده‌سازی <strong>GroupJoin</strong> شبیه Join است، اما ساده‌تر:</p>
-<pre><code class="language-csharp">public static IEnumerable&lt;TResult&gt; GroupJoin
-    &lt;TOuter, TInner, TKey, TResult&gt;(
-        this IEnumerable&lt;TOuter&gt; outer,
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">IEnumerable</span>&lt;<span class="hljs-title">TResult</span>&gt; <span class="hljs-title">GroupJoin</span>
+    &lt;TOuter, TInner, TKey, TResult&gt;(<span class="hljs-params">
+        <span class="hljs-keyword">this</span> IEnumerable&lt;TOuter&gt; outer,
         IEnumerable&lt;TInner&gt; inner,
         Func&lt;TOuter, TKey&gt; outerKeySelector,
         Func&lt;TInner, TKey&gt; innerKeySelector,
-        Func&lt;TOuter, IEnumerable&lt;TInner&gt;, TResult&gt; resultSelector)
+        Func&lt;TOuter, IEnumerable&lt;TInner&gt;, TResult&gt; resultSelector</span>)</span>
 {
     ILookup&lt;TKey, TInner&gt; lookup = inner.ToLookup(innerKeySelector);
-    return
-        from outerItem in outer
-        select resultSelector(
+    <span class="hljs-keyword">return</span>
+        <span class="hljs-function"><span class="hljs-keyword">from</span> outerItem <span class="hljs-keyword">in</span> outer
+        <span class="hljs-keyword">select</span> <span class="hljs-title">resultSelector</span>(<span class="hljs-params">
             outerItem,
-            lookup[outerKeySelector(outerItem)]);
+            lookup[outerKeySelector(outerItem</span>)])</span>;
 }
 </code></pre>
 <hr>
 <h2>🔗 The Zip Operator</h2>
-<pre><code class="language-csharp">IEnumerable&lt;TFirst&gt;, IEnumerable&lt;TSecond&gt; → IEnumerable&lt;TResult&gt;
+<pre class="hljs"><code>IEnumerable&lt;TFirst&gt;, IEnumerable&lt;TSecond&gt; → IEnumerable&lt;TResult&gt;
 </code></pre>
 <p>اپراتور <strong>Zip</strong> دو توالی را <strong>گام‌به‌گام</strong> (مثل زیپ) پیمایش می‌کند و با اعمال یک تابع روی هر جفت عنصر، یک توالی جدید می‌سازد.</p>
 <p>🔹 مثال:</p>
-<pre><code class="language-csharp">int[] numbers = { 3, 5, 7 };
-string[] words = { &quot;three&quot;, &quot;five&quot;, &quot;seven&quot;, &quot;ignored&quot; };
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] numbers = { <span class="hljs-number">3</span>, <span class="hljs-number">5</span>, <span class="hljs-number">7</span> };
+<span class="hljs-built_in">string</span>[] words = { <span class="hljs-string">&quot;three&quot;</span>, <span class="hljs-string">&quot;five&quot;</span>, <span class="hljs-string">&quot;seven&quot;</span>, <span class="hljs-string">&quot;ignored&quot;</span> };
 
-IEnumerable&lt;string&gt; zip =
-    numbers.Zip(words, (n, w) =&gt; n + &quot;=&quot; + w);
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; zip =
+    numbers.Zip(words, (n, w) =&gt; n + <span class="hljs-string">&quot;=&quot;</span> + w);
 </code></pre>
 <p>📋 خروجی:</p>
-<pre><code>3=three
+<pre class="hljs"><code>3=three
 5=five
 7=seven
 </code></pre>
-<p>📌 عناصر اضافه در هر یک از توالی‌ها نادیده گرفته می‌شوند.
+<p>📌 عناصر اضافه در هر یک از توالی‌ها نادیده گرفته می‌شوند.<br>
 ⚠️ <strong>Zip</strong> در <strong>EF Core</strong> پشتیبانی نمی‌شود.</p>
 <h3>📑 مرتب‌سازی (Ordering)</h3>
-<pre><code>IEnumerable&lt;TSource&gt; → IOrderedEnumerable&lt;TSource&gt;
+<pre class="hljs"><code>IEnumerable&lt;TSource&gt; → IOrderedEnumerable&lt;TSource&gt;
 </code></pre>
 <div align="center">
 <p><img src="../../../assets/image/09/Table-9-13.jpeg" alt="Conventions-UsedThis-Book"></p>
@@ -1448,7 +1408,7 @@ IEnumerable&lt;string&gt; zip =
 <p><img src="../../../assets/image/09/Table-9-15.jpeg" alt="Conventions-UsedThis-Book"></p>
 </div>
 <h3>📑 نحوۀ Query (Query syntax)</h3>
-<pre><code>orderby expression1 [descending] [, expression2 [descending] ... ]
+<pre class="hljs"><code>orderby expression1 [descending] [, expression2 [descending] ... ]
 </code></pre>
 <hr>
 <h3>📖 مرور کلی (Overview)</h3>
@@ -1456,66 +1416,66 @@ IEnumerable&lt;string&gt; zip =
 <li><strong>OrderBy</strong> نسخه‌ای مرتب‌شده از توالی ورودی را برمی‌گرداند و از <strong>keySelector</strong> برای مقایسه استفاده می‌کند.</li>
 <li>مثال: تولید یک توالی از نام‌ها به ترتیب حروف الفبا:</li>
 </ul>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query = names.OrderBy(s =&gt; s);
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query = names.OrderBy(s =&gt; s);
 </code></pre>
 <ul>
 <li>مرتب‌سازی بر اساس طول نام:</li>
 </ul>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query = names.OrderBy(s =&gt; s.Length);
-// نتیجه: { &quot;Jay&quot;, &quot;Tom&quot;, &quot;Mary&quot;, &quot;Dick&quot;, &quot;Harry&quot; };
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query = names.OrderBy(s =&gt; s.Length);
+<span class="hljs-comment">// نتیجه: { &quot;Jay&quot;, &quot;Tom&quot;, &quot;Mary&quot;, &quot;Dick&quot;, &quot;Harry&quot; };</span>
 </code></pre>
 <ul>
 <li>ترتیب نسبی عناصری که کلید مرتب‌سازی یکسان دارند (مثل Jay/Tom و Mary/Dick) مشخص نیست—مگر اینکه <strong>ThenBy</strong> اضافه کنید:</li>
 </ul>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query = names.OrderBy(s =&gt; s.Length).ThenBy(s =&gt; s);
-// نتیجه: { &quot;Jay&quot;, &quot;Tom&quot;, &quot;Dick&quot;, &quot;Mary&quot;, &quot;Harry&quot; };
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query = names.OrderBy(s =&gt; s.Length).ThenBy(s =&gt; s);
+<span class="hljs-comment">// نتیجه: { &quot;Jay&quot;, &quot;Tom&quot;, &quot;Dick&quot;, &quot;Mary&quot;, &quot;Harry&quot; };</span>
 </code></pre>
 <ul>
 <li><strong>ThenBy</strong> تنها عناصر با همان کلید مرتب‌سازی قبلی را دوباره مرتب می‌کند.</li>
 <li>می‌توانید هر تعداد <strong>ThenBy</strong> را زنجیره‌ای استفاده کنید. مثال: ابتدا بر اساس طول، سپس کاراکتر دوم، و در نهایت کاراکتر اول:</li>
 </ul>
-<pre><code class="language-csharp">names.OrderBy(s =&gt; s.Length).ThenBy(s =&gt; s[1]).ThenBy(s =&gt; s[0]);
+<pre class="hljs"><code>names.OrderBy(s =&gt; s.Length).ThenBy(s =&gt; s[<span class="hljs-number">1</span>]).ThenBy(s =&gt; s[<span class="hljs-number">0</span>]);
 </code></pre>
 <hr>
 <h3>🔄 معادل در نحوۀ Query</h3>
-<pre><code class="language-csharp">from s in names
-orderby s.Length, s[1], s[0]
-select s;
+<pre class="hljs"><code><span class="hljs-keyword">from</span> s <span class="hljs-keyword">in</span> names
+<span class="hljs-keyword">orderby</span> s.Length, s[<span class="hljs-number">1</span>], s[<span class="hljs-number">0</span>]
+<span class="hljs-keyword">select</span> s;
 </code></pre>
 <p>⚠️ نمونه اشتباه: این در واقع ابتدا بر اساس <code>s[1]</code> و سپس <code>s.Length</code> مرتب می‌کند (یا در کوئری پایگاه داده فقط بر اساس <code>s[1]</code> مرتب می‌کند و ترتیب قبلی را نادیده می‌گیرد):</p>
-<pre><code class="language-csharp">from s in names
-orderby s.Length
-orderby s[1]
+<pre class="hljs"><code><span class="hljs-keyword">from</span> s <span class="hljs-keyword">in</span> names
+<span class="hljs-keyword">orderby</span> s.Length
+<span class="hljs-keyword">orderby</span> s[<span class="hljs-number">1</span>]
 ...
 </code></pre>
 <hr>
 <h3>🔽 OrderByDescending و ThenByDescending</h3>
 <p>این اپراتورها همان کارهای قبلی را انجام می‌دهند اما خروجی را به ترتیب معکوس می‌دهند.</p>
 <p>مثال EF Core: بازیابی خریدها بر اساس قیمت نزولی و در صورت برابر بودن قیمت، به ترتیب الفبایی:</p>
-<pre><code class="language-csharp">dbContext.Purchases
+<pre class="hljs"><code>dbContext.Purchases
     .OrderByDescending(p =&gt; p.Price)
     .ThenBy(p =&gt; p.Description);
 </code></pre>
 <p>معادل در نحوۀ Query:</p>
-<pre><code class="language-csharp">from p in dbContext.Purchases
-orderby p.Price descending, p.Description
-select p;
+<pre class="hljs"><code><span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> dbContext.Purchases
+<span class="hljs-keyword">orderby</span> p.Price <span class="hljs-keyword">descending</span>, p.Description
+<span class="hljs-keyword">select</span> p;
 </code></pre>
 <h3>📚 Comparers و Collations</h3>
 <ul>
 <li>در یک <strong>کوئری محلی (local query)</strong>، خودِ اشیاء انتخاب‌شده توسط <strong>key selector</strong> الگوریتم مرتب‌سازی را از طریق پیاده‌سازی پیش‌فرض <strong>IComparable</strong> تعیین می‌کنند (رجوع کنید به فصل ۷).</li>
 <li>شما می‌توانید الگوریتم مرتب‌سازی را با ارسال یک شیء <strong>IComparer</strong> بازنویسی کنید. مثال: مرتب‌سازی <strong>غیرحساس به حروف بزرگ/کوچک</strong>:</li>
 </ul>
-<pre><code class="language-csharp">names.OrderBy(n =&gt; n, StringComparer.CurrentCultureIgnoreCase);
+<pre class="hljs"><code>names.OrderBy(n =&gt; n, StringComparer.CurrentCultureIgnoreCase);
 </code></pre>
 <ul>
 <li>ارسال <strong>comparer</strong> در نحوۀ Query یا توسط <strong>EF Core</strong> پشتیبانی نمی‌شود.</li>
 <li>هنگام کوئری زدن روی پایگاه داده، الگوریتم مقایسه توسط <strong>Collation</strong> ستون مربوطه تعیین می‌شود.</li>
 <li>اگر Collation حساس به حروف باشد، می‌توانید مرتب‌سازی غیرحساس به حروف بزرگ/کوچک را با فراخوانی <code>ToUpper</code> در <strong>key selector</strong> انجام دهید:</li>
 </ul>
-<pre><code class="language-csharp">from p in dbContext.Purchases
-orderby p.Description.ToUpper()
-select p;
+<pre class="hljs"><code><span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> dbContext.Purchases
+<span class="hljs-keyword">orderby</span> p.Description.ToUpper()
+<span class="hljs-keyword">select</span> p;
 </code></pre>
 <hr>
 <h3>🔹 IOrderedEnumerable و IOrderedQueryable</h3>
@@ -1535,20 +1495,20 @@ select p;
 </li>
 </ul>
 <p>🔹 مثال: ساخت کوئری مرحله‌ای</p>
-<pre><code class="language-csharp">IOrderedEnumerable&lt;string&gt; query1 = names.OrderBy(s =&gt; s.Length);
-IOrderedEnumerable&lt;string&gt; query2 = query1.ThenBy(s =&gt; s);
+<pre class="hljs"><code>IOrderedEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query1 = names.OrderBy(s =&gt; s.Length);
+IOrderedEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query2 = query1.ThenBy(s =&gt; s);
 </code></pre>
 <p>⚠️ اگر <code>query1</code> از نوع <code>IEnumerable&lt;string&gt;</code> تعریف شود، خط دوم کامپایل نمی‌شود—چون <strong>ThenBy</strong> به ورودی از نوع <code>IOrderedEnumerable&lt;string&gt;</code> نیاز دارد.</p>
 <hr>
 <h3>🔹 استفاده از تایپ ضمنی (Implicit Typing)</h3>
-<pre><code class="language-csharp">var query1 = names.OrderBy(s =&gt; s.Length);
-var query2 = query1.ThenBy(s =&gt; s);
+<pre class="hljs"><code><span class="hljs-keyword">var</span> query1 = names.OrderBy(s =&gt; s.Length);
+<span class="hljs-keyword">var</span> query2 = query1.ThenBy(s =&gt; s);
 </code></pre>
 <ul>
 <li>تایپ ضمنی راحتی دارد اما می‌تواند مشکلاتی ایجاد کند:</li>
 </ul>
-<pre><code class="language-csharp">var query = names.OrderBy(s =&gt; s.Length);
-query = query.Where(n =&gt; n.Length &gt; 3);  // خطای زمان کامپایل
+<pre class="hljs"><code><span class="hljs-keyword">var</span> query = names.OrderBy(s =&gt; s.Length);
+query = query.Where(n =&gt; n.Length &gt; <span class="hljs-number">3</span>);  <span class="hljs-comment">// خطای زمان کامپایل</span>
 </code></pre>
 <ul>
 <li>کامپایلر <code>query</code> را از نوع <code>IOrderedEnumerable&lt;string&gt;</code> استنتاج می‌کند، اما <code>Where</code> یک <code>IEnumerable&lt;string&gt;</code> برمی‌گرداند که نمی‌توان آن را دوباره به <code>query</code> اختصاص داد.</li>
@@ -1558,8 +1518,8 @@ query = query.Where(n =&gt; n.Length &gt; 3);  // خطای زمان کامپای
 <li>استفاده از تایپ صریح</li>
 <li>یا فراخوانی <code>AsEnumerable()</code> بعد از <code>OrderBy</code>:</li>
 </ol>
-<pre><code class="language-csharp">var query = names.OrderBy(s =&gt; s.Length).AsEnumerable();
-query = query.Where(n =&gt; n.Length &gt; 3);  // درست
+<pre class="hljs"><code><span class="hljs-keyword">var</span> query = names.OrderBy(s =&gt; s.Length).AsEnumerable();
+query = query.Where(n =&gt; n.Length &gt; <span class="hljs-number">3</span>);  <span class="hljs-comment">// درست</span>
 </code></pre>
 <ul>
 <li>معادل در کوئری‌های <strong>interpreted</strong>، فراخوانی <code>AsQueryable()</code> است.</li>
@@ -1569,17 +1529,17 @@ query = query.Where(n =&gt; n.Length &gt; 3);  // درست
 <p><img src="../../../assets/image/09/Table-9-16.jpeg" alt="Conventions-UsedThis-Book"></p>
 </div>
 <h3>📚 GroupBy</h3>
-<pre><code>IEnumerable&lt;TSource&gt; → IEnumerable&lt;IGrouping&lt;TKey, TElement&gt;&gt;
+<pre class="hljs"><code>IEnumerable&lt;TSource&gt; → IEnumerable&lt;IGrouping&lt;TKey, TElement&gt;&gt;
 </code></pre>
 <div align="center">
 <p><img src="../../../assets/image/09/Table-9-17.jpeg" alt="Conventions-UsedThis-Book"></p>
 </div>
 <h3>📑 GroupBy</h3>
-<pre><code>IEnumerable&lt;TSource&gt; → IEnumerable&lt;IGrouping&lt;TKey, TElement&gt;&gt;
+<pre class="hljs"><code>IEnumerable&lt;TSource&gt; → IEnumerable&lt;IGrouping&lt;TKey, TElement&gt;&gt;
 </code></pre>
 <hr>
 <h3>🔍 نحوۀ Query (Query syntax)</h3>
-<pre><code>group element-expression by key-expression
+<pre class="hljs"><code>group element-expression by key-expression
 </code></pre>
 <hr>
 <h3>📖 مرور کلی (Overview)</h3>
@@ -1587,27 +1547,27 @@ query = query.Where(n =&gt; n.Length &gt; 3);  // درست
 <li><strong>GroupBy</strong> یک توالی صاف (flat) را به توالی‌ای از گروه‌ها تبدیل می‌کند.</li>
 <li>مثال: گروه‌بندی تمام فایل‌های موجود در <code>Path.GetTempPath()</code> بر اساس پسوند:</li>
 </ul>
-<pre><code class="language-csharp">string[] files = Directory.GetFiles(Path.GetTempPath());
+<pre class="hljs"><code><span class="hljs-built_in">string</span>[] files = Directory.GetFiles(Path.GetTempPath());
 
-IEnumerable&lt;IGrouping&lt;string, string&gt;&gt; query =
-    files.GroupBy(file =&gt; Path.GetExtension(file));
+IEnumerable&lt;IGrouping&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">string</span>&gt;&gt; query =
+    files.GroupBy(<span class="hljs-keyword">file</span> =&gt; Path.GetExtension(<span class="hljs-keyword">file</span>));
 </code></pre>
 <ul>
 <li>یا با تایپ ضمنی:</li>
 </ul>
-<pre><code class="language-csharp">var query = files.GroupBy(file =&gt; Path.GetExtension(file));
+<pre class="hljs"><code><span class="hljs-keyword">var</span> query = files.GroupBy(<span class="hljs-keyword">file</span> =&gt; Path.GetExtension(<span class="hljs-keyword">file</span>));
 </code></pre>
 <hr>
 <h3>🔹 پیمایش نتایج</h3>
-<pre><code class="language-csharp">foreach (IGrouping&lt;string, string&gt; grouping in query)
+<pre class="hljs"><code><span class="hljs-keyword">foreach</span> (IGrouping&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">string</span>&gt; grouping <span class="hljs-keyword">in</span> query)
 {
-    Console.WriteLine(&quot;Extension: &quot; + grouping.Key);
-    foreach (string filename in grouping)
-        Console.WriteLine(&quot;   - &quot; + filename);
+    Console.WriteLine(<span class="hljs-string">&quot;Extension: &quot;</span> + grouping.Key);
+    <span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">string</span> filename <span class="hljs-keyword">in</span> grouping)
+        Console.WriteLine(<span class="hljs-string">&quot;   - &quot;</span> + filename);
 }
 </code></pre>
 <p>📋 خروجی نمونه:</p>
-<pre><code>Extension: .pdf
+<pre class="hljs"><code>Extension: .pdf
   -- chapter03.pdf
   -- chapter04.pdf
 Extension: .doc
@@ -1622,22 +1582,22 @@ Extension: .doc
 <li>سپس یک توالی از <strong>grouping</strong>ها را تولید می‌کند.</li>
 <li><strong>Grouping</strong> یک توالی است که دارای <strong>Key</strong> می‌باشد:</li>
 </ul>
-<pre><code class="language-csharp">public interface IGrouping&lt;TKey, TElement&gt; : IEnumerable&lt;TElement&gt;, IEnumerable
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title">IGrouping</span>&lt;<span class="hljs-title">TKey</span>, <span class="hljs-title">TElement</span>&gt; : <span class="hljs-title">IEnumerable</span>&lt;<span class="hljs-title">TElement</span>&gt;, <span class="hljs-title">IEnumerable</span>
 {
-    TKey Key { get; }    // کلید اعمال شده روی زیرتوالی به‌صورت کلی
+    TKey Key { <span class="hljs-keyword">get</span>; }    <span class="hljs-comment">// کلید اعمال شده روی زیرتوالی به‌صورت کلی</span>
 }
 </code></pre>
 <ul>
 <li>به طور پیش‌فرض، عناصر هر گروه همان عناصر ورودی هستند مگر اینکه <strong>elementSelector</strong> مشخص کنید.</li>
 <li>مثال: تبدیل عناصر ورودی به حروف بزرگ:</li>
 </ul>
-<pre><code class="language-csharp">files.GroupBy(file =&gt; Path.GetExtension(file), file =&gt; file.ToUpper());
+<pre class="hljs"><code>files.GroupBy(<span class="hljs-keyword">file</span> =&gt; Path.GetExtension(<span class="hljs-keyword">file</span>), <span class="hljs-keyword">file</span> =&gt; <span class="hljs-keyword">file</span>.ToUpper());
 </code></pre>
 <ul>
 <li>در این حالت، <strong>Key</strong> هر گروه هنوز در حالت اصلی خود باقی می‌ماند.</li>
 </ul>
 <p>📋 خروجی نمونه:</p>
-<pre><code>Extension: .pdf
+<pre class="hljs"><code>Extension: .pdf
   -- CHAPTER03.PDF
   -- CHAPTER04.PDF
 Extension: .doc
@@ -1649,34 +1609,34 @@ Extension: .doc
 <li>زیرمجموعه‌ها بر اساس کلید به ترتیب الفبا صادر نمی‌شوند. <strong>GroupBy</strong> تنها گروه‌بندی می‌کند و مرتب‌سازی انجام نمی‌دهد.</li>
 <li>برای مرتب‌سازی، باید از <strong>OrderBy</strong> استفاده کنید:</li>
 </ul>
-<pre><code class="language-csharp">files.GroupBy(file =&gt; Path.GetExtension(file), file =&gt; file.ToUpper())
+<pre class="hljs"><code>files.GroupBy(<span class="hljs-keyword">file</span> =&gt; Path.GetExtension(<span class="hljs-keyword">file</span>), <span class="hljs-keyword">file</span> =&gt; <span class="hljs-keyword">file</span>.ToUpper())
      .OrderBy(grouping =&gt; grouping.Key);
 </code></pre>
 <hr>
 <h3>🔹 معادل در نحوۀ Query</h3>
-<pre><code>group element-expr by key-expr
+<pre class="hljs"><code>group element-expr by key-expr
 </code></pre>
 <p>مثال:</p>
-<pre><code class="language-csharp">from file in files
-group file.ToUpper() by Path.GetExtension(file);
+<pre class="hljs"><code><span class="hljs-keyword">from</span> <span class="hljs-keyword">file</span> <span class="hljs-keyword">in</span> files
+<span class="hljs-keyword">group</span> <span class="hljs-keyword">file</span>.ToUpper() <span class="hljs-keyword">by</span> Path.GetExtension(<span class="hljs-keyword">file</span>);
 </code></pre>
 <ul>
 <li>مشابه <strong>select</strong>، <code>group</code> یک کوئری را پایان می‌دهد مگر اینکه <strong>query continuation clause</strong> اضافه کنید:</li>
 </ul>
-<pre><code class="language-csharp">from file in files
-group file.ToUpper() by Path.GetExtension(file) into grouping
-orderby grouping.Key
-select grouping;
+<pre class="hljs"><code><span class="hljs-keyword">from</span> <span class="hljs-keyword">file</span> <span class="hljs-keyword">in</span> files
+<span class="hljs-keyword">group</span> <span class="hljs-keyword">file</span>.ToUpper() <span class="hljs-keyword">by</span> Path.GetExtension(<span class="hljs-keyword">file</span>) <span class="hljs-keyword">into</span> grouping
+<span class="hljs-keyword">orderby</span> grouping.Key
+<span class="hljs-keyword">select</span> grouping;
 </code></pre>
 <hr>
 <h3>🔹 ادامه‌ی کوئری‌ها (Query Continuations)</h3>
 <ul>
 <li>ادامه‌ی کوئری پس از <strong>group by</strong> مفید است، مثلاً فیلتر کردن گروه‌هایی که کمتر از پنج فایل دارند:</li>
 </ul>
-<pre><code class="language-csharp">from file in files
-group file.ToUpper() by Path.GetExtension(file) into grouping
-where grouping.Count() &gt;= 5
-select grouping;
+<pre class="hljs"><code><span class="hljs-keyword">from</span> <span class="hljs-keyword">file</span> <span class="hljs-keyword">in</span> files
+<span class="hljs-keyword">group</span> <span class="hljs-keyword">file</span>.ToUpper() <span class="hljs-keyword">by</span> Path.GetExtension(<span class="hljs-keyword">file</span>) <span class="hljs-keyword">into</span> grouping
+<span class="hljs-keyword">where</span> grouping.Count() &gt;= <span class="hljs-number">5</span>
+<span class="hljs-keyword">select</span> grouping;
 </code></pre>
 <ul>
 <li>یک <code>where</code> پس از <code>group by</code> معادل <strong>HAVING</strong> در SQL است.</li>
@@ -1687,14 +1647,14 @@ select grouping;
 <ul>
 <li>گاهی تنها به نتیجه‌ی تجمیع روی گروه‌ها نیاز دارید و می‌توانید زیرتوالی‌ها را نادیده بگیرید:</li>
 </ul>
-<pre><code class="language-csharp">string[] votes = { &quot;Dogs&quot;, &quot;Cats&quot;, &quot;Cats&quot;, &quot;Dogs&quot;, &quot;Dogs&quot; };
+<pre class="hljs"><code><span class="hljs-built_in">string</span>[] votes = { <span class="hljs-string">&quot;Dogs&quot;</span>, <span class="hljs-string">&quot;Cats&quot;</span>, <span class="hljs-string">&quot;Cats&quot;</span>, <span class="hljs-string">&quot;Dogs&quot;</span>, <span class="hljs-string">&quot;Dogs&quot;</span> };
 
-IEnumerable&lt;string&gt; query = from vote in votes
-                            group vote by vote into g
-                            orderby g.Count() descending
-                            select g.Key;
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query = <span class="hljs-keyword">from</span> vote <span class="hljs-keyword">in</span> votes
+                            <span class="hljs-keyword">group</span> vote <span class="hljs-keyword">by</span> vote <span class="hljs-keyword">into</span> g
+                            <span class="hljs-keyword">orderby</span> g.Count() <span class="hljs-keyword">descending</span>
+                            <span class="hljs-keyword">select</span> g.Key;
 
-string winner = query.First();    // Dogs
+<span class="hljs-built_in">string</span> winner = query.First();    <span class="hljs-comment">// Dogs</span>
 </code></pre>
 <h3>📑 GroupBy در EF Core</h3>
 <ul>
@@ -1702,16 +1662,16 @@ string winner = query.First();    // Dogs
 <li>اگر <strong>navigation property</strong>ها را تنظیم کرده باشید، اغلب نیازی به گروه‌بندی کمتر از حالت استاندارد SQL پیش می‌آید.</li>
 </ul>
 <p>مثال: انتخاب مشتریانی که حداقل دو خرید داشته‌اند بدون نیاز به گروه‌بندی:</p>
-<pre><code class="language-csharp">from c in dbContext.Customers
-where c.Purchases.Count &gt;= 2
-select c.Name + &quot; has made &quot; + c.Purchases.Count + &quot; purchases&quot;;
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+<span class="hljs-keyword">where</span> c.Purchases.Count &gt;= <span class="hljs-number">2</span>
+<span class="hljs-keyword">select</span> c.Name + <span class="hljs-string">&quot; has made &quot;</span> + c.Purchases.Count + <span class="hljs-string">&quot; purchases&quot;</span>;
 </code></pre>
 <ul>
 <li>نمونه‌ای که نیاز به گروه‌بندی دارد: محاسبه کل فروش‌ها بر اساس سال:</li>
 </ul>
-<pre><code class="language-csharp">from p in dbContext.Purchases
-group p.Price by p.Date.Year into salesByYear
-select new {
+<pre class="hljs"><code><span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> dbContext.Purchases
+<span class="hljs-keyword">group</span> p.Price <span class="hljs-keyword">by</span> p.Date.Year <span class="hljs-keyword">into</span> salesByYear
+<span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> {
     Year       = salesByYear.Key,
     TotalValue = salesByYear.Sum()
 };
@@ -1719,10 +1679,10 @@ select new {
 <ul>
 <li><strong>GroupBy</strong> در LINQ از <strong>GROUP BY</strong> در SQL قدرتمندتر است، زیرا می‌توانید همه ردیف‌ها را بدون هیچ تجمیعی بازیابی کنید:</li>
 </ul>
-<pre><code class="language-csharp">from p in dbContext.Purchases
-group p by p.Date.Year
+<pre class="hljs"><code><span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> dbContext.Purchases
+<span class="hljs-keyword">group</span> p <span class="hljs-keyword">by</span> p.Date.Year
 </code></pre>
-<p>⚠️ این روش در <strong>EF Core</strong> کار نمی‌کند.
+<p>⚠️ این روش در <strong>EF Core</strong> کار نمی‌کند.<br>
 راه‌حل ساده: قبل از گروه‌بندی <code>.AsEnumerable()</code> فراخوانی کنید تا گروه‌بندی روی کلاینت انجام شود.</p>
 <ul>
 <li>
@@ -1737,8 +1697,8 @@ group p by p.Date.Year
 <ul>
 <li>می‌توانید با استفاده از <strong>composite key</strong> و <strong>anonymous type</strong> گروه‌بندی کنید:</li>
 </ul>
-<pre><code class="language-csharp">from n in names
-group n by new { FirstLetter = n[0], Length = n.Length };
+<pre class="hljs"><code><span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> names
+<span class="hljs-keyword">group</span> n <span class="hljs-keyword">by</span> <span class="hljs-keyword">new</span> { FirstLetter = n[<span class="hljs-number">0</span>], Length = n.Length };
 </code></pre>
 <hr>
 <h3>🔹 مقایسه‌کننده‌های سفارشی (Custom equality comparers)</h3>
@@ -1747,11 +1707,11 @@ group n by new { FirstLetter = n[0], Length = n.Length };
 <li>به ندرت لازم است، زیرا تغییر عبارت <strong>key selector</strong> معمولاً کافی است.</li>
 <li>مثال: گروه‌بندی غیرحساس به حروف بزرگ/کوچک:</li>
 </ul>
-<pre><code class="language-csharp">group n by n.ToUpper()
+<pre class="hljs"><code><span class="hljs-keyword">group</span> n <span class="hljs-keyword">by</span> n.ToUpper()
 </code></pre>
 <hr>
 <h3>📑 Chunk</h3>
-<pre><code>IEnumerable&lt;TSource&gt; → IEnumerable&lt;TElement[]&gt;
+<pre class="hljs"><code>IEnumerable&lt;TSource&gt; → IEnumerable&lt;TElement[]&gt;
 </code></pre>
 <div align="center">
 <p><img src="../../../assets/image/09/Table-9-18.jpeg" alt="Conventions-UsedThis-Book"></p>
@@ -1760,17 +1720,17 @@ group n by new { FirstLetter = n[0], Length = n.Length };
 <ul>
 <li>معرفی‌شده در <strong>.NET 6</strong>، <strong>Chunk</strong> یک توالی را به بلوک‌هایی (chunks) با اندازه‌ی مشخص تقسیم می‌کند (یا کمتر، اگر عناصر کافی نباشند):</li>
 </ul>
-<pre><code class="language-csharp">foreach (int[] chunk in new[] { 1, 2, 3, 4, 5, 6, 7, 8 }.Chunk(3))
-    Console.WriteLine(string.Join(&quot;, &quot;, chunk));
+<pre class="hljs"><code><span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">int</span>[] chunk <span class="hljs-keyword">in</span> <span class="hljs-keyword">new</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span> }.Chunk(<span class="hljs-number">3</span>))
+    Console.WriteLine(<span class="hljs-built_in">string</span>.Join(<span class="hljs-string">&quot;, &quot;</span>, chunk));
 </code></pre>
 <p><strong>خروجی:</strong></p>
-<pre><code>1, 2, 3
+<pre class="hljs"><code>1, 2, 3
 4, 5, 6
 7, 8
 </code></pre>
 <hr>
 <h3>🔗 Set Operators</h3>
-<pre><code>IEnumerable&lt;TSource&gt;, IEnumerable&lt;TSource&gt; → IEnumerable&lt;TSource&gt;
+<pre class="hljs"><code>IEnumerable&lt;TSource&gt;, IEnumerable&lt;TSource&gt; → IEnumerable&lt;TSource&gt;
 </code></pre>
 <div align="center">
 <p><img src="../../../assets/image/09/Table-9-19.jpeg" alt="Conventions-UsedThis-Book"></p>
@@ -1780,46 +1740,46 @@ group n by new { FirstLetter = n[0], Length = n.Length };
 <li><strong>Concat</strong> همه عناصر توالی اول را بازمی‌گرداند، سپس همه عناصر توالی دوم را اضافه می‌کند.</li>
 <li><strong>Union</strong> همان کار را می‌کند اما <strong>تکراری‌ها را حذف می‌کند</strong>:</li>
 </ul>
-<pre><code class="language-csharp">int[] seq1 = { 1, 2, 3 }, seq2 = { 3, 4, 5 };
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] seq1 = { <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span> }, seq2 = { <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span> };
 
-IEnumerable&lt;int&gt;
-    concat = seq1.Concat(seq2),   // { 1, 2, 3, 3, 4, 5 }
-    union  = seq1.Union(seq2);   // { 1, 2, 3, 4, 5 }
+IEnumerable&lt;<span class="hljs-built_in">int</span>&gt;
+    concat = seq1.Concat(seq2),   <span class="hljs-comment">// { 1, 2, 3, 3, 4, 5 }</span>
+    union  = seq1.Union(seq2);   <span class="hljs-comment">// { 1, 2, 3, 4, 5 }</span>
 </code></pre>
 <ul>
 <li>مشخص کردن <strong>نوع آرگومان</strong> مفید است وقتی توالی‌ها نوع متفاوتی دارند ولی عناصر یک <strong>base type</strong> مشترک دارند.</li>
 <li>مثال با API بازتاب (Reflection API): متدها و پراپرتی‌ها با کلاس‌های <code>MethodInfo</code> و <code>PropertyInfo</code> نمایش داده می‌شوند که یک کلاس پایه مشترک به نام <code>MemberInfo</code> دارند.</li>
 </ul>
-<pre><code class="language-csharp">MethodInfo[] methods = typeof(string).GetMethods();
-PropertyInfo[] props = typeof(string).GetProperties();
+<pre class="hljs"><code>MethodInfo[] methods = <span class="hljs-keyword">typeof</span>(<span class="hljs-built_in">string</span>).GetMethods();
+PropertyInfo[] props = <span class="hljs-keyword">typeof</span>(<span class="hljs-built_in">string</span>).GetProperties();
 IEnumerable&lt;MemberInfo&gt; both = methods.Concat&lt;MemberInfo&gt;(props);
 </code></pre>
 <ul>
 <li>مثال دیگر: فیلتر کردن متدها قبل از الحاق:</li>
 </ul>
-<pre><code class="language-csharp">var methods = typeof(string).GetMethods().Where(m =&gt; !m.IsSpecialName);
-var props   = typeof(string).GetProperties();
-var both    = methods.Concat&lt;MemberInfo&gt;(props);
+<pre class="hljs"><code><span class="hljs-keyword">var</span> methods = <span class="hljs-keyword">typeof</span>(<span class="hljs-built_in">string</span>).GetMethods().Where(m =&gt; !m.IsSpecialName);
+<span class="hljs-keyword">var</span> props   = <span class="hljs-keyword">typeof</span>(<span class="hljs-built_in">string</span>).GetProperties();
+<span class="hljs-keyword">var</span> both    = methods.Concat&lt;MemberInfo&gt;(props);
 </code></pre>
 <ul>
 <li>
-<p>این مثال به <strong>interface type parameter variance</strong> وابسته است:
+<p>این مثال به <strong>interface type parameter variance</strong> وابسته است:<br>
 <code>methods</code> از نوع <code>IEnumerable&lt;MethodInfo&gt;</code> است و نیاز به تبدیل <strong>covariant</strong> به <code>IEnumerable&lt;MemberInfo&gt;</code> دارد.</p>
 </li>
 <li>
 <p><strong>UnionBy</strong> (معرفی شده در .NET 6) یک <strong>keySelector</strong> می‌گیرد که برای تعیین تکراری بودن عناصر استفاده می‌شود. مثال: union غیر حساس به حروف بزرگ/کوچک:</p>
 </li>
 </ul>
-<pre><code class="language-csharp">string[] seq1 = { &quot;A&quot;, &quot;b&quot;, &quot;C&quot; };
-string[] seq2 = { &quot;a&quot;, &quot;B&quot;, &quot;c&quot; };
+<pre class="hljs"><code><span class="hljs-built_in">string</span>[] seq1 = { <span class="hljs-string">&quot;A&quot;</span>, <span class="hljs-string">&quot;b&quot;</span>, <span class="hljs-string">&quot;C&quot;</span> };
+<span class="hljs-built_in">string</span>[] seq2 = { <span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-string">&quot;B&quot;</span>, <span class="hljs-string">&quot;c&quot;</span> };
 
-var union = seq1.UnionBy(seq2, x =&gt; x.ToUpperInvariant());
-// union is { &quot;A&quot;, &quot;b&quot;, &quot;C&quot; }
+<span class="hljs-keyword">var</span> union = seq1.UnionBy(seq2, x =&gt; x.ToUpperInvariant());
+<span class="hljs-comment">// union is { &quot;A&quot;, &quot;b&quot;, &quot;C&quot; }</span>
 </code></pre>
 <ul>
 <li>این کار با <strong>Union</strong> هم قابل انجام است اگر یک <strong>equality comparer</strong> بدهیم:</li>
 </ul>
-<pre><code class="language-csharp">var union = seq1.Union(seq2, StringComparer.InvariantCultureIgnoreCase);
+<pre class="hljs"><code><span class="hljs-keyword">var</span> union = seq1.Union(seq2, StringComparer.InvariantCultureIgnoreCase);
 </code></pre>
 <hr>
 <h3>🔹 Intersect, IntersectBy, Except, ExceptBy</h3>
@@ -1827,19 +1787,19 @@ var union = seq1.UnionBy(seq2, x =&gt; x.ToUpperInvariant());
 <li><strong>Intersect</strong> عناصر مشترک بین دو توالی را بازمی‌گرداند.</li>
 <li><strong>Except</strong> عناصر توالی اول که در توالی دوم نیستند را بازمی‌گرداند:</li>
 </ul>
-<pre><code class="language-csharp">int[] seq1 = { 1, 2, 3 }, seq2 = { 3, 4, 5 };
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] seq1 = { <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span> }, seq2 = { <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span> };
 
-IEnumerable&lt;int&gt;
-    commonality  = seq1.Intersect(seq2),    // { 3 }
-    difference1  = seq1.Except(seq2),      // { 1, 2 }
-    difference2  = seq2.Except(seq1);      // { 4, 5 }
+IEnumerable&lt;<span class="hljs-built_in">int</span>&gt;
+    commonality  = seq1.Intersect(seq2),    <span class="hljs-comment">// { 3 }</span>
+    difference1  = seq1.Except(seq2),      <span class="hljs-comment">// { 1, 2 }</span>
+    difference2  = seq2.Except(seq1);      <span class="hljs-comment">// { 4, 5 }</span>
 </code></pre>
 <ul>
 <li>پیاده‌سازی داخلی <strong>Enumerable.Except</strong>: تمام عناصر توالی اول در یک دیکشنری بارگذاری می‌شوند، سپس تمام عناصر موجود در توالی دوم از دیکشنری حذف می‌شوند.</li>
 <li>معادل در SQL:</li>
 </ul>
-<pre><code class="language-sql">SELECT number FROM numbers1Table
-WHERE number NOT IN (SELECT number FROM numbers2Table)
+<pre class="hljs"><code><span class="hljs-keyword">SELECT</span> number <span class="hljs-keyword">FROM</span> numbers1Table
+<span class="hljs-keyword">WHERE</span> number <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">IN</span> (<span class="hljs-keyword">SELECT</span> number <span class="hljs-keyword">FROM</span> numbers2Table)
 </code></pre>
 <ul>
 <li><strong>IntersectBy</strong> و <strong>ExceptBy</strong> (از .NET 6) اجازه می‌دهند یک <strong>key selector</strong> مشخص کنید که قبل از مقایسه تساوی اعمال می‌شود (مشابه UnionBy).</li>
@@ -1857,10 +1817,10 @@ WHERE number NOT IN (SELECT number FROM numbers2Table)
 <ul>
 <li><strong>OfType</strong> و <strong>Cast</strong> یک مجموعه غیرجنریک (<code>IEnumerable</code>) را می‌گیرند و یک توالی جنریک (<code>IEnumerable&lt;T&gt;</code>) بازمی‌گردانند که می‌توانید روی آن عملیات LINQ انجام دهید:</li>
 </ul>
-<pre><code class="language-csharp">ArrayList classicList = new ArrayList(); // در System.Collections
-classicList.AddRange(new int[] { 3, 4, 5 });
+<pre class="hljs"><code>ArrayList classicList = <span class="hljs-keyword">new</span> ArrayList(); <span class="hljs-comment">// در System.Collections</span>
+classicList.AddRange(<span class="hljs-keyword">new</span> <span class="hljs-built_in">int</span>[] { <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span> });
 
-IEnumerable&lt;int&gt; sequence1 = classicList.Cast&lt;int&gt;();
+IEnumerable&lt;<span class="hljs-built_in">int</span>&gt; sequence1 = classicList.Cast&lt;<span class="hljs-built_in">int</span>&gt;();
 </code></pre>
 <ul>
 <li>
@@ -1872,39 +1832,39 @@ IEnumerable&lt;int&gt; sequence1 = classicList.Cast&lt;int&gt;();
 </li>
 </ul>
 <p>ادامه مثال بالا:</p>
-<pre><code class="language-csharp">DateTime offender = DateTime.Now;
+<pre class="hljs"><code>DateTime offender = DateTime.Now;
 classicList.Add(offender);
 
-IEnumerable&lt;int&gt;
-    sequence2 = classicList.OfType&lt;int&gt;(), // OK - عنصر DateTime نادیده گرفته می‌شود
-    sequence3 = classicList.Cast&lt;int&gt;();   // استثناء می‌دهد
+IEnumerable&lt;<span class="hljs-built_in">int</span>&gt;
+    sequence2 = classicList.OfType&lt;<span class="hljs-built_in">int</span>&gt;(), <span class="hljs-comment">// OK - عنصر DateTime نادیده گرفته می‌شود</span>
+    sequence3 = classicList.Cast&lt;<span class="hljs-built_in">int</span>&gt;();   <span class="hljs-comment">// استثناء می‌دهد</span>
 </code></pre>
 <ul>
 <li>قوانین سازگاری عناصر دقیقاً مطابق <strong>is operator</strong> در C# است و تنها <strong>reference conversion</strong> و <strong>unboxing conversion</strong> را در نظر می‌گیرد.</li>
 </ul>
 <p>پیاده‌سازی داخلی <strong>OfType</strong>:</p>
-<pre><code class="language-csharp">public static IEnumerable&lt;TSource&gt; OfType&lt;TSource&gt;(IEnumerable source)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">IEnumerable</span>&lt;<span class="hljs-title">TSource</span>&gt; <span class="hljs-title">OfType</span>&lt;<span class="hljs-title">TSource</span>&gt;(<span class="hljs-params">IEnumerable source</span>)</span>
 {
-    foreach (object element in source)
-        if (element is TSource)
-            yield return (TSource)element;
+    <span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">object</span> element <span class="hljs-keyword">in</span> source)
+        <span class="hljs-keyword">if</span> (element <span class="hljs-keyword">is</span> TSource)
+            <span class="hljs-function"><span class="hljs-keyword">yield</span> <span class="hljs-title">return</span> (<span class="hljs-params">TSource</span>)element</span>;
 }
 </code></pre>
 <p>پیاده‌سازی <strong>Cast</strong> مشابه است ولی تست سازگاری نوع را انجام نمی‌دهد:</p>
-<pre><code class="language-csharp">public static IEnumerable&lt;TSource&gt; Cast&lt;TSource&gt;(IEnumerable source)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">IEnumerable</span>&lt;<span class="hljs-title">TSource</span>&gt; <span class="hljs-title">Cast</span>&lt;<span class="hljs-title">TSource</span>&gt;(<span class="hljs-params">IEnumerable source</span>)</span>
 {
-    foreach (object element in source)
-        yield return (TSource)element;
+    <span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">object</span> element <span class="hljs-keyword">in</span> source)
+        <span class="hljs-function"><span class="hljs-keyword">yield</span> <span class="hljs-title">return</span> (<span class="hljs-params">TSource</span>)element</span>;
 }
 </code></pre>
 <ul>
 <li>نتیجه: نمی‌توانید از <strong>Cast</strong> برای تبدیل‌های عددی یا سفارشی استفاده کنید. برای این کار باید از <strong>Select</strong> استفاده کنید.</li>
 </ul>
 <p>مثال:</p>
-<pre><code class="language-csharp">int[] integers = { 1, 2, 3 };
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] integers = { <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span> };
 
-IEnumerable&lt;long&gt; test1 = integers.OfType&lt;long&gt;(); // صفر عنصر
-IEnumerable&lt;long&gt; test2 = integers.Cast&lt;long&gt;();   // استثناء می‌دهد
+IEnumerable&lt;<span class="hljs-built_in">long</span>&gt; test1 = integers.OfType&lt;<span class="hljs-built_in">long</span>&gt;(); <span class="hljs-comment">// صفر عنصر</span>
+IEnumerable&lt;<span class="hljs-built_in">long</span>&gt; test2 = integers.Cast&lt;<span class="hljs-built_in">long</span>&gt;();   <span class="hljs-comment">// استثناء می‌دهد</span>
 </code></pre>
 <ul>
 <li>
@@ -1916,7 +1876,7 @@ IEnumerable&lt;long&gt; test2 = integers.Cast&lt;long&gt;();   // استثناء
 </li>
 </ul>
 <p>راه‌حل: استفاده از <strong>Select</strong>:</p>
-<pre><code class="language-csharp">IEnumerable&lt;long&gt; castLong = integers.Select(s =&gt; (long)s);
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">long</span>&gt; castLong = integers.Select(s =&gt; (<span class="hljs-built_in">long</span>)s);
 </code></pre>
 <ul>
 <li>
@@ -1930,7 +1890,7 @@ IEnumerable&lt;long&gt; test2 = integers.Cast&lt;long&gt;();   // استثناء
 <p><strong>Cast</strong> از <strong>query syntax</strong> نیز پشتیبانی می‌کند: کافیست نوع را قبل از متغیر محدوده مشخص کنید:</p>
 </li>
 </ul>
-<pre><code class="language-csharp">from TreeNode node in myTreeView.Nodes
+<pre class="hljs"><code><span class="hljs-keyword">from</span> TreeNode node <span class="hljs-keyword">in</span> myTreeView.Nodes
 ...
 </code></pre>
 <hr>
@@ -1959,7 +1919,7 @@ IEnumerable&lt;long&gt; test2 = integers.Cast&lt;long&gt;();   // استثناء
 </ul>
 <hr>
 <h3>🔹 Element Operators</h3>
-<pre><code>IEnumerable&lt;TSource&gt; → TSource
+<pre class="hljs"><code>IEnumerable&lt;TSource&gt; → TSource
 </code></pre>
 <div align="center">
 <p><img src="../../../assets/image/09/Table-9-22.jpeg" alt="Conventions-UsedThis-Book"></p>
@@ -1976,15 +1936,15 @@ IEnumerable&lt;long&gt; test2 = integers.Cast&lt;long&gt;();   // استثناء
 </div>
 <h3>🔹 First و Last</h3>
 <p>مثال زیر <strong>First</strong> و <strong>Last</strong> را نشان می‌دهد:</p>
-<pre><code class="language-csharp">int[] numbers  = { 1, 2, 3, 4, 5 };
-int first      = numbers.First();                     // 1
-int last       = numbers.Last();                      // 5
-int firstEven  = numbers.First(n =&gt; n % 2 == 0);     // 2
-int lastEven   = numbers.Last(n =&gt; n % 2 == 0);      // 4
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] numbers  = { <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span> };
+<span class="hljs-built_in">int</span> first      = numbers.First();                     <span class="hljs-comment">// 1</span>
+<span class="hljs-built_in">int</span> last       = numbers.Last();                      <span class="hljs-comment">// 5</span>
+<span class="hljs-built_in">int</span> firstEven  = numbers.First(n =&gt; n % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>);     <span class="hljs-comment">// 2</span>
+<span class="hljs-built_in">int</span> lastEven   = numbers.Last(n =&gt; n % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>);      <span class="hljs-comment">// 4</span>
 </code></pre>
 <p>مثال <strong>First</strong> در مقابل <strong>FirstOrDefault</strong>:</p>
-<pre><code class="language-csharp">int firstBigError  = numbers.First(n =&gt; n &gt; 10);      // Exception
-int firstBigNumber = numbers.FirstOrDefault(n =&gt; n &gt; 10); // 0
+<pre class="hljs"><code><span class="hljs-built_in">int</span> firstBigError  = numbers.First(n =&gt; n &gt; <span class="hljs-number">10</span>);      <span class="hljs-comment">// Exception</span>
+<span class="hljs-built_in">int</span> firstBigNumber = numbers.FirstOrDefault(n =&gt; n &gt; <span class="hljs-number">10</span>); <span class="hljs-comment">// 0</span>
 </code></pre>
 <hr>
 <h3>🔹 Single و SingleOrDefault</h3>
@@ -1993,11 +1953,11 @@ int firstBigNumber = numbers.FirstOrDefault(n =&gt; n &gt; 10); // 0
 <li><strong>SingleOrDefault</strong> اجازه می‌دهد <strong>صفر یا یک عنصر</strong> وجود داشته باشد.</li>
 </ul>
 <p>مثال‌ها:</p>
-<pre><code class="language-csharp">int onlyDivBy3 = numbers.Single(n =&gt; n % 3 == 0);      // 3
-int divBy2Err  = numbers.Single(n =&gt; n % 2 == 0);      // خطا: 2 و 4 مطابقت دارند
-int singleError = numbers.Single(n =&gt; n &gt; 10);         // خطا
-int noMatches   = numbers.SingleOrDefault(n =&gt; n &gt; 10); // 0
-int divBy2Error = numbers.SingleOrDefault(n =&gt; n % 2 == 0); // خطا
+<pre class="hljs"><code><span class="hljs-built_in">int</span> onlyDivBy3 = numbers.Single(n =&gt; n % <span class="hljs-number">3</span> == <span class="hljs-number">0</span>);      <span class="hljs-comment">// 3</span>
+<span class="hljs-built_in">int</span> divBy2Err  = numbers.Single(n =&gt; n % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>);      <span class="hljs-comment">// خطا: 2 و 4 مطابقت دارند</span>
+<span class="hljs-built_in">int</span> singleError = numbers.Single(n =&gt; n &gt; <span class="hljs-number">10</span>);         <span class="hljs-comment">// خطا</span>
+<span class="hljs-built_in">int</span> noMatches   = numbers.SingleOrDefault(n =&gt; n &gt; <span class="hljs-number">10</span>); <span class="hljs-comment">// 0</span>
+<span class="hljs-built_in">int</span> divBy2Error = numbers.SingleOrDefault(n =&gt; n % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>); <span class="hljs-comment">// خطا</span>
 </code></pre>
 <ul>
 <li>
@@ -2010,7 +1970,7 @@ int divBy2Error = numbers.SingleOrDefault(n =&gt; n % 2 == 0); // خطا
 <p>در <strong>EF Core</strong>، <strong>Single</strong> اغلب برای واکشی یک ردیف از جدول بر اساس <strong>primary key</strong> استفاده می‌شود:</p>
 </li>
 </ul>
-<pre><code class="language-csharp">Customer cust = dataContext.Customers.Single(c =&gt; c.ID == 3);
+<pre class="hljs"><code>Customer cust = dataContext.Customers.Single(c =&gt; c.ID == <span class="hljs-number">3</span>);
 </code></pre>
 <hr>
 <h3>🔹 ElementAt</h3>
@@ -2021,10 +1981,10 @@ int divBy2Error = numbers.SingleOrDefault(n =&gt; n % 2 == 0); // خطا
 <ul>
 <li><strong>ElementAt</strong> عنصر nام توالی را برمی‌گرداند:</li>
 </ul>
-<pre><code class="language-csharp">int[] numbers  = { 1, 2, 3, 4, 5 };
-int third      = numbers.ElementAt(2);          // 3
-int tenthError = numbers.ElementAt(9);          // Exception
-int tenth      = numbers.ElementAtOrDefault(9); // 0
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] numbers  = { <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span> };
+<span class="hljs-built_in">int</span> third      = numbers.ElementAt(<span class="hljs-number">2</span>);          <span class="hljs-comment">// 3</span>
+<span class="hljs-built_in">int</span> tenthError = numbers.ElementAt(<span class="hljs-number">9</span>);          <span class="hljs-comment">// Exception</span>
+<span class="hljs-built_in">int</span> tenth      = numbers.ElementAtOrDefault(<span class="hljs-number">9</span>); <span class="hljs-comment">// 0</span>
 </code></pre>
 <ul>
 <li>اگر توالی ورودی <strong>IList<T></strong> باشد، <strong>ElementAt</strong> از indexer آن استفاده می‌کند؛ در غیر این صورت، n بار شمارش می‌کند و سپس عنصر بعدی را برمی‌گرداند.</li>
@@ -2035,18 +1995,18 @@ int tenth      = numbers.ElementAtOrDefault(9); // 0
 <ul>
 <li>معرفی‌شده در <strong>.NET 6</strong>، <strong>MinBy</strong> و <strong>MaxBy</strong> عنصری با کوچک‌ترین یا بزرگ‌ترین مقدار (بر اساس <strong>keySelector</strong>) را برمی‌گردانند:</li>
 </ul>
-<pre><code class="language-csharp">string[] names = { &quot;Tom&quot;, &quot;Dick&quot;, &quot;Harry&quot;, &quot;Mary&quot;, &quot;Jay&quot; };
-Console.WriteLine(names.MaxBy(n =&gt; n.Length));   // Harry
+<pre class="hljs"><code><span class="hljs-built_in">string</span>[] names = { <span class="hljs-string">&quot;Tom&quot;</span>, <span class="hljs-string">&quot;Dick&quot;</span>, <span class="hljs-string">&quot;Harry&quot;</span>, <span class="hljs-string">&quot;Mary&quot;</span>, <span class="hljs-string">&quot;Jay&quot;</span> };
+Console.WriteLine(names.MaxBy(n =&gt; n.Length));   <span class="hljs-comment">// Harry</span>
 </code></pre>
 <ul>
 <li>در مقابل، <strong>Min</strong> و <strong>Max</strong> خود <strong>مقدار کوچک‌ترین یا بزرگ‌ترین</strong> را برمی‌گردانند:</li>
 </ul>
-<pre><code class="language-csharp">Console.WriteLine(names.Max(n =&gt; n.Length));    // 5
+<pre class="hljs"><code>Console.WriteLine(names.Max(n =&gt; n.Length));    <span class="hljs-comment">// 5</span>
 </code></pre>
 <ul>
 <li>اگر دو یا چند عنصر مقدار حداقل/حداکثر یکسان داشته باشند، <strong>MinBy/MaxBy</strong> اولین عنصر را بازمی‌گردانند:</li>
 </ul>
-<pre><code class="language-csharp">Console.WriteLine(names.MinBy(n =&gt; n.Length));  // Tom
+<pre class="hljs"><code>Console.WriteLine(names.MinBy(n =&gt; n.Length));  <span class="hljs-comment">// Tom</span>
 </code></pre>
 <ul>
 <li>اگر توالی خالی باشد، <strong>MinBy</strong> و <strong>MaxBy</strong> مقدار <strong>null</strong> برمی‌گردانند اگر نوع عنصر nullable باشد؛ در غیر این صورت استثناء رخ می‌دهد.</li>
@@ -2059,7 +2019,7 @@ Console.WriteLine(names.MaxBy(n =&gt; n.Length));   // Harry
 </ul>
 <hr>
 <h3>🔹 Aggregation Methods</h3>
-<pre><code>IEnumerable&lt;TSource&gt; → scalar
+<pre class="hljs"><code>IEnumerable&lt;TSource&gt; → scalar
 </code></pre>
 <div align="center">
 <p><img src="../../../assets/image/09/Table-9-25.jpeg" alt="Conventions-UsedThis-Book"></p>
@@ -2071,7 +2031,7 @@ Console.WriteLine(names.MaxBy(n =&gt; n.Length));   // Harry
 <ul>
 <li><strong>Count</strong> به سادگی توالی را شمارش می‌کند و تعداد عناصر را بازمی‌گرداند:</li>
 </ul>
-<pre><code class="language-csharp">int fullCount = new int[] { 5, 6, 7 }.Count();   // 3
+<pre class="hljs"><code><span class="hljs-built_in">int</span> fullCount = <span class="hljs-keyword">new</span> <span class="hljs-built_in">int</span>[] { <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span> }.Count();   <span class="hljs-comment">// 3</span>
 </code></pre>
 <ul>
 <li>
@@ -2085,7 +2045,7 @@ Console.WriteLine(names.MaxBy(n =&gt; n.Length));   // Harry
 <p>می‌توان یک <strong>predicate</strong> هم ارائه داد تا فقط عناصر مطابق شرط شمارش شوند:</p>
 </li>
 </ul>
-<pre><code class="language-csharp">int digitCount = &quot;pa55w0rd&quot;.Count(c =&gt; char.IsDigit(c));   // 3
+<pre class="hljs"><code><span class="hljs-built_in">int</span> digitCount = <span class="hljs-string">&quot;pa55w0rd&quot;</span>.Count(c =&gt; <span class="hljs-built_in">char</span>.IsDigit(c));   <span class="hljs-comment">// 3</span>
 </code></pre>
 <ul>
 <li><strong>LongCount</strong> همان کار <strong>Count</strong> را انجام می‌دهد اما نتیجه را به صورت <strong>int64 (long)</strong> برمی‌گرداند و مناسب توالی‌هایی با بیش از دو میلیارد عنصر است.</li>
@@ -2098,26 +2058,26 @@ Console.WriteLine(names.MaxBy(n =&gt; n.Length));   // Harry
 <ul>
 <li><strong>Min</strong> و <strong>Max</strong> کوچک‌ترین یا بزرگ‌ترین عنصر یک توالی را برمی‌گردانند:</li>
 </ul>
-<pre><code class="language-csharp">int[] numbers = { 28, 32, 14 };
-int smallest = numbers.Min();  // 14
-int largest  = numbers.Max();  // 32
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] numbers = { <span class="hljs-number">28</span>, <span class="hljs-number">32</span>, <span class="hljs-number">14</span> };
+<span class="hljs-built_in">int</span> smallest = numbers.Min();  <span class="hljs-comment">// 14</span>
+<span class="hljs-built_in">int</span> largest  = numbers.Max();  <span class="hljs-comment">// 32</span>
 </code></pre>
 <ul>
 <li>اگر یک <strong>selector</strong> ارائه دهید، هر عنصر ابتدا به صورت دلخواه تبدیل می‌شود و سپس مقایسه انجام می‌شود:</li>
 </ul>
-<pre><code class="language-csharp">int smallestMod = numbers.Max(n =&gt; n % 10);  // 8
+<pre class="hljs"><code><span class="hljs-built_in">int</span> smallestMod = numbers.Max(n =&gt; n % <span class="hljs-number">10</span>);  <span class="hljs-comment">// 8</span>
 </code></pre>
 <ul>
 <li>اگر عناصر خودشان قابل مقایسه نباشند (<strong>IComparable<T></strong> پیاده‌سازی نکرده باشند)، ارائه <strong>selector</strong> الزامی است:</li>
 </ul>
-<pre><code class="language-csharp">Purchase runtimeError = dbContext.Purchases.Min();             // خطا
-decimal? lowestPrice = dbContext.Purchases.Min(p =&gt; p.Price);  // صحیح
+<pre class="hljs"><code>Purchase runtimeError = dbContext.Purchases.Min();             <span class="hljs-comment">// خطا</span>
+<span class="hljs-built_in">decimal</span>? lowestPrice = dbContext.Purchases.Min(p =&gt; p.Price);  <span class="hljs-comment">// صحیح</span>
 </code></pre>
 <ul>
 <li><strong>Selector</strong> تعیین می‌کند که چگونه عناصر مقایسه شوند و همچنین نوع نتیجه نهایی چیست. در مثال بالا، نتیجه نهایی <strong>decimal</strong> است نه شیء <strong>Purchase</strong>.</li>
 <li>برای به دست آوردن ارزان‌ترین خرید، باید از <strong>subquery</strong> استفاده کنید:</li>
 </ul>
-<pre><code class="language-csharp">Purchase cheapest = dbContext.Purchases
+<pre class="hljs"><code>Purchase cheapest = dbContext.Purchases
     .Where(p =&gt; p.Price == dbContext.Purchases.Min(p2 =&gt; p2.Price))
     .FirstOrDefault();
 </code></pre>
@@ -2132,14 +2092,14 @@ decimal? lowestPrice = dbContext.Purchases.Min(p =&gt; p.Price);  // صحیح
 <ul>
 <li><strong>Sum</strong> و <strong>Average</strong> اپراتورهای تجمیعی (<strong>aggregation</strong>) هستند و به شکلی مشابه با <strong>Min</strong> و <strong>Max</strong> استفاده می‌شوند:</li>
 </ul>
-<pre><code class="language-csharp">decimal[] numbers  = { 3, 4, 8 };
-decimal sumTotal   = numbers.Sum();     // 15
-decimal average    = numbers.Average(); // 5  (میانگین)
+<pre class="hljs"><code><span class="hljs-built_in">decimal</span>[] numbers  = { <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">8</span> };
+<span class="hljs-built_in">decimal</span> sumTotal   = numbers.Sum();     <span class="hljs-comment">// 15</span>
+<span class="hljs-built_in">decimal</span> average    = numbers.Average(); <span class="hljs-comment">// 5  (میانگین)</span>
 </code></pre>
 <ul>
 <li>مثال دیگر: مجموع طول رشته‌ها در آرایه <strong>names</strong>:</li>
 </ul>
-<pre><code class="language-csharp">int combinedLength = names.Sum(s =&gt; s.Length);   // 19
+<pre class="hljs"><code><span class="hljs-built_in">int</span> combinedLength = names.Sum(s =&gt; s.Length);   <span class="hljs-comment">// 19</span>
 </code></pre>
 <ul>
 <li><strong>Sum</strong> و <strong>Average</strong> محدودیت‌هایی در نوع داده دارند و فقط برای انواع عددی (int, long, float, double, decimal و نسخه nullable آنها) تعریف شده‌اند.</li>
@@ -2153,32 +2113,32 @@ decimal average    = numbers.Average(); // 5  (میانگین)
 <ul>
 <li><strong>Average</strong> به‌طور ضمنی مقادیر ورودی را ارتقا می‌دهد تا از دست رفتن دقت جلوگیری شود. به همین دلیل مثال زیر کامپایل نمی‌شود:</li>
 </ul>
-<pre><code class="language-csharp">int avg = new int[] { 3, 4 }.Average(); // خطا: cannot convert double to int
+<pre class="hljs"><code><span class="hljs-built_in">int</span> avg = <span class="hljs-keyword">new</span> <span class="hljs-built_in">int</span>[] { <span class="hljs-number">3</span>, <span class="hljs-number">4</span> }.Average(); <span class="hljs-comment">// خطا: cannot convert double to int</span>
 </code></pre>
 <ul>
 <li>اما این نمونه کامپایل می‌شود:</li>
 </ul>
-<pre><code class="language-csharp">double avg = new int[] { 3, 4 }.Average(); // 3.5
+<pre class="hljs"><code><span class="hljs-built_in">double</span> avg = <span class="hljs-keyword">new</span> <span class="hljs-built_in">int</span>[] { <span class="hljs-number">3</span>, <span class="hljs-number">4</span> }.Average(); <span class="hljs-comment">// 3.5</span>
 </code></pre>
 <ul>
 <li>اگر نیاز باشد، می‌توانیم عنصر ورودی را به صراحت تبدیل کنیم:</li>
 </ul>
-<pre><code class="language-csharp">double avg = numbers.Average(n =&gt; (double)n);
+<pre class="hljs"><code><span class="hljs-built_in">double</span> avg = numbers.Average(n =&gt; (<span class="hljs-built_in">double</span>)n);
 </code></pre>
 <ul>
 <li>هنگام کوئری زدن به پایگاه داده، <strong>Sum</strong> و <strong>Average</strong> به عملیات تجمیعی استاندارد SQL ترجمه می‌شوند. مثال:</li>
 </ul>
-<pre><code class="language-csharp">from c in dbContext.Customers
-where c.Purchases.Average(p =&gt; p.Price) &gt; 500
-select c.Name;
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+<span class="hljs-keyword">where</span> c.Purchases.Average(p =&gt; p.Price) &gt; <span class="hljs-number">500</span>
+<span class="hljs-keyword">select</span> c.Name;
 </code></pre>
 <hr>
 <h3>🔹 Aggregate</h3>
 <ul>
 <li><strong>Aggregate</strong> اجازه می‌دهد الگوریتم تجمیع سفارشی خود را پیاده‌سازی کنید. این متد در EF Core پشتیبانی نمی‌شود و کاربرد آن در موارد خاص است. مثال مشابه با <strong>Sum</strong>:</li>
 </ul>
-<pre><code class="language-csharp">int[] numbers = { 1, 2, 3 };
-int sum = numbers.Aggregate(0, (total, n) =&gt; total + n); // 6
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] numbers = { <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span> };
+<span class="hljs-built_in">int</span> sum = numbers.Aggregate(<span class="hljs-number">0</span>, (total, n) =&gt; total + n); <span class="hljs-comment">// 6</span>
 </code></pre>
 <ul>
 <li>
@@ -2196,15 +2156,15 @@ int sum = numbers.Aggregate(0, (total, n) =&gt; total + n); // 6
 <ul>
 <li>می‌توان <strong>seed</strong> را حذف کرد. در این حالت، عنصر اول به‌صورت ضمنی <strong>seed</strong> شده و تجمیع از عنصر دوم آغاز می‌شود:</li>
 </ul>
-<pre><code class="language-csharp">int[] numbers = { 1, 2, 3 };
-int sum = numbers.Aggregate((total, n) =&gt; total + n); // 6
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] numbers = { <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span> };
+<span class="hljs-built_in">int</span> sum = numbers.Aggregate((total, n) =&gt; total + n); <span class="hljs-comment">// 6</span>
 </code></pre>
 <ul>
 <li>مثال دیگر با ضرب:</li>
 </ul>
-<pre><code class="language-csharp">int[] numbers = { 1, 2, 3 };
-int x = numbers.Aggregate(0, (prod, n) =&gt; prod * n); // 0*1*2*3 = 0
-int y = numbers.Aggregate((prod, n) =&gt; prod * n);   // 1*2*3 = 6
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] numbers = { <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span> };
+<span class="hljs-built_in">int</span> x = numbers.Aggregate(<span class="hljs-number">0</span>, (prod, n) =&gt; prod * n); <span class="hljs-comment">// 0*1*2*3 = 0</span>
+<span class="hljs-built_in">int</span> y = numbers.Aggregate((prod, n) =&gt; prod * n);   <span class="hljs-comment">// 1*2*3 = 6</span>
 </code></pre>
 <ul>
 <li>تجمیع بدون <strong>seed</strong> مزیت اجرای موازی بدون overload خاص را دارد، اما نکات خطرناکی نیز دارد.</li>
@@ -2215,8 +2175,8 @@ int y = numbers.Aggregate((prod, n) =&gt; prod * n);   // 1*2*3 = 6
 <li>توابع غیر جابجایی و غیر ترکیبی (<strong>non-commutative / non-associative</strong>) می‌توانند نتایج غیرمنتظره یا غیرقطعی تولید کنند.</li>
 <li>مثال:</li>
 </ul>
-<pre><code class="language-csharp">int[] numbers = { 2, 3, 4 };
-int sum = numbers.Aggregate((total, n) =&gt; total + n * n); // 27
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] numbers = { <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span> };
+<span class="hljs-built_in">int</span> sum = numbers.Aggregate((total, n) =&gt; total + n * n); <span class="hljs-comment">// 27</span>
 </code></pre>
 <ul>
 <li>
@@ -2229,25 +2189,25 @@ int sum = numbers.Aggregate((total, n) =&gt; total + n * n); // 27
 </ol>
 </li>
 </ul>
-<pre><code class="language-csharp">int[] numbers = { 0, 2, 3, 4 };
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] numbers = { <span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span> };
 </code></pre>
 <ol start="2">
 <li>بازنویسی تابع تجمیع به صورت جابجایی و ترکیبی:</li>
 </ol>
-<pre><code class="language-csharp">int sum = numbers.Select(n =&gt; n * n).Aggregate((total, n) =&gt; total + n);
+<pre class="hljs"><code><span class="hljs-built_in">int</span> sum = numbers.Select(n =&gt; n * n).Aggregate((total, n) =&gt; total + n);
 </code></pre>
 <ul>
 <li>در سناریوهای ساده، بهتر است از <strong>Sum</strong> و <strong>Average</strong> استفاده شود. مثال محاسبه <strong>Root-Mean-Square</strong>:</li>
 </ul>
-<pre><code class="language-csharp">Math.Sqrt(numbers.Average(n =&gt; n * n));
+<pre class="hljs"><code>Math.Sqrt(numbers.Average(n =&gt; n * n));
 </code></pre>
 <ul>
 <li>مثال محاسبه انحراف معیار:</li>
 </ul>
-<pre><code class="language-csharp">double mean = numbers.Average();
-double sdev = Math.Sqrt(numbers.Average(n =&gt; {
-    double dif = n - mean;
-    return dif * dif;
+<pre class="hljs"><code><span class="hljs-built_in">double</span> mean = numbers.Average();
+<span class="hljs-built_in">double</span> sdev = Math.Sqrt(numbers.Average(n =&gt; {
+    <span class="hljs-built_in">double</span> dif = n - mean;
+    <span class="hljs-keyword">return</span> dif * dif;
 }));
 </code></pre>
 <ul>
@@ -2265,32 +2225,32 @@ double sdev = Math.Sqrt(numbers.Average(n =&gt; {
 <li>متد <strong>Any</strong> یک شرط اختیاری (<strong>predicate</strong>) می‌گیرد و بررسی می‌کند آیا حداقل یک عنصر با شرط داده‌شده وجود دارد یا خیر.</li>
 </ul>
 <p>مثال‌ها:</p>
-<pre><code class="language-csharp">bool hasAThree = new int[] { 2, 3, 4 }.Contains(3);       // true
-bool hasAThree = new int[] { 2, 3, 4 }.Any(n =&gt; n == 3);  // true
+<pre class="hljs"><code><span class="hljs-built_in">bool</span> hasAThree = <span class="hljs-keyword">new</span> <span class="hljs-built_in">int</span>[] { <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span> }.Contains(<span class="hljs-number">3</span>);       <span class="hljs-comment">// true</span>
+<span class="hljs-built_in">bool</span> hasAThree = <span class="hljs-keyword">new</span> <span class="hljs-built_in">int</span>[] { <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span> }.Any(n =&gt; n == <span class="hljs-number">3</span>);  <span class="hljs-comment">// true</span>
 </code></pre>
 <ul>
 <li><strong>Any</strong> می‌تواند همه‌ی کارهایی که <strong>Contains</strong> انجام می‌دهد را انجام دهد و حتی بیشتر:</li>
 </ul>
-<pre><code class="language-csharp">bool hasABigNumber = new int[] { 2, 3, 4 }.Any(n =&gt; n &gt; 10); // false
+<pre class="hljs"><code><span class="hljs-built_in">bool</span> hasABigNumber = <span class="hljs-keyword">new</span> <span class="hljs-built_in">int</span>[] { <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span> }.Any(n =&gt; n &gt; <span class="hljs-number">10</span>); <span class="hljs-comment">// false</span>
 </code></pre>
 <ul>
 <li>فراخوانی <strong>Any</strong> بدون شرط، بررسی می‌کند که آیا توالی حداقل یک عنصر دارد یا خیر:</li>
 </ul>
-<pre><code class="language-csharp">bool hasABigNumber = new int[] { 2, 3, 4 }.Where(n =&gt; n &gt; 10).Any();
+<pre class="hljs"><code><span class="hljs-built_in">bool</span> hasABigNumber = <span class="hljs-keyword">new</span> <span class="hljs-built_in">int</span>[] { <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span> }.Where(n =&gt; n &gt; <span class="hljs-number">10</span>).Any();
 </code></pre>
 <ul>
 <li><strong>Any</strong> در زیرکوئری‌ها و کوئری‌های پایگاه داده بسیار مفید است. مثال:</li>
 </ul>
-<pre><code class="language-csharp">from c in dbContext.Customers
-where c.Purchases.Any(p =&gt; p.Price &gt; 1000)
-select c
+<pre class="hljs"><code><span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+<span class="hljs-keyword">where</span> c.Purchases.Any(p =&gt; p.Price &gt; <span class="hljs-number">1000</span>)
+<span class="hljs-keyword">select</span> c
 </code></pre>
 <hr>
 <h3>🔹 All و SequenceEqual</h3>
 <ul>
 <li><strong>All</strong> بررسی می‌کند که آیا همه عناصر شرط داده‌شده را رعایت می‌کنند یا خیر. مثال:</li>
 </ul>
-<pre><code class="language-csharp">dbContext.Customers.Where(c =&gt; c.Purchases.All(p =&gt; p.Price &lt; 100));
+<pre class="hljs"><code>dbContext.Customers.Where(c =&gt; c.Purchases.All(p =&gt; p.Price &lt; <span class="hljs-number">100</span>));
 </code></pre>
 <ul>
 <li><strong>SequenceEqual</strong> دو توالی را با هم مقایسه می‌کند. برای بازگرداندن <code>true</code>، هر دو توالی باید عناصر یکسان و با همان ترتیب داشته باشند. می‌توان از <strong>equality comparer</strong> دلخواه استفاده کرد؛ پیش‌فرض <code>EqualityComparer&lt;T&gt;.Default</code> است.</li>
@@ -2306,84 +2266,38 @@ select c
 <hr>
 <h4>🔹 Empty</h4>
 <p>متد <strong>Empty</strong> یک توالی خالی تولید می‌کند و تنها نیاز به نوع داده دارد:</p>
-<pre><code class="language-csharp">foreach (string s in Enumerable.Empty&lt;string&gt;())
-    Console.Write(s);   // &lt;چیزی نمایش داده نمی‌شود&gt;
+<pre class="hljs"><code><span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">string</span> s <span class="hljs-keyword">in</span> Enumerable.Empty&lt;<span class="hljs-built_in">string</span>&gt;())
+    Console.Write(s);   <span class="hljs-comment">// &lt;چیزی نمایش داده نمی‌شود&gt;</span>
 </code></pre>
 <p>در ترکیب با عملگر <code>??</code>، <strong>Empty</strong> عکس <strong>DefaultIfEmpty</strong> عمل می‌کند.</p>
 <p>مثال: فرض کنید یک آرایه‌ی jagged از اعداد صحیح داریم و می‌خواهیم همه‌ی اعداد را در یک لیست صاف جمع کنیم. کوئری <strong>SelectMany</strong> زیر در صورت وجود آرایه‌ی null داخلی با خطا مواجه می‌شود:</p>
-<pre><code class="language-csharp">int[][] numbers =
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[][] numbers =
 {
-    new int[] { 1, 2, 3 },
-    new int[] { 4, 5, 6 },
-    null                     // این null باعث شکست کوئری می‌شود
+    <span class="hljs-keyword">new</span> <span class="hljs-built_in">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span> },
+    <span class="hljs-keyword">new</span> <span class="hljs-built_in">int</span>[] { <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span> },
+    <span class="hljs-literal">null</span>                     <span class="hljs-comment">// این null باعث شکست کوئری می‌شود</span>
 };
 
-IEnumerable&lt;int&gt; flat = numbers.SelectMany(innerArray =&gt; innerArray);
+IEnumerable&lt;<span class="hljs-built_in">int</span>&gt; flat = numbers.SelectMany(innerArray =&gt; innerArray);
 </code></pre>
 <p>استفاده از <strong>Empty</strong> همراه با <code>??</code> مشکل را حل می‌کند:</p>
-<pre><code class="language-csharp">IEnumerable&lt;int&gt; flat = numbers
-    .SelectMany(innerArray =&gt; innerArray ?? Enumerable.Empty&lt;int&gt;());
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">int</span>&gt; flat = numbers
+    .SelectMany(innerArray =&gt; innerArray ?? Enumerable.Empty&lt;<span class="hljs-built_in">int</span>&gt;());
 
-foreach (int i in flat)
-    Console.Write(i + &quot; &quot;);     // 1 2 3 4 5 6
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">int</span> i <span class="hljs-keyword">in</span> flat)
+    Console.Write(i + <span class="hljs-string">&quot; &quot;</span>);     <span class="hljs-comment">// 1 2 3 4 5 6</span>
 </code></pre>
 <hr>
 <h4>🔹 Range و Repeat</h4>
 <ul>
 <li><strong>Range</strong>: یک مقدار شروع و تعداد عناصر (هر دو از نوع <code>int</code>) می‌گیرد و توالی تولید می‌کند:</li>
 </ul>
-<pre><code class="language-csharp">foreach (int i in Enumerable.Range(5, 3))
-    Console.Write(i + &quot; &quot;);    // 5 6 7
+<pre class="hljs"><code><span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">int</span> i <span class="hljs-keyword">in</span> Enumerable.Range(<span class="hljs-number">5</span>, <span class="hljs-number">3</span>))
+    Console.Write(i + <span class="hljs-string">&quot; &quot;</span>);    <span class="hljs-comment">// 5 6 7</span>
 </code></pre>
 <ul>
 <li><strong>Repeat</strong>: عنصری برای تکرار و تعداد دفعات تکرار آن را می‌گیرد:</li>
 </ul>
-<pre><code class="language-csharp">foreach (bool x in Enumerable.Repeat(true, 3))
-    Console.Write(x + &quot; &quot;);    // True True True
+<pre class="hljs"><code><span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">bool</span> x <span class="hljs-keyword">in</span> Enumerable.Repeat(<span class="hljs-literal">true</span>, <span class="hljs-number">3</span>))
+    Console.Write(x + <span class="hljs-string">&quot; &quot;</span>);    <span class="hljs-comment">// True True True</span>
 </code></pre>
-
-  </main>
-
-  <!-- فوتر مشترک -->
-  <footer class="footer">
-    <div class="container">
-      <p>
-        <img src="/icone/copyright.svg" alt="کپی‌رایت" width="14" height="14"
-             style="vertical-align:middle;margin-inline:4px">
-        <span id="y"></span> Gitab — برای توسعه‌دهندگان
-      </p>
-    </div>
-  </footer>
-
-  <!-- سال + اسکریپت تم -->
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
-
-    (() => {
-      const root = document.documentElement;
-      const btn = document.getElementById('themeToggle');
-      const KEY = 'gitab-theme';
-      const media = window.matchMedia('(prefers-color-scheme: dark)');
-      const getEffective = s => s === 'auto' ? (media.matches ? 'dark' : 'light') : s;
-      function updateTheme(s) {
-        root.setAttribute('data-theme', s);
-        const mode = getEffective(s);
-        root.dataset.colorMode = mode;
-        btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
-      }
-      const saved = localStorage.getItem(KEY) || 'auto';
-      updateTheme(saved);
-      btn.addEventListener('click', () => {
-        const curr = localStorage.getItem(KEY) || 'auto';
-        const next = curr === 'auto' ? 'dark' : curr === 'dark' ? 'light' : 'auto';
-        localStorage.setItem(KEY, next);
-        updateTheme(next);
-      });
-      media.addEventListener('change', () => {
-        if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
-      });
-      window.addEventListener('DOMContentLoaded', () => updateTheme(saved));
-    })();
-  </script>
-</body>
-</html>

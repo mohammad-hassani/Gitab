@@ -1,44 +1,4 @@
-<!doctype html>
-<html lang="fa" dir="rtl">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gitab | کتابخانهٔ ترجمه‌های دات‌نت و سی شارپ</title>
-  <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
-  <link rel="stylesheet" href="/styles/main.css">
-</head>
-<body>
-  <!-- هدر مشترک -->
-  <header class="header">
-    <div class="container nav-wrap">
-      <a class="brand" href="/">
-        <img src="/icone/logo.svg" alt="Gitab" width="28" height="28">
-        <span>Gitab</span>
-      </a>
-
-      <nav class="nav">
-        <a href="/">خانه</a>
-        <a href="/books/list-books">کتاب‌ها</a>
-        <a href="#">همکاری</a>
-        <a href="#">درباره‌ما</a>
-      </nav>
-
-     <div class="nav-actions">
-  <button id="themeToggle" class="icon-btn theme-btn" aria-label="تغییر حالت">
-    <img class="icon-sun" src="/icone/sun.svg" alt="روشن">
-    <img class="icon-moon" src="/icone/moon.svg" alt="تاریک">
-  </button>
-
-  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
-    <img src="/icone/github.svg" alt="GitHub">
-  </a>
-</div>
-
-  </header>
-
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل هشتم: پرس‌وجوهای LINQ</h1>
+<h1>فصل هشتم: پرس‌وجوهای LINQ</h1>
 <p><strong>LINQ</strong> یا <strong>Language Integrated Query</strong> مجموعه‌ای از ویژگی‌های زبان و زمان اجراست که برای نوشتن پرس‌وجوهای ساختاریافته و نوع-ایمن (<strong>type-safe</strong>) روی مجموعه‌های محلی از اشیا و منابع داده راه دور استفاده می‌شود.</p>
 <p>LINQ به شما امکان می‌دهد روی هر مجموعه‌ای که <strong>IEnumerable<T></strong> را پیاده‌سازی کرده است پرس‌وجو کنید، چه یک آرایه، لیست، یا <strong>XML Document Object Model (DOM)</strong> باشد، و چه منابع داده راه دور مانند جدول‌های موجود در پایگاه داده <strong>SQL Server</strong>. LINQ مزایای بررسی نوع در زمان کامپایل (<strong>compile-time type checking</strong>) و ترکیب پرس‌وجوهای پویا (<strong>dynamic query composition</strong>) را ارائه می‌دهد.</p>
 <p>این فصل معماری LINQ و اصول نوشتن پرس‌وجوها را توضیح می‌دهد. همه‌ی نوع‌های اصلی در <strong>System.Linq</strong> و <strong>System.Linq.Expressions</strong> تعریف شده‌اند.</p>
@@ -47,9 +7,9 @@
 <h3>شروع کار 🚀</h3>
 <p>واحدهای پایه داده در LINQ، <strong>دنباله‌ها (sequences)</strong> و <strong>عناصر (elements)</strong> هستند. یک دنباله هر شیئی است که <strong>IEnumerable<T></strong> را پیاده‌سازی کند و هر عنصر، یک آیتم در آن دنباله است.</p>
 <p>مثال زیر را در نظر بگیرید:</p>
-<pre><code class="language-csharp">string[] names = { &quot;Tom&quot;, &quot;Dick&quot;, &quot;Harry&quot; };
+<pre class="hljs"><code><span class="hljs-built_in">string</span>[] names = { <span class="hljs-string">&quot;Tom&quot;</span>, <span class="hljs-string">&quot;Dick&quot;</span>, <span class="hljs-string">&quot;Harry&quot;</span> };
 </code></pre>
-<p>در این مثال، <code>names</code> یک دنباله است و <code>&quot;Tom&quot;</code>, <code>&quot;Dick&quot;</code>, و <code>&quot;Harry&quot;</code> عناصر آن هستند.
+<p>در این مثال، <code>names</code> یک دنباله است و <code>&quot;Tom&quot;</code>, <code>&quot;Dick&quot;</code>, و <code>&quot;Harry&quot;</code> عناصر آن هستند.<br>
 به این دنباله <strong>محلی (local sequence)</strong> گفته می‌شود چون مجموعه‌ای از اشیا در حافظه محلی را نمایش می‌دهد.</p>
 <hr>
 <h3>عملگرهای پرس‌وجو 🛠️</h3>
@@ -60,61 +20,61 @@
 <h3>نوشتن یک پرس‌وجوی ساده ✨</h3>
 <p>یک پرس‌وجو یک <strong>عبارت (expression)</strong> است که وقتی شمارش می‌شود، دنباله‌ها را با عملگرهای پرس‌وجو تغییر می‌دهد. ساده‌ترین پرس‌وجو شامل یک دنباله ورودی و یک عملگر است.</p>
 <p>مثال زیر از عملگر <strong>Where</strong> برای استخراج رشته‌هایی که طول آن‌ها حداقل چهار کاراکتر است، استفاده می‌کند:</p>
-<pre><code class="language-csharp">string[] names = { &quot;Tom&quot;, &quot;Dick&quot;, &quot;Harry&quot; };
-IEnumerable&lt;string&gt; filteredNames = System.Linq.Enumerable.Where(names, n =&gt; n.Length &gt;= 4);
-foreach (string n in filteredNames)
+<pre class="hljs"><code><span class="hljs-built_in">string</span>[] names = { <span class="hljs-string">&quot;Tom&quot;</span>, <span class="hljs-string">&quot;Dick&quot;</span>, <span class="hljs-string">&quot;Harry&quot;</span> };
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; filteredNames = System.Linq.Enumerable.Where(names, n =&gt; n.Length &gt;= <span class="hljs-number">4</span>);
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">string</span> n <span class="hljs-keyword">in</span> filteredNames)
     Console.WriteLine(n);
 </code></pre>
 <p>خروجی:</p>
-<pre><code>Dick
+<pre class="hljs"><code>Dick
 Harry
 </code></pre>
 <p>از آنجا که عملگرهای استاندارد پرس‌وجو به‌صورت <strong>extension methods</strong> پیاده‌سازی شده‌اند، می‌توانیم <strong>Where</strong> را مستقیماً روی <code>names</code> فراخوانی کنیم، انگار که یک متد نمونه است:</p>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; filteredNames = names.Where(n =&gt; n.Length &gt;= 4);
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; filteredNames = names.Where(n =&gt; n.Length &gt;= <span class="hljs-number">4</span>);
 </code></pre>
 <p>برای اینکه این کد کامپایل شود، باید فضای نام <strong>System.Linq</strong> را وارد کنید. مثال کامل:</p>
-<pre><code class="language-csharp">using System;
-using System.Collections.Generic;
-using System.Linq;
+<pre class="hljs"><code><span class="hljs-keyword">using</span> System;
+<span class="hljs-keyword">using</span> System.Collections.Generic;
+<span class="hljs-keyword">using</span> System.Linq;
 
-string[] names = { &quot;Tom&quot;, &quot;Dick&quot;, &quot;Harry&quot; };
-IEnumerable&lt;string&gt; filteredNames = names.Where(n =&gt; n.Length &gt;= 4);
-foreach (string name in filteredNames)
+<span class="hljs-built_in">string</span>[] names = { <span class="hljs-string">&quot;Tom&quot;</span>, <span class="hljs-string">&quot;Dick&quot;</span>, <span class="hljs-string">&quot;Harry&quot;</span> };
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; filteredNames = names.Where(n =&gt; n.Length &gt;= <span class="hljs-number">4</span>);
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">string</span> name <span class="hljs-keyword">in</span> filteredNames)
     Console.WriteLine(name);
 </code></pre>
 <p>خروجی:</p>
-<pre><code>Dick
+<pre class="hljs"><code>Dick
 Harry
 </code></pre>
 <p>می‌توانیم کد را با <strong>نوع‌دهی ضمنی (implicit typing)</strong> کوتاه‌تر کنیم:</p>
-<pre><code class="language-csharp">var filteredNames = names.Where(n =&gt; n.Length &gt;= 4);
+<pre class="hljs"><code><span class="hljs-keyword">var</span> filteredNames = names.Where(n =&gt; n.Length &gt;= <span class="hljs-number">4</span>);
 </code></pre>
 <p>اما این کار می‌تواند خوانایی کد را در خارج از محیط IDE کاهش دهد، زیرا ابزارهای راهنما وجود ندارند. به همین دلیل در این فصل کمتر از نوع‌دهی ضمنی استفاده می‌کنیم.</p>
 <hr>
 <h3>استفاده از عبارات لامبدا 🔹</h3>
 <p>اکثر عملگرهای پرس‌وجو یک <strong>عبارت لامبدا (lambda expression)</strong> به‌عنوان آرگومان می‌پذیرند. این عبارت لامبدا به هدایت و شکل‌دهی پرس‌وجو کمک می‌کند.</p>
 <p>در مثال ما، عبارت لامبدا به شکل زیر است:</p>
-<pre><code class="language-csharp">n =&gt; n.Length &gt;= 4
+<pre class="hljs"><code>n =&gt; n.Length &gt;= <span class="hljs-number">4</span>
 </code></pre>
 <p>آرگومان ورودی <code>n</code> نشان‌دهنده هر عنصر در دنباله است و نوع آن <strong>string</strong> است. عملگر <strong>Where</strong> نیاز دارد که عبارت لامبدا یک مقدار <strong>bool</strong> بازگرداند؛ اگر <strong>true</strong> باشد، عنصر در دنباله خروجی قرار می‌گیرد.</p>
 <p>امضای آن:</p>
-<pre><code class="language-csharp">public static IEnumerable&lt;TSource&gt; Where&lt;TSource&gt;(
-    this IEnumerable&lt;TSource&gt; source, 
-    Func&lt;TSource,bool&gt; predicate
-)
-</code></pre>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">IEnumerable</span>&lt;<span class="hljs-title">TSource</span>&gt; <span class="hljs-title">Where</span>&lt;<span class="hljs-title">TSource</span>&gt;(<span class="hljs-params">
+    <span class="hljs-keyword">this</span> IEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource,<span class="hljs-built_in">bool</span>&gt; predicate
+</span>)
+</span></code></pre>
 <p>مثال بعدی، استخراج تمام نام‌هایی که شامل حرف &quot;a&quot; هستند:</p>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; filteredNames = names.Where(n =&gt; n.Contains(&quot;a&quot;));
-foreach (string name in filteredNames)
-    Console.WriteLine(name);  // Harry
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; filteredNames = names.Where(n =&gt; n.Contains(<span class="hljs-string">&quot;a&quot;</span>));
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">string</span> name <span class="hljs-keyword">in</span> filteredNames)
+    Console.WriteLine(name);  <span class="hljs-comment">// Harry</span>
 </code></pre>
 <hr>
 <h3>ترکیب پرس‌وجوها و <strong>Fluent Syntax</strong> 🌊</h3>
 <p>تاکنون پرس‌وجوها را با <strong>متدهای توسعه‌ای</strong> و <strong>عبارات لامبدا</strong> ساخته‌ایم. این روش بسیار قابل ترکیب است و امکان زنجیره‌ای کردن عملگرهای پرس‌وجو را فراهم می‌کند. در این کتاب به این روش <strong>Fluent Syntax</strong> گفته می‌شود.</p>
 <p>C# همچنین یک نحو دیگر برای نوشتن پرس‌وجوها دارد به نام <strong>Query Expression Syntax</strong>. پرس‌وجوی قبلی به شکل یک <strong>Query Expression</strong>:</p>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; filteredNames = from n in names
-                                    where n.Contains(&quot;a&quot;)
-                                    select n;
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; filteredNames = <span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> names
+                                    <span class="hljs-keyword">where</span> n.Contains(<span class="hljs-string">&quot;a&quot;</span>)
+                                    <span class="hljs-keyword">select</span> n;
 </code></pre>
 <p><strong>Fluent Syntax</strong> و <strong>Query Syntax</strong> مکمل یکدیگر هستند. در دو بخش بعدی، هر کدام را با جزئیات بیشتری بررسی خواهیم کرد.</p>
 <h3>نحو Fluent 🔗</h3>
@@ -123,32 +83,32 @@ foreach (string name in filteredNames)
 <h3>زنجیره‌سازی عملگرهای پرس‌وجو 🛠️</h3>
 <p>در بخش قبل، دو پرس‌وجوی ساده نشان دادیم که هرکدام تنها شامل یک عملگر پرس‌وجو بودند. برای ساخت پرس‌وجوهای پیچیده‌تر، عملگرهای پرس‌وجوی بیشتری را به عبارت اضافه می‌کنیم و یک <strong>زنجیره</strong> ایجاد می‌کنیم.</p>
 <p>مثال زیر تمام رشته‌هایی که شامل حرف &quot;a&quot; هستند را استخراج کرده، بر اساس طول مرتب می‌کند و سپس نتیجه را به حروف بزرگ تبدیل می‌کند:</p>
-<pre><code class="language-csharp">using System;
-using System.Collections.Generic;
-using System.Linq;
+<pre class="hljs"><code><span class="hljs-keyword">using</span> System;
+<span class="hljs-keyword">using</span> System.Collections.Generic;
+<span class="hljs-keyword">using</span> System.Linq;
 
-string[] names = { &quot;Tom&quot;, &quot;Dick&quot;, &quot;Harry&quot;, &quot;Mary&quot;, &quot;Jay&quot; };
-IEnumerable&lt;string&gt; query = names
-    .Where(n =&gt; n.Contains(&quot;a&quot;))
+<span class="hljs-built_in">string</span>[] names = { <span class="hljs-string">&quot;Tom&quot;</span>, <span class="hljs-string">&quot;Dick&quot;</span>, <span class="hljs-string">&quot;Harry&quot;</span>, <span class="hljs-string">&quot;Mary&quot;</span>, <span class="hljs-string">&quot;Jay&quot;</span> };
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query = names
+    .Where(n =&gt; n.Contains(<span class="hljs-string">&quot;a&quot;</span>))
     .OrderBy(n =&gt; n.Length)
     .Select(n =&gt; n.ToUpper());
 
-foreach (string name in query)
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">string</span> name <span class="hljs-keyword">in</span> query)
     Console.WriteLine(name);
 </code></pre>
 <p>خروجی:</p>
-<pre><code>JAY
+<pre class="hljs"><code>JAY
 MARY
 HARRY
 </code></pre>
 <hr>
 <h3>محدوده متغیرهای لامبدا 🔹</h3>
 <p>متغیر <code>n</code> در مثال ما به‌صورت خصوصی در هر عبارت لامبدا محدوده‌بندی شده است. می‌توانیم همین شناسه <code>n</code> را دوباره استفاده کنیم، مشابه اینکه می‌توانیم شناسه <code>c</code> را در مثال زیر دوباره استفاده کنیم:</p>
-<pre><code class="language-csharp">void Test()
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Test</span>()</span>
 {
-    foreach (char c in &quot;string1&quot;) Console.Write(c);
-    foreach (char c in &quot;string2&quot;) Console.Write(c);
-    foreach (char c in &quot;string3&quot;) Console.Write(c);
+    <span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">char</span> c <span class="hljs-keyword">in</span> <span class="hljs-string">&quot;string1&quot;</span>) Console.Write(c);
+    <span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">char</span> c <span class="hljs-keyword">in</span> <span class="hljs-string">&quot;string2&quot;</span>) Console.Write(c);
+    <span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">char</span> c <span class="hljs-keyword">in</span> <span class="hljs-string">&quot;string3&quot;</span>) Console.Write(c);
 }
 </code></pre>
 <hr>
@@ -163,67 +123,67 @@ HARRY
 <hr>
 <h3>امضای متدهای توسعه‌ای ✍️</h3>
 <p>امضای این متدهای توسعه‌ای به‌صورت زیر است (امضای <strong>OrderBy</strong> کمی ساده شده):</p>
-<pre><code class="language-csharp">public static IEnumerable&lt;TSource&gt; Where&lt;TSource&gt;(
-    this IEnumerable&lt;TSource&gt; source, 
-    Func&lt;TSource,bool&gt; predicate
-)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">IEnumerable</span>&lt;<span class="hljs-title">TSource</span>&gt; <span class="hljs-title">Where</span>&lt;<span class="hljs-title">TSource</span>&gt;(<span class="hljs-params">
+    <span class="hljs-keyword">this</span> IEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource,<span class="hljs-built_in">bool</span>&gt; predicate
+</span>)
 
-public static IEnumerable&lt;TSource&gt; OrderBy&lt;TSource,TKey&gt;(
-    this IEnumerable&lt;TSource&gt; source, 
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">IEnumerable</span>&lt;<span class="hljs-title">TSource</span>&gt; <span class="hljs-title">OrderBy</span>&lt;<span class="hljs-title">TSource</span>,<span class="hljs-title">TKey</span>&gt;(<span class="hljs-params">
+    <span class="hljs-keyword">this</span> IEnumerable&lt;TSource&gt; source, 
     Func&lt;TSource,TKey&gt; keySelector
-)
+</span>)
 
-public static IEnumerable&lt;TResult&gt; Select&lt;TSource,TResult&gt;(
-    this IEnumerable&lt;TSource&gt; source, 
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">IEnumerable</span>&lt;<span class="hljs-title">TResult</span>&gt; <span class="hljs-title">Select</span>&lt;<span class="hljs-title">TSource</span>,<span class="hljs-title">TResult</span>&gt;(<span class="hljs-params">
+    <span class="hljs-keyword">this</span> IEnumerable&lt;TSource&gt; source, 
     Func&lt;TSource,TResult&gt; selector
-)
-</code></pre>
+</span>)
+</span></code></pre>
 <hr>
 <p>وقتی عملگرهای پرس‌وجو به‌صورت زنجیره‌ای استفاده می‌شوند، دنباله خروجی یک عملگر، دنباله ورودی عملگر بعدی است. پرس‌وجوی کامل شبیه یک <strong>خط تولید با نوار نقاله</strong> است، همان‌طور که در شکل ۸-۱ نشان داده شده است.</p>
 <div align="center">
 <p><img src="../../../assets/image/08/Table-8-1.jpeg" alt="Conventions-UsedThis-Book"></p>
 </div>
 <p>می‌توانیم همان پرس‌وجوی قبلی را به‌صورت مرحله‌ای بسازیم، به این شکل:</p>
-<pre><code class="language-csharp">// برای کامپایل شدن، باید فضای نام System.Linq را وارد کنید:
-IEnumerable&lt;string&gt; filtered   = names   .Where   (n =&gt; n.Contains(&quot;a&quot;));
-IEnumerable&lt;string&gt; sorted     = filtered.OrderBy (n =&gt; n.Length);
-IEnumerable&lt;string&gt; finalQuery = sorted  .Select  (n =&gt; n.ToUpper());
+<pre class="hljs"><code><span class="hljs-comment">// برای کامپایل شدن، باید فضای نام System.Linq را وارد کنید:</span>
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; filtered   = names   .Where   (n =&gt; n.Contains(<span class="hljs-string">&quot;a&quot;</span>));
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; sorted     = filtered.OrderBy (n =&gt; n.Length);
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; finalQuery = sorted  .Select  (n =&gt; n.ToUpper());
 </code></pre>
 <p><code>finalQuery</code> از نظر ترکیبی <strong>کاملاً مشابه</strong> پرس‌وجویی است که قبلاً ساخته‌ایم.</p>
 <p>علاوه بر این، هر مرحله میانی نیز یک پرس‌وجوی معتبر است که می‌توانیم اجرا کنیم:</p>
-<pre><code class="language-csharp">foreach (string name in filtered)
-    Console.Write(name + &quot;|&quot;);        // Harry|Mary|Jay|
+<pre class="hljs"><code><span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">string</span> name <span class="hljs-keyword">in</span> filtered)
+    Console.Write(name + <span class="hljs-string">&quot;|&quot;</span>);        <span class="hljs-comment">// Harry|Mary|Jay|</span>
 Console.WriteLine();
 
-foreach (string name in sorted)
-    Console.Write(name + &quot;|&quot;);        // Jay|Mary|Harry|
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">string</span> name <span class="hljs-keyword">in</span> sorted)
+    Console.Write(name + <span class="hljs-string">&quot;|&quot;</span>);        <span class="hljs-comment">// Jay|Mary|Harry|</span>
 Console.WriteLine();
 
-foreach (string name in finalQuery)
-    Console.Write(name + &quot;|&quot;);        // JAY|MARY|HARRY|
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">string</span> name <span class="hljs-keyword">in</span> finalQuery)
+    Console.Write(name + <span class="hljs-string">&quot;|&quot;</span>);        <span class="hljs-comment">// JAY|MARY|HARRY|</span>
 </code></pre>
 <hr>
 <h3>اهمیت <strong>extension methods</strong> ⭐</h3>
 <p>به جای استفاده از نحو <strong>extension method</strong>، می‌توان از نحو متد ایستا (<strong>static method syntax</strong>) برای فراخوانی عملگرهای پرس‌وجو استفاده کرد:</p>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; filtered = Enumerable.Where(names, n =&gt; n.Contains(&quot;a&quot;));
-IEnumerable&lt;string&gt; sorted   = Enumerable.OrderBy(filtered, n =&gt; n.Length);
-IEnumerable&lt;string&gt; finalQuery = Enumerable.Select(sorted, n =&gt; n.ToUpper());
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; filtered = Enumerable.Where(names, n =&gt; n.Contains(<span class="hljs-string">&quot;a&quot;</span>));
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; sorted   = Enumerable.OrderBy(filtered, n =&gt; n.Length);
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; finalQuery = Enumerable.Select(sorted, n =&gt; n.ToUpper());
 </code></pre>
 <p>در واقع، <strong>کامپایلر</strong> همین ترجمه را برای فراخوانی متدهای توسعه‌ای انجام می‌دهد.</p>
 <p>اما اگر بخواهید پرس‌وجو را در یک <strong>عبارت واحد</strong> بنویسید، استفاده نکردن از <strong>extension methods</strong> هزینه‌بر خواهد بود.</p>
 <hr>
 <h4>پرس‌وجوی یک‌عبارتی با <strong>extension method syntax</strong></h4>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query = names.Where(n =&gt; n.Contains(&quot;a&quot;))
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query = names.Where(n =&gt; n.Contains(<span class="hljs-string">&quot;a&quot;</span>))
                                  .OrderBy(n =&gt; n.Length)
                                  .Select(n =&gt; n.ToUpper());
 </code></pre>
 <p>شکل طبیعی و خطی آن جریان داده از <strong>چپ به راست</strong> را نشان می‌دهد و همچنین عبارات لامبدا را کنار عملگرهای پرس‌وجو نگه می‌دارد (<strong>infix notation</strong>).</p>
 <p>بدون <strong>extension methods</strong>، روانی پرس‌وجو از بین می‌رود:</p>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query =
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query =
     Enumerable.Select(
         Enumerable.OrderBy(
             Enumerable.Where(
-                names, n =&gt; n.Contains(&quot;a&quot;)
+                names, n =&gt; n.Contains(<span class="hljs-string">&quot;a&quot;</span>)
             ), n =&gt; n.Length
         ), n =&gt; n.ToUpper()
     );
@@ -231,7 +191,7 @@ IEnumerable&lt;string&gt; finalQuery = Enumerable.Select(sorted, n =&gt; n.ToUpp
 <hr>
 <h3>ترکیب عبارات لامبدا 🔹</h3>
 <p>در مثال‌های قبلی، عبارت لامبدا زیر به <strong>عملگر Where</strong> داده شده بود:</p>
-<pre><code class="language-csharp">n =&gt; n.Contains(&quot;a&quot;)   // نوع ورودی = string، نوع خروجی = bool
+<pre class="hljs"><code>n =&gt; n.Contains(<span class="hljs-string">&quot;a&quot;</span>)   <span class="hljs-comment">// نوع ورودی = string، نوع خروجی = bool</span>
 </code></pre>
 <p>یک عبارت لامبدا که یک مقدار می‌گیرد و <strong>bool</strong> برمی‌گرداند، <strong>predicate</strong> نامیده می‌شود.</p>
 <p>هدف عبارت لامبدا به عملگر پرس‌وجو بستگی دارد:</p>
@@ -246,19 +206,19 @@ IEnumerable&lt;string&gt; finalQuery = Enumerable.Select(sorted, n =&gt; n.ToUpp
 <p>عملگر پرس‌وجو عبارت لامبدا شما را <strong>به‌صورت تنبل و در زمان نیاز</strong> ارزیابی می‌کند، معمولاً یک بار برای هر عنصر دنباله ورودی.</p>
 <p>عبارات لامبدا به شما اجازه می‌دهند منطق خود را به عملگرهای پرس‌وجو منتقل کنید، که باعث انعطاف‌پذیری آن‌ها می‌شود، در حالی که ساختار داخلی ساده باقی می‌ماند.</p>
 <p>نمونه‌ای از پیاده‌سازی کامل <strong>Enumerable.Where</strong> (به جز مدیریت استثناها):</p>
-<pre><code class="language-csharp">public static IEnumerable&lt;TSource&gt; Where&lt;TSource&gt;(
-    this IEnumerable&lt;TSource&gt; source, 
-    Func&lt;TSource,bool&gt; predicate
-)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">IEnumerable</span>&lt;<span class="hljs-title">TSource</span>&gt; <span class="hljs-title">Where</span>&lt;<span class="hljs-title">TSource</span>&gt;(<span class="hljs-params">
+    <span class="hljs-keyword">this</span> IEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource,<span class="hljs-built_in">bool</span>&gt; predicate
+</span>)</span>
 {
-    foreach (TSource element in source)
-        if (predicate(element))
-            yield return element;
+    <span class="hljs-keyword">foreach</span> (TSource element <span class="hljs-keyword">in</span> source)
+        <span class="hljs-keyword">if</span> (predicate(element))
+            <span class="hljs-keyword">yield</span> <span class="hljs-keyword">return</span> element;
 }
 </code></pre>
 <hr>
 <h3>عبارات لامبدا و امضای <strong>Func</strong> ✍️</h3>
-<p>عملگرهای استاندارد پرس‌وجو از <strong>generic Func delegates</strong> استفاده می‌کنند.
+<p>عملگرهای استاندارد پرس‌وجو از <strong>generic Func delegates</strong> استفاده می‌کنند.<br>
 <strong>Func</strong> یک خانواده از دیلیگیت‌های عمومی در فضای نام <strong>System</strong> است که با هدف زیر تعریف شده‌اند:</p>
 <ul>
 <li>آرگومان‌های نوع (<strong>type arguments</strong>) در <strong>Func</strong> همان ترتیبی را دارند که در عبارات لامبدا استفاده می‌شوند.</li>
@@ -275,42 +235,42 @@ IEnumerable&lt;string&gt; finalQuery = Enumerable.Select(sorted, n =&gt; n.ToUpp
 <h3>نوع‌دهی عناصر در عبارات لامبدا 🎯</h3>
 <p><strong>TSource</strong> توسط دنباله ورودی تعیین می‌شود. <strong>TResult</strong> و <strong>TKey</strong> معمولاً از روی عبارت لامبدا شما استنتاج می‌شوند.</p>
 <p>برای مثال، به امضای عملگر پرس‌وجوی <strong>Select</strong> توجه کنید:</p>
-<pre><code class="language-csharp">public static IEnumerable&lt;TResult&gt; Select&lt;TSource,TResult&gt;(
-    this IEnumerable&lt;TSource&gt; source, 
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">IEnumerable</span>&lt;<span class="hljs-title">TResult</span>&gt; <span class="hljs-title">Select</span>&lt;<span class="hljs-title">TSource</span>,<span class="hljs-title">TResult</span>&gt;(<span class="hljs-params">
+    <span class="hljs-keyword">this</span> IEnumerable&lt;TSource&gt; source, 
     Func&lt;TSource,TResult&gt; selector
-)
-</code></pre>
+</span>)
+</span></code></pre>
 <p>عبارت لامبدا <strong>Func&lt;TSource,TResult&gt;</strong> با لامبدا <strong>TSource =&gt; TResult</strong> مطابقت دارد: عنصری از نوع ورودی را به عنصری از نوع خروجی نگاشت می‌کند. <strong>TSource</strong> و <strong>TResult</strong> می‌توانند نوع‌های متفاوتی داشته باشند، بنابراین لامبدا می‌تواند نوع هر عنصر را تغییر دهد. علاوه بر این، نوع دنباله خروجی توسط لامبدا تعیین می‌شود.</p>
 <p>مثال زیر از <strong>Select</strong> برای تبدیل عناصر رشته‌ای به عناصر عدد صحیح استفاده می‌کند:</p>
-<pre><code class="language-csharp">string[] names = { &quot;Tom&quot;, &quot;Dick&quot;, &quot;Harry&quot;, &quot;Mary&quot;, &quot;Jay&quot; };
-IEnumerable&lt;int&gt; query = names.Select(n =&gt; n.Length);
+<pre class="hljs"><code><span class="hljs-built_in">string</span>[] names = { <span class="hljs-string">&quot;Tom&quot;</span>, <span class="hljs-string">&quot;Dick&quot;</span>, <span class="hljs-string">&quot;Harry&quot;</span>, <span class="hljs-string">&quot;Mary&quot;</span>, <span class="hljs-string">&quot;Jay&quot;</span> };
+IEnumerable&lt;<span class="hljs-built_in">int</span>&gt; query = names.Select(n =&gt; n.Length);
 
-foreach (int length in query)
-    Console.Write(length + &quot;|&quot;);   // 3|4|5|4|3|
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">int</span> length <span class="hljs-keyword">in</span> query)
+    Console.Write(length + <span class="hljs-string">&quot;|&quot;</span>);   <span class="hljs-comment">// 3|4|5|4|3|</span>
 </code></pre>
 <p>کامپایلر نوع <strong>TResult</strong> را از مقدار بازگشتی لامبدا استنتاج می‌کند. در این مثال، <code>n.Length</code> یک مقدار <strong>int</strong> برمی‌گرداند، بنابراین <strong>TResult</strong> برابر با <strong>int</strong> است.</p>
 <hr>
 <p>عملگر <strong>Where</strong> ساده‌تر است و نیاز به استنتاج نوع برای خروجی ندارد، زیرا عناصر ورودی و خروجی از یک نوع هستند. این منطقی است چون این عملگر فقط عناصر را فیلتر می‌کند و آن‌ها را تبدیل نمی‌کند:</p>
-<pre><code class="language-csharp">public static IEnumerable&lt;TSource&gt; Where&lt;TSource&gt;(
-    this IEnumerable&lt;TSource&gt; source, 
-    Func&lt;TSource,bool&gt; predicate
-)
-</code></pre>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">IEnumerable</span>&lt;<span class="hljs-title">TSource</span>&gt; <span class="hljs-title">Where</span>&lt;<span class="hljs-title">TSource</span>&gt;(<span class="hljs-params">
+    <span class="hljs-keyword">this</span> IEnumerable&lt;TSource&gt; source, 
+    Func&lt;TSource,<span class="hljs-built_in">bool</span>&gt; predicate
+</span>)
+</span></code></pre>
 <hr>
 <h3>امضای عملگر <strong>OrderBy</strong> 🔑</h3>
-<pre><code class="language-csharp">// کمی ساده شده
-public static IEnumerable&lt;TSource&gt; OrderBy&lt;TSource,TKey&gt;(
-    this IEnumerable&lt;TSource&gt; source, 
+<pre class="hljs"><code><span class="hljs-comment">// کمی ساده شده</span>
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">IEnumerable</span>&lt;<span class="hljs-title">TSource</span>&gt; <span class="hljs-title">OrderBy</span>&lt;<span class="hljs-title">TSource</span>,<span class="hljs-title">TKey</span>&gt;(<span class="hljs-params">
+    <span class="hljs-keyword">this</span> IEnumerable&lt;TSource&gt; source, 
     Func&lt;TSource,TKey&gt; keySelector
-)
-</code></pre>
+</span>)
+</span></code></pre>
 <p>عبارت لامبدا <strong>Func&lt;TSource,TKey&gt;</strong> یک عنصر ورودی را به <strong>کلید مرتب‌سازی (sorting key)</strong> نگاشت می‌کند. <strong>TKey</strong> از روی لامبدا استنتاج می‌شود و از نوع عنصر ورودی و خروجی جداست.</p>
 <p>برای مثال، می‌توانیم لیست نام‌ها را بر اساس طول (<strong>کلید int</strong>) یا به‌صورت الفبایی (<strong>کلید string</strong>) مرتب کنیم:</p>
-<pre><code class="language-csharp">string[] names = { &quot;Tom&quot;, &quot;Dick&quot;, &quot;Harry&quot;, &quot;Mary&quot;, &quot;Jay&quot; };
-IEnumerable&lt;string&gt; sortedByLength, sortedAlphabetically;
+<pre class="hljs"><code><span class="hljs-built_in">string</span>[] names = { <span class="hljs-string">&quot;Tom&quot;</span>, <span class="hljs-string">&quot;Dick&quot;</span>, <span class="hljs-string">&quot;Harry&quot;</span>, <span class="hljs-string">&quot;Mary&quot;</span>, <span class="hljs-string">&quot;Jay&quot;</span> };
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; sortedByLength, sortedAlphabetically;
 
-sortedByLength       = names.OrderBy(n =&gt; n.Length);   // int key
-sortedAlphabetically = names.OrderBy(n =&gt; n);          // string key
+sortedByLength       = names.OrderBy(n =&gt; n.Length);   <span class="hljs-comment">// int key</span>
+sortedAlphabetically = names.OrderBy(n =&gt; n);          <span class="hljs-comment">// string key</span>
 </code></pre>
 <p>می‌توان عملگرهای پرس‌وجو در <strong>Enumerable</strong> را با <strong>delegateهای سنتی</strong> که به متدها اشاره دارند، فراخوانی کرد. این روش برای ساده کردن برخی پرس‌وجوهای محلی، به‌ویژه در <strong>LINQ to XML</strong> مفید است و در فصل ۱۰ نشان داده شده است.</p>
 <p>اما این روش در دنباله‌های مبتنی بر <strong>IQueryable<T></strong> (مثلاً هنگام پرس‌وجو از پایگاه داده) کار نمی‌کند، زیرا عملگرهای <strong>Queryable</strong> نیاز به عبارات لامبدا دارند تا بتوانند <strong>expression tree</strong> تولید کنند. این موضوع بعداً در بخش «پرس‌وجوهای تفسیر شده» صفحه ۴۴۸ توضیح داده می‌شود.</p>
@@ -320,18 +280,18 @@ sortedAlphabetically = names.OrderBy(n =&gt; n);          // string key
 <ul>
 <li><strong>Take</strong>: اولین x عنصر را خروجی می‌دهد و بقیه را حذف می‌کند:</li>
 </ul>
-<pre><code class="language-csharp">int[] numbers = { 10, 9, 8, 7, 6 };
-IEnumerable&lt;int&gt; firstThree = numbers.Take(3);   // {10, 9, 8}
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] numbers = { <span class="hljs-number">10</span>, <span class="hljs-number">9</span>, <span class="hljs-number">8</span>, <span class="hljs-number">7</span>, <span class="hljs-number">6</span> };
+IEnumerable&lt;<span class="hljs-built_in">int</span>&gt; firstThree = numbers.Take(<span class="hljs-number">3</span>);   <span class="hljs-comment">// {10, 9, 8}</span>
 </code></pre>
 <ul>
 <li><strong>Skip</strong>: x عنصر اول را نادیده می‌گیرد و بقیه را خروجی می‌دهد:</li>
 </ul>
-<pre><code class="language-csharp">IEnumerable&lt;int&gt; lastTwo = numbers.Skip(3);     // {7, 6}
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">int</span>&gt; lastTwo = numbers.Skip(<span class="hljs-number">3</span>);     <span class="hljs-comment">// {7, 6}</span>
 </code></pre>
 <ul>
 <li><strong>Reverse</strong>: عناصر را برعکس می‌کند:</li>
 </ul>
-<pre><code class="language-csharp">IEnumerable&lt;int&gt; reversed = numbers.Reverse();  // {6, 7, 8, 9, 10}
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">int</span>&gt; reversed = numbers.Reverse();  <span class="hljs-comment">// {6, 7, 8, 9, 10}</span>
 </code></pre>
 <p>در پرس‌وجوهای محلی (<strong>LINQ-to-objects</strong>)، عملگرهایی مانند <strong>Where</strong> و <strong>Select</strong> ترتیب اصلی دنباله ورودی را حفظ می‌کنند (همچنین همه عملگرهای دیگر، مگر آن‌هایی که صراحتاً ترتیب را تغییر می‌دهند).</p>
 <hr>
@@ -340,33 +300,33 @@ IEnumerable&lt;int&gt; firstThree = numbers.Take(3);   // {10, 9, 8}
 <ul>
 <li><strong>عملگرهای عنصر (element operators)</strong> یک عنصر از دنباله ورودی استخراج می‌کنند، مانند <strong>First</strong>، <strong>Last</strong> و <strong>ElementAt</strong>:</li>
 </ul>
-<pre><code class="language-csharp">int[] numbers    = { 10, 9, 8, 7, 6 };
-int firstNumber  = numbers.First();          // 10
-int lastNumber   = numbers.Last();           // 6
-int secondNumber = numbers.ElementAt(1);     // 9
-int secondLowest = numbers.OrderBy(n =&gt; n).Skip(1).First(); // 7
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] numbers    = { <span class="hljs-number">10</span>, <span class="hljs-number">9</span>, <span class="hljs-number">8</span>, <span class="hljs-number">7</span>, <span class="hljs-number">6</span> };
+<span class="hljs-built_in">int</span> firstNumber  = numbers.First();          <span class="hljs-comment">// 10</span>
+<span class="hljs-built_in">int</span> lastNumber   = numbers.Last();           <span class="hljs-comment">// 6</span>
+<span class="hljs-built_in">int</span> secondNumber = numbers.ElementAt(<span class="hljs-number">1</span>);     <span class="hljs-comment">// 9</span>
+<span class="hljs-built_in">int</span> secondLowest = numbers.OrderBy(n =&gt; n).Skip(<span class="hljs-number">1</span>).First(); <span class="hljs-comment">// 7</span>
 </code></pre>
 <p>این عملگرها معمولاً خروجی خود را برای اجرای عملگرهای دیگر فراخوانی نمی‌کنیم، مگر آن عنصر خودش یک مجموعه باشد.</p>
 <ul>
 <li><strong>عملگرهای تجمیع (aggregation operators)</strong> یک مقدار اسکالر، معمولاً عددی، برمی‌گردانند:</li>
 </ul>
-<pre><code class="language-csharp">int count = numbers.Count();   // 5
-int min   = numbers.Min();     // 6
+<pre class="hljs"><code><span class="hljs-built_in">int</span> count = numbers.Count();   <span class="hljs-comment">// 5</span>
+<span class="hljs-built_in">int</span> min   = numbers.Min();     <span class="hljs-comment">// 6</span>
 </code></pre>
 <ul>
 <li><strong>عملگرهای کمی (quantifiers)</strong> مقدار <strong>bool</strong> برمی‌گردانند:</li>
 </ul>
-<pre><code class="language-csharp">bool hasTheNumberNine     = numbers.Contains(9);          // true
-bool hasMoreThanZeroElements = numbers.Any();            // true
-bool hasAnOddElement      = numbers.Any(n =&gt; n % 2 != 0); // true
+<pre class="hljs"><code><span class="hljs-built_in">bool</span> hasTheNumberNine     = numbers.Contains(<span class="hljs-number">9</span>);          <span class="hljs-comment">// true</span>
+<span class="hljs-built_in">bool</span> hasMoreThanZeroElements = numbers.Any();            <span class="hljs-comment">// true</span>
+<span class="hljs-built_in">bool</span> hasAnOddElement      = numbers.Any(n =&gt; n % <span class="hljs-number">2</span> != <span class="hljs-number">0</span>); <span class="hljs-comment">// true</span>
 </code></pre>
 <ul>
 <li>برخی عملگرها دو دنباله ورودی می‌گیرند، مانند <strong>Concat</strong> که یک دنباله را به دیگری اضافه می‌کند و <strong>Union</strong> که مشابه آن است اما مقادیر تکراری را حذف می‌کند:</li>
 </ul>
-<pre><code class="language-csharp">int[] seq1 = {1, 2, 3};
-int[] seq2 = {3, 4, 5};
-IEnumerable&lt;int&gt; concat = seq1.Concat(seq2);  // {1, 2, 3, 3, 4, 5}
-IEnumerable&lt;int&gt; union  = seq1.Union(seq2);   // {1, 2, 3, 4, 5}
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] seq1 = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>};
+<span class="hljs-built_in">int</span>[] seq2 = {<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>};
+IEnumerable&lt;<span class="hljs-built_in">int</span>&gt; concat = seq1.Concat(seq2);  <span class="hljs-comment">// {1, 2, 3, 3, 4, 5}</span>
+IEnumerable&lt;<span class="hljs-built_in">int</span>&gt; union  = seq1.Union(seq2);   <span class="hljs-comment">// {1, 2, 3, 4, 5}</span>
 </code></pre>
 <ul>
 <li><strong>عملگرهای اتصال (joining operators)</strong> نیز در همین دسته قرار می‌گیرند. فصل ۹ تمام عملگرهای پرس‌وجو را به‌تفصیل پوشش می‌دهد.</li>
@@ -376,23 +336,23 @@ IEnumerable&lt;int&gt; union  = seq1.Union(seq2);   // {1, 2, 3, 4, 5}
 <p>در این کتاب، نحو <strong>query expressions</strong> را به سادگی <strong>query syntax</strong> می‌نامیم.</p>
 <hr>
 <p>در بخش قبل، پرس‌وجویی با <strong>Fluent Syntax</strong> نوشتیم تا رشته‌هایی که شامل حرف &quot;a&quot; هستند را استخراج کرده، بر اساس طول مرتب کنیم و به حروف بزرگ تبدیل کنیم. همان پرس‌وجو به شکل <strong>query syntax</strong> به این صورت است:</p>
-<pre><code class="language-csharp">using System;
-using System.Collections.Generic;
-using System.Linq;
+<pre class="hljs"><code><span class="hljs-keyword">using</span> System;
+<span class="hljs-keyword">using</span> System.Collections.Generic;
+<span class="hljs-keyword">using</span> System.Linq;
 
-string[] names = { &quot;Tom&quot;, &quot;Dick&quot;, &quot;Harry&quot;, &quot;Mary&quot;, &quot;Jay&quot; };
+<span class="hljs-built_in">string</span>[] names = { <span class="hljs-string">&quot;Tom&quot;</span>, <span class="hljs-string">&quot;Dick&quot;</span>, <span class="hljs-string">&quot;Harry&quot;</span>, <span class="hljs-string">&quot;Mary&quot;</span>, <span class="hljs-string">&quot;Jay&quot;</span> };
 
-IEnumerable&lt;string&gt; query =
-    from    n in names
-    where   n.Contains(&quot;a&quot;)     // فیلتر کردن عناصر
-    orderby n.Length             // مرتب‌سازی عناصر
-    select  n.ToUpper();         // تبدیل هر عنصر (projection)
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query =
+    <span class="hljs-keyword">from</span>    n <span class="hljs-keyword">in</span> names
+    <span class="hljs-keyword">where</span>   n.Contains(<span class="hljs-string">&quot;a&quot;</span>)     <span class="hljs-comment">// فیلتر کردن عناصر</span>
+    <span class="hljs-keyword">orderby</span> n.Length             <span class="hljs-comment">// مرتب‌سازی عناصر</span>
+    <span class="hljs-keyword">select</span>  n.ToUpper();         <span class="hljs-comment">// تبدیل هر عنصر (projection)</span>
 
-foreach (string name in query)
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">string</span> name <span class="hljs-keyword">in</span> query)
     Console.WriteLine(name);
 </code></pre>
 <p>خروجی:</p>
-<pre><code>JAY
+<pre class="hljs"><code>JAY
 MARY
 HARRY
 </code></pre>
@@ -414,7 +374,7 @@ HARRY
 <h3>پردازش عبارات پرس‌وجو توسط کامپایلر ⚙️</h3>
 <p>کامپایلر یک <strong>query expression</strong> را با ترجمه آن به <strong>Fluent Syntax</strong> پردازش می‌کند. این فرآیند نسبتاً مکانیکی است—مشابه تبدیل حلقه‌های <code>foreach</code> به فراخوانی‌های <code>GetEnumerator</code> و <code>MoveNext</code>.</p>
 <p>این یعنی هر چیزی که بتوانید در <strong>query syntax</strong> بنویسید، می‌توانید به همان شکل در <strong>fluent syntax</strong> نیز بنویسید. برای مثال، پرس‌وجوی قبلی توسط کامپایلر به این شکل ترجمه می‌شود:</p>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query = names.Where(n =&gt; n.Contains(&quot;a&quot;))
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query = names.Where(n =&gt; n.Contains(<span class="hljs-string">&quot;a&quot;</span>))
                                  .OrderBy(n =&gt; n.Length)
                                  .Select(n =&gt; n.ToUpper());
 </code></pre>
@@ -425,15 +385,15 @@ HARRY
 <h3>متغیرهای دامنه (Range Variables) 🔹</h3>
 <p>شناسه‌ای که بلافاصله پس از <strong>from</strong> می‌آید، <strong>range variable</strong> نامیده می‌شود. یک متغیر دامنه به <strong>عنصر جاری در دنباله</strong> که عملیات روی آن انجام می‌شود، اشاره دارد.</p>
 <p>در مثال‌های ما، متغیر دامنه <code>n</code> در هر بخش پرس‌وجو ظاهر می‌شود. با این حال، این متغیر در هر بخش روی دنباله‌ای متفاوت شمارش می‌شود:</p>
-<pre><code class="language-csharp">from    n in names           // n متغیر دامنه ماست
-where   n.Contains(&quot;a&quot;)     // n = مستقیم از آرایه
-orderby n.Length             // n = پس از فیلتر شدن
-select  n.ToUpper()          // n = پس از مرتب‌سازی
+<pre class="hljs"><code><span class="hljs-keyword">from</span>    n <span class="hljs-keyword">in</span> names           <span class="hljs-comment">// n متغیر دامنه ماست</span>
+<span class="hljs-keyword">where</span>   n.Contains(<span class="hljs-string">&quot;a&quot;</span>)     <span class="hljs-comment">// n = مستقیم از آرایه</span>
+<span class="hljs-keyword">orderby</span> n.Length             <span class="hljs-comment">// n = پس از فیلتر شدن</span>
+<span class="hljs-keyword">select</span>  n.ToUpper()          <span class="hljs-comment">// n = پس از مرتب‌سازی</span>
 </code></pre>
 <p>این موضوع با ترجمه مکانیکی کامپایلر به <strong>fluent syntax</strong> واضح می‌شود:</p>
-<pre><code class="language-csharp">names.Where(n =&gt; n.Contains(&quot;a&quot;))   // n با دامنه محلی
-     .OrderBy(n =&gt; n.Length)         // n با دامنه محلی
-     .Select(n =&gt; n.ToUpper())       // n با دامنه محلی
+<pre class="hljs"><code>names.Where(n =&gt; n.Contains(<span class="hljs-string">&quot;a&quot;</span>))   <span class="hljs-comment">// n با دامنه محلی</span>
+     .OrderBy(n =&gt; n.Length)         <span class="hljs-comment">// n با دامنه محلی</span>
+     .Select(n =&gt; n.ToUpper())       <span class="hljs-comment">// n با دامنه محلی</span>
 </code></pre>
 <p>همان‌طور که می‌بینید، هر نمونه از <code>n</code> <strong>به‌صورت خصوصی</strong> در لامبدا خود محدوده‌بندی شده است.</p>
 <hr>
@@ -477,7 +437,7 @@ select  n.ToUpper()          // n = پس از مرتب‌سازی
 <p>برخی عملگرها در <strong>query syntax</strong> کلیدواژه ندارند و برای استفاده از آن‌ها حداقل بخشی از Fluent syntax لازم است. این عملگرها خارج از موارد زیر هستند:</p>
 </li>
 </ul>
-<pre><code>Where, Select, SelectMany
+<pre class="hljs"><code>Where, Select, SelectMany
 OrderBy, ThenBy, OrderByDescending, ThenByDescending
 GroupBy, Join, GroupJoin
 </code></pre>
@@ -485,21 +445,21 @@ GroupBy, Join, GroupJoin
 <h3>پرس‌وجوهای ترکیبی (Mixed-Syntax) ⚙️</h3>
 <p>اگر یک عملگر پرس‌وجو در <strong>query syntax</strong> پشتیبانی نشود، می‌توانید <strong>query syntax</strong> و <strong>fluent syntax</strong> را ترکیب کنید. تنها محدودیت این است که هر بخش query syntax باید <strong>کامل</strong> باشد (یعنی با from شروع و با select یا group پایان یابد).</p>
 <p>برای مثال، با آرایه زیر:</p>
-<pre><code class="language-csharp">string[] names = { &quot;Tom&quot;, &quot;Dick&quot;, &quot;Harry&quot;, &quot;Mary&quot;, &quot;Jay&quot; };
+<pre class="hljs"><code><span class="hljs-built_in">string</span>[] names = { <span class="hljs-string">&quot;Tom&quot;</span>, <span class="hljs-string">&quot;Dick&quot;</span>, <span class="hljs-string">&quot;Harry&quot;</span>, <span class="hljs-string">&quot;Mary&quot;</span>, <span class="hljs-string">&quot;Jay&quot;</span> };
 </code></pre>
 <p>مثال ترکیبی زیر تعداد نام‌هایی که شامل حرف &quot;a&quot; هستند را می‌شمارد:</p>
-<pre><code class="language-csharp">int matches = (from n in names
-               where n.Contains(&quot;a&quot;)
-               select n).Count();   // 3
+<pre class="hljs"><code><span class="hljs-built_in">int</span> matches = (<span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> names
+               <span class="hljs-keyword">where</span> n.Contains(<span class="hljs-string">&quot;a&quot;</span>)
+               <span class="hljs-keyword">select</span> n).Count();   <span class="hljs-comment">// 3</span>
 </code></pre>
 <p>همچنین اولین نام به ترتیب الفبایی را می‌گیرد:</p>
-<pre><code class="language-csharp">string first = (from n in names
-                orderby n
-                select n).First();   // Dick
+<pre class="hljs"><code><span class="hljs-built_in">string</span> first = (<span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> names
+                <span class="hljs-keyword">orderby</span> n
+                <span class="hljs-keyword">select</span> n).First();   <span class="hljs-comment">// Dick</span>
 </code></pre>
 <p>در پرس‌وجوهای ساده، می‌توان کل کار را با Fluent syntax انجام داد:</p>
-<pre><code class="language-csharp">int matches = names.Where(n =&gt; n.Contains(&quot;a&quot;)).Count();   // 3
-string first = names.OrderBy(n =&gt; n).First();              // Dick
+<pre class="hljs"><code><span class="hljs-built_in">int</span> matches = names.Where(n =&gt; n.Contains(<span class="hljs-string">&quot;a&quot;</span>)).Count();   <span class="hljs-comment">// 3</span>
+<span class="hljs-built_in">string</span> first = names.OrderBy(n =&gt; n).First();              <span class="hljs-comment">// Dick</span>
 </code></pre>
 <p>گاهی پرس‌وجوهای ترکیبی بالاترین <strong>کارایی و سادگی</strong> را ارائه می‌دهند. بنابراین مهم است که همیشه به‌طور یک‌جانبه فقط یک نحو را ترجیح ندهید، تا هنگام نیاز بتوانید از پرس‌وجوی ترکیبی بهره ببرید.</p>
 <hr>
@@ -507,16 +467,16 @@ string first = names.OrderBy(n =&gt; n).First();              // Dick
 <h3>اجرای به تعویق‌افتاده (Deferred Execution) ⏳</h3>
 <p>یکی از ویژگی‌های مهم بیشتر <strong>query operators</strong> این است که <strong>در زمان ساخت پرس‌وجو اجرا نمی‌شوند</strong>، بلکه زمانی اجرا می‌شوند که شمارش شوند (یعنی وقتی <code>MoveNext</code> روی enumerator فراخوانی شود).</p>
 <p>مثال زیر را در نظر بگیرید:</p>
-<pre><code class="language-csharp">var numbers = new List&lt;int&gt; { 1 };
-IEnumerable&lt;int&gt; query = numbers.Select(n =&gt; n * 10);   // ساخت پرس‌وجو
-numbers.Add(2);                                         // اضافه کردن عنصر جدید
-foreach (int n in query)
-    Console.Write(n + &quot;|&quot;);                             // 10|20|
+<pre class="hljs"><code><span class="hljs-keyword">var</span> numbers = <span class="hljs-keyword">new</span> List&lt;<span class="hljs-built_in">int</span>&gt; { <span class="hljs-number">1</span> };
+IEnumerable&lt;<span class="hljs-built_in">int</span>&gt; query = numbers.Select(n =&gt; n * <span class="hljs-number">10</span>);   <span class="hljs-comment">// ساخت پرس‌وجو</span>
+numbers.Add(<span class="hljs-number">2</span>);                                         <span class="hljs-comment">// اضافه کردن عنصر جدید</span>
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">int</span> n <span class="hljs-keyword">in</span> query)
+    Console.Write(n + <span class="hljs-string">&quot;|&quot;</span>);                             <span class="hljs-comment">// 10|20|</span>
 </code></pre>
 <p>عنصر اضافه‌شده پس از ساخت پرس‌وجو در نتیجه لحاظ می‌شود، زیرا <strong>هیچ فیلتر یا مرتب‌سازی تا زمان اجرای <code>foreach</code> انجام نمی‌شود</strong>. به این ویژگی <strong>deferred یا lazy execution</strong> گفته می‌شود، مشابه آنچه با <strong>delegates</strong> رخ می‌دهد:</p>
-<pre><code class="language-csharp">Action a = () =&gt; Console.WriteLine(&quot;Foo&quot;);
-// هنوز چیزی به Console ننوشته‌ایم. حالا اجرا می‌کنیم:
-a();  // اجرای به تعویق‌افتاده!
+<pre class="hljs"><code>Action a = () =&gt; Console.WriteLine(<span class="hljs-string">&quot;Foo&quot;</span>);
+<span class="hljs-comment">// هنوز چیزی به Console ننوشته‌ایم. حالا اجرا می‌کنیم:</span>
+a();  <span class="hljs-comment">// اجرای به تعویق‌افتاده!</span>
 </code></pre>
 <p>تمام <strong>standard query operators</strong> اجرای به تعویق‌افتاده دارند، به جز موارد زیر:</p>
 <ul>
@@ -531,19 +491,19 @@ a();  // اجرای به تعویق‌افتاده!
 </li>
 </ul>
 <p>این عملگرها <strong>پرس‌وجو را فوراً اجرا می‌کنند</strong> زیرا نوع خروجی آن‌ها مکانیزمی برای اجرای به تعویق‌افتاده ندارد. به عنوان مثال، <code>Count</code> یک <strong>عدد ساده</strong> برمی‌گرداند و دیگر شمارش نمی‌شود:</p>
-<pre><code class="language-csharp">int matches = numbers.Where(n =&gt; n &lt;= 2).Count();   // اجرا فوراً انجام می‌شود
+<pre class="hljs"><code><span class="hljs-built_in">int</span> matches = numbers.Where(n =&gt; n &lt;= <span class="hljs-number">2</span>).Count();   <span class="hljs-comment">// اجرا فوراً انجام می‌شود</span>
 </code></pre>
 <p><strong>اهمیت اجرای به تعویق‌افتاده</strong> در این است که <strong>ساخت پرس‌وجو را از اجرای آن جدا می‌کند</strong>. این امکان را می‌دهد که پرس‌وجو را در چند مرحله بسازید و همچنین پرس‌وجوهای پایگاه داده را ممکن می‌سازد.</p>
 <hr>
 <h3>ارزیابی مجدد (Reevaluation) 🔄</h3>
 <p><strong>Subqueries</strong> سطح دیگری از <strong>indirection</strong> ایجاد می‌کنند. تمام محتویات یک subquery نیز از deferred execution پیروی می‌کنند، از جمله <strong>aggregation</strong> و <strong>conversion methods</strong>.</p>
 <p>اجرای به تعویق‌افتاده یک پیامد دیگر هم دارد: <strong>هر بار که پرس‌وجو دوباره شمارش شود، دوباره ارزیابی می‌شود</strong>:</p>
-<pre><code class="language-csharp">var numbers = new List&lt;int&gt;() { 1, 2 };
-IEnumerable&lt;int&gt; query = numbers.Select(n =&gt; n * 10);
+<pre class="hljs"><code><span class="hljs-keyword">var</span> numbers = <span class="hljs-keyword">new</span> List&lt;<span class="hljs-built_in">int</span>&gt;() { <span class="hljs-number">1</span>, <span class="hljs-number">2</span> };
+IEnumerable&lt;<span class="hljs-built_in">int</span>&gt; query = numbers.Select(n =&gt; n * <span class="hljs-number">10</span>);
 
-foreach (int n in query) Console.Write(n + &quot;|&quot;);  // 10|20|
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">int</span> n <span class="hljs-keyword">in</span> query) Console.Write(n + <span class="hljs-string">&quot;|&quot;</span>);  <span class="hljs-comment">// 10|20|</span>
 numbers.Clear();
-foreach (int n in query) Console.Write(n + &quot;|&quot;);  // &lt;چیزی نمایش داده نمی‌شود&gt;
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">int</span> n <span class="hljs-keyword">in</span> query) Console.Write(n + <span class="hljs-string">&quot;|&quot;</span>);  <span class="hljs-comment">// &lt;چیزی نمایش داده نمی‌شود&gt;</span>
 </code></pre>
 <p>گاهی ارزیابی مجدد ممکن است <strong>مزاحمت‌آفرین</strong> باشد:</p>
 <ul>
@@ -551,56 +511,56 @@ foreach (int n in query) Console.Write(n + &quot;|&quot;);  // &lt;چیزی نم
 <li>وقتی پرس‌وجو محاسبات سنگین دارد یا به پایگاه داده خارجی وابسته است، تکرار غیرضروری آن منطقی نیست</li>
 </ul>
 <p>برای جلوگیری از ارزیابی مجدد، می‌توانید از <strong>conversion operators</strong> مانند <code>ToArray</code> یا <code>ToList</code> استفاده کنید:</p>
-<pre><code class="language-csharp">var numbers = new List&lt;int&gt;() { 1, 2 };
-List&lt;int&gt; timesTen = numbers
-    .Select(n =&gt; n * 10)
-    .ToList();                // فوراً اجرا و در List&lt;int&gt; ذخیره شد
+<pre class="hljs"><code><span class="hljs-keyword">var</span> numbers = <span class="hljs-keyword">new</span> List&lt;<span class="hljs-built_in">int</span>&gt;() { <span class="hljs-number">1</span>, <span class="hljs-number">2</span> };
+List&lt;<span class="hljs-built_in">int</span>&gt; timesTen = numbers
+    .Select(n =&gt; n * <span class="hljs-number">10</span>)
+    .ToList();                <span class="hljs-comment">// فوراً اجرا و در List&lt;int&gt; ذخیره شد</span>
 numbers.Clear();
-Console.WriteLine(timesTen.Count);  // هنوز 2
+Console.WriteLine(timesTen.Count);  <span class="hljs-comment">// هنوز 2</span>
 </code></pre>
 <hr>
 <h3>متغیرهای گرفته‌شده (Captured Variables) ⚠️</h3>
 <p>اگر <strong>lambda expressions</strong> پرس‌وجو متغیرهای بیرونی را گرفته باشند، <strong>مقدار آن‌ها هنگام اجرای پرس‌وجو لحاظ می‌شود</strong>:</p>
-<pre><code class="language-csharp">int[] numbers = { 1, 2 };
-int factor = 10;
-IEnumerable&lt;int&gt; query = numbers.Select(n =&gt; n * factor);
-factor = 20;
+<pre class="hljs"><code><span class="hljs-built_in">int</span>[] numbers = { <span class="hljs-number">1</span>, <span class="hljs-number">2</span> };
+<span class="hljs-built_in">int</span> factor = <span class="hljs-number">10</span>;
+IEnumerable&lt;<span class="hljs-built_in">int</span>&gt; query = numbers.Select(n =&gt; n * factor);
+factor = <span class="hljs-number">20</span>;
 
-foreach (int n in query) Console.Write(n + &quot;|&quot;);  // 20|40|
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">int</span> n <span class="hljs-keyword">in</span> query) Console.Write(n + <span class="hljs-string">&quot;|&quot;</span>);  <span class="hljs-comment">// 20|40|</span>
 </code></pre>
 <p>این می‌تواند <strong>یک تله در حلقه‌ها</strong> ایجاد کند. مثال حذف حروف صدادار از یک رشته:</p>
-<pre><code class="language-csharp">IEnumerable&lt;char&gt; query = &quot;Not what you might expect&quot;;
-query = query.Where(c =&gt; c != 'a');
-query = query.Where(c =&gt; c != 'e');
-query = query.Where(c =&gt; c != 'i');
-query = query.Where(c =&gt; c != 'o');
-query = query.Where(c =&gt; c != 'u');
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">char</span>&gt; query = <span class="hljs-string">&quot;Not what you might expect&quot;</span>;
+query = query.Where(c =&gt; c != <span class="hljs-string">&#x27;a&#x27;</span>);
+query = query.Where(c =&gt; c != <span class="hljs-string">&#x27;e&#x27;</span>);
+query = query.Where(c =&gt; c != <span class="hljs-string">&#x27;i&#x27;</span>);
+query = query.Where(c =&gt; c != <span class="hljs-string">&#x27;o&#x27;</span>);
+query = query.Where(c =&gt; c != <span class="hljs-string">&#x27;u&#x27;</span>);
 
-foreach (char c in query) Console.Write(c);  // Nt wht y mght xpct
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">char</span> c <span class="hljs-keyword">in</span> query) Console.Write(c);  <span class="hljs-comment">// Nt wht y mght xpct</span>
 </code></pre>
 <p>اگر بخواهیم از <strong>for loop</strong> استفاده کنیم:</p>
-<pre><code class="language-csharp">IEnumerable&lt;char&gt; query = &quot;Not what you might expect&quot;;
-string vowels = &quot;aeiou&quot;;
-for (int i = 0; i &lt; vowels.Length; i++)
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">char</span>&gt; query = <span class="hljs-string">&quot;Not what you might expect&quot;</span>;
+<span class="hljs-built_in">string</span> vowels = <span class="hljs-string">&quot;aeiou&quot;</span>;
+<span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; vowels.Length; i++)
     query = query.Where(c =&gt; c != vowels[i]);
 
-foreach (char c in query) Console.Write(c);
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">char</span> c <span class="hljs-keyword">in</span> query) Console.Write(c);
 </code></pre>
 <p>یک <strong>IndexOutOfRangeException</strong> رخ می‌دهد، زیرا متغیر حلقه <code>i</code> در closure گرفته شده و هنگام شمارش مقدار آن برابر ۵ است.</p>
 <p>راه حل‌ها:</p>
 <ol>
 <li><strong>تعریف متغیر محلی داخل بلوک</strong>:</li>
 </ol>
-<pre><code class="language-csharp">for (int i = 0; i &lt; vowels.Length; i++)
+<pre class="hljs"><code><span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; vowels.Length; i++)
 {
-    char vowel = vowels[i];
+    <span class="hljs-built_in">char</span> vowel = vowels[i];
     query = query.Where(c =&gt; c != vowel);
 }
 </code></pre>
 <ol start="2">
 <li>یا استفاده از <strong>foreach</strong>:</li>
 </ol>
-<pre><code class="language-csharp">foreach (char vowel in vowels)
+<pre class="hljs"><code><span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">char</span> vowel <span class="hljs-keyword">in</span> vowels)
     query = query.Where(c =&gt; c != vowel);
 </code></pre>
 <hr>
@@ -610,7 +570,7 @@ foreach (char c in query) Console.Write(c);
 <p><strong>تبدیل یا تغییر عملگر پرس‌وجو همان “decoration” است.</strong> اگر دنباله خروجی هیچ تبدیلی انجام ندهد، یک <strong>proxy</strong> است نه decorator.</p>
 <p>فراخوانی <code>Where</code> صرفاً <strong>دنباله wrapper</strong> را می‌سازد که شامل ارجاع به <strong>input sequence</strong>، <strong>lambda expression</strong> و سایر آرگومان‌ها است. دنباله ورودی <strong>فقط زمانی شمارش می‌شود که decorator شمارش شود</strong>.</p>
 <p>مثال:</p>
-<pre><code class="language-csharp">IEnumerable&lt;int&gt; lessThanTen = new int[] { 5, 12, 3 }.Where(n =&gt; n &lt; 10);
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">int</span>&gt; lessThanTen = <span class="hljs-keyword">new</span> <span class="hljs-built_in">int</span>[] { <span class="hljs-number">5</span>, <span class="hljs-number">12</span>, <span class="hljs-number">3</span> }.Where(n =&gt; n &lt; <span class="hljs-number">10</span>);
 </code></pre>
 <p>این ساختار همانند شکل ۸-۳ ترکیب می‌شود.</p>
 <div align="center">
@@ -618,18 +578,18 @@ foreach (char c in query) Console.Write(c);
 </div>
 <p>هنگامی که <code>lessThanTen</code> را شمارش می‌کنید، در واقع <strong>آرایه را از طریق decorator <code>Where</code> پرس‌وجو می‌کنید</strong>. ✅</p>
 <p>خبر خوب این است که اگر بخواهید <strong>یک query operator شخصی بسازید</strong>، پیاده‌سازی یک <strong>decorator sequence</strong> با <strong>C# iterator</strong> بسیار ساده است. مثال ساخت متد <code>Select</code> خودتان:</p>
-<pre><code class="language-csharp">public static IEnumerable&lt;TResult&gt; MySelect&lt;TSource,TResult&gt;
-    (this IEnumerable&lt;TSource&gt; source, Func&lt;TSource,TResult&gt; selector)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">IEnumerable</span>&lt;<span class="hljs-title">TResult</span>&gt; <span class="hljs-title">MySelect</span>&lt;<span class="hljs-title">TSource</span>,<span class="hljs-title">TResult</span>&gt;
+    (<span class="hljs-params"><span class="hljs-keyword">this</span> IEnumerable&lt;TSource&gt; source, Func&lt;TSource,TResult&gt; selector</span>)</span>
 {
-    foreach (TSource element in source)
-        yield return selector(element);
+    <span class="hljs-keyword">foreach</span> (TSource element <span class="hljs-keyword">in</span> source)
+        <span class="hljs-function"><span class="hljs-keyword">yield</span> <span class="hljs-keyword">return</span> <span class="hljs-title">selector</span>(<span class="hljs-params">element</span>)</span>;
 }
 </code></pre>
 <p>این متد به دلیل استفاده از <strong><code>yield return</code></strong> یک <strong>iterator</strong> است. از نظر عملکرد، معادل کوتاه‌شده‌ی کد زیر است:</p>
-<pre><code class="language-csharp">public static IEnumerable&lt;TResult&gt; MySelect&lt;TSource,TResult&gt;
-    (this IEnumerable&lt;TSource&gt; source, Func&lt;TSource,TResult&gt; selector)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">IEnumerable</span>&lt;<span class="hljs-title">TResult</span>&gt; <span class="hljs-title">MySelect</span>&lt;<span class="hljs-title">TSource</span>,<span class="hljs-title">TResult</span>&gt;
+    (<span class="hljs-params"><span class="hljs-keyword">this</span> IEnumerable&lt;TSource&gt; source, Func&lt;TSource,TResult&gt; selector</span>)</span>
 {
-    return new SelectSequence(source, selector);
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> SelectSequence(source, selector);
 }
 </code></pre>
 <p>که در آن <code>SelectSequence</code> یک <strong>کلاس نوشته‌شده توسط کامپایلر</strong> است که <strong>enumerator آن منطق موجود در iterator را encapsulate می‌کند</strong>.</p>
@@ -637,10 +597,10 @@ foreach (char c in query) Console.Write(c);
 <hr>
 <h3>زنجیره‌سازی Decorators 🔗</h3>
 <p>زنجیره‌سازی <strong>query operators</strong> باعث <strong>لایه‌لایه شدن decorators</strong> می‌شود. مثال:</p>
-<pre><code class="language-csharp">IEnumerable&lt;int&gt; query = new int[] { 5, 12, 3 }
-    .Where(n =&gt; n &lt; 10)
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">int</span>&gt; query = <span class="hljs-keyword">new</span> <span class="hljs-built_in">int</span>[] { <span class="hljs-number">5</span>, <span class="hljs-number">12</span>, <span class="hljs-number">3</span> }
+    .Where(n =&gt; n &lt; <span class="hljs-number">10</span>)
     .OrderBy(n =&gt; n)
-    .Select(n =&gt; n * 10);
+    .Select(n =&gt; n * <span class="hljs-number">10</span>);
 </code></pre>
 <p>هر <strong>query operator</strong> یک decorator جدید ایجاد می‌کند که <strong>دنباله قبلی را می‌پوشاند</strong> (مانند <strong>عروسک‌های روسی تو در تو</strong>). 🪆</p>
 <p>شکل ۸-۴ <strong>مدل شیء (object model)</strong> این پرس‌وجو را نشان می‌دهد. توجه کنید که <strong>این مدل شیء کاملاً قبل از هر شمارش ساخته می‌شود</strong> و هیچ داده‌ای هنوز پردازش نشده است.</p>
@@ -656,21 +616,21 @@ foreach (char c in query) Console.Write(c);
 <li>و decorator <code>Where</code> به آرایه اصلی ارجاع می‌دهد.</li>
 </ul>
 <p>ویژگی اجرای به تعویق‌افتاده این است که اگر <strong>پرس‌وجو را به صورت مرحله‌ای بسازید</strong>، <strong>همان مدل شیء ساخته می‌شود</strong>:</p>
-<pre><code class="language-csharp">IEnumerable&lt;int&gt;
-    source    = new int[] { 5, 12, 3 },
-    filtered  = source   .Where(n =&gt; n &lt; 10),
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">int</span>&gt;
+    source    = <span class="hljs-keyword">new</span> <span class="hljs-built_in">int</span>[] { <span class="hljs-number">5</span>, <span class="hljs-number">12</span>, <span class="hljs-number">3</span> },
+    filtered  = source   .Where(n =&gt; n &lt; <span class="hljs-number">10</span>),
     sorted    = filtered .OrderBy(n =&gt; n),
-    query     = sorted   .Select(n =&gt; n * 10);
+    query     = sorted   .Select(n =&gt; n * <span class="hljs-number">10</span>);
 </code></pre>
 <div align="center">
 <p><img src="../../../assets/image/08/Table-8-6.jpeg" alt="Conventions-UsedThis-Book"></p>
 </div>
 <h3>نحوه اجرای پرس‌وجوها ⚙️</h3>
 <p>نتایج شمارش پرس‌وجوی قبلی به این صورت است:</p>
-<pre><code class="language-csharp">foreach (int n in query) Console.WriteLine(n);
+<pre class="hljs"><code><span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">int</span> n <span class="hljs-keyword">in</span> query) Console.WriteLine(n);
 </code></pre>
 <p>خروجی:</p>
-<pre><code>30
+<pre class="hljs"><code>30
 50
 </code></pre>
 <hr>
@@ -685,8 +645,8 @@ foreach (char c in query) Console.Write(c);
 <hr>
 <h3>Subqueries (زیرپرس‌وجوها) 🔍</h3>
 <p>یک <strong>زیرپرس‌وجو</strong>، پرس‌وجویی است که در <strong>lambda expression</strong> یک پرس‌وجوی دیگر قرار دارد. مثال زیر، از یک زیرپرس‌وجو برای مرتب کردن موسیقی‌دان‌ها بر اساس <strong>نام خانوادگی</strong> استفاده می‌کند:</p>
-<pre><code class="language-csharp">string[] musos = { &quot;David Gilmour&quot;, &quot;Roger Waters&quot;, &quot;Rick Wright&quot;, &quot;Nick Mason&quot; };
-IEnumerable&lt;string&gt; query = musos.OrderBy(m =&gt; m.Split().Last());
+<pre class="hljs"><code><span class="hljs-built_in">string</span>[] musos = { <span class="hljs-string">&quot;David Gilmour&quot;</span>, <span class="hljs-string">&quot;Roger Waters&quot;</span>, <span class="hljs-string">&quot;Rick Wright&quot;</span>, <span class="hljs-string">&quot;Nick Mason&quot;</span> };
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query = musos.OrderBy(m =&gt; m.Split().Last());
 </code></pre>
 <ul>
 <li><code>m.Split</code> هر رشته را به یک مجموعه از کلمات تبدیل می‌کند، سپس <strong>عملگر <code>Last</code></strong> روی آن فراخوانی می‌شود.</li>
@@ -697,24 +657,24 @@ IEnumerable&lt;string&gt; query = musos.OrderBy(m =&gt; m.Split().Last());
 <p>در این کتاب، وقتی از اصطلاح <strong>subquery</strong> استفاده می‌کنیم، منظور <strong>پرس‌وجویی است که در lambda expression یک پرس‌وجوی دیگر ارجاع شده</strong>. در <strong>query expressions</strong>، یک زیرپرس‌وجو معادل پرس‌وجویی است که از یک عبارت در هر clause به جز <strong>from</strong> ارجاع شده باشد.</p>
 <p>زیرپرس‌وجو به <strong>طور خصوصی در محدوده عبارت احاطه‌کننده</strong> است و می‌تواند به <strong>پارامترهای lambda بیرونی</strong> یا <strong>range variables در query expression</strong> ارجاع دهد.</p>
 <p>مثال ساده:</p>
-<pre><code class="language-csharp">string[] names = { &quot;Tom&quot;, &quot;Dick&quot;, &quot;Harry&quot;, &quot;Mary&quot;, &quot;Jay&quot; };
-IEnumerable&lt;string&gt; outerQuery = names
+<pre class="hljs"><code><span class="hljs-built_in">string</span>[] names = { <span class="hljs-string">&quot;Tom&quot;</span>, <span class="hljs-string">&quot;Dick&quot;</span>, <span class="hljs-string">&quot;Harry&quot;</span>, <span class="hljs-string">&quot;Mary&quot;</span>, <span class="hljs-string">&quot;Jay&quot;</span> };
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; outerQuery = names
     .Where(n =&gt; n.Length == names.OrderBy(n2 =&gt; n2.Length)
                                 .Select(n2 =&gt; n2.Length).First());
-// Tom, Jay
+<span class="hljs-comment">// Tom, Jay</span>
 </code></pre>
 <p>همان مثال به صورت query expression:</p>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; outerQuery =
-    from n in names
-    where n.Length ==
-        (from n2 in names orderby n2.Length select n2.Length).First()
-    select n;
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; outerQuery =
+    <span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> names
+    <span class="hljs-keyword">where</span> n.Length ==
+        (<span class="hljs-keyword">from</span> n2 <span class="hljs-keyword">in</span> names <span class="hljs-keyword">orderby</span> n2.Length <span class="hljs-keyword">select</span> n2.Length).First()
+    <span class="hljs-keyword">select</span> n;
 </code></pre>
 <ul>
 <li><strong>توجه:</strong> چون <strong>range variable بیرونی (n)</strong> در محدوده زیرپرس‌وجو در دسترس است، نمی‌توان از همان نام <code>n</code> برای زیرپرس‌وجو استفاده کرد.</li>
 </ul>
 <hr>
-<p><strong>زمان اجرای زیرپرس‌وجو:</strong>
+<p><strong>زمان اجرای زیرپرس‌وجو:</strong><br>
 یک زیرپرس‌وجو <strong>هرگاه lambda احاطه‌کننده ارزیابی شود، اجرا می‌شود</strong>. به عبارت دیگر، <strong>اجرا از بیرون به داخل</strong> انجام می‌شود.</p>
 <ul>
 <li>برای <strong>پرس‌وجوهای محلی (local queries)</strong>، این مدل دقیقاً رعایت می‌شود.</li>
@@ -726,32 +686,32 @@ IEnumerable&lt;string&gt; outerQuery = names
 <p><img src="../../../assets/image/08/Table-8-8.jpeg" alt="Conventions-UsedThis-Book"></p>
 </div>
 <p>می‌توانیم <strong>زیرپرس‌وجوی قبلی</strong> را به شکل مختصرتر این‌گونه بیان کنیم:</p>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query =
-    from n in names
-    where n.Length == names.OrderBy(n2 =&gt; n2.Length).First().Length
-    select n;
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query =
+    <span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> names
+    <span class="hljs-keyword">where</span> n.Length == names.OrderBy(n2 =&gt; n2.Length).First().Length
+    <span class="hljs-keyword">select</span> n;
 </code></pre>
 <p>با استفاده از <strong>تابع تجمیعی <code>Min</code></strong> می‌توان پرس‌وجو را حتی ساده‌تر کرد:</p>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query =
-    from n in names
-    where n.Length == names.Min(n2 =&gt; n2.Length)
-    select n;
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query =
+    <span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> names
+    <span class="hljs-keyword">where</span> n.Length == names.Min(n2 =&gt; n2.Length)
+    <span class="hljs-keyword">select</span> n;
 </code></pre>
 <hr>
 <p>در بخش <strong>“Interpreted Queries”</strong> در صفحه 448، توضیح داده‌ایم که چگونه می‌توان از منابع راه‌دور مانند جداول SQL پرس‌وجو گرفت. مثال بالا برای <strong>پرس‌وجوی پایگاه داده</strong> ایده‌آل است، زیرا به صورت یک واحد پردازش می‌شود و فقط یک بار نیاز به ارسال به سرور پایگاه داده دارد. 🖥️</p>
 <p>با این حال، برای یک مجموعه محلی، این پرس‌وجو <strong>بهینه نیست</strong>، چون زیرپرس‌وجو <strong>در هر تکرار حلقه بیرونی دوباره محاسبه می‌شود</strong>.</p>
 <p>برای اجتناب از این ناکارآمدی، می‌توانیم زیرپرس‌وجو را <strong>به صورت جداگانه اجرا کنیم</strong> تا دیگر زیرپرس‌وجو نباشد:</p>
-<pre><code class="language-csharp">int shortest = names.Min(n =&gt; n.Length);
-IEnumerable&lt;string&gt; query =
-    from n in names
-    where n.Length == shortest
-    select n;
+<pre class="hljs"><code><span class="hljs-built_in">int</span> shortest = names.Min(n =&gt; n.Length);
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query =
+    <span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> names
+    <span class="hljs-keyword">where</span> n.Length == shortest
+    <span class="hljs-keyword">select</span> n;
 </code></pre>
 <div align="center">
 <p><img src="../../../assets/image/08/Table-8-9.jpeg" alt="Conventions-UsedThis-Book"></p>
 </div>
-<p>تفکیک زیرپرس‌وجوها به این صورت تقریباً همیشه در <strong>پرس‌وجوهای روی مجموعه‌های محلی</strong> توصیه می‌شود، زیرا کارایی و وضوح کد را افزایش می‌دهد. تنها استثناء زمانی است که زیرپرس‌وجو <strong>مرتبط (correlated)</strong> باشد، یعنی به متغیرهای محدوده‌ی پرس‌وجوی بیرونی اشاره کند. زیرپرس‌وجوهای مرتبط در بخش «Projecting» در صفحه 473 توضیح داده شده‌اند.
-<strong>زیرپرس‌وجوها و اجرای تنبل (Deferred Execution)</strong>
+<p>تفکیک زیرپرس‌وجوها به این صورت تقریباً همیشه در <strong>پرس‌وجوهای روی مجموعه‌های محلی</strong> توصیه می‌شود، زیرا کارایی و وضوح کد را افزایش می‌دهد. تنها استثناء زمانی است که زیرپرس‌وجو <strong>مرتبط (correlated)</strong> باشد، یعنی به متغیرهای محدوده‌ی پرس‌وجوی بیرونی اشاره کند. زیرپرس‌وجوهای مرتبط در بخش «Projecting» در صفحه 473 توضیح داده شده‌اند.<br>
+<strong>زیرپرس‌وجوها و اجرای تنبل (Deferred Execution)</strong><br>
 یک عملگر عنصر یا تجمیع مانند <code>First</code> یا <code>Count</code> در یک زیرپرس‌وجو، باعث اجرای فوری پرس‌وجوی بیرونی نمی‌شود—اجرای تنبل هنوز برای پرس‌وجوی بیرونی برقرار است. دلیل این است که زیرپرس‌وجوها به‌صورت غیرمستقیم فراخوانی می‌شوند—در مورد پرس‌وجوهای محلی، از طریق یک <strong>delegate</strong> و در مورد پرس‌وجوهای تفسیرشده، از طریق یک <strong>expression tree</strong>.</p>
 <p>یک حالت جالب زمانی پیش می‌آید که زیرپرس‌وجو را در یک عبارت <code>Select</code> قرار دهید. در پرس‌وجوهای محلی، شما در واقع <strong>یک دنباله از پرس‌وجوها را پروجکت می‌کنید</strong>—هر کدام خود تحت اجرای تنبل هستند. این کار معمولاً شفاف است و <strong>به بهبود کارایی کمک می‌کند</strong>. مثال‌های دقیق‌تر برای زیرپرس‌وجوهای <code>Select</code> در فصل 9 بررسی شده‌اند.</p>
 <hr>
@@ -765,9 +725,9 @@ IEnumerable&lt;string&gt; query =
 <hr>
 <h3><strong>ساخت تدریجی پرس‌وجو (Progressive Query Building)</strong></h3>
 <p>در ابتدای فصل، نحوه ساخت تدریجی یک پرس‌وجو با <strong>syntax فلونت</strong> را مشاهده کردیم:</p>
-<pre><code class="language-csharp">var filtered = names.Where(n =&gt; n.Contains(&quot;a&quot;));
-var sorted   = filtered.OrderBy(n =&gt; n);
-var query    = sorted.Select(n =&gt; n.ToUpper());
+<pre class="hljs"><code><span class="hljs-keyword">var</span> filtered = names.Where(n =&gt; n.Contains(<span class="hljs-string">&quot;a&quot;</span>));
+<span class="hljs-keyword">var</span> sorted   = filtered.OrderBy(n =&gt; n);
+<span class="hljs-keyword">var</span> query    = sorted.Select(n =&gt; n.ToUpper());
 </code></pre>
 <p>هر عملگر پرس‌وجو یک <strong>decorator sequence</strong> بازمی‌گرداند و در نتیجه پرس‌وجو همان <strong>زنجیره‌ی لایه‌لایه‌ای از دکوریتورها</strong> را دارد که در یک پرس‌وجوی تک‌عبارتی ایجاد می‌شود.</p>
 <p><strong>مزایای ساخت تدریجی پرس‌وجو:</strong></p>
@@ -775,77 +735,77 @@ var query    = sorted.Select(n =&gt; n.ToUpper());
 <li>نوشتن پرس‌وجوها آسان‌تر می‌شود.</li>
 <li>امکان افزودن عملگرها به‌صورت شرطی وجود دارد. مثال:</li>
 </ul>
-<pre><code class="language-csharp">if (includeFilter) 
+<pre class="hljs"><code><span class="hljs-keyword">if</span> (includeFilter) 
     query = query.Where(...);
 </code></pre>
 <p>این روش <strong>بهینه‌تر از نوشتن شرط داخل پرس‌وجو</strong> است:</p>
-<pre><code class="language-csharp">query = query.Where(n =&gt; !includeFilter || &lt;expression&gt;);
+<pre class="hljs"><code>query = query.Where(n =&gt; !includeFilter || &lt;expression&gt;);
 </code></pre>
 <p>زیرا اگر <code>includeFilter</code> برابر <code>false</code> باشد، یک عملگر اضافه اضافه نمی‌شود.</p>
 <hr>
 <h3><strong>مثال عملی: حذف حروف صدادار و مرتب‌سازی</strong></h3>
 <p>می‌خواهیم از یک لیست اسامی تمام <strong>حروف صدادار</strong> را حذف کنیم و سپس اسامی با طول بیش از دو حرف را به ترتیب الفبایی مرتب کنیم. با syntax فلونت:</p>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query = names
-    .Select(n =&gt; n.Replace(&quot;a&quot;,&quot;&quot;).Replace(&quot;e&quot;,&quot;&quot;).Replace(&quot;i&quot;,&quot;&quot;)
-                  .Replace(&quot;o&quot;,&quot;&quot;).Replace(&quot;u&quot;,&quot;&quot;))
-    .Where(n =&gt; n.Length &gt; 2)
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query = names
+    .Select(n =&gt; n.Replace(<span class="hljs-string">&quot;a&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;e&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;i&quot;</span>,<span class="hljs-string">&quot;&quot;</span>)
+                  .Replace(<span class="hljs-string">&quot;o&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;u&quot;</span>,<span class="hljs-string">&quot;&quot;</span>))
+    .Where(n =&gt; n.Length &gt; <span class="hljs-number">2</span>)
     .OrderBy(n =&gt; n);
 
-// خروجی:
-// Dck
-// Hrry
-// Mry
+<span class="hljs-comment">// خروجی:</span>
+<span class="hljs-comment">// Dck</span>
+<span class="hljs-comment">// Hrry</span>
+<span class="hljs-comment">// Mry</span>
 </code></pre>
 <p>به جای پنج بار فراخوانی <code>Replace</code> می‌توان از <strong>Regular Expression</strong> هم استفاده کرد:</p>
-<pre><code class="language-csharp">n =&gt; Regex.Replace(n, &quot;[aeiou]&quot;, &quot;&quot;)
+<pre class="hljs"><code>n =&gt; Regex.Replace(n, <span class="hljs-string">&quot;[aeiou]&quot;</span>, <span class="hljs-string">&quot;&quot;</span>)
 </code></pre>
 <p>مزیت <code>Replace</code> این است که در <strong>پرس‌وجوهای پایگاه داده</strong> نیز کار می‌کند.</p>
 <hr>
 <h3><strong>چالش در ترجمه مستقیم به Query Syntax</strong></h3>
 <p>در <strong>query syntax</strong>، <code>select</code> باید بعد از <code>where</code> و <code>orderby</code> بیاید، و اگر ترتیب را تغییر دهیم، نتیجه متفاوت خواهد بود:</p>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query =
-    from n in names
-    where n.Length &gt; 2
-    orderby n
-    select n.Replace(&quot;a&quot;,&quot;&quot;).Replace(&quot;e&quot;,&quot;&quot;).Replace(&quot;i&quot;,&quot;&quot;)
-             .Replace(&quot;o&quot;,&quot;&quot;).Replace(&quot;u&quot;,&quot;&quot;);
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query =
+    <span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> names
+    <span class="hljs-keyword">where</span> n.Length &gt; <span class="hljs-number">2</span>
+    <span class="hljs-keyword">orderby</span> n
+    <span class="hljs-keyword">select</span> n.Replace(<span class="hljs-string">&quot;a&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;e&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;i&quot;</span>,<span class="hljs-string">&quot;&quot;</span>)
+             .Replace(<span class="hljs-string">&quot;o&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;u&quot;</span>,<span class="hljs-string">&quot;&quot;</span>);
 
-// خروجی:
-// Dck
-// Hrry
-// Jy
-// Mry
-// Tm
+<span class="hljs-comment">// خروجی:</span>
+<span class="hljs-comment">// Dck</span>
+<span class="hljs-comment">// Hrry</span>
+<span class="hljs-comment">// Jy</span>
+<span class="hljs-comment">// Mry</span>
+<span class="hljs-comment">// Tm</span>
 </code></pre>
 <hr>
 <h3><strong>راه حل: پرس‌وجوی تدریجی در Query Syntax</strong></h3>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query =
-    from n in names
-    select n.Replace(&quot;a&quot;,&quot;&quot;).Replace(&quot;e&quot;,&quot;&quot;).Replace(&quot;i&quot;,&quot;&quot;)
-            .Replace(&quot;o&quot;,&quot;&quot;).Replace(&quot;u&quot;,&quot;&quot;);
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query =
+    <span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> names
+    <span class="hljs-keyword">select</span> n.Replace(<span class="hljs-string">&quot;a&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;e&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;i&quot;</span>,<span class="hljs-string">&quot;&quot;</span>)
+            .Replace(<span class="hljs-string">&quot;o&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;u&quot;</span>,<span class="hljs-string">&quot;&quot;</span>);
 
-query = from n in query
-        where n.Length &gt; 2
-        orderby n
-        select n;
+query = <span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> query
+        <span class="hljs-keyword">where</span> n.Length &gt; <span class="hljs-number">2</span>
+        <span class="hljs-keyword">orderby</span> n
+        <span class="hljs-keyword">select</span> n;
 
-// خروجی:
-// Dck
-// Hrry
-// Mry
+<span class="hljs-comment">// خروجی:</span>
+<span class="hljs-comment">// Dck</span>
+<span class="hljs-comment">// Hrry</span>
+<span class="hljs-comment">// Mry</span>
 </code></pre>
 <p>با این روش، نتیجه همانند پرس‌وجوی فلونت باقی می‌ماند و <strong>خوانایی و انعطاف بیشتری</strong> دارد.</p>
 <h3><strong>کلمه کلیدی <code>into</code> در LINQ</strong></h3>
 <p>کلمه کلیدی <code>into</code> در <strong>query expressions</strong> بسته به زمینه، دو معنا دارد. معنایی که در اینجا بررسی می‌کنیم برای <strong>ادامه دادن پرس‌وجو بعد از یک projection</strong> است (معنای دیگر برای <code>GroupJoin</code> است).</p>
 <p>با <code>into</code> می‌توان پرس‌وجو را <strong>پس از یک select ادامه داد</strong> و این در واقع یک <strong>میانبر برای پرس‌وجوی تدریجی</strong> است. برای مثال، پرس‌وجوی قبلی را می‌توان به شکل زیر نوشت:</p>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query =
-    from n in names
-    select n.Replace(&quot;a&quot;,&quot;&quot;).Replace(&quot;e&quot;,&quot;&quot;).Replace(&quot;i&quot;,&quot;&quot;)
-            .Replace(&quot;o&quot;,&quot;&quot;).Replace(&quot;u&quot;,&quot;&quot;)
-    into noVowel
-    where noVowel.Length &gt; 2
-    orderby noVowel
-    select noVowel;
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query =
+    <span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> names
+    <span class="hljs-keyword">select</span> n.Replace(<span class="hljs-string">&quot;a&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;e&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;i&quot;</span>,<span class="hljs-string">&quot;&quot;</span>)
+            .Replace(<span class="hljs-string">&quot;o&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;u&quot;</span>,<span class="hljs-string">&quot;&quot;</span>)
+    <span class="hljs-keyword">into</span> noVowel
+    <span class="hljs-keyword">where</span> noVowel.Length &gt; <span class="hljs-number">2</span>
+    <span class="hljs-keyword">orderby</span> noVowel
+    <span class="hljs-keyword">select</span> noVowel;
 </code></pre>
 <ul>
 <li><strong>محدوده استفاده</strong>: تنها بعد از یک <code>select</code> یا <code>group</code> می‌توان از <code>into</code> استفاده کرد.</li>
@@ -856,57 +816,57 @@ query = from n in query
 <hr>
 <h3><strong>قوانین محدوده (Scoping Rules)</strong></h3>
 <p>تمام <strong>range variables</strong> پس از <code>into</code> از محدوده خارج می‌شوند. مثال نادرست:</p>
-<pre><code class="language-csharp">var query =
-    from n1 in names
-    select n1.ToUpper()
-    into n2          // فقط n2 قابل دسترس است
-    where n1.Contains(&quot;x&quot;)  // خطا: n1 از محدوده خارج شده
-    select n2;
+<pre class="hljs"><code><span class="hljs-keyword">var</span> query =
+    <span class="hljs-keyword">from</span> n1 <span class="hljs-keyword">in</span> names
+    <span class="hljs-keyword">select</span> n1.ToUpper()
+    <span class="hljs-keyword">into</span> n2          <span class="hljs-comment">// فقط n2 قابل دسترس است</span>
+    <span class="hljs-keyword">where</span> n1.Contains(<span class="hljs-string">&quot;x&quot;</span>)  <span class="hljs-comment">// خطا: n1 از محدوده خارج شده</span>
+    <span class="hljs-keyword">select</span> n2;
 </code></pre>
 <p><strong>توضیح:</strong> در fluent syntax معادل:</p>
-<pre><code class="language-csharp">var query = names
+<pre class="hljs"><code><span class="hljs-keyword">var</span> query = names
     .Select(n1 =&gt; n1.ToUpper())
-    .Where(n2 =&gt; n1.Contains(&quot;x&quot;)); // خطا: n1 دیگر در دسترس نیست
+    .Where(n2 =&gt; n1.Contains(<span class="hljs-string">&quot;x&quot;</span>)); <span class="hljs-comment">// خطا: n1 دیگر در دسترس نیست</span>
 </code></pre>
 <hr>
 <h3><strong>پیچاندن پرس‌وجوها (Wrapping Queries)</strong></h3>
 <p>یک پرس‌وجوی تدریجی می‌تواند به شکل <strong>یک statement واحد</strong> با <strong>پیچاندن یک پرس‌وجو در پرس‌وجوی دیگر</strong> نوشته شود:</p>
-<pre><code class="language-csharp">var tempQuery = tempQueryExpr;
-var finalQuery = from ... in tempQuery ...
+<pre class="hljs"><code><span class="hljs-keyword">var</span> tempQuery = tempQueryExpr;
+<span class="hljs-keyword">var</span> finalQuery = <span class="hljs-keyword">from</span> ... <span class="hljs-keyword">in</span> tempQuery ...
 </code></pre>
 <p>معادل <strong>فرم بدون متغیر واسط</strong>:</p>
-<pre><code class="language-csharp">var finalQuery = from ... in (tempQueryExpr)
+<pre class="hljs"><code><span class="hljs-keyword">var</span> finalQuery = <span class="hljs-keyword">from</span> ... <span class="hljs-keyword">in</span> (tempQueryExpr)
                  ...
 </code></pre>
 <p><strong>مثال عملی:</strong></p>
 <p>پرس‌وجوی تدریجی:</p>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query =
-    from n in names
-    select n.Replace(&quot;a&quot;,&quot;&quot;).Replace(&quot;e&quot;,&quot;&quot;).Replace(&quot;i&quot;,&quot;&quot;)
-            .Replace(&quot;o&quot;,&quot;&quot;).Replace(&quot;u&quot;,&quot;&quot;);
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query =
+    <span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> names
+    <span class="hljs-keyword">select</span> n.Replace(<span class="hljs-string">&quot;a&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;e&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;i&quot;</span>,<span class="hljs-string">&quot;&quot;</span>)
+            .Replace(<span class="hljs-string">&quot;o&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;u&quot;</span>,<span class="hljs-string">&quot;&quot;</span>);
 
-query = from n in query
-        where n.Length &gt; 2
-        orderby n
-        select n;
+query = <span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> query
+        <span class="hljs-keyword">where</span> n.Length &gt; <span class="hljs-number">2</span>
+        <span class="hljs-keyword">orderby</span> n
+        <span class="hljs-keyword">select</span> n;
 </code></pre>
 <p>همان پرس‌وجو به صورت <strong>wrapped</strong>:</p>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query =
-    from n1 in
-    (
-        from n2 in names
-        select n2.Replace(&quot;a&quot;,&quot;&quot;).Replace(&quot;e&quot;,&quot;&quot;).Replace(&quot;i&quot;,&quot;&quot;)
-                 .Replace(&quot;o&quot;,&quot;&quot;).Replace(&quot;u&quot;,&quot;&quot;)
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query =
+    <span class="hljs-function"><span class="hljs-keyword">from</span> n1 <span class="hljs-title">in</span>
+    (<span class="hljs-params">
+        <span class="hljs-keyword">from</span> n2 <span class="hljs-keyword">in</span> names
+        <span class="hljs-keyword">select</span> n2.Replace(<span class="hljs-string">&quot;a&quot;</span>,<span class="hljs-string">&quot;&quot;</span></span>).<span class="hljs-title">Replace</span>(<span class="hljs-params"><span class="hljs-string">&quot;e&quot;</span>,<span class="hljs-string">&quot;&quot;</span></span>).<span class="hljs-title">Replace</span>(<span class="hljs-params"><span class="hljs-string">&quot;i&quot;</span>,<span class="hljs-string">&quot;&quot;</span></span>)
+                 .<span class="hljs-title">Replace</span>(<span class="hljs-params"><span class="hljs-string">&quot;o&quot;</span>,<span class="hljs-string">&quot;&quot;</span></span>).<span class="hljs-title">Replace</span>(<span class="hljs-params"><span class="hljs-string">&quot;u&quot;</span>,<span class="hljs-string">&quot;&quot;</span></span>)
     )
-    where n1.Length &gt; 2
-    orderby n1
-    select n1;
+    <span class="hljs-keyword">where</span> n1.Length &gt; 2
+    <span class="hljs-keyword">orderby</span> n1
+    <span class="hljs-keyword">select</span> n1</span>;
 </code></pre>
 <p>در <strong>fluent syntax</strong>، نتیجه همان زنجیره خطی عملگرها است:</p>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query = names
-    .Select(n =&gt; n.Replace(&quot;a&quot;,&quot;&quot;).Replace(&quot;e&quot;,&quot;&quot;).Replace(&quot;i&quot;,&quot;&quot;)
-                   .Replace(&quot;o&quot;,&quot;&quot;).Replace(&quot;u&quot;,&quot;&quot;))
-    .Where(n =&gt; n.Length &gt; 2)
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query = names
+    .Select(n =&gt; n.Replace(<span class="hljs-string">&quot;a&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;e&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;i&quot;</span>,<span class="hljs-string">&quot;&quot;</span>)
+                   .Replace(<span class="hljs-string">&quot;o&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;u&quot;</span>,<span class="hljs-string">&quot;&quot;</span>))
+    .Where(n =&gt; n.Length &gt; <span class="hljs-number">2</span>)
     .OrderBy(n =&gt; n);
 </code></pre>
 <blockquote>
@@ -929,82 +889,82 @@ query = from n in query
 <h2><strong>Object Initializers</strong></h2>
 <p>تا کنون در <code>select</code>، فقط عناصر اسکالر (مانند <code>int</code> یا <code>string</code>) را projection کرده‌ایم. با <strong>object initializers</strong> می‌توانیم projection را به <strong>انواع پیچیده‌تر</strong> انجام دهیم.</p>
 <p>مثال: می‌خواهیم نام‌ها را بدون حروف صدادار داشته باشیم، ولی نام اصلی هم حفظ شود:</p>
-<pre><code class="language-csharp">class TempProjectionItem
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title">TempProjectionItem</span>
 {
-    public string Original;   // نام اصلی
-    public string Vowelless;  // نام بدون حروف صدادار
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Original;   <span class="hljs-comment">// نام اصلی</span>
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Vowelless;  <span class="hljs-comment">// نام بدون حروف صدادار</span>
 }
 </code></pre>
 <p>سپس در پرس‌وجو می‌توانیم projection کنیم:</p>
-<pre><code class="language-csharp">string[] names = { &quot;Tom&quot;, &quot;Dick&quot;, &quot;Harry&quot;, &quot;Mary&quot;, &quot;Jay&quot; };
+<pre class="hljs"><code><span class="hljs-built_in">string</span>[] names = { <span class="hljs-string">&quot;Tom&quot;</span>, <span class="hljs-string">&quot;Dick&quot;</span>, <span class="hljs-string">&quot;Harry&quot;</span>, <span class="hljs-string">&quot;Mary&quot;</span>, <span class="hljs-string">&quot;Jay&quot;</span> };
 
 IEnumerable&lt;TempProjectionItem&gt; temp =
-    from n in names
-    select new TempProjectionItem
+    <span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> names
+    <span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> TempProjectionItem
     {
         Original = n,
-        Vowelless = n.Replace(&quot;a&quot;,&quot;&quot;).Replace(&quot;e&quot;,&quot;&quot;).Replace(&quot;i&quot;,&quot;&quot;)
-                     .Replace(&quot;o&quot;,&quot;&quot;).Replace(&quot;u&quot;,&quot;&quot;)
+        Vowelless = n.Replace(<span class="hljs-string">&quot;a&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;e&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;i&quot;</span>,<span class="hljs-string">&quot;&quot;</span>)
+                     .Replace(<span class="hljs-string">&quot;o&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;u&quot;</span>,<span class="hljs-string">&quot;&quot;</span>)
     };
 </code></pre>
 <p>نتیجه نوع <code>IEnumerable&lt;TempProjectionItem&gt;</code> خواهد بود و می‌توانیم پرس‌وجوی بعدی روی آن انجام دهیم:</p>
-<pre><code class="language-csharp">IEnumerable&lt;string&gt; query =
-    from item in temp
-    where item.Vowelless.Length &gt; 2
-    select item.Original;
+<pre class="hljs"><code>IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query =
+    <span class="hljs-keyword">from</span> item <span class="hljs-keyword">in</span> temp
+    <span class="hljs-keyword">where</span> item.Vowelless.Length &gt; <span class="hljs-number">2</span>
+    <span class="hljs-keyword">select</span> item.Original;
 
-// نتیجه:
-// Dick
-// Harry
-// Mary
+<span class="hljs-comment">// نتیجه:</span>
+<span class="hljs-comment">// Dick</span>
+<span class="hljs-comment">// Harry</span>
+<span class="hljs-comment">// Mary</span>
 </code></pre>
 <hr>
 <h2><strong>Anonymous Types</strong></h2>
 <p>برای حذف نیاز به نوشتن کلاس موقت، می‌توان از <strong>anonymous types</strong> استفاده کرد:</p>
-<pre><code class="language-csharp">var intermediate =
-    from n in names
-    select new
+<pre class="hljs"><code><span class="hljs-keyword">var</span> intermediate =
+    <span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> names
+    <span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span>
     {
         Original = n,
-        Vowelless = n.Replace(&quot;a&quot;,&quot;&quot;).Replace(&quot;e&quot;,&quot;&quot;).Replace(&quot;i&quot;,&quot;&quot;)
-                     .Replace(&quot;o&quot;,&quot;&quot;).Replace(&quot;u&quot;,&quot;&quot;)
+        Vowelless = n.Replace(<span class="hljs-string">&quot;a&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;e&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;i&quot;</span>,<span class="hljs-string">&quot;&quot;</span>)
+                     .Replace(<span class="hljs-string">&quot;o&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;u&quot;</span>,<span class="hljs-string">&quot;&quot;</span>)
     };
 
-IEnumerable&lt;string&gt; query =
-    from item in intermediate
-    where item.Vowelless.Length &gt; 2
-    select item.Original;
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query =
+    <span class="hljs-keyword">from</span> item <span class="hljs-keyword">in</span> intermediate
+    <span class="hljs-keyword">where</span> item.Vowelless.Length &gt; <span class="hljs-number">2</span>
+    <span class="hljs-keyword">select</span> item.Original;
 </code></pre>
 <ul>
 <li>نتیجه همانند نمونه قبلی است.</li>
 <li>نوع <code>intermediate</code> توسط کامپایلر ساخته می‌شود و نام مشخصی ندارد، بنابراین تنها با <code>var</code> می‌توان آن را نگه داشت.</li>
 </ul>
 <p>می‌توان کل پرس‌وجو را با <code>into</code> به صورت کوتاه‌تر نوشت:</p>
-<pre><code class="language-csharp">var query =
-    from n in names
-    select new
+<pre class="hljs"><code><span class="hljs-keyword">var</span> query =
+    <span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> names
+    <span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span>
     {
         Original = n,
-        Vowelless = n.Replace(&quot;a&quot;,&quot;&quot;).Replace(&quot;e&quot;,&quot;&quot;).Replace(&quot;i&quot;,&quot;&quot;)
-                     .Replace(&quot;o&quot;,&quot;&quot;).Replace(&quot;u&quot;,&quot;&quot;)
+        Vowelless = n.Replace(<span class="hljs-string">&quot;a&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;e&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;i&quot;</span>,<span class="hljs-string">&quot;&quot;</span>)
+                     .Replace(<span class="hljs-string">&quot;o&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;u&quot;</span>,<span class="hljs-string">&quot;&quot;</span>)
     }
-    into temp
-    where temp.Vowelless.Length &gt; 2
-    select temp.Original;
+    <span class="hljs-keyword">into</span> temp
+    <span class="hljs-keyword">where</span> temp.Vowelless.Length &gt; <span class="hljs-number">2</span>
+    <span class="hljs-keyword">select</span> temp.Original;
 </code></pre>
 <hr>
 <h2><strong>کلمه کلیدی <code>let</code></strong></h2>
 <p><code>let</code> یک <strong>متغیر جدید</strong> در کنار range variable ایجاد می‌کند و باعث ساده‌تر شدن پرس‌وجو می‌شود.</p>
 <p>مثال استخراج نام‌هایی که طول آن‌ها بدون حروف صدادار بیشتر از ۲ است:</p>
-<pre><code class="language-csharp">string[] names = { &quot;Tom&quot;, &quot;Dick&quot;, &quot;Harry&quot;, &quot;Mary&quot;, &quot;Jay&quot; };
+<pre class="hljs"><code><span class="hljs-built_in">string</span>[] names = { <span class="hljs-string">&quot;Tom&quot;</span>, <span class="hljs-string">&quot;Dick&quot;</span>, <span class="hljs-string">&quot;Harry&quot;</span>, <span class="hljs-string">&quot;Mary&quot;</span>, <span class="hljs-string">&quot;Jay&quot;</span> };
 
-IEnumerable&lt;string&gt; query =
-    from n in names
-    let vowelless = n.Replace(&quot;a&quot;,&quot;&quot;).Replace(&quot;e&quot;,&quot;&quot;).Replace(&quot;i&quot;,&quot;&quot;)
-                     .Replace(&quot;o&quot;,&quot;&quot;).Replace(&quot;u&quot;,&quot;&quot;)
-    where vowelless.Length &gt; 2
-    orderby vowelless
-    select n; // n هنوز در دسترس است
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; query =
+    <span class="hljs-keyword">from</span> n <span class="hljs-keyword">in</span> names
+    <span class="hljs-keyword">let</span> vowelless = n.Replace(<span class="hljs-string">&quot;a&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;e&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;i&quot;</span>,<span class="hljs-string">&quot;&quot;</span>)
+                     .Replace(<span class="hljs-string">&quot;o&quot;</span>,<span class="hljs-string">&quot;&quot;</span>).Replace(<span class="hljs-string">&quot;u&quot;</span>,<span class="hljs-string">&quot;&quot;</span>)
+    <span class="hljs-keyword">where</span> vowelless.Length &gt; <span class="hljs-number">2</span>
+    <span class="hljs-keyword">orderby</span> vowelless
+    <span class="hljs-keyword">select</span> n; <span class="hljs-comment">// n هنوز در دسترس است</span>
 </code></pre>
 <p><strong>ویژگی‌های let:</strong></p>
 <ol>
@@ -1051,78 +1011,78 @@ IEnumerable&lt;string&gt; query =
 <hr>
 <h2><strong>ایجاد یک Interpreted Query با EF Core</strong></h2>
 <p>مثال: جدول <code>Customer</code> در SQL Server:</p>
-<pre><code class="language-sql">CREATE TABLE Customer
+<pre class="hljs"><code><span class="hljs-keyword">CREATE TABLE</span> Customer
 (
-    ID int NOT NULL PRIMARY KEY,
-    Name varchar(30)
+    ID <span class="hljs-type">int</span> <span class="hljs-keyword">NOT NULL</span> <span class="hljs-keyword">PRIMARY KEY</span>,
+    Name <span class="hljs-type">varchar</span>(<span class="hljs-number">30</span>)
 );
 
-INSERT Customer VALUES (1, 'Tom');
-INSERT Customer VALUES (2, 'Dick');
-INSERT Customer VALUES (3, 'Harry');
-INSERT Customer VALUES (4, 'Mary');
-INSERT Customer VALUES (5, 'Jay');
+<span class="hljs-keyword">INSERT</span> Customer <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">1</span>, <span class="hljs-string">&#x27;Tom&#x27;</span>);
+<span class="hljs-keyword">INSERT</span> Customer <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">2</span>, <span class="hljs-string">&#x27;Dick&#x27;</span>);
+<span class="hljs-keyword">INSERT</span> Customer <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">3</span>, <span class="hljs-string">&#x27;Harry&#x27;</span>);
+<span class="hljs-keyword">INSERT</span> Customer <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">4</span>, <span class="hljs-string">&#x27;Mary&#x27;</span>);
+<span class="hljs-keyword">INSERT</span> Customer <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">5</span>, <span class="hljs-string">&#x27;Jay&#x27;</span>);
 </code></pre>
 <p>پرس‌وجوی LINQ:</p>
-<pre><code class="language-csharp">using System;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+<pre class="hljs"><code><span class="hljs-keyword">using</span> System;
+<span class="hljs-keyword">using</span> System.Linq;
+<span class="hljs-keyword">using</span> Microsoft.EntityFrameworkCore;
 
-using var dbContext = new NutshellContext();
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> dbContext = <span class="hljs-keyword">new</span> NutshellContext();
 
-IQueryable&lt;string&gt; query = 
-    from c in dbContext.Customers
-    where c.Name.Contains(&quot;a&quot;)
-    orderby c.Name.Length
-    select c.Name.ToUpper();
+IQueryable&lt;<span class="hljs-built_in">string</span>&gt; query = 
+    <span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+    <span class="hljs-keyword">where</span> c.Name.Contains(<span class="hljs-string">&quot;a&quot;</span>)
+    <span class="hljs-keyword">orderby</span> c.Name.Length
+    <span class="hljs-keyword">select</span> c.Name.ToUpper();
 
-foreach (string name in query)
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">string</span> name <span class="hljs-keyword">in</span> query)
     Console.WriteLine(name);
 </code></pre>
 <ul>
 <li>کلاس <code>Customer</code>:</li>
 </ul>
-<pre><code class="language-csharp">public class Customer
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Customer</span>
 {
-    public int ID { get; set; }
-    public string Name { get; set; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> ID { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Name { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
 }
 </code></pre>
 <ul>
 <li>کلاس <code>DbContext</code>:</li>
 </ul>
-<pre><code class="language-csharp">public class NutshellContext : DbContext
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">NutshellContext</span> : <span class="hljs-title">DbContext</span>
 {
-    public virtual DbSet&lt;Customer&gt; Customers { get; set; }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">virtual</span> DbSet&lt;Customer&gt; Customers { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder builder)
-        =&gt; builder.UseSqlServer(&quot;...connection string...&quot;);
+    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnConfiguring</span>(<span class="hljs-params">DbContextOptionsBuilder builder</span>)</span>
+        =&gt; builder.UseSqlServer(<span class="hljs-string">&quot;...connection string...&quot;</span>);
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnModelCreating</span>(<span class="hljs-params">ModelBuilder modelBuilder</span>)</span>
         =&gt; modelBuilder.Entity&lt;Customer&gt;()
-                       .ToTable(&quot;Customer&quot;)
+                       .ToTable(<span class="hljs-string">&quot;Customer&quot;</span>)
                        .HasKey(c =&gt; c.ID);
 }
 </code></pre>
 <p>EF Core این پرس‌وجو را به SQL زیر ترجمه می‌کند:</p>
-<pre><code class="language-sql">SELECT UPPER([c].[Name])
-FROM [Customers] AS [c]
-WHERE CHARINDEX(N'a', [c].[Name]) &gt; 0
-ORDER BY CAST(LEN([c].[Name]) AS int)
+<pre class="hljs"><code><span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">UPPER</span>([c].[Name])
+<span class="hljs-keyword">FROM</span> [Customers] <span class="hljs-keyword">AS</span> [c]
+<span class="hljs-keyword">WHERE</span> CHARINDEX(N<span class="hljs-string">&#x27;a&#x27;</span>, [c].[Name]) <span class="hljs-operator">&gt;</span> <span class="hljs-number">0</span>
+<span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> <span class="hljs-built_in">CAST</span>(LEN([c].[Name]) <span class="hljs-keyword">AS</span> <span class="hljs-type">int</span>)
 </code></pre>
 <p>نتیجه:</p>
-<pre><code>JAY
+<pre class="hljs"><code>JAY
 MARY
 HARRY
 </code></pre>
 <hr>
 <h2><strong>نحوه کار Interpreted Queries</strong></h2>
 <ol>
-<li><strong>تبدیل syntax پرس‌وجو</strong>:
+<li><strong>تبدیل syntax پرس‌وجو</strong>:<br>
 query syntax به fluent syntax تبدیل می‌شود:</li>
 </ol>
-<pre><code class="language-csharp">IQueryable&lt;string&gt; query = dbContext.Customers
-                                    .Where(n =&gt; n.Name.Contains(&quot;a&quot;))
+<pre class="hljs"><code>IQueryable&lt;<span class="hljs-built_in">string</span>&gt; query = dbContext.Customers
+                                    .Where(n =&gt; n.Name.Contains(<span class="hljs-string">&quot;a&quot;</span>))
                                     .OrderBy(n =&gt; n.Name.Length)
                                     .Select(n =&gt; n.Name.ToUpper());
 </code></pre>
@@ -1198,36 +1158,36 @@ query syntax به fluent syntax تبدیل می‌شود:</li>
 <li>الگو: <strong>operators محلی در بیرون و interpreted operators در داخل</strong></li>
 <li>مثال: extension method سفارشی برای جفت‌سازی عناصر (<code>Pair</code>)</li>
 </ul>
-<pre><code class="language-csharp">public static IEnumerable&lt;string&gt; Pair(this IEnumerable&lt;string&gt; source)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; <span class="hljs-title">Pair</span>(<span class="hljs-params"><span class="hljs-keyword">this</span> IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; source</span>)</span>
 {
-    string firstHalf = null;
-    foreach (string element in source)
+    <span class="hljs-built_in">string</span> firstHalf = <span class="hljs-literal">null</span>;
+    <span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">string</span> element <span class="hljs-keyword">in</span> source)
     {
-        if (firstHalf == null)
+        <span class="hljs-keyword">if</span> (firstHalf == <span class="hljs-literal">null</span>)
             firstHalf = element;
-        else
+        <span class="hljs-keyword">else</span>
         {
-            yield return firstHalf + &quot;, &quot; + element;
-            firstHalf = null;
+            <span class="hljs-keyword">yield</span> <span class="hljs-keyword">return</span> firstHalf + <span class="hljs-string">&quot;, &quot;</span> + element;
+            firstHalf = <span class="hljs-literal">null</span>;
         }
     }
 }
 </code></pre>
 <p>ترکیب با EF Core:</p>
-<pre><code class="language-csharp">using var dbContext = new NutshellContext();
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> dbContext = <span class="hljs-keyword">new</span> NutshellContext();
 
-IEnumerable&lt;string&gt; q = dbContext.Customers
-    .Select(c =&gt; c.Name.ToUpper())  // Interpreted (IQueryable)
-    .OrderBy(n =&gt; n)                // Interpreted
-    .Pair()                          // Local (IEnumerable)
-    .Select((n, i) =&gt; &quot;Pair &quot; + i + &quot; = &quot; + n);
+IEnumerable&lt;<span class="hljs-built_in">string</span>&gt; q = dbContext.Customers
+    .Select(c =&gt; c.Name.ToUpper())  <span class="hljs-comment">// Interpreted (IQueryable)</span>
+    .OrderBy(n =&gt; n)                <span class="hljs-comment">// Interpreted</span>
+    .Pair()                          <span class="hljs-comment">// Local (IEnumerable)</span>
+    .Select((n, i) =&gt; <span class="hljs-string">&quot;Pair &quot;</span> + i + <span class="hljs-string">&quot; = &quot;</span> + n);
 
-foreach (string element in q)
+<span class="hljs-keyword">foreach</span> (<span class="hljs-built_in">string</span> element <span class="hljs-keyword">in</span> q)
     Console.WriteLine(element);
 
-// Output:
-// Pair 0 = DICK, HARRY
-// Pair 1 = JAY, MARY
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// Pair 0 = DICK, HARRY</span>
+<span class="hljs-comment">// Pair 1 = JAY, MARY</span>
 </code></pre>
 <blockquote>
 <p>وقتی یک operator فقط برای <code>IEnumerable&lt;T&gt;</code> تعریف شده باشد، query به local query تبدیل می‌شود و ادامه پردازش روی client انجام می‌شود.</p>
@@ -1237,9 +1197,9 @@ foreach (string element in q)
 <ul>
 <li>ساده‌ترین query operator برای تبدیل <code>IQueryable&lt;T&gt;</code> به <code>IEnumerable&lt;T&gt;</code>:</li>
 </ul>
-<pre><code class="language-csharp">public static IEnumerable&lt;TSource&gt; AsEnumerable&lt;TSource&gt;(this IEnumerable&lt;TSource&gt; source)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">IEnumerable</span>&lt;<span class="hljs-title">TSource</span>&gt; <span class="hljs-title">AsEnumerable</span>&lt;<span class="hljs-title">TSource</span>&gt;(<span class="hljs-params"><span class="hljs-keyword">this</span> IEnumerable&lt;TSource&gt; source</span>)</span>
 {
-    return source;
+    <span class="hljs-keyword">return</span> source;
 }
 </code></pre>
 <ul>
@@ -1252,38 +1212,38 @@ foreach (string element in q)
 </li>
 </ul>
 <p>مثال با Regular Expression:</p>
-<pre><code class="language-csharp">Regex wordCounter = new Regex(@&quot;\b(\w|[-'])+\b&quot;);
+<pre class="hljs"><code>Regex wordCounter = <span class="hljs-keyword">new</span> Regex(<span class="hljs-string">@&quot;\b(\w|[-&#x27;])+\b&quot;</span>);
 
-using var dbContext = new NutshellContext();
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> dbContext = <span class="hljs-keyword">new</span> NutshellContext();
 
-var query = dbContext.MedicalArticles
-    .Where(article =&gt; article.Topic == &quot;influenza&quot;)
-    .AsEnumerable()  // Force subsequent operators to execute locally
-    .Where(article =&gt; wordCounter.Matches(article.Abstract).Count &lt; 100);
+<span class="hljs-keyword">var</span> query = dbContext.MedicalArticles
+    .Where(article =&gt; article.Topic == <span class="hljs-string">&quot;influenza&quot;</span>)
+    .AsEnumerable()  <span class="hljs-comment">// Force subsequent operators to execute locally</span>
+    .Where(article =&gt; wordCounter.Matches(article.Abstract).Count &lt; <span class="hljs-number">100</span>);
 </code></pre>
 <blockquote>
 <p>نکته: اجرای بخشی از query روی client می‌تواند performance را کاهش دهد، زیرا ممکن است تعداد ردیف‌های بیشتری از پایگاه داده دریافت شود.</p>
 </blockquote>
 <h3>EF Core ⚡</h3>
-<p>در طول این فصل و فصل ۹، ما از <strong>EF Core</strong> برای نشان دادن <strong>interpreted queries</strong> استفاده می‌کنیم.
+<p>در طول این فصل و فصل ۹، ما از <strong>EF Core</strong> برای نشان دادن <strong>interpreted queries</strong> استفاده می‌کنیم.<br>
 اکنون بیایید به بررسی ویژگی‌های کلیدی این فناوری بپردازیم.</p>
 <hr>
 <h3>کلاس‌های Entity در EF Core 🏷️</h3>
 <p>EF Core به شما اجازه می‌دهد تا از <strong>هر کلاسی</strong> برای نمایش داده‌ها استفاده کنید، به شرطی که برای هر ستون مورد نظر یک <strong>property عمومی</strong> داشته باشد.</p>
 <p>به‌عنوان مثال، می‌توانیم کلاس زیر را برای <strong>query</strong> و <strong>update</strong> جدول Customers در پایگاه داده تعریف کنیم:</p>
-<pre><code class="language-csharp">public class Customer
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Customer</span>
 {
-    public int ID { get; set; } 
-    public string Name { get; set; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> ID { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; } 
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Name { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
 }
 </code></pre>
 <hr>
 <h3>DbContext 📦</h3>
-<p>پس از تعریف کلاس‌های entity، مرحله بعدی <strong>subclass کردن DbContext</strong> است.
+<p>پس از تعریف کلاس‌های entity، مرحله بعدی <strong>subclass کردن DbContext</strong> است.<br>
 یک نمونه از این کلاس نشان‌دهنده جلسات شما برای کار با پایگاه داده است. معمولاً subclass شما شامل <strong>یک property از نوع DbSet<T></strong> برای هر entity در مدل شما خواهد بود:</p>
-<pre><code class="language-csharp">public class NutshellContext : DbContext
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">NutshellContext</span> : <span class="hljs-title">DbContext</span>
 {
-    public DbSet&lt;Customer&gt; Customers { get; set; }
+    <span class="hljs-keyword">public</span> DbSet&lt;Customer&gt; Customers { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
     ... properties برای جداول دیگر ...
 }
 </code></pre>
@@ -1296,28 +1256,28 @@ var query = dbContext.MedicalArticles
 <hr>
 <h3>پیکربندی Connection 🔧</h3>
 <p>با override کردن متد <strong>OnConfiguring</strong>، می‌توانید <strong>database provider</strong> و <strong>connection string</strong> را مشخص کنید:</p>
-<pre><code class="language-csharp">public class NutshellContext : DbContext
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">NutshellContext</span> : <span class="hljs-title">DbContext</span>
 {
     ...
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =&gt;
+    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnConfiguring</span>(<span class="hljs-params">DbContextOptionsBuilder optionsBuilder</span>)</span> =&gt;
         optionsBuilder.UseSqlServer(
-            @&quot;Server=(local);Database=Nutshell;Trusted_Connection=True&quot;);
+            <span class="hljs-string">@&quot;Server=(local);Database=Nutshell;Trusted_Connection=True&quot;</span>);
 }
 </code></pre>
-<p>در این مثال، <strong>connection string</strong> به‌صورت <strong>string literal</strong> مشخص شده است.
+<p>در این مثال، <strong>connection string</strong> به‌صورت <strong>string literal</strong> مشخص شده است.<br>
 در برنامه‌های واقعی، معمولاً آن را از یک فایل پیکربندی مانند <strong>appsettings.json</strong> می‌خوانند.</p>
-<p>متد <strong>UseSqlServer</strong> یک <strong>extension method</strong> است که در <strong>assembly مربوط به Microsoft.EntityFramework.SqlServer NuGet package</strong> تعریف شده است.
+<p>متد <strong>UseSqlServer</strong> یک <strong>extension method</strong> است که در <strong>assembly مربوط به Microsoft.EntityFramework.SqlServer NuGet package</strong> تعریف شده است.<br>
 برای سایر پایگاه‌های داده مانند Oracle، MySQL، PostgreSQL و SQLite نیز پکیج‌های مشابه وجود دارند.</p>
 <hr>
-<p>اگر از <strong>ASP.NET</strong> استفاده می‌کنید، می‌توانید به <strong>dependency injection framework</strong> اجازه دهید که <strong>optionsBuilder</strong> را از قبل پیکربندی کند؛ در اکثر موارد، این کار باعث می‌شود که نیازی به override کردن <strong>OnConfiguring</strong> نداشته باشید.</p>
+<p>اگر از <strong><a href="http://ASP.NET">ASP.NET</a></strong> استفاده می‌کنید، می‌توانید به <strong>dependency injection framework</strong> اجازه دهید که <strong>optionsBuilder</strong> را از قبل پیکربندی کند؛ در اکثر موارد، این کار باعث می‌شود که نیازی به override کردن <strong>OnConfiguring</strong> نداشته باشید.</p>
 <p>برای فعال کردن این قابلیت، می‌توانید یک <strong>constructor</strong> برای DbContext به شکل زیر تعریف کنید:</p>
-<pre><code class="language-csharp">public NutshellContext(DbContextOptions&lt;NutshellContext&gt; options)
-    : base(options) { }
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">NutshellContext</span>(<span class="hljs-params">DbContextOptions&lt;NutshellContext&gt; options</span>)
+    : <span class="hljs-title">base</span>(<span class="hljs-params">options</span>)</span> { }
 </code></pre>
 <p>اگر بخواهید <strong>OnConfiguring</strong> را override کنید (مثلاً برای فراهم کردن پیکربندی در سناریوهای دیگر)، می‌توانید بررسی کنید که آیا گزینه‌ها از قبل پیکربندی شده‌اند یا خیر:</p>
-<pre><code class="language-csharp">protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnConfiguring</span>(<span class="hljs-params">DbContextOptionsBuilder optionsBuilder</span>)</span>
 {
-    if (!optionsBuilder.IsConfigured)
+    <span class="hljs-keyword">if</span> (!optionsBuilder.IsConfigured)
     {
         ...
     }
@@ -1326,20 +1286,20 @@ var query = dbContext.MedicalArticles
 <p>در متد <strong>OnConfiguring</strong> می‌توانید گزینه‌های دیگری مانند <strong>lazy loading</strong> را نیز فعال کنید (نگاه کنید به “Lazy loading” در صفحه 464).</p>
 <h3>پیکربندی مدل 🏗️</h3>
 <p>به‌طور پیش‌فرض، <strong>EF Core</strong> بر اساس <strong>convention</strong> عمل می‌کند؛ یعنی <strong>schema پایگاه داده</strong> را از روی نام کلاس‌ها و propertyها حدس می‌زند.</p>
-<p>می‌توانید این پیش‌فرض‌ها را با استفاده از <strong>fluent API</strong> و override کردن <strong>OnModelCreating</strong> و فراخوانی extension methodها روی پارامتر <strong>ModelBuilder</strong> تغییر دهید.
+<p>می‌توانید این پیش‌فرض‌ها را با استفاده از <strong>fluent API</strong> و override کردن <strong>OnModelCreating</strong> و فراخوانی extension methodها روی پارامتر <strong>ModelBuilder</strong> تغییر دهید.<br>
 به‌عنوان مثال، می‌توانیم نام جدول پایگاه داده برای entity کلاس <strong>Customer</strong> را به‌صورت صریح مشخص کنیم:</p>
-<pre><code class="language-csharp">protected override void OnModelCreating(ModelBuilder modelBuilder) =&gt;
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnModelCreating</span>(<span class="hljs-params">ModelBuilder modelBuilder</span>)</span> =&gt;
     modelBuilder.Entity&lt;Customer&gt;()
-        .ToTable(&quot;Customer&quot;);   // نام جدول 'Customer' است
+        .ToTable(<span class="hljs-string">&quot;Customer&quot;</span>);   <span class="hljs-comment">// نام جدول &#x27;Customer&#x27; است</span>
 </code></pre>
 <p>بدون این کد، EF Core این entity را به جدولی با نام <strong>“Customers”</strong> نگاشت می‌کند، نه “Customer”، زیرا ما در <strong>DbContext</strong> خود یک property از نوع <strong>DbSet<Customer></strong> داریم که نام آن <strong>Customers</strong> است:</p>
-<pre><code class="language-csharp">public DbSet&lt;Customer&gt; Customers { get; set; }
+<pre class="hljs"><code><span class="hljs-keyword">public</span> DbSet&lt;Customer&gt; Customers { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
 </code></pre>
 <hr>
 <p>کد زیر تمام entityهای شما را به <strong>نام کلاس entity</strong> نگاشت می‌کند (که معمولاً مفرد است) نه به نام propertyهای <strong>DbSet<T></strong> (که معمولاً جمع هستند):</p>
-<pre><code class="language-csharp">protected override void OnModelCreating(ModelBuilder modelBuilder)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnModelCreating</span>(<span class="hljs-params">ModelBuilder modelBuilder</span>)</span>
 {
-    foreach (IMutableEntityType entityType in modelBuilder.Model.GetEntityTypes())
+    <span class="hljs-keyword">foreach</span> (IMutableEntityType entityType <span class="hljs-keyword">in</span> modelBuilder.Model.GetEntityTypes())
     {
         modelBuilder.Entity(entityType.Name)
                     .ToTable(entityType.ClrType.Name);
@@ -1348,37 +1308,37 @@ var query = dbContext.MedicalArticles
 </code></pre>
 <hr>
 <h3>Fluent API برای ستون‌ها 📊</h3>
-<p><strong>Fluent API</strong> یک سینتکس پیشرفته‌تر برای پیکربندی ستون‌ها ارائه می‌دهد.
+<p><strong>Fluent API</strong> یک سینتکس پیشرفته‌تر برای پیکربندی ستون‌ها ارائه می‌دهد.<br>
 در مثال زیر از دو متد محبوب استفاده می‌کنیم:</p>
 <ul>
 <li><strong>HasColumnName</strong>: property را به یک ستون با نام متفاوت نگاشت می‌کند.</li>
 <li><strong>IsRequired</strong>: مشخص می‌کند که ستون <strong>nullable</strong> نیست.</li>
 </ul>
-<pre><code class="language-csharp">protected override void OnModelCreating(ModelBuilder modelBuilder) =&gt;
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnModelCreating</span>(<span class="hljs-params">ModelBuilder modelBuilder</span>)</span> =&gt;
     modelBuilder.Entity&lt;Customer&gt;(entity =&gt;
     {
-        entity.ToTable(&quot;Customer&quot;);
+        entity.ToTable(<span class="hljs-string">&quot;Customer&quot;</span>);
         entity.Property(e =&gt; e.Name)
-              .HasColumnName(&quot;Full Name&quot;)  // نام ستون 'Full Name' است
-              .IsRequired();                // ستون نمی‌تواند null باشد
+              .HasColumnName(<span class="hljs-string">&quot;Full Name&quot;</span>)  <span class="hljs-comment">// نام ستون &#x27;Full Name&#x27; است</span>
+              .IsRequired();                <span class="hljs-comment">// ستون نمی‌تواند null باشد</span>
     });
 </code></pre>
 <p>جدول 8-1 برخی از مهم‌ترین متدهای <strong>fluent API</strong> را فهرست می‌کند.</p>
 <hr>
-<p>به جای استفاده از <strong>fluent API</strong>، می‌توانید مدل خود را با اعمال <strong>attributeهای خاص</strong> روی کلاس‌ها و propertyها (<strong>data annotations</strong>) پیکربندی کنید.
+<p>به جای استفاده از <strong>fluent API</strong>، می‌توانید مدل خود را با اعمال <strong>attributeهای خاص</strong> روی کلاس‌ها و propertyها (<strong>data annotations</strong>) پیکربندی کنید.<br>
 این روش <strong>انعطاف‌پذیری کمتری</strong> دارد، زیرا پیکربندی باید در زمان کامپایل ثابت باشد، و <strong>قدرت کمتری</strong> دارد، چرا که برخی گزینه‌ها فقط از طریق <strong>fluent API</strong> قابل پیکربندی هستند.</p>
 <div align="center">
 <p><img src="../../../assets/image/08/Table-8-11.jpeg" alt="Conventions-UsedThis-Book"></p>
 </div>
 <h3>ایجاد پایگاه داده 🏗️🗄️</h3>
 <p><strong>EF Core</strong> از رویکرد <strong>code-first</strong> پشتیبانی می‌کند، به این معنا که می‌توانید ابتدا کلاس‌های <strong>entity</strong> خود را تعریف کنید و سپس از <strong>EF Core</strong> بخواهید پایگاه داده را ایجاد کند. ساده‌ترین روش برای این کار فراخوانی متد زیر روی یک نمونه از <strong>DbContext</strong> است:</p>
-<pre><code class="language-csharp">dbContext.Database.EnsureCreated();
+<pre class="hljs"><code>dbContext.Database.EnsureCreated();
 </code></pre>
 <p>با این حال، روش بهتر استفاده از قابلیت <strong>migrations</strong> در EF Core است. این روش نه تنها پایگاه داده را ایجاد می‌کند، بلکه آن را طوری پیکربندی می‌کند که EF Core بتواند در آینده، هنگام تغییر کلاس‌های entity، <strong>schema</strong> را به‌صورت خودکار به‌روزرسانی کند.</p>
 <p>در <strong>Visual Studio</strong>، می‌توانید migrations را از <strong>Package Manager Console</strong> فعال کنید و پایگاه داده را با دستورات زیر ایجاد کنید:</p>
-<pre><code class="language-powershell">Install-Package Microsoft.EntityFrameworkCore.Tools
-Add-Migration InitialCreate
-Update-Database
+<pre class="hljs"><code><span class="hljs-built_in">Install-Package</span> Microsoft.EntityFrameworkCore.Tools
+<span class="hljs-built_in">Add-Migration</span> InitialCreate
+<span class="hljs-built_in">Update-Database</span>
 </code></pre>
 <ul>
 <li>دستور اول ابزارهای مدیریت EF Core را در Visual Studio نصب می‌کند.</li>
@@ -1388,26 +1348,26 @@ Update-Database
 <hr>
 <h3>استفاده از DbContext 🧩</h3>
 <p>بعد از تعریف کلاس‌های <strong>Entity</strong> و ایجاد زیرکلاس از <strong>DbContext</strong>، می‌توانید یک نمونه از DbContext بسازید و پایگاه داده را query کنید:</p>
-<pre><code class="language-csharp">using var dbContext = new NutshellContext();
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> dbContext = <span class="hljs-keyword">new</span> NutshellContext();
 Console.WriteLine(dbContext.Customers.Count());
-// اجرای دستور SQL: &quot;SELECT COUNT(*) FROM [Customer] AS [c]&quot;
+<span class="hljs-comment">// اجرای دستور SQL: &quot;SELECT COUNT(*) FROM [Customer] AS [c]&quot;</span>
 </code></pre>
 <p>همچنین می‌توانید از <strong>DbContext</strong> برای نوشتن داده در پایگاه داده استفاده کنید:</p>
-<pre><code class="language-csharp">using var dbContext = new NutshellContext();
-Customer cust = new Customer()
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> dbContext = <span class="hljs-keyword">new</span> NutshellContext();
+Customer cust = <span class="hljs-keyword">new</span> Customer()
 {
-    Name = &quot;Sara Wells&quot;
+    Name = <span class="hljs-string">&quot;Sara Wells&quot;</span>
 };
 dbContext.Customers.Add(cust);
-dbContext.SaveChanges();    // تغییرات را به پایگاه داده می‌نویسد
+dbContext.SaveChanges();    <span class="hljs-comment">// تغییرات را به پایگاه داده می‌نویسد</span>
 </code></pre>
 <p>برای بازیابی رکوردی که تازه اضافه شده:</p>
-<pre><code class="language-csharp">using var dbContext = new NutshellContext();
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> dbContext = <span class="hljs-keyword">new</span> NutshellContext();
 Customer cust = dbContext.Customers
-    .Single(c =&gt; c.Name == &quot;Sara Wells&quot;);
+    .Single(c =&gt; c.Name == <span class="hljs-string">&quot;Sara Wells&quot;</span>);
 </code></pre>
 <p>و برای به‌روزرسانی نام مشتری و ذخیره تغییرات:</p>
-<pre><code class="language-csharp">cust.Name = &quot;Dr. Sara Wells&quot;;
+<pre class="hljs"><code>cust.Name = <span class="hljs-string">&quot;Dr. Sara Wells&quot;</span>;
 dbContext.SaveChanges();
 </code></pre>
 <blockquote>
@@ -1417,22 +1377,22 @@ dbContext.SaveChanges();
 <h3>ردیابی اشیاء (Object Tracking) 🔍</h3>
 <p>یک نمونه <strong>DbContext</strong> تمام entityهایی که ایجاد می‌کند را ردیابی می‌کند تا هر بار که همان رکوردها را درخواست کنید، همان اشیاء را به شما بازگرداند. به عبارت دیگر، در طول عمر یک context، هیچ دو entity جداگانه‌ای برای یک رکورد مشخص (با primary key) ایجاد نمی‌شود. این قابلیت <strong>object tracking</strong> نام دارد.</p>
 <p>برای مثال، فرض کنید مشتری‌ای که از نظر حروف الفبا اولین است، کمترین <strong>ID</strong> را نیز دارد. در مثال زیر، <code>a</code> و <code>b</code> به یک <strong>object</strong> اشاره خواهند کرد:</p>
-<pre><code class="language-csharp">using var dbContext = new NutshellContext();
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> dbContext = <span class="hljs-keyword">new</span> NutshellContext();
 Customer a = dbContext.Customers.OrderBy(c =&gt; c.Name).First();
 Customer b = dbContext.Customers.OrderBy(c =&gt; c.ID).First();
 </code></pre>
 <h3>مدیریت منابع و DbContext 🗑️🧩</h3>
 <p>اگرچه <strong>DbContext</strong> از <strong>IDisposable</strong> پیروی می‌کند، اما معمولاً می‌توانید بدون فراخوانی <strong>Dispose</strong> از نمونه‌ها استفاده کنید. فراخوانی <strong>Dispose</strong> باعث می‌شود که <strong>connection</strong> داخلی context هم بسته شود، اما این معمولاً ضروری نیست زیرا <strong>EF Core</strong> به‌طور خودکار پس از پایان دریافت نتایج از یک query، <strong>connection</strong> را می‌بندد.</p>
 <p>فراخوانی زودهنگام <strong>Dispose</strong> می‌تواند مشکل‌ساز باشد، مخصوصاً به دلیل <strong>lazy evaluation</strong>. مثال زیر را در نظر بگیرید:</p>
-<pre><code class="language-csharp">IQueryable&lt;Customer&gt; GetCustomers(string prefix)
+<pre class="hljs"><code><span class="hljs-function">IQueryable&lt;Customer&gt; <span class="hljs-title">GetCustomers</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> prefix</span>)</span>
 {
-    using (var dbContext = new NutshellContext())
-        return dbContext.Customers
+    <span class="hljs-keyword">using</span> (<span class="hljs-keyword">var</span> dbContext = <span class="hljs-keyword">new</span> NutshellContext())
+        <span class="hljs-keyword">return</span> dbContext.Customers
                         .Where(c =&gt; c.Name.StartsWith(prefix));
 }
 
-foreach (Customer c in GetCustomers(&quot;a&quot;))
-    Console.WriteLine(c.Name);
+<span class="hljs-keyword">foreach</span> (<span class="hljs-function">Customer c <span class="hljs-keyword">in</span> <span class="hljs-title">GetCustomers</span>(<span class="hljs-params"><span class="hljs-string">&quot;a&quot;</span></span>))
+    Console.<span class="hljs-title">WriteLine</span>(<span class="hljs-params">c.Name</span>)</span>;
 </code></pre>
 <p>این کد شکست می‌خورد، زیرا query زمانی ارزیابی می‌شود که آن را <strong>enumerate</strong> می‌کنیم—و این بعد از <strong>Dispose</strong> شدن <strong>DbContext</strong> است.</p>
 <p>چند نکته درباره عدم فراخوانی <strong>Dispose</strong> وجود دارد:</p>
@@ -1441,7 +1401,7 @@ foreach (Customer c in GetCustomers(&quot;a&quot;))
 <li>اگر به‌صورت دستی <strong>GetEnumerator</strong> روی query فراخوانی کنید و سپس enumerator را <strong>dispose</strong> نکنید یا تمام عناصر را مصرف نکنید، connection باز خواهد ماند. در این سناریوها <strong>Dispose</strong> یک backup است.</li>
 <li>برخی افراد احساس می‌کنند تمیزتر است که contextها و تمام اشیاء پیروی‌کننده از <strong>IDisposable</strong> را <strong>dispose</strong> کنند.</li>
 </ul>
-<p>اگر می‌خواهید contextها را صریحاً <strong>dispose</strong> کنید، باید نمونه <strong>DbContext</strong> را به متدهایی مانند <strong>GetCustomers</strong> منتقل کنید تا مشکل فوق پیش نیاید. در محیط‌هایی مانند <strong>ASP.NET Core MVC</strong> که context از طریق <strong>Dependency Injection (DI)</strong> ارائه می‌شود، <strong>DI</strong> مدیریت طول عمر context را بر عهده دارد: ایجاد آن هنگام شروع واحد کاری (مثلاً HTTP request) و <strong>Dispose</strong> هنگام پایان واحد کاری.</p>
+<p>اگر می‌خواهید contextها را صریحاً <strong>dispose</strong> کنید، باید نمونه <strong>DbContext</strong> را به متدهایی مانند <strong>GetCustomers</strong> منتقل کنید تا مشکل فوق پیش نیاید. در محیط‌هایی مانند <strong><a href="http://ASP.NET">ASP.NET</a> Core MVC</strong> که context از طریق <strong>Dependency Injection (DI)</strong> ارائه می‌شود، <strong>DI</strong> مدیریت طول عمر context را بر عهده دارد: ایجاد آن هنگام شروع واحد کاری (مثلاً HTTP request) و <strong>Dispose</strong> هنگام پایان واحد کاری.</p>
 <hr>
 <h3>تاثیر object tracking در EF Core 🔄</h3>
 <p>فرض کنید وقتی EF Core دومین query را اجرا می‌کند، ابتدا یک رکورد از پایگاه داده دریافت کرده و <strong>primary key</strong> آن را می‌خواند، سپس در <strong>entity cache</strong> context جستجو می‌کند. اگر match پیدا شود، همان <strong>object</strong> موجود را بدون بروزرسانی مقادیر برمی‌گرداند.</p>
@@ -1451,7 +1411,7 @@ foreach (Customer c in GetCustomers(&quot;a&quot;))
 </ul>
 <p>می‌توانید <strong>object tracking</strong> را با فراخوانی <strong>AsNoTracking</strong> روی query یا با تنظیم <strong>ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking</strong> غیرفعال کنید. این queries بدون tracking برای داده‌های <strong>read-only</strong> مفید است زیرا کارایی را افزایش و مصرف حافظه را کاهش می‌دهد.</p>
 <p>برای دریافت اطلاعات تازه از پایگاه داده، باید یا یک context جدید بسازید یا متد <strong>Reload</strong> را فراخوانی کنید:</p>
-<pre><code class="language-csharp">dbContext.Entry(myCustomer).Reload();
+<pre class="hljs"><code>dbContext.Entry(myCustomer).Reload();
 </code></pre>
 <p>بهترین روش این است که برای هر <strong>unit of work</strong> یک <strong>DbContext</strong> جدید استفاده کنید تا نیاز به <strong>Reload</strong> دستی به حداقل برسد.</p>
 <hr>
@@ -1459,12 +1419,12 @@ foreach (Customer c in GetCustomers(&quot;a&quot;))
 <p>هنگامی که مقدار یک property در یک entity بارگذاری‌شده توسط <strong>DbContext</strong> تغییر کند، EF Core این تغییر را تشخیص داده و هنگام فراخوانی <strong>SaveChanges</strong> پایگاه داده را مطابق تغییرات به‌روز می‌کند.</p>
 <p>EF Core برای این کار، <strong>snapshot</strong> از وضعیت entityها ایجاد می‌کند و وضعیت فعلی را با وضعیت اصلی هنگام <strong>SaveChanges</strong> مقایسه می‌کند.</p>
 <p>برای مشاهده تغییرات ردیابی‌شده:</p>
-<pre><code class="language-csharp">foreach (var e in dbContext.ChangeTracker.Entries())
+<pre class="hljs"><code><span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> e <span class="hljs-keyword">in</span> dbContext.ChangeTracker.Entries())
 {
-    Console.WriteLine($&quot;{e.Entity.GetType().FullName} is {e.State}&quot;);
-    foreach (var m in e.Members)
+    Console.WriteLine(<span class="hljs-string">$&quot;<span class="hljs-subst">{e.Entity.GetType().FullName}</span> is <span class="hljs-subst">{e.State}</span>&quot;</span>);
+    <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> m <span class="hljs-keyword">in</span> e.Members)
         Console.WriteLine(
-            $&quot;  {m.Metadata.Name}: '{m.CurrentValue}' modified: {m.IsModified}&quot;);
+            <span class="hljs-string">$&quot;  <span class="hljs-subst">{m.Metadata.Name}</span>: &#x27;<span class="hljs-subst">{m.CurrentValue}</span>&#x27; modified: <span class="hljs-subst">{m.IsModified}</span>&quot;</span>);
 }
 </code></pre>
 <p>هنگام فراخوانی <strong>SaveChanges</strong>، EF Core با استفاده از اطلاعات <strong>ChangeTracker</strong>، دستورات SQL ایجاد می‌کند:</p>
@@ -1483,43 +1443,43 @@ foreach (Customer c in GetCustomers(&quot;a&quot;))
 <li>رکوردهای مرتبط را درج، حذف یا به‌روزرسانی کنید بدون آن‌که کلید خارجی را به‌صورت صریح تغییر دهید</li>
 </ul>
 <p>مثال: فرض کنید هر مشتری می‌تواند چند خرید داشته باشد. رابطه <strong>one-to-many</strong> بین <strong>Customer</strong> و <strong>Purchase</strong> را می‌توان به شکل زیر نمایش داد:</p>
-<pre><code class="language-csharp">public class Customer
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Customer</span>
 {
-    public int ID { get; set; }
-    public string Name { get; set; }
-    public virtual List&lt;Purchase&gt; Purchases { get; set; } = new List&lt;Purchase&gt;();
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> ID { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Name { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">virtual</span> List&lt;Purchase&gt; Purchases { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; } = <span class="hljs-keyword">new</span> List&lt;Purchase&gt;();
 }
 
-public class Purchase
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Purchase</span>
 {
-    public int ID { get; set; }
-    public DateTime Date { get; set; }
-    public string Description { get; set; }
-    public decimal Price { get; set; }
-    public int? CustomerID { get; set; }  // Foreign key
-    public Customer Customer { get; set; } // Parent navigation
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> ID { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> DateTime Date { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Description { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">decimal</span> Price { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span>? CustomerID { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }  <span class="hljs-comment">// Foreign key</span>
+    <span class="hljs-keyword">public</span> Customer Customer { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; } <span class="hljs-comment">// Parent navigation</span>
 }
 </code></pre>
 <p>EF Core با توجه به نام <strong>CustomerID</strong>، آن را به عنوان <strong>foreign key</strong> به جدول <strong>Customer</strong> تشخیص می‌دهد. اگر EF Core نتواند رابطه را استنتاج کند، می‌توانید آن را صریحاً در <strong>OnModelCreating</strong> پیکربندی کنید:</p>
-<pre><code class="language-csharp">modelBuilder.Entity&lt;Purchase&gt;()
+<pre class="hljs"><code>modelBuilder.Entity&lt;Purchase&gt;()
     .HasOne(e =&gt; e.Customer)
     .WithMany(e =&gt; e.Purchases)
     .HasForeignKey(e =&gt; e.CustomerID);
 </code></pre>
 <p>با این navigation properties، می‌توان queries مانند زیر نوشت:</p>
-<pre><code class="language-csharp">var customersWithPurchases = Customers.Where(c =&gt; c.Purchases.Any());
+<pre class="hljs"><code><span class="hljs-keyword">var</span> customersWithPurchases = Customers.Where(c =&gt; c.Purchases.Any());
 </code></pre>
 <p>در فصل بعد، نحوه نوشتن این نوع queryها را به تفصیل بررسی خواهیم کرد.</p>
 <h3>افزودن و حذف موجودیت‌ها از مجموعه‌های Navigation 🛒❌</h3>
 <p>وقتی موجودیت‌های جدیدی به یک <strong>collection navigation property</strong> اضافه می‌کنید، <strong>EF Core</strong> به‌صورت خودکار کلیدهای خارجی را هنگام فراخوانی <strong>SaveChanges</strong> پر می‌کند:</p>
-<pre><code class="language-csharp">Customer cust = dbContext.Customers.Single(c =&gt; c.ID == 1);
-Purchase p1 = new Purchase { Description=&quot;Bike&quot;, Price=500 };
-Purchase p2 = new Purchase { Description=&quot;Tools&quot;, Price=100 };
+<pre class="hljs"><code>Customer cust = dbContext.Customers.Single(c =&gt; c.ID == <span class="hljs-number">1</span>);
+Purchase p1 = <span class="hljs-keyword">new</span> Purchase { Description=<span class="hljs-string">&quot;Bike&quot;</span>, Price=<span class="hljs-number">500</span> };
+Purchase p2 = <span class="hljs-keyword">new</span> Purchase { Description=<span class="hljs-string">&quot;Tools&quot;</span>, Price=<span class="hljs-number">100</span> };
 cust.Purchases.Add(p1);
 cust.Purchases.Add(p2);
 dbContext.SaveChanges();
 </code></pre>
-<p>در این مثال، <strong>EF Core</strong> به‌صورت خودکار مقدار <code>1</code> را در ستون <strong>CustomerID</strong> هر خرید جدید می‌نویسد و <strong>ID</strong> تولیدشده توسط پایگاه داده را به <strong>Purchase.ID</strong> اختصاص می‌دهد.</p>
+<p>در این مثال، <strong>EF Core</strong> به‌صورت خودکار مقدار <code>1</code> را در ستون <strong>CustomerID</strong> هر خرید جدید می‌نویسد و <strong>ID</strong> تولیدشده توسط پایگاه داده را به <strong><a href="http://Purchase.ID">Purchase.ID</a></strong> اختصاص می‌دهد.</p>
 <p>اگر موجودیتی را از یک <strong>collection navigation property</strong> حذف کرده و <strong>SaveChanges</strong> را فراخوانی کنید، EF Core بسته به نوع پیکربندی یا استنتاج رابطه، یکی از کارهای زیر را انجام می‌دهد:</p>
 <ul>
 <li>پاک کردن مقدار <strong>foreign key</strong></li>
@@ -1529,28 +1489,28 @@ dbContext.SaveChanges();
 <hr>
 <h3>بارگذاری Navigation Properties 📦</h3>
 <p>زمانی که <strong>EF Core</strong> یک entity را populate می‌کند، به‌طور پیش‌فرض navigation properties آن را پر نمی‌کند:</p>
-<pre><code class="language-csharp">using var dbContext = new NutshellContext();
-var cust = dbContext.Customers.First();
-Console.WriteLine(cust.Purchases.Count);    // همیشه 0
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> dbContext = <span class="hljs-keyword">new</span> NutshellContext();
+<span class="hljs-keyword">var</span> cust = dbContext.Customers.First();
+Console.WriteLine(cust.Purchases.Count);    <span class="hljs-comment">// همیشه 0</span>
 </code></pre>
 <p>راه‌حل‌ها:</p>
 <ol>
 <li><strong>استفاده از Include:</strong> این روش به EF Core دستور می‌دهد که navigation properties را eager load کند:</li>
 </ol>
-<pre><code class="language-csharp">var cust = dbContext.Customers
+<pre class="hljs"><code><span class="hljs-keyword">var</span> cust = dbContext.Customers
     .Include(c =&gt; c.Purchases)
-    .Where(c =&gt; c.ID == 2)
+    .Where(c =&gt; c.ID == <span class="hljs-number">2</span>)
     .First();
 </code></pre>
 <ol start="2">
 <li><strong>استفاده از Projection:</strong> این تکنیک زمانی مفید است که فقط بخشی از propertyهای entity نیاز باشد، زیرا حجم انتقال داده کاهش می‌یابد:</li>
 </ol>
-<pre><code class="language-csharp">var custInfo = dbContext.Customers
-    .Where(c =&gt; c.ID == 2)
-    .Select(c =&gt; new
+<pre class="hljs"><code><span class="hljs-keyword">var</span> custInfo = dbContext.Customers
+    .Where(c =&gt; c.ID == <span class="hljs-number">2</span>)
+    .Select(c =&gt; <span class="hljs-keyword">new</span>
     {
         Name = c.Name,
-        Purchases = c.Purchases.Select(p =&gt; new { p.Description, p.Price })
+        Purchases = c.Purchases.Select(p =&gt; <span class="hljs-keyword">new</span> { p.Description, p.Price })
     })
     .First();
 </code></pre>
@@ -1558,8 +1518,8 @@ Console.WriteLine(cust.Purchases.Count);    // همیشه 0
 <ol start="3">
 <li><strong>Explicit Loading:</strong> می‌توانید EF Core را به‌صورت دستی وادار به populate کردن navigation property کنید:</li>
 </ol>
-<pre><code class="language-csharp">dbContext.Entry(cust).Collection(b =&gt; b.Purchases).Load();
-// cust.Purchases اکنون پر شده است
+<pre class="hljs"><code>dbContext.Entry(cust).Collection(b =&gt; b.Purchases).Load();
+<span class="hljs-comment">// cust.Purchases اکنون پر شده است</span>
 </code></pre>
 <p>این روش یک round trip اضافی به پایگاه داده ایجاد می‌کند.</p>
 <hr>
@@ -1571,7 +1531,7 @@ Console.WriteLine(cust.Purchases.Count);    // همیشه 0
 <li>context نباید قبل از lazy load <strong>Dispose</strong> شده باشد</li>
 </ul>
 <p>فعال کردن lazy loading در متد <strong>OnConfiguring</strong> DbContext به شکل زیر است:</p>
-<pre><code class="language-csharp">protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OnConfiguring</span>(<span class="hljs-params">DbContextOptionsBuilder optionsBuilder</span>)</span>
 {
     optionsBuilder
         .UseLazyLoadingProxies();
@@ -1583,58 +1543,58 @@ Console.WriteLine(cust.Purchases.Count);    // همیشه 0
 </blockquote>
 <p>هزینه lazy loading این است که هر بار که به navigation property بارگذاری‌نشده دسترسی پیدا کنید، یک درخواست اضافی به پایگاه داده ارسال می‌شود. اگر تعداد زیادی از این درخواست‌ها وجود داشته باشد، کارایی کاهش می‌یابد.</p>
 <p>با فعال بودن lazy loading، نوع runtime کلاس‌ها پروکسی است که از کلاس entity مشتق شده است:</p>
-<pre><code class="language-csharp">using var dbContext = new NutshellContext();
-var cust = dbContext.Customers.First();
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> dbContext = <span class="hljs-keyword">new</span> NutshellContext();
+<span class="hljs-keyword">var</span> cust = dbContext.Customers.First();
 Console.WriteLine(cust.GetType());
-// خروجی: Castle.Proxies.CustomerProxy
+<span class="hljs-comment">// خروجی: Castle.Proxies.CustomerProxy</span>
 </code></pre>
 <h3>اجرای به تأخیر افتاده (Deferred Execution) ⏳</h3>
 <p>کوئری‌های <strong>EF Core</strong> نیز مانند کوئری‌های محلی از مدل <strong>deferred execution</strong> پیروی می‌کنند. این ویژگی به شما اجازه می‌دهد کوئری‌ها را به‌تدریج بسازید. با این حال، یک نکته ویژه در <strong>EF Core</strong> وجود دارد و آن زمانی است که <strong>subquery</strong> داخل یک <strong>Select expression</strong> قرار گیرد.</p>
 <p>با کوئری‌های محلی، شما <strong>double-deferred execution</strong> دارید، زیرا از دیدگاه تابعی، در حال انتخاب یک دنباله از کوئری‌ها هستید. بنابراین اگر دنباله بیرونی را شمارش کنید اما دنباله‌های داخلی هرگز شمارش نشوند، subquery اجرا نخواهد شد.</p>
 <p>در <strong>EF Core</strong>، subquery همزمان با اجرای کوئری بیرونی اجرا می‌شود تا از ارسال درخواست‌های اضافی جلوگیری شود.</p>
 <p>مثال: این کوئری تنها در یک round trip به پایگاه داده اجرا می‌شود:</p>
-<pre><code class="language-csharp">using var dbContext = new NutshellContext();
-var query = from c in dbContext.Customers
-            select from p in c.Purchases
-                   select new { c.Name, p.Price };
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">var</span> dbContext = <span class="hljs-keyword">new</span> NutshellContext();
+<span class="hljs-keyword">var</span> query = <span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+            <span class="hljs-keyword">select</span> <span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> c.Purchases
+                   <span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> { c.Name, p.Price };
 
-foreach (var customerPurchaseResults in query)
-    foreach (var namePrice in customerPurchaseResults)
-        Console.WriteLine($&quot;{namePrice.Name} spent {namePrice.Price}&quot;);
+<span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> customerPurchaseResults <span class="hljs-keyword">in</span> query)
+    <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> namePrice <span class="hljs-keyword">in</span> customerPurchaseResults)
+        Console.WriteLine(<span class="hljs-string">$&quot;<span class="hljs-subst">{namePrice.Name}</span> spent <span class="hljs-subst">{namePrice.Price}</span>&quot;</span>);
 </code></pre>
 <p>تمام <strong>navigation properties</strong> که به‌صورت صریح projection شده‌اند، در یک round trip کامل پر می‌شوند:</p>
-<pre><code class="language-csharp">var query = from c in dbContext.Customers
-            select new { c.Name, c.Purchases };
+<pre class="hljs"><code><span class="hljs-keyword">var</span> query = <span class="hljs-keyword">from</span> c <span class="hljs-keyword">in</span> dbContext.Customers
+            <span class="hljs-keyword">select</span> <span class="hljs-keyword">new</span> { c.Name, c.Purchases };
 
-foreach (var row in query)
-    foreach (Purchase p in row.Purchases)   // بدون round-trip اضافی
-        Console.WriteLine(row.Name + &quot; spent &quot; + p.Price);
+<span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> row <span class="hljs-keyword">in</span> query)
+    <span class="hljs-keyword">foreach</span> (Purchase p <span class="hljs-keyword">in</span> row.Purchases)   <span class="hljs-comment">// بدون round-trip اضافی</span>
+        Console.WriteLine(row.Name + <span class="hljs-string">&quot; spent &quot;</span> + p.Price);
 </code></pre>
 <p>اما اگر یک navigation property را بدون eager load یا projection شمارش کنید، قوانین deferred execution اعمال می‌شوند:</p>
-<pre><code class="language-csharp">foreach (Customer c in dbContext.Customers.ToArray())
-    foreach (Purchase p in c.Purchases)    // SQL round-trip اضافی
-        Console.WriteLine(c.Name + &quot; spent &quot; + p.Price);
+<pre class="hljs"><code><span class="hljs-keyword">foreach</span> (Customer c <span class="hljs-keyword">in</span> dbContext.Customers.ToArray())
+    <span class="hljs-keyword">foreach</span> (Purchase p <span class="hljs-keyword">in</span> c.Purchases)    <span class="hljs-comment">// SQL round-trip اضافی</span>
+        Console.WriteLine(c.Name + <span class="hljs-string">&quot; spent &quot;</span> + p.Price);
 </code></pre>
 <p>این مدل زمانی مفید است که بخواهید اجرای حلقه داخلی را به‌صورت انتخابی انجام دهید:</p>
-<pre><code class="language-csharp">foreach (Customer c in dbContext.Customers.ToArray())
-    if (myWebService.HasBadCreditHistory(c.ID))
-        foreach (Purchase p in c.Purchases)   // SQL round-trip اضافی
-            Console.WriteLine(c.Name + &quot; spent &quot; + p.Price);
+<pre class="hljs"><code><span class="hljs-keyword">foreach</span> (Customer c <span class="hljs-keyword">in</span> dbContext.Customers.ToArray())
+    <span class="hljs-keyword">if</span> (myWebService.HasBadCreditHistory(c.ID))
+        <span class="hljs-keyword">foreach</span> (Purchase p <span class="hljs-keyword">in</span> c.Purchases)   <span class="hljs-comment">// SQL round-trip اضافی</span>
+            Console.WriteLine(c.Name + <span class="hljs-string">&quot; spent &quot;</span> + p.Price);
 </code></pre>
 <blockquote>
-<p>توجه: استفاده از <strong>ToArray</strong> ضروری است، زیرا SQL Server به‌صورت پیش‌فرض نمی‌تواند یک کوئری جدید را در حالی که نتایج کوئری فعلی هنوز پردازش می‌شوند، آغاز کند.
+<p>توجه: استفاده از <strong>ToArray</strong> ضروری است، زیرا SQL Server به‌صورت پیش‌فرض نمی‌تواند یک کوئری جدید را در حالی که نتایج کوئری فعلی هنوز پردازش می‌شوند، آغاز کند.<br>
 می‌توان با اضافه کردن <code>;MultipleActiveResultSets=True</code> به connection string، امکان <strong>MARS</strong> را فعال کرد، اما با احتیاط استفاده کنید، زیرا ممکن است مشکلات طراحی دیتابیس که می‌توانند با eager loading یا projection بهبود یابند، پنهان شوند.</p>
 </blockquote>
 <hr>
 <h3>ساخت Expressions برای کوئری‌ها 🏗️</h3>
 <p>تاکنون، وقتی نیاز به ایجاد کوئری‌های داینامیک داشتیم، این کار را با chaining شرطی <strong>query operators</strong> انجام می‌دادیم. این روش در بسیاری از سناریوها کافی است، اما گاهی نیاز داریم به سطح دقیق‌تر رفته و <strong>lambda expression</strong>هایی که به operatorها داده می‌شوند را داینامیک بسازیم.</p>
 <p>فرض کنید کلاس زیر داریم:</p>
-<pre><code class="language-csharp">public class Product
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Product</span>
 {
-    public int ID { get; set; }
-    public string Description { get; set; }
-    public bool Discontinued { get; set; }
-    public DateTime LastSale { get; set; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> ID { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Description { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> Discontinued { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> DateTime LastSale { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
 }
 </code></pre>
 <hr>
@@ -1645,18 +1605,18 @@ foreach (var row in query)
 <li>کوئری‌های تفسیرشده (<strong>Queryable operators</strong>) از <strong>expression trees</strong> استفاده می‌کنند.</li>
 </ul>
 <p>می‌توان این را با مقایسه signature متد <strong>Where</strong> در Enumerable و Queryable دید:</p>
-<pre><code class="language-csharp">public static IEnumerable&lt;TSource&gt; Where&lt;TSource&gt;(this IEnumerable&lt;TSource&gt; source, Func&lt;TSource,bool&gt; predicate)
-public static IQueryable&lt;TSource&gt; Where&lt;TSource&gt;(this IQueryable&lt;TSource&gt; source, Expression&lt;Func&lt;TSource,bool&gt;&gt; predicate)
-</code></pre>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">IEnumerable</span>&lt;<span class="hljs-title">TSource</span>&gt; <span class="hljs-title">Where</span>&lt;<span class="hljs-title">TSource</span>&gt;(<span class="hljs-params"><span class="hljs-keyword">this</span> IEnumerable&lt;TSource&gt; source, Func&lt;TSource,<span class="hljs-built_in">bool</span>&gt; predicate</span>)
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">IQueryable</span>&lt;<span class="hljs-title">TSource</span>&gt; <span class="hljs-title">Where</span>&lt;<span class="hljs-title">TSource</span>&gt;(<span class="hljs-params"><span class="hljs-keyword">this</span> IQueryable&lt;TSource&gt; source, Expression&lt;Func&lt;TSource,<span class="hljs-built_in">bool</span>&gt;&gt; predicate</span>)
+</span></code></pre>
 <p>وقتی یک lambda expression درون یک کوئری قرار می‌گیرد، ظاهر آن شبیه هم است، چه به operatorهای Enumerable متصل شود و چه Queryable:</p>
-<pre><code class="language-csharp">IEnumerable&lt;Product&gt; q1 = localProducts.Where(p =&gt; !p.Discontinued);
+<pre class="hljs"><code>IEnumerable&lt;Product&gt; q1 = localProducts.Where(p =&gt; !p.Discontinued);
 IQueryable&lt;Product&gt;  q2 = sqlProducts.Where(p =&gt; !p.Discontinued);
 </code></pre>
 <p>اما اگر lambda را به یک متغیر میانی اختصاص دهید، باید مشخص کنید که <strong>delegate</strong> می‌خواهید یا <strong>expression tree</strong>. مثال:</p>
-<pre><code class="language-csharp">Func&lt;Product, bool&gt; predicate1 = p =&gt; !p.Discontinued;
+<pre class="hljs"><code>Func&lt;Product, <span class="hljs-built_in">bool</span>&gt; predicate1 = p =&gt; !p.Discontinued;
 IEnumerable&lt;Product&gt; q1 = localProducts.Where(predicate1);
 
-Expression&lt;Func&lt;Product, bool&gt;&gt; predicate2 = p =&gt; !p.Discontinued;
+Expression&lt;Func&lt;Product, <span class="hljs-built_in">bool</span>&gt;&gt; predicate2 = p =&gt; !p.Discontinued;
 IQueryable&lt;Product&gt; q2 = sqlProducts.Where(predicate2);
 </code></pre>
 <blockquote>
@@ -1665,18 +1625,18 @@ IQueryable&lt;Product&gt; q2 = sqlProducts.Where(predicate2);
 <h3>کامپایل کردن Expression Treeها ⚙️</h3>
 <p>می‌توانید یک <strong>expression tree</strong> را با فراخوانی متد <strong>Compile</strong> به <strong>delegate</strong> تبدیل کنید. این کار به‌ویژه زمانی ارزشمند است که بخواهید متدهایی بنویسید که <strong>expressions قابل استفاده مجدد</strong> برمی‌گردانند.</p>
 <p>برای مثال، فرض کنید یک متد استاتیک به کلاس <strong>Product</strong> اضافه کنیم که یک predicate برمی‌گرداند و بررسی می‌کند که محصول <strong>discontinued</strong> نباشد و در ۳۰ روز گذشته فروخته شده باشد:</p>
-<pre><code class="language-csharp">public class Product
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Product</span>
 {
-    public static Expression&lt;Func&lt;Product, bool&gt;&gt; IsSelling()
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Expression&lt;Func&lt;Product, <span class="hljs-built_in">bool</span>&gt;&gt; IsSelling()
     {
-        return p =&gt; !p.Discontinued &amp;&amp; p.LastSale &gt; DateTime.Now.AddDays(-30);
+        <span class="hljs-keyword">return</span> p =&gt; !p.Discontinued &amp;&amp; p.LastSale &gt; DateTime.Now.AddDays(<span class="hljs-number">-30</span>);
     }
 }
 </code></pre>
 <p>این متد می‌تواند هم در کوئری‌های <strong>interpreted</strong> و هم <strong>local</strong> استفاده شود:</p>
-<pre><code class="language-csharp">void Test()
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Test</span>()</span>
 {
-    var dbContext = new NutshellContext();
+    <span class="hljs-keyword">var</span> dbContext = <span class="hljs-keyword">new</span> NutshellContext();
     Product[] localProducts = dbContext.Products.ToArray();
     
     IQueryable&lt;Product&gt; sqlQuery = dbContext.Products.Where(Product.IsSelling());
@@ -1687,21 +1647,21 @@ IQueryable&lt;Product&gt; q2 = sqlProducts.Where(predicate2);
 <h3>AsQueryable 🧵</h3>
 <p>در .NET API مستقیمی برای تبدیل <strong>delegate</strong> به <strong>expression tree</strong> وجود ندارد. این ویژگی، <strong>expression tree</strong>ها را انعطاف‌پذیرتر می‌کند.</p>
 <p>عملگر <strong>AsQueryable</strong> اجازه می‌دهد کل یک کوئری را طوری بنویسید که هم روی دنباله‌های محلی و هم روی دنباله‌های ریموت اجرا شود:</p>
-<pre><code class="language-csharp">IQueryable&lt;Product&gt; FilterSortProducts(IQueryable&lt;Product&gt; input)
+<pre class="hljs"><code><span class="hljs-function">IQueryable&lt;Product&gt; <span class="hljs-title">FilterSortProducts</span>(<span class="hljs-params">IQueryable&lt;Product&gt; input</span>)</span>
 {
-    return from p in input
-           where ...
-           orderby ...
-           select p;
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">from</span> p <span class="hljs-keyword">in</span> input
+           <span class="hljs-keyword">where</span> ...
+           <span class="hljs-keyword">orderby</span> ...
+           <span class="hljs-keyword">select</span> p;
 }
 
-void Test()
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Test</span>()</span>
 {
-    var dbContext = new NutshellContext();
+    <span class="hljs-keyword">var</span> dbContext = <span class="hljs-keyword">new</span> NutshellContext();
     Product[] localProducts = dbContext.Products.ToArray();
 
-    var sqlQuery   = FilterSortProducts(dbContext.Products);
-    var localQuery = FilterSortProducts(localProducts.AsQueryable());
+    <span class="hljs-keyword">var</span> sqlQuery   = FilterSortProducts(dbContext.Products);
+    <span class="hljs-keyword">var</span> localQuery = FilterSortProducts(localProducts.AsQueryable());
 }
 </code></pre>
 <blockquote>
@@ -1719,85 +1679,39 @@ void Test()
 </div>
 <p>کلاس پایه برای تمام نودها، کلاس <strong>Expression</strong> غیرجنریک است.</p>
 <p>کلاس <strong>generic Expression<TDelegate></strong> در واقع به معنای &quot;<strong>typed lambda expression</strong>&quot; است و اگر مسئله پیچیدگی زیر نبود، می‌توانست نامش <strong>LambdaExpression<TDelegate></strong> باشد:</p>
-<pre><code class="language-csharp">LambdaExpression&lt;Func&lt;Customer,bool&gt;&gt; f = ...
+<pre class="hljs"><code>LambdaExpression&lt;Func&lt;Customer,<span class="hljs-built_in">bool</span>&gt;&gt; f = ...
 </code></pre>
 <p>کلاس پایه <strong>Expression<T></strong> همان کلاس غیرجنریک <strong>LambdaExpression</strong> است. <strong>LambdaExpression</strong> نوع‌بندی یکنواخت برای <strong>lambda expression tree</strong>ها را فراهم می‌کند؛ به طوری که هر <strong>Expression<T></strong> قابل تبدیل به <strong>LambdaExpression</strong> است.</p>
 <p>ویژگی متمایز <strong>LambdaExpression</strong> از <strong>Expression</strong>های معمولی این است که <strong>lambda expression</strong>ها دارای پارامتر هستند.</p>
 <p>برای ساخت یک <strong>expression tree</strong>، نباید مستقیماً نودها را instantiate کنید؛ بلکه باید از متدهای استاتیک ارائه‌شده در کلاس <strong>Expression</strong> استفاده کنید، مانند: <code>Add</code>, <code>And</code>, <code>Call</code>, <code>Constant</code>, <code>LessThan</code> و غیره.</p>
 <p>شکل ۸-۱۱ درخت <strong>expression</strong> ایجادشده توسط انتساب زیر را نشان می‌دهد:</p>
-<pre><code class="language-csharp">Expression&lt;Func&lt;string, bool&gt;&gt; f = s =&gt; s.Length &lt; 5;
+<pre class="hljs"><code>Expression&lt;Func&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">bool</span>&gt;&gt; f = s =&gt; s.Length &lt; <span class="hljs-number">5</span>;
 </code></pre>
 <div align="center">
 <p><img src="../../../assets/image/08/Table-8-13.jpeg" alt="Conventions-UsedThis-Book"></p>
 </div>
 می‌توانیم این موضوع را به صورت زیر نشان دهیم:
-<pre><code class="language-csharp">Console.WriteLine(f.Body.NodeType);                     // LessThan
-Console.WriteLine(((BinaryExpression) f.Body).Right);   // 5
+<pre class="hljs"><code>Console.WriteLine(f.Body.NodeType);                     <span class="hljs-comment">// LessThan</span>
+Console.WriteLine(((BinaryExpression) f.Body).Right);   <span class="hljs-comment">// 5</span>
 </code></pre>
 <p>حال بیایید این <strong>expression</strong> را از صفر بسازیم. اصل این است که از پایین درخت شروع کرده و به سمت بالا پیش برویم. پایین‌ترین عنصر درخت ما یک <strong>ParameterExpression</strong> است، یعنی پارامتر <strong>lambda expression</strong> به نام <code>&quot;s&quot;</code> از نوع <code>string</code>:</p>
-<pre><code class="language-csharp">ParameterExpression p = Expression.Parameter(typeof(string), &quot;s&quot;);
+<pre class="hljs"><code>ParameterExpression p = Expression.Parameter(<span class="hljs-keyword">typeof</span>(<span class="hljs-built_in">string</span>), <span class="hljs-string">&quot;s&quot;</span>);
 </code></pre>
 <p>گام بعدی ساخت <strong>MemberExpression</strong> و <strong>ConstantExpression</strong> است. در مورد اول، باید به خاصیت <code>Length</code> پارامتر <code>&quot;s&quot;</code> دسترسی پیدا کنیم:</p>
-<pre><code class="language-csharp">MemberExpression stringLength = Expression.Property(p, &quot;Length&quot;);
-ConstantExpression five = Expression.Constant(5);
+<pre class="hljs"><code>MemberExpression stringLength = Expression.Property(p, <span class="hljs-string">&quot;Length&quot;</span>);
+ConstantExpression five = Expression.Constant(<span class="hljs-number">5</span>);
 </code></pre>
 <p>گام بعدی مقایسه <strong>LessThan</strong> است:</p>
-<pre><code class="language-csharp">BinaryExpression comparison = Expression.LessThan(stringLength, five);
+<pre class="hljs"><code>BinaryExpression comparison = Expression.LessThan(stringLength, five);
 </code></pre>
 <p>آخرین گام، ساخت <strong>lambda expression</strong> است که <strong>expression Body</strong> را به مجموعه‌ای از پارامترها متصل می‌کند:</p>
-<pre><code class="language-csharp">Expression&lt;Func&lt;string, bool&gt;&gt; lambda
-    = Expression.Lambda&lt;Func&lt;string, bool&gt;&gt;(comparison, p);
+<pre class="hljs"><code>Expression&lt;Func&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">bool</span>&gt;&gt; lambda
+    = Expression.Lambda&lt;Func&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">bool</span>&gt;&gt;(comparison, p);
 </code></pre>
 <p>راهی ساده برای تست <strong>lambda</strong> این است که آن را به یک <strong>delegate</strong> کامپایل کنیم:</p>
-<pre><code class="language-csharp">Func&lt;string, bool&gt; runnable = lambda.Compile();
-Console.WriteLine(runnable(&quot;kangaroo&quot;));   // False
-Console.WriteLine(runnable(&quot;dog&quot;));        // True
+<pre class="hljs"><code>Func&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">bool</span>&gt; runnable = lambda.Compile();
+Console.WriteLine(runnable(<span class="hljs-string">&quot;kangaroo&quot;</span>));   <span class="hljs-comment">// False</span>
+Console.WriteLine(runnable(<span class="hljs-string">&quot;dog&quot;</span>));        <span class="hljs-comment">// True</span>
 </code></pre>
 <p>ساده‌ترین روش برای تعیین اینکه کدام نوع <strong>expression</strong> را باید استفاده کرد، این است که یک <strong>lambda expression</strong> موجود را در <strong>Visual Studio debugger</strong> بررسی کنید.</p>
 <p>ما ادامه این بحث را آنلاین ارائه داده‌ایم در: <a href="http://www.albahari.com/expressions">http://www.albahari.com/expressions</a> ✅</p>
-
-  </main>
-
-  <!-- فوتر مشترک -->
-  <footer class="footer">
-    <div class="container">
-      <p>
-        <img src="/icone/copyright.svg" alt="کپی‌رایت" width="14" height="14"
-             style="vertical-align:middle;margin-inline:4px">
-        <span id="y"></span> Gitab — برای توسعه‌دهندگان
-      </p>
-    </div>
-  </footer>
-
-  <!-- سال + اسکریپت تم -->
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
-
-    (() => {
-      const root = document.documentElement;
-      const btn = document.getElementById('themeToggle');
-      const KEY = 'gitab-theme';
-      const media = window.matchMedia('(prefers-color-scheme: dark)');
-      const getEffective = s => s === 'auto' ? (media.matches ? 'dark' : 'light') : s;
-      function updateTheme(s) {
-        root.setAttribute('data-theme', s);
-        const mode = getEffective(s);
-        root.dataset.colorMode = mode;
-        btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
-      }
-      const saved = localStorage.getItem(KEY) || 'auto';
-      updateTheme(saved);
-      btn.addEventListener('click', () => {
-        const curr = localStorage.getItem(KEY) || 'auto';
-        const next = curr === 'auto' ? 'dark' : curr === 'dark' ? 'light' : 'auto';
-        localStorage.setItem(KEY, next);
-        updateTheme(next);
-      });
-      media.addEventListener('change', () => {
-        if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
-      });
-      window.addEventListener('DOMContentLoaded', () => updateTheme(saved));
-    })();
-  </script>
-</body>
-</html>
