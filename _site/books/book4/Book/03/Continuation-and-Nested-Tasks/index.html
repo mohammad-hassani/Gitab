@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ادامه و Task های تو در تو</title>
+  <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
+  <link rel="stylesheet" href="/styles/main.css">
+<link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<style>
+@font-face {
+  font-family: 'Vazir';
+  src: url('/fonts/Vazir-FD-WOL.ttf') format('truetype');
+  font-display: swap;
+}
+body {
+  font-family: 'Vazir', sans-serif;
+}
+</style>
+
+</head>
+<body>
+  <!-- هدر مشترک -->
+  <header class="header">
+    <div class="container nav-wrap">
+      <a class="brand" href="/">
+        <img src="/icone/logo.svg" alt="Gitab" width="28" height="28">
+        <span>Gitab</span>
+      </a>
+
+      <nav class="nav">
+        <a href="/">خانه</a>
+        <a href="/books/list-books">کتاب‌ها</a>
+        <a href="#">مترجم ها</a>
+        <a href="#">همکاری</a>
+        <a href="#">درباره‌ما</a>
+      </nav>
+
+     <div class="nav-actions">
+  <button id="themeToggle" class="icon-btn theme-btn" aria-label="تغییر حالت">
+    <img class="icon-sun" src="/icone/sun.svg" alt="روشن">
+    <img class="icon-moon" src="/icone/moon.svg" alt="تاریک">
+  </button>
+
+  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
+    <img src="/icone/github.svg" alt="GitHub">
+  </a>
+</div>
+
+  </header>
+
+
+<main class="site-main book-page ">
+  <h1>فصل سوم: ادامه و Taskهای تو در تو 🧵</h1>
+<p>این فصل مروری بر Task Continuations، Taskهای تو در تو (Nested Tasks) و موضوعات مرتبط ارائه می‌دهد.</p>
+<p>شما خواهید آموخت چگونه می‌توان کارها را پس از اتمام یک Task ادامه داد و چگونه Taskها می‌توانند داخل یکدیگر اجرا شوند تا ساختار برنامه منظم و بهینه باقی بماند.</p>
+<h2>وظایف ادامه‌دهنده (Continuation Tasks) 🔗</h2>
+<p>فرض کنید دو وظیفه داریم به نام Task A و Task B. اگر بخواهید اجرای Task B را تنها بعد از Task A شروع کنید، احتمالاً می‌خواهید از callbackها استفاده کنید. اما TPL این کار را بسیار ساده می‌کند. این قابلیت از طریق یک <strong>وظیفه ادامه‌دهنده (continuation task)</strong> فراهم می‌شود که چیزی جز یک <strong>وظیفه غیرهمزمان (asynchronous task)</strong> نیست. ایده همان است: وقتی یک <strong>وظیفه پیشین (antecedent task)</strong> به پایان رسید، وظیفه بعدی که می‌خواهید ادامه دهید، فراخوانی می‌شود. در مثال ما، Task A همان <strong>وظیفه پیشین</strong> و Task B همان <strong>وظیفه ادامه‌دهنده</strong> است.</p>
+<p>اجازه دهید ویژگی‌های مهم یک <strong>وظیفه ادامه‌دهنده</strong> را خلاصه کنم:<br>
+• یک <strong>وظیفه ادامه‌دهنده</strong> توسط یک وظیفه دیگر فراخوانی می‌شود. می‌تواند زمانی شروع شود که وظیفه قبلی (یعنی <strong>وظیفه پیشین</strong>) کامل شده باشد. این یعنی ادامه‌ها چیزی جز <strong>زنجیره‌سازی وظایف</strong> نیستند.<br>
+• با استفاده از این مفهوم، می‌توانید <strong>داده‌ها (و حتی استثناها)</strong> را از یک وظیفه پیشین به وظیفه ادامه‌دهنده منتقل کنید.<br>
+• اگر یک وظیفه غیرهمزمان داده‌ای برگرداند، می‌توانید از وظیفه ادامه‌دهنده برای <strong>دریافت و/یا پردازش آن داده‌ها بدون مسدود کردن نخ اصلی</strong> استفاده کنید. این ویژگی، <strong>انعطاف‌پذیری بالای وظایف ادامه‌دهنده</strong> را نشان می‌دهد.<br>
+• ادامه‌ها می‌توانند به یک یا چند <strong>وظیفه پیشین</strong> متصل شوند.<br>
+• می‌توانید یک یا چند <strong>وظیفه ادامه‌دهنده</strong> را فراخوانی کنید.<br>
+• می‌توانید <strong>کنترل وظیفه ادامه‌دهنده</strong> را در دست بگیرید. برای مثال، اگر سه وظیفه به نام‌های Task A، Task B و Task C وجود داشته باشد، می‌توانید تصمیم بگیرید که Task C تنها بعد از اتمام هر دو Task A و Task B ادامه یابد. یا می‌توانید تعیین کنید که Task C لازم نیست منتظر هر دو باشد و به محض اتمام هر کدام، ادامه یابد.<br>
+• همچنین می‌توانید یک <strong>وظیفه ادامه‌دهنده را لغو (cancel)</strong> کنید. این ویژگی اغلب در شرایط اضطراری یا زمانی که با یک باگ مکرر در اجرای برنامه مواجه می‌شوید، مفید است.</p>
+<hr>
+<h3>ادامه ساده (Simple Continuation) 🍽️</h3>
+<p>فرض کنید فردی به نام Jack می‌خواهد دوستانش را به یک <strong>مهمانی شام</strong> دعوت کند. در سطح بالا، فعالیت کلی را می‌توان به دو وظیفه تقسیم کرد:<br>
+• دعوت از دوستان<br>
+• سفارش غذا</p>
+<p>فرض کنیم Jack ابتدا دوستانش را از طریق تلفن دعوت می‌کند. پس از اتمام دعوت، او می‌داند چند نفر قرار است در مهمانی شرکت کنند. بر اساس این اطلاعات، حالا غذا را سفارش می‌دهد. همان‌طور که می‌بینید، <strong>دعوت از دوستان</strong> همان <strong>وظیفه پیشین</strong> و <strong>سفارش غذا</strong> همان <strong>وظیفه ادامه‌دهنده</strong> است.</p>
+<p>بیایید برنامه‌ای بنویسیم تا این سناریو را شبیه‌سازی کند.</p>
+<p>برای <strong>وظیفه ادامه‌دهنده</strong>، شما استفاده از متد <code>ContinueWith</code> را مشاهده خواهید کرد. این متد یک <strong>وظیفه ادامه‌دهنده</strong> ایجاد می‌کند که زمانی اجرا می‌شود که <strong>وظیفه هدف</strong> کامل شده باشد. این متد چندین <strong>بارگذاری اضافی (overload)</strong> دارد. در این مثال، من ساده‌ترین نسخه‌ی <code>ContinueWith</code> را استفاده کرده‌ام که یک <strong>Action<Task></strong> به عنوان پارامتر می‌پذیرد. به همین دلیل شما کد زیر را مشاهده می‌کنید:</p>
+<pre class="hljs"><code><span class="hljs-keyword">var</span> orderTask = inviteTask.ContinueWith(previousTask =&gt;
+{
+    WriteLine(previousTask.Result);
+    <span class="hljs-comment">// شبیه‌سازی یک تأخیر برای تقلید از یک موقعیت واقعی</span>
+    Thread.Sleep(<span class="hljs-number">1000</span>);
+    WriteLine(<span class="hljs-string">&quot;Food is ordered now.&quot;</span>);
+}
+);
+</code></pre>
+<p>همان‌طور که می‌بینید، یک توقف یک ثانیه‌ای داخل <code>orderTask</code> گذاشته شده است. اگرچه این کار لازم نبود، اما این خط کد برای شبیه‌سازی <strong>تأخیر بین وظیفه دعوت از دوستان و سفارش غذا</strong> نگه داشته شده است.</p>
+<div align="center">
+<p><img src="../../../assets/image/03/Table%203-1.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>نکته مهم ⚠️</p>
+<p>برای اینکه خروجی کامل برنامه را نشان دهم، در این مثال از متد <code>ReadLine</code> استفاده کرده‌ام تا از پایان زودهنگام برنامه کنسول جلوگیری شود. همین نکته زمانی که من از <code>ReadKey</code> یا <code>ReadLine</code> در مثال‌های دیگر این کتاب استفاده می‌کنم نیز صدق می‌کند.</p>
+<hr>
+<h3>نمایش 1 (Demonstration 1) 💻</h3>
+<p>در اینجا نمایش کامل برنامه آمده است:</p>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">static</span> System.Console;
+
+WriteLine(<span class="hljs-string">&quot;The host is planning a party.&quot;</span>);
+
+<span class="hljs-keyword">var</span> inviteTask = Task.Run(() =&gt; <span class="hljs-string">&quot;Invitation is done.&quot;</span>);
+
+<span class="hljs-keyword">var</span> orderTask = inviteTask.ContinueWith(previousTask =&gt;
+{
+    WriteLine(previousTask.Result);
+    <span class="hljs-comment">// شبیه‌سازی تأخیر برای تقلید از یک موقعیت واقعی</span>
+    Thread.Sleep(<span class="hljs-number">1000</span>);
+    WriteLine(<span class="hljs-string">&quot;Food is ordered now.&quot;</span>);
+});
+
+WriteLine(<span class="hljs-string">&quot;The host is decorating the house.&quot;</span>);
+
+ReadLine();
+</code></pre>
+<h4>خروجی (Output) 🖥️</h4>
+<p>نمونه خروجی برای شما به این شکل خواهد بود:</p>
+<pre class="hljs"><code>The host is planning a party.
+The host is decorating the house.
+Invitation is done.
+Food is ordered now.
+</code></pre>
+<hr>
+<h3>تحلیل (Analysis) 🔍</h3>
+<p>خروجی بالا ویژگی‌های زیر را تأیید می‌کند:<br>
+• <strong>نخ اصلی (main thread)</strong> در هنگام اجرای <strong>وظیفه ادامه‌دهنده</strong> مسدود نشده بود. به همین دلیل خط <code>&quot;The host is decorating the house.&quot;</code> قبل از خط <code>&quot;Invitation is done.&quot;</code> نمایش داده شد.<br>
+• می‌توان دید که <strong>وظیفه ادامه‌دهنده</strong> بعد از اتمام <strong>وظیفه پیشین</strong> آغاز شد و همچنین <strong>داده‌های برگشتی از وظیفه والد/پیشین</strong> را به درستی پردازش کرد.<br>
+• در این مثال، زمانی که وظیفه ادامه‌دهنده خط <code>WriteLine(previousTask.Result);</code> را پردازش کرد، غیرمسدود کننده بود. چرا؟ زیرا وظیفه قبلی از قبل کامل شده بود و نتیجه آن فوراً در دسترس بود.</p>
+<hr>
+<h3>ادامه‌های شرطی (Conditional Continuations) ⚙️</h3>
+<p>نمایش 1 یک نمونه ساده از <strong>وظیفه ادامه‌دهنده</strong> را نشان داد. با این حال، شما می‌توانید کنترل بیشتری بر فرآیند ادامه داشته باشید. بیایید این مفهوم را با برخی <strong>مطالعات موردی (case studies)</strong> بررسی کنیم.</p>
+<h4>مطالعه موردی 1 (Case Study 1) 📝</h4>
+<p>حتی پس از دعوت مهمان‌ها، ممکن است میزبان به دلایلی ناگزیر مجبور شود <strong>تاریخ مهمانی را تغییر دهد</strong>. در این حالت، به جای سفارش غذا، فرض کنیم میزبان <strong>به مهمان اطلاع می‌دهد</strong> و تاریخ مهمانی را جابه‌جا می‌کند. آیا می‌توانید برنامه‌ای بنویسید که این وضعیت را شبیه‌سازی کند؟</p>
+<p>قطعاً می‌توانید. اما اجازه دهید <strong>تکنیکی با استفاده از enumeration به نام <code>TaskContinuationOptions</code></strong> به شما نشان دهم که این وضعیت را مدیریت می‌کند. تصویر زیر (Figure 3-1) از Visual Studio <strong>اعضای مختلف <code>TaskContinuationOptions</code></strong> را نشان می‌دهد:</p>
+<div align="center">
+<p><img src="../../../assets/image/03/Table%203-2.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>نکته مهم ⚠️</p>
+<p>بحث در مورد همه‌ی اعضای <code>TaskContinuationOptions</code> باعث حجیم شدن بی‌مورد کتاب می‌شود. اگر علاقه‌مند هستید، می‌توانید با باز کردن آن‌ها در Visual Studio یا از لینک آنلاین زیر اطلاعات بیشتری کسب کنید:<br>
+<a href="https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.taskcontinuationoptions?view=net-8.0">TaskContinuationOptions – Microsoft Docs</a><br>
+با این حال، فکر می‌کنم با دیدن نام این اعضا نیز می‌توانید <strong>تصوری کلی از عملکرد آن‌ها</strong> به دست آورید.</p>
+<hr>
+<p>چون مثال ما با یک <strong>وضعیت استثنایی (exceptional situation)</strong> سروکار دارد، قصد دارم از گزینه‌های <code>NotOnFaulted</code> و <code>OnlyOnFaulted</code> استفاده کنم. شما می‌توانید به‌طور ایمن فرض کنید که گزینه‌ی <code>NotOnFaulted</code> برای وضعیت <strong>عادی</strong> و گزینه‌ی دیگر برای وضعیت <strong>استثنایی</strong> استفاده خواهد شد.</p>
+<p>قبل از اینکه برنامه کامل را ببینید، باید بگویم برای ایجاد یک <strong>وضعیت استثنایی</strong>، از یک منطق ساده (dummy logic) استفاده کرده‌ام. این منطق به این صورت است: <strong>وظیفه پیشین (inviteTask)</strong> یک عدد تولید می‌کند. اگر عدد <strong>زوج</strong> باشد، یک <strong>استثنا (exception)</strong> رخ می‌دهد. در غیر این صورت، پیامی مبنی بر اینکه دعوت انجام شده است، ارسال می‌شود.</p>
+<hr>
+<h3>نمایش 2 (Demonstration 2) 💻</h3>
+<p>بیایید برنامه کامل را ببینیم:</p>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">static</span> System.Console;
+
+WriteLine(<span class="hljs-string">&quot;The host is planning a party.&quot;</span>);
+
+<span class="hljs-keyword">var</span> inviteTask = Task.Run(() =&gt;
+{
+    <span class="hljs-built_in">string</span> msg = <span class="hljs-string">&quot;Invitation is done.&quot;</span>;
+    <span class="hljs-comment">// منطق ساده برای ایجاد استثنا</span>
+    <span class="hljs-built_in">int</span> random = <span class="hljs-keyword">new</span> Random().Next(<span class="hljs-number">10</span>);
+    <span class="hljs-keyword">if</span> (random % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>)
+    {
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Exception(<span class="hljs-string">&quot;Some problem occurs.&quot;</span>);
+    }
+    <span class="hljs-keyword">return</span> msg;
+});
+
+<span class="hljs-keyword">var</span> orderTask = inviteTask.ContinueWith(previousTask =&gt;
+{
+    WriteLine(previousTask.Result);
+    <span class="hljs-comment">// شبیه‌سازی تأخیر برای تقلید از یک موقعیت واقعی</span>
+    Thread.Sleep(<span class="hljs-number">1000</span>);
+    WriteLine(<span class="hljs-string">&quot;Food is ordered now.&quot;</span>);
+}, TaskContinuationOptions.NotOnFaulted);
+
+<span class="hljs-keyword">var</span> changePartyDateTask = inviteTask.ContinueWith(previousTask =&gt;
+{
+    WriteLine(<span class="hljs-string">&quot;Party date is shifted due to some unavoidable circumstances.&quot;</span>);
+}, TaskContinuationOptions.OnlyOnFaulted);
+
+WriteLine(<span class="hljs-string">&quot;The host is decorating the house.&quot;</span>);
+
+ReadLine();
+</code></pre>
+<h4>خروجی (Output) 🖥️</h4>
+<p>نمونه‌ای از خروجی ممکن بدون استثنا:</p>
+<pre class="hljs"><code>The host is planning a party.
+The host is decorating the house.
+Invitation is done.
+Food is ordered now.
+</code></pre>
+<p>نمونه‌ای از خروجی ممکن وقتی میزبان مجبور شد <strong>تاریخ مهمانی را تغییر دهد</strong>:</p>
+<pre class="hljs"><code>The host is planning a party.
+The host is decorating the house.
+Party date is shifted due to some unavoidable circumstances.
+</code></pre>
+<hr>
+<h3>مطالعه موردی 2 (Case Study 2) 📚</h3>
+<p>وظایف ادامه‌دهنده به شما کمک می‌کنند با <strong>وضعیت‌های مختلف</strong> به‌خوبی کنار بیایید. اجازه دهید یک <strong>مطالعه موردی دیگر</strong> را بررسی کنیم. قبلاً گفتیم که <strong>ادامه‌ها می‌توانند به یک یا چند وظیفه پیشین متصل شوند</strong>. بیایید یک مثال ببینیم.</p>
+<p>این بار از متد <code>ContinueWhenAll</code> استفاده می‌کنم. همانند همیشه، این متد چندین overload دارد. من قصد دارم نسخه‌ای را استفاده کنم که <strong>دو پارامتر می‌پذیرد</strong>:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> Task <span class="hljs-title">ContinueWhenAll</span>&lt;<span class="hljs-title">TAntecedentResult</span>&gt;(<span class="hljs-params">
+    Task&lt;TAntecedentResult&gt;[] tasks,
+    Action&lt;Task&lt;TAntecedentResult&gt;[]&gt; continuationAction
+</span>)</span>
+{
+    <span class="hljs-comment">// بدنه متد نشان داده نشده است</span>
+}
+</code></pre>
+<p>پارامتر اول <strong>یک آرایه از وظایف پیشین</strong> می‌پذیرد (این یعنی تمام آن‌ها باید تکمیل شوند تا ادامه آغاز شود) و پارامتر بعدی برای <strong>delegate از نوع Action</strong> است که زمانی اجرا می‌شود که <strong>تمام وظایف موجود در آرایه تکمیل شوند</strong>.</p>
+<p>به همین دلیل، شما کد زیر را خواهید دید که نشان می‌دهد <strong>orderTask</strong> و <strong>inviteTask</strong> باید تکمیل شوند تا <strong>وظیفه ادامه‌دهنده (continuation task)</strong> آغاز شود:</p>
+<pre class="hljs"><code><span class="hljs-keyword">var</span> arrangeDinnerTask = Task.Factory.ContinueWhenAll(
+    [<span class="hljs-meta">orderTask, inviteTask</span>],
+    tasks =&gt;
+    {
+         WriteLine(<span class="hljs-string">&quot;Arranging dinner.&quot;</span>);
+    }
+);
+</code></pre>
+<div align="center">
+<p><img src="../../../assets/image/03/Table%203-3.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>نکته مهم ⚠️</p>
+<p>شاید توجه کرده باشید که ویژگی <strong>“Collection expressions”</strong> در C# 12 اجازه می‌دهد <code>arrangeDinnerTask</code> را به این شکل بنویسیم. اگر از نسخه قدیمی‌تر C# استفاده می‌کنید، لازم است آن را به صورت زیر بنویسید (تغییر مهم با <strong>bold</strong> مشخص شده است):</p>
+<pre class="hljs"><code><span class="hljs-keyword">var</span> arrangeDinnerTask = Task.Factory.ContinueWhenAll(
+    <span class="hljs-keyword">new</span>[] { orderTask, inviteTask },
+    <span class="hljs-comment">//[orderTask,inviteTask],  // از C#12 به بعد</span>
+    tasks =&gt;
+    {
+    }
+);
+</code></pre>
+<hr>
+<h3>نمایش 3 (Demonstration 3) 💻</h3>
+<p>بیایید برنامه کامل را ببینیم:</p>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">static</span> System.Console;
+
+<span class="hljs-keyword">var</span> orderTask = Task.Run(() =&gt; WriteLine(<span class="hljs-string">&quot;Food is ordered.&quot;</span>));
+<span class="hljs-keyword">var</span> inviteTask = Task.Run(() =&gt; WriteLine(<span class="hljs-string">&quot;Invitation is done.&quot;</span>));
+
+<span class="hljs-keyword">var</span> arrangeDinnerTask = Task.Factory.ContinueWhenAll(
+    <span class="hljs-comment">//[new[] { orderTask,inviteTask }],</span>
+    [<span class="hljs-meta">orderTask, inviteTask</span>],  <span class="hljs-comment">// از C#12 به بعد</span>
+    tasks =&gt;
+    {
+        WriteLine(<span class="hljs-string">&quot;Arranging dinner.&quot;</span>);
+    }
+);
+
+ReadLine();
+</code></pre>
+<h4>خروجی (Output) 🖥️</h4>
+<p>نمونه‌ای از خروجی ممکن وقتی ابتدا غذا سفارش داده می‌شود:</p>
+<pre class="hljs"><code>Food is ordered.
+Invitation is done.
+Arranging dinner.
+</code></pre>
+<p>نمونه‌ای از خروجی ممکن وقتی ابتدا دعوت‌ها انجام می‌شود:</p>
+<pre class="hljs"><code>Invitation is done.
+Food is ordered.
+Arranging dinner.
+</code></pre>
+<hr>
+<h3>تحلیل (Analysis) 🔍</h3>
+<p>در هر حالت می‌توان مشاهده کرد که <strong>شام تنها پس از تکمیل وظیفه سفارش غذا و انجام دعوت‌ها</strong> چیده شده است.</p>
+<hr>
+<h3>مطالعه موردی 3 (Case Study 3) 🍽️</h3>
+<p>بیایید یک مطالعه موردی دیگر را بررسی کنیم که در آن <strong>وظیفه ادامه‌دهنده زمانی اجرا می‌شود که هر یک از وظایف قبلی تکمیل شوند</strong>. در این حالت می‌توانید از متد <code>ContinueWhenAny</code> به جای <code>ContinueWhenAll</code> استفاده کنید.</p>
+<p>به عنوان مثال، نمونه خروجی زیر زمانی به دست آمد که من متد <code>ContinueWhenAll</code> را با <code>ContinueWhenAny</code> جایگزین کردم:</p>
+<pre class="hljs"><code>Food is ordered.
+Arranging dinner.
+Invitation is done.
+</code></pre>
+<p>این خروجی نشان می‌دهد که <strong>شام حتی قبل از تکمیل دعوت‌ها چیده شده است</strong>. شما می‌توانید احتمال مشاهده چنین خروجی‌ای را با اضافه کردن یک <strong>دستور sleep در <code>inviteTask</code></strong> افزایش دهید، مانند:</p>
+<pre class="hljs"><code><span class="hljs-keyword">var</span> inviteTask = Task.Run(() =&gt;
+{
+    Thread.Sleep(<span class="hljs-number">3000</span>);
+    WriteLine(<span class="hljs-string">&quot;Invitation is done.&quot;</span>);
+});
+</code></pre>
+<p>💡 نکته: شما همچنین می‌توانید پروژه <strong>Chapter3_Demo3_CaseStudy3</strong> را دانلود کنید تا این مطالعه موردی را تمرین کنید.</p>
+<p>شناسایی یک وظیفه و وضعیت آن 🆔</p>
+<p>وقتی در یک محیط <strong>چندنخی (multithreaded)</strong> با چندین وظیفه کار می‌کنید، ضروری است که <strong>وظایف همراه با وضعیت آن‌ها شناسایی شوند</strong>. با استفاده از <code>Task.CurrentId</code> می‌توانید <strong>شناسه (ID) وظیفه‌ای که در حال اجراست</strong> را دریافت کنید.</p>
+<div align="center">
+<p><img src="../../../assets/image/03/Table%203-4.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>نکته مهم ⚠️</p>
+<p><code>CurrentId</code> برای دریافت <strong>شناسه وظیفه‌ای که در حال اجراست</strong> از داخل کدی که وظیفه اجرا می‌کند استفاده می‌شود. با این حال، این یک <strong>ویژگی ایستا (static property)</strong> است و با ویژگی <code>Id</code> متفاوت است. ویژگی <code>Id</code> <strong>شناسه یک نمونه مشخص از Task</strong> را برمی‌گرداند. تلاش برای دریافت مقدار <code>CurrentId</code> از خارج کدی که وظیفه در حال اجراست، <strong>مقدار null</strong> بازمی‌گرداند.</p>
+<p>چرخه عمر یک <strong>نمونه Task</strong> از مراحل مختلفی عبور می‌کند. ویژگی <code>Status</code> برای بررسی <strong>وضعیت فعلی</strong> استفاده می‌شود. هنگام بررسی، خواهید دید که این ویژگی <strong>نوع enum به نام TaskStatus</strong> را برمی‌گرداند که اعضای زیادی دارد. اجازه دهید یک <strong>تصویر از Visual Studio</strong> برای نمایش آن‌ها ارائه کنم (Figure 3-2).</p>
+<div align="center">
+<p><img src="../../../assets/image/03/Table%203-5.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h3>وضعیت نهایی یک Task و تحلیل آن 📝</h3>
+<p>در یک محیط <strong>همزمان (concurrent)</strong> ممکن است زمانی که مقدار وضعیت یک وظیفه را دریافت می‌کنید، وضعیت آن تغییر کرده باشد. اما نکته جالب این است که <strong>زمانی که یک وضعیت به دست آمد، نمی‌تواند به وضعیت قبلی بازگردد</strong>. برای مثال، وقتی یک وظیفه به <strong>وضعیت نهایی (final state)</strong> برسد، نمی‌تواند به وضعیت <code>Created</code> بازگردد.</p>
+<p>سه وضعیت نهایی ممکن وجود دارد:<br>
+• <code>RanToCompletion</code> ✅ – نشان می‌دهد وظیفه با موفقیت کامل شده است.<br>
+• <code>Canceled</code> ❌ – نشان می‌دهد وظیفه لغو شده است، که می‌تواند به دلایلی مثل دخالت کاربر، تایم‌اوت‌ها، یا منطق برنامه رخ دهد.<br>
+• <code>Faulted</code> ⚠️ – نشان می‌دهد وظیفه به دلیل یک <strong>استثنای مدیریت‌نشده</strong> کامل شده است.</p>
+<p>توضیحات بیشتر درباره استثناها و لغو وظایف در <strong>فصل ۴ و فصل ۵</strong> ارائه خواهد شد.</p>
+<hr>
+<h3>نمایش 4 (Demonstration 4) 💻</h3>
+<p>در برنامه زیر، دو وظیفه داریم:</p>
+<ol>
+<li><code>doSomethingTask</code> – می‌تواند با موفقیت تکمیل شود یا با یک استثنا مواجه شود.</li>
+<li><code>statusCheckerTask</code> – یک <strong>وظیفه ادامه‌دهنده</strong> است که وضعیت وظیفه والد را با استفاده از ویژگی <code>Status</code> بررسی می‌کند و <code>TaskStatus</code> آن را بازمی‌گرداند.</li>
+</ol>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">static</span> System.Console;
+
+<span class="hljs-keyword">var</span> doSomethingTask = Task.Run(() =&gt;
+{
+    WriteLine(<span class="hljs-string">$&quot;The task [id:<span class="hljs-subst">{Task.CurrentId}</span>] starts...&quot;</span>);
+    <span class="hljs-comment">// انجام کار دیگر، در صورت نیاز</span>
+    <span class="hljs-built_in">int</span> random = <span class="hljs-keyword">new</span> Random().Next(<span class="hljs-number">2</span>);
+    WriteLine(<span class="hljs-string">$&quot;The random number is:<span class="hljs-subst">{random}</span>&quot;</span>);
+    <span class="hljs-comment">// عدد تصادفی 0 باعث ایجاد استثنا می‌شود</span>
+    <span class="hljs-keyword">if</span> (random == <span class="hljs-number">0</span>)
+    {
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Exception(<span class="hljs-string">&quot;Got a zero&quot;</span>);
+    }
+    WriteLine(<span class="hljs-string">$&quot;The task [id:<span class="hljs-subst">{Task.CurrentId}</span>] has finished.&quot;</span>);
+});
+
+<span class="hljs-keyword">var</span> statusCheckerTask = doSomethingTask.ContinueWith(previousTask =&gt;
+{
+    WriteLine(<span class="hljs-string">$&quot;The task <span class="hljs-subst">{previousTask.Id}</span>&#x27;s status is: <span class="hljs-subst">{previousTask.Status}</span>&quot;</span>);
+}, TaskContinuationOptions.AttachedToParent);
+
+ReadKey();
+</code></pre>
+<h4>خروجی (Output) 🖥️</h4>
+<p>نمونه‌ای از خروجی وقتی استثنا رخ داده است:</p>
+<pre class="hljs"><code>The task [id:8] starts...
+The random number is:0
+The task 8's status is: Faulted
+</code></pre>
+<p>نمونه‌ای از خروجی وقتی استثنا رخ نداده است:</p>
+<pre class="hljs"><code>The task [id:8] starts...
+The random number is:1
+The task [id:8] has finished.
+The task 8's status is: RanToCompletion
+</code></pre>
+<hr>
+<h3>تحلیل و مدیریت شاخه‌های مختلف 🔄</h3>
+<p>در صورت نیاز، می‌توانید برنامه را طوری تغییر دهید که <strong>شاخه‌های جداگانه برای مدیریت سناریوهای مختلف</strong> ایجاد کنید، مشابه نمایش 2. برای مثال، می‌توان <code>statusCheckerTask</code> را با دو شاخه زیر جایگزین کرد:</p>
+<pre class="hljs"><code><span class="hljs-keyword">var</span> normalHandlerTask = doSomethingTask.ContinueWith(previousTask =&gt;
+{
+    WriteLine(<span class="hljs-string">$&quot;The task <span class="hljs-subst">{previousTask.Id}</span>&#x27;s status is: <span class="hljs-subst">{previousTask.Status}</span>&quot;</span>);
+}, TaskContinuationOptions.AttachedToParent | TaskContinuationOptions.NotOnFaulted);
+
+<span class="hljs-keyword">var</span> faultHandlerTask = doSomethingTask.ContinueWith(previousTask =&gt;
+{
+    WriteLine(<span class="hljs-string">$&quot;The parent task was not completed due to an exception.&quot;</span>);
+}, TaskContinuationOptions.AttachedToParent | TaskContinuationOptions.OnlyOnFaulted);
+</code></pre>
+<p>با اجرای این برنامه، پیام‌ها <strong>بر اساس وضعیت تکمیل وظیفه والد</strong> نمایش داده می‌شوند.</p>
+<ul>
+<li>وقتی استثنا رخ دهد:</li>
+</ul>
+<pre class="hljs"><code>The task [id:7] starts...
+The random number is:0
+The parent task was not completed due to an exception.
+</code></pre>
+<ul>
+<li>وقتی استثنا رخ ندهد:</li>
+</ul>
+<pre class="hljs"><code>The task [id:8] starts...
+The random number is:1
+The task [id:8] has finished.
+The task 8's status is: RanToCompletion
+</code></pre>
+<hr>
+<h3>پرسش و پاسخ (Q&amp;A) ❓</h3>
+<p><strong>Q3.1:</strong> در خروجی‌ها، شناسه وظیفه والد 7 یا 8 بود. آیا درست است که وظایف دیگری نیز همزمان اجرا می‌شدند؟</p>
+<p><strong>پاسخ:</strong> بله، این کد در VS2022 با تنظیمات پیش‌فرض <strong>Debug</strong> و فعال بودن <strong>Hot Reload</strong> اجرا شد. اگر همین کد را در <strong>Release configuration</strong> یا با غیرفعال کردن Hot Reload اجرا کنید، شناسه پایین‌تری مانند 1 خواهید دید:</p>
+<pre class="hljs"><code>The task [id:1] started doing something...
+The random number is:0
+The task 1's status is: Faulted
+</code></pre>
+<p>📌 برای انتخاب تنظیمات موردنظر: روی <strong>Solution Explorer</strong> راست‌کلیک کنید ➤ <strong>Configuration Manager…</strong> ➤ <strong>Debug یا Release</strong> را برای پروژه انتخاب کنید.</p>
+<div align="center">
+<p><img src="../../../assets/image/03/Table%203-6.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>نکته مهم ⚠️</p>
+<p>من اغلب برنامه‌هایم را در <strong>حالت Debug</strong> اجرا می‌کنم. بنابراین، برای دیدن <strong>شناسه‌های پایین‌تر وظایف</strong> مانند 1، 2، 3 و… در خروجی، معمولاً آن برنامه‌ها را با <strong>غیرفعال کردن تنظیم “Hot Reload”</strong> اجرا می‌کنم.</p>
+<p><strong>Q3.2 آیا شناسه‌های وظایف یکتا هستند؟</strong></p>
+<p>مایکروسافت این موضوع را تضمین نمی‌کند. در لینک آنلاین زیر ذکر شده است:<br>
+<a href="https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.task.currentid?view=net-9.0">Task.CurrentId – Microsoft Docs</a></p>
+<blockquote>
+<p>توجه داشته باشید که هرچند برخورد شناسه‌ها بسیار نادر است، اما <strong>شناسه‌های وظایف تضمین شده نیستند که یکتا باشند</strong>.</p>
+</blockquote>
+<hr>
+<h3>وظایف تو در تو (Nested Tasks) 🔄</h3>
+<p>وظایف می‌توانند <strong>تو در تو</strong> باشند. یعنی می‌توان یک <strong>وظیفه را در دلیگیت کاربر یک وظیفه دیگر</strong> ایجاد کرد. <strong>وظیفه بیرونی</strong> که وظیفه فرزند در آن ایجاد می‌شود، معمولاً به عنوان <strong>وظیفه والد (parent task)</strong> شناخته می‌شود.</p>
+<p>یک <strong>وظیفه فرزند</strong> می‌تواند یکی از انواع زیر باشد:<br>
+• <strong>Attached</strong> 📎 – با گزینه <code>TaskCreationOptions.AttachedToParent</code> ایجاد می‌شود (در صورتی که والد اجازه اتصال داشته باشد).<br>
+• <strong>Detached</strong> 🚀 – به طور مستقل اجرا می‌شود.</p>
+<h4>وظیفه فرزند Detached</h4>
+<p>بیایید بحث خود را با <strong>وظایف فرزند Detached</strong> شروع کنیم.</p>
+<hr>
+<h3>نمایش 5 (Demonstration 5) 💻</h3>
+<p>کد زیر دو نمونه Task به نام‌های <strong>parent</strong> و <strong>child</strong> ایجاد می‌کند. توجه داشته باشید که <strong>وظیفه فرزند داخل وظیفه والد ایجاد شده است</strong>. با این حال، من <strong>وظیفه فرزند را به والد متصل نکردم</strong>. به همین دلیل، خط <code>TaskCreationOptions.AttachedToParent</code> در کد زیر <strong>کامنت شده است</strong>.</p>
+<div align="center">
+<p><img src="../../../assets/image/03/Table%203-7.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>نکته مهم ⚠️</p>
+<p>متد <code>Task.Factory.StartNew</code> یک <strong>بارگذاری اضافی (overload)</strong> دارد که <strong><code>TaskCreationOptions</code></strong> را به عنوان پارامتر می‌پذیرد. این امکان برای متد <code>Task.Run</code> وجود ندارد.</p>
+<hr>
+<h3>مثال Detached Nested Task 💻</h3>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">static</span> System.Console;
+
+<span class="hljs-keyword">var</span> parent = Task.Factory.StartNew(() =&gt;
+{
+    <span class="hljs-comment">// کار والد</span>
+});
+
+WriteLine(<span class="hljs-string">$&quot;The parent task has started.&quot;</span>);
+
+<span class="hljs-keyword">var</span> child = Task.Factory.StartNew(() =&gt;
+{
+    WriteLine(<span class="hljs-string">&quot;The child task has started.&quot;</span>);
+    <span class="hljs-comment">// ایجاد تأخیر</span>
+    Thread.Sleep(<span class="hljs-number">1000</span>);
+    WriteLine(<span class="hljs-string">&quot;The child task has finished.&quot;</span>);
+    <span class="hljs-comment">// ,TaskCreationOptions.AttachedToParent</span>
+});
+
+Thread.Sleep(<span class="hljs-number">5</span>);
+parent.Wait();
+
+WriteLine(<span class="hljs-string">$&quot;The parent task has finished now.&quot;</span>);
+</code></pre>
+<h4>خروجی نمونه 🖥️</h4>
+<pre class="hljs"><code>The parent task has started.
+The child task has started.
+The parent task has finished now.
+</code></pre>
+<p>همان‌طور که مشاهده می‌کنید، خروجی نشان می‌دهد <strong>وظیفه فرزند شروع شده است</strong>، اما نشان نمی‌دهد که <strong>تکمیل شده است یا خیر</strong>. دلیل این است که <strong>وظیفه فرزند بدون گزینه <code>TaskCreationOptions.AttachedToParent</code> ایجاد شده</strong> و بنابراین <strong>یک وظیفه Detached</strong> است که به طور مستقل از والد اجرا می‌شود. به همین دلیل وظیفه والد <strong>نیازی ندارد که منتظر تکمیل وظیفه فرزند باشد</strong>.</p>
+<hr>
+<h3>پرسش و پاسخ (Q&amp;A) ❓</h3>
+<p><strong>Q3.3:</strong> اگر بخواهم خط <code>parent.Wait();</code> را با <code>Task.WaitAll(parent, child);</code> جایگزین کنم تا مطمئن شوم وظیفه فرزند هم اجرا شده است، آیا درست است؟</p>
+<p><strong>پاسخ:</strong> خیر. در آن نمونه کد، <strong>وظیفه فرزند در محدوده (scope) وجود ندارد</strong>. بنابراین، کد پیشنهادی شما باعث <strong>خطای زمان کامپایل</strong> می‌شود:</p>
+<pre class="hljs"><code>CS0103 The name 'child' does not exist in the current context
+</code></pre>
+<p><strong>Q3.4:</strong> آیا استفاده از دستور <code>Sleep</code> در نخ اصلی ضروری بود؟</p>
+<p><strong>پاسخ:</strong> نه، ضروری نبود. اما با قرار دادن این دستور، احتمال نمایش خط <code>&quot;The child task has started.&quot;</code> در خروجی افزایش می‌یابد.</p>
+<hr>
+<h3>Attached Nested Task 📎</h3>
+<p>حالا خط</p>
+<pre class="hljs"><code><span class="hljs-comment">// ,TaskCreationOptions.AttachedToParent</span>
+</code></pre>
+<p>را از کامنت خارج کرده و برنامه را دوباره اجرا می‌کنیم. این بار، <strong>وضعیت تکمیل وظیفه فرزند</strong> نیز نمایش داده خواهد شد.</p>
+<h4>خروجی نمونه 🖥️</h4>
+<pre class="hljs"><code>The parent task has started.
+The child task has started.
+The child task has finished.
+The parent task has finished now.
+</code></pre>
+<div align="center">
+<p><img src="../../../assets/image/03/Table%203-8.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>نکات مهم ⚠️</p>
+<p>می‌توانید یک <strong>وظیفه فرزند (child task)</strong> را به <strong>وظیفه والد (parent task)</strong> متصل کنید، <strong>فقط در صورتی که والد اجازه این کار را بدهد</strong>. در این زمینه، دو نکته مهم از مستندات رسمی (<a href="https://learn.microsoft.com/en-us/dotnet/standard/parallel-programming/attached-and-detached-child-tasks">لینک</a>) قابل ذکر است:</p>
+<ol>
+<li>والدین می‌توانند به طور صریح از اتصال وظایف فرزند جلوگیری کنند، با مشخص کردن گزینه <code>TaskCreationOptions.DenyChildAttach</code> در <strong>سازنده کلاس والد</strong> یا در متد <code>TaskFactory.StartNew</code>.</li>
+<li>والدین به طور ضمنی از اتصال وظایف فرزند جلوگیری می‌کنند اگر آن‌ها با استفاده از متد <code>Task.Run</code> ایجاد شوند.</li>
+</ol>
+<hr>
+<h3>پرسش و پاسخ (Q&amp;A) ❓</h3>
+<p><strong>Q3.5:</strong> در نمایش قبلی (Demonstration 5)، فقط <code>parent.Wait();</code> نوشته شده بود. این یعنی شما فقط منتظر تکمیل وظیفه والد هستید و برای وظیفه فرزند چنین نیست. بنابراین هیچ تضمینی وجود ندارد که خروجی نشان دهد وظیفه فرزند تکمیل شده است. آیا این درک صحیح است؟</p>
+<p><strong>پاسخ:</strong> خیر. مایکروسافت معماری را به گونه‌ای طراحی کرده است که اگر رابطه والد–فرزند ایجاد کنید، <strong>منتظر ماندن برای وظیفه والد باعث می‌شود وظیفه فرزند نیز تکمیل شود</strong>.</p>
+<hr>
+<h3>وادار کردن والد به انتظار برای فرزند 👨‍👩‍👧</h3>
+<p>می‌توانید <strong>وظیفه والد را وادار کنید تا منتظر تکمیل وظیفه فرزند شود</strong> (حتی اگر یک وظیفه فرزند Detached باشد) با دسترسی به ویژگی <code>Task&lt;TResult&gt;.Result</code> وظیفه فرزند.</p>
+<hr>
+<h3>نمایش 6 (Demonstration 6) 💻</h3>
+<p>در این مثال، برنامه قبلی کمی تغییر کرده است. کد جدید با <strong>bold</strong> مشخص شده و کد قدیمی کامنت شده است:</p>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">static</span> System.Console;
+
+<span class="hljs-keyword">var</span> parent = Task.Factory.StartNew(() =&gt;
+{
+    <span class="hljs-comment">// کار والد</span>
+});
+
+WriteLine(<span class="hljs-string">$&quot;The parent task has started.&quot;</span>);
+
+<span class="hljs-keyword">var</span> child = Task.Factory.StartNew(() =&gt;
+{
+    WriteLine(<span class="hljs-string">&quot;The child task has started.&quot;</span>);
+    <span class="hljs-comment">// ایجاد تأخیر</span>
+    Thread.Sleep(<span class="hljs-number">1000</span>);
+    <span class="hljs-comment">// WriteLine(&quot;The child task has finished.&quot;);</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;the child task has finished.&quot;</span>;
+    <span class="hljs-comment">// , TaskCreationOptions.AttachedToParent</span>
+});
+
+<span class="hljs-comment">// والد اکنون منتظر این وظیفه فرزند Detached است</span>
+<span class="hljs-keyword">return</span> child.Result;
+
+<span class="hljs-comment">// Thread.Sleep(5);</span>
+<span class="hljs-comment">// parent.Wait();</span>
+<span class="hljs-comment">// WriteLine($&quot;The parent task has finished now.&quot;);</span>
+
+WriteLine(<span class="hljs-string">$&quot;The parent task confirms that <span class="hljs-subst">{parent.Result}</span>&quot;</span>);
+</code></pre>
+<h4>خروجی 🖥️</h4>
+<pre class="hljs"><code>The parent task has started.
+The child task has started.
+The parent task confirms that the child task has finished.
+</code></pre>
+<hr>
+<h3>باز کردن وظایف تو در تو (Unwrapping Nested Tasks) 🔄</h3>
+<p>در مورد وظایف تو در تو، مثال زیر را در نظر بگیرید:</p>
+<pre class="hljs"><code><span class="hljs-keyword">var</span> someTask = Task.Factory.StartNew(
+    () =&gt; Task.Factory.StartNew(() =&gt; <span class="hljs-number">200</span>)
+);
+</code></pre>
+<p>در این کد، <code>someTask</code> از نوع <code>Task&lt;Task&lt;int&gt;&gt;</code> است. اگر حالا کد زیر را اجرا کنید:</p>
+<pre class="hljs"><code>WriteLine(someTask.Result);
+</code></pre>
+<p>خروجی به شکل زیر خواهد بود:</p>
+<pre class="hljs"><code>System.Threading.Tasks.Task`1[System.Int32]
+</code></pre>
+<p>از <strong>.NET 4 به بعد</strong>، می‌توانید از یکی از <strong>متدهای Extension به نام <code>Unwrap</code></strong> استفاده کنید تا هر <code>Task&lt;Task&lt;TResult&gt;&gt;</code> را به <code>Task&lt;TResult&gt;</code> تبدیل کنید (یا <code>Task&lt;Task&gt;</code> به <code>Task</code>). این وظیفه جدید نماینده <strong>وظیفه داخلی (inner nested task)</strong> خواهد بود و <strong>وضعیت لغو و استثناها</strong> را نیز شامل می‌شود.</p>
+<div align="center">
+<p><img src="../../../assets/image/03/Table%203-9.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h3>متد Unwrap 🔄</h3>
+<p>متد <code>Unwrap</code> دو بارگذاری (overload) دارد:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Task <span class="hljs-title">Unwrap</span>(<span class="hljs-params"><span class="hljs-keyword">this</span> Task&lt;Task&gt; task</span>)</span>;
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-title">Task</span>&lt;<span class="hljs-title">TResult</span>&gt; <span class="hljs-title">Unwrap</span>&lt;<span class="hljs-title">TResult</span>&gt;(<span class="hljs-params"><span class="hljs-keyword">this</span> Task&lt;Task&lt;TResult&gt;&gt; task</span>)</span>;
+</code></pre>
+<p>همان‌طور که مشاهده می‌کنید، هر دو <strong>متدهای Extension</strong> هستند. زمانی که یک <code>Task&lt;Task&gt;</code> (یا <code>Task&lt;Task&lt;TResult&gt;&gt;</code>) را unwrap می‌کنید، یک <strong>وظیفه جدید (معمولاً به آن proxy گفته می‌شود)</strong> دریافت می‌کنید.</p>
+<hr>
+<h3>مثال 💻</h3>
+<pre class="hljs"><code><span class="hljs-keyword">var</span> someTask1 = Task.Factory.StartNew(
+    () =&gt; Task.Factory.StartNew(() =&gt; <span class="hljs-number">200</span>)
+).Unwrap();
+
+WriteLine(<span class="hljs-string">$&quot;Received: <span class="hljs-subst">{someTask1.Result}</span>&quot;</span>);
+</code></pre>
+<h4>خروجی 🖥️</h4>
+<pre class="hljs"><code>Received: 200
+</code></pre>
+<p>جالب است که اگر از متد <code>Run</code> استفاده کنید، این کار <strong>به طور خودکار برای شما انجام می‌شود</strong>. مثال معادل:</p>
+<pre class="hljs"><code><span class="hljs-keyword">var</span> someTask2 = Task.Run(
+    () =&gt; Task.Run(() =&gt; <span class="hljs-number">200</span>)
+);
+
+WriteLine(<span class="hljs-string">$&quot;Received: <span class="hljs-subst">{someTask2.Result}</span>&quot;</span>);
+</code></pre>
+<p>خروجی همین خواهد بود:</p>
+<pre class="hljs"><code>Received: 200
+</code></pre>
+<hr>
+<h3>نکته ویژه ⭐</h3>
+<p>در این کتاب، ما <strong>کلمات کلیدی <code>async</code> و <code>await</code></strong> را بررسی نکرده‌ایم. با این حال، می‌توانید از <code>await</code> برای <strong>unwrap کردن یک لایه</strong> استفاده کنید. مثال:</p>
+<pre class="hljs"><code><span class="hljs-keyword">var</span> someTask3 = Task.Factory.StartNew(
+    () =&gt; Task.Factory.StartNew(() =&gt; <span class="hljs-number">200</span>)
+);
+
+WriteLine(<span class="hljs-string">$&quot;Received: <span class="hljs-subst">{<span class="hljs-keyword">await</span> someTask3.Result}</span>&quot;</span>);
+</code></pre>
+<p>این کد نیز کامپایل می‌شود و خروجی مشابه دارد.</p>
+<p>💡 نکته: پروژه <strong>Chapter3_demo_unwrappingnestedtasks</strong> را دانلود کنید تا این قطعات کد را تمرین کنید. این پروژه در پوشه <strong>Chapter3</strong> قرار دارد.</p>
+<hr>
+<h3>خلاصه فصل 📚</h3>
+<p>این فصل به <strong>ادامه وظایف (task continuations)</strong> و <strong>وظایف تو در تو (nested tasks)</strong> پرداخته است و به طور خلاصه به سوالات زیر پاسخ داده است:</p>
+<p>• چگونه می‌توان یک مکانیزم ساده برای <strong>ادامه وظیفه</strong> پیاده‌سازی کرد؟<br>
+• چگونه می‌توان شاخه‌های مختلف ایجاد کرد تا از <strong>ادامه شرطی وظیفه</strong> استفاده شود؟<br>
+• چگونه می‌توان <strong>وضعیت وظیفه فعلی</strong> را بررسی کرد؟<br>
+• چگونه می‌توان یک <strong>وظیفه تو در تو ایجاد، مدیریت و unwrap</strong> کرد؟</p>
+<h3>تمرین‌ها 📝</h3>
+<p>برای بررسی میزان درک خود، <strong>تمرین‌های زیر را انجام دهید</strong> (برای این تمرین‌ها نیازی به مدیریت استثناها یا لغو وظایف نیست):</p>
+<div align="center">
+<p><img src="../../../assets/image/03/Table%203-10.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h3>یادآوری ⚠️</h3>
+<p>همان‌طور که قبلاً گفته شد، می‌توانید با اطمینان فرض کنید که <strong>تمام namespaceهای لازم</strong> برای این قطعات کد در دسترس هستند. این نکته برای <strong>تمام تمرین‌های این کتاب</strong> نیز صدق می‌کند.</p>
+<hr>
+<h2>تمرین‌ها و نمونه راه‌حل‌ها 📝💻</h2>
+<h3>E3.1</h3>
+<p>شروع با <strong>C# 12</strong>، می‌توانیم <strong>Primary Constructor</strong> را به عنوان بخشی از تعریف کلاس مشخص کنیم. مثال:</p>
+<pre class="hljs"><code><span class="hljs-keyword">class</span> <span class="hljs-title">Employee</span> (<span class="hljs-title">string</span> <span class="hljs-title">name</span>, <span class="hljs-title">int</span> <span class="hljs-title">id</span>)
+{
+    <span class="hljs-keyword">private</span> <span class="hljs-built_in">string</span> _name = name;
+    <span class="hljs-keyword">private</span> <span class="hljs-built_in">int</span> _id = id;
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">override</span> <span class="hljs-built_in">string</span> <span class="hljs-title">ToString</span>()</span>
+    {
+        <span class="hljs-keyword">return</span> <span class="hljs-string">$&quot;Name:<span class="hljs-subst">{_name}</span> Id:<span class="hljs-subst">{_id}</span>&quot;</span>;
+    }
+}
+
+<span class="hljs-comment">// ایجاد نمونه‌ای از کلاس Employee</span>
+Employee emp = <span class="hljs-keyword">new</span>(<span class="hljs-string">&quot;Bob&quot;</span>, <span class="hljs-number">1</span>);
+</code></pre>
+<p>فرض کنید دو وظیفه داریم:<br>
+1️⃣ اولین وظیفه، یک نمونه Employee ایجاد می‌کند.<br>
+2️⃣ وظیفه دوم، پس از اتمام وظیفه اول اجرا شده و ابتدا بررسی می‌کند که آیا وظیفه اول با موفقیت تکمیل شده است یا خیر، سپس <strong>تاریخ و زمان جاری</strong> را چاپ می‌کند.</p>
+<h4>نمونه برنامه 💻</h4>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">static</span> System.Console;
+
+<span class="hljs-keyword">var</span> createEmp = Task.Factory.StartNew(() =&gt; { })
+    .ContinueWith(task =&gt;
+    {
+        Employee emp = <span class="hljs-keyword">new</span>(<span class="hljs-string">&quot;Bob&quot;</span>, <span class="hljs-number">1</span>);
+        WriteLine(<span class="hljs-string">$&quot;Created an employee with <span class="hljs-subst">{emp}</span>&quot;</span>);
+        WriteLine(<span class="hljs-string">$&quot;Was the previous task completed? <span class="hljs-subst">{task.IsCompletedSuccessfully}</span>&quot;</span>);
+        WriteLine(<span class="hljs-string">$&quot;Current time:<span class="hljs-subst">{DateTime.Now}</span>&quot;</span>);
+    });
+
+createEmp.Wait();
+
+<span class="hljs-keyword">class</span> <span class="hljs-title">Employee</span> (<span class="hljs-title">string</span> <span class="hljs-title">name</span>, <span class="hljs-title">int</span> <span class="hljs-title">id</span>)
+{
+    <span class="hljs-keyword">private</span> <span class="hljs-built_in">string</span> _name = name;
+    <span class="hljs-keyword">private</span> <span class="hljs-built_in">int</span> _id = id;
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">override</span> <span class="hljs-built_in">string</span> <span class="hljs-title">ToString</span>()</span>
+    {
+        <span class="hljs-keyword">return</span> <span class="hljs-string">$&quot;Name: <span class="hljs-subst">{_name}</span> Id: <span class="hljs-subst">{_id}</span>&quot;</span>;
+    }
+}
+</code></pre>
+<h4>خروجی نمونه 🖥️</h4>
+<pre class="hljs"><code>Created an employee with Name: Bob Id: 1
+Was the previous task completed? True
+Current time:10/16/2024 9:58:08 AM
+</code></pre>
+<hr>
+<h3>E3.2</h3>
+<p>ایجاد یک <strong>وظیفه پس‌زمینه</strong> که یک URL را ping می‌کند (مثلاً <code>www.google.com</code>) و سپس ایجاد یک <strong>وظیفه ادامه</strong> که نتیجه را در کنسول نمایش دهد.</p>
+<h4>نمونه برنامه 💻</h4>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">static</span> System.Console;
+<span class="hljs-keyword">using</span> System.Net.NetworkInformation;
+
+<span class="hljs-built_in">string</span> url = <span class="hljs-string">&quot;www.google.com&quot;</span>;
+
+WriteLine(<span class="hljs-string">$&quot;The main thread initiates a task that starts pinging <span class="hljs-subst">{url}</span>&quot;</span>);
+
+<span class="hljs-keyword">var</span> pingTask = Task.Run(() =&gt; <span class="hljs-keyword">new</span> Ping().Send(url));
+
+<span class="hljs-keyword">var</span> statusTask = pingTask.ContinueWith(previousTask =&gt;
+{
+    WriteLine(<span class="hljs-string">$&quot;Ping Status of <span class="hljs-subst">{url}</span>: <span class="hljs-subst">{pingTask.Result.Status}</span>&quot;</span>);
+});
+
+WriteLine(<span class="hljs-string">$&quot;The main thread is ready to do other work.&quot;</span>);
+
+statusTask.Wait();
+</code></pre>
+<h4>خروجی نمونه 🖥️</h4>
+<pre class="hljs"><code>The main thread initiates a task that starts pinging www.google.com
+The main thread is ready to do other work.
+Ping Status of www.google.com: Success
+</code></pre>
+<p>📌 <strong>نسخه جایگزین بدون متغیر statusTask:</strong></p>
+<pre class="hljs"><code><span class="hljs-keyword">var</span> pingTask = Task.Run(() =&gt; <span class="hljs-keyword">new</span> Ping().Send(url))
+    .ContinueWith(previousTask =&gt; previousTask.Result.Status);
+
+WriteLine(<span class="hljs-string">$&quot;Ping Status of <span class="hljs-subst">{url}</span>: <span class="hljs-subst">{pingTask.Result}</span>&quot;</span>);
+</code></pre>
+<blockquote>
+<p>نکته نویسنده: نخ اصلی در حین اجرای وظیفه پس‌زمینه <strong>مسدود نشده بود</strong> و فقط در پایان برای نمایش خروجی منتظر می‌ماند.</p>
+</blockquote>
+<hr>
+<h3>E3.3</h3>
+<p>پیش‌بینی خروجی برنامه زیر:</p>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">static</span> System.Console;
+
+<span class="hljs-keyword">var</span> helloTask = Task.Run(() =&gt;
+{
+    WriteLine(<span class="hljs-string">&quot;Hello reader!&quot;</span>);
+    <span class="hljs-keyword">var</span> aboutTask = Task.Factory.StartNew(() =&gt;
+    {
+        Task.Delay(<span class="hljs-number">1000</span>);
+        WriteLine(<span class="hljs-string">&quot;How are you?&quot;</span>);
+    }, TaskCreationOptions.AttachedToParent);
+});
+
+helloTask.Wait();
+</code></pre>
+<h4>خروجی معمول 🖥️</h4>
+<pre class="hljs"><code>Hello reader!
+</code></pre>
+<p>❗ دلیل: برنامه قبل از اتمام aboutTask خاتمه یافته است.</p>
+<p>با استفاده از <code>ReadKey()</code> یا <code>ReadLine()</code> در پایان نخ اصلی، می‌توانید برنامه را تا مشاهده خروجی کامل نگه دارید:</p>
+<pre class="hljs"><code>Hello reader!
+How are you?
+</code></pre>
+<blockquote>
+<p>نکته: <code>Task.Run(someAction)</code> به طور پیش‌فرض <strong>اجازه اتصال وظایف فرزند به والد را نمی‌دهد</strong>، اما <code>Task.Factory.StartNew</code> این امکان را فراهم می‌کند.</p>
+</blockquote>
+<hr>
+<h3>E3.4</h3>
+<p>آیا می‌توانید کد زیر را کامپایل کنید؟</p>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">static</span> System.Console;
+
+<span class="hljs-keyword">var</span> someTask = Task.Factory.StartNew(() =&gt; Task.Run(() =&gt; <span class="hljs-number">300</span>)).Unwrap();
+
+WriteLine(<span class="hljs-string">$&quot;Received: <span class="hljs-subst">{someTask.Result}</span>&quot;</span>);
+</code></pre>
+<p>✅ بله، خروجی:</p>
+<pre class="hljs"><code>Received: 300
+</code></pre>
+<hr>
+<h3>E3.5</h3>
+<p>پیش‌بینی خروجی برنامه زیر:</p>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> <span class="hljs-keyword">static</span> System.Console;
+
+<span class="hljs-keyword">var</span> getGift = Task.Factory.StartNew(() =&gt; <span class="hljs-string">&quot;Sunny wins a book&quot;</span>)
+    .ContinueWith(previousTask =&gt;
+        Task.Run(() =&gt; previousTask.Result + <span class="hljs-string">&quot; and a laptop.&quot;</span>)
+    )
+    .Unwrap();
+
+WriteLine(getGift.Result);
+</code></pre>
+<h4>خروجی 🖥️</h4>
+<pre class="hljs"><code>Sunny wins a book and a laptop.
+</code></pre>
+
+</main>
+
+
+ 
+
+  <!-- فوتر مشترک -->
+  <footer class="footer">
+    <div class="container">
+      <p>
+        <img src="/icone/copyright.svg" alt="کپی‌رایت" width="14" height="14"
+             style="vertical-align:middle;margin-inline:4px">
+        <span id="y"></span> Gitab — برای توسعه‌دهندگان
+      </p>
+    </div>
+  </footer>
+
+  <!-- سال + اسکریپت تم -->
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    (() => {
+      const root = document.documentElement;
+      const btn = document.getElementById('themeToggle');
+      const KEY = 'gitab-theme';
+      const media = window.matchMedia('(prefers-color-scheme: dark)');
+      const getEffective = s => s === 'auto' ? (media.matches ? 'dark' : 'light') : s;
+      function updateTheme(s) {
+        root.setAttribute('data-theme', s);
+        const mode = getEffective(s);
+        root.dataset.colorMode = mode;
+        btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
+      }
+      const saved = localStorage.getItem(KEY) || 'auto';
+      updateTheme(saved);
+      btn.addEventListener('click', () => {
+        const curr = localStorage.getItem(KEY) || 'auto';
+        const next = curr === 'auto' ? 'dark' : curr === 'dark' ? 'light' : 'auto';
+        localStorage.setItem(KEY, next);
+        updateTheme(next);
+      });
+      media.addEventListener('change', () => {
+        if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
+      });
+      window.addEventListener('DOMContentLoaded', () => updateTheme(saved));
+    })();
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
+<script>
+  document.body.dataset.page = window.location.pathname;
+</script>
+
+</body>
+
+</html>

@@ -10,6 +10,7 @@ module.exports = function (eleventyConfig) {
     eleventyConfig.addPassthroughCopy("src/books/book1/assets");
     eleventyConfig.addPassthroughCopy("src/books/book2/assets");
     eleventyConfig.addPassthroughCopy("src/books/book3/assets");
+    eleventyConfig.addPassthroughCopy("src/books/book4/assets");
     eleventyConfig.addPassthroughCopy("src/icone");
 
     /* --- Markdown با Highlight.js --- */
