@@ -1,3 +1,7 @@
+---
+layout: layout.njk
+title: ایجاد و اجرای Task
+---
 # فصل دوم: ایجاد و اجرای Task ⚡
 
 این فصل به شما کمک می‌کند تا در برنامه‌نویسی Task عمیق‌تر شوید.
@@ -92,12 +96,13 @@ Task task = Task.Run(
 ```
 
 ---
+
 ### **نمایش ۱** 🔍
 
 بیایید بررسی کنیم که آیا **Task**‌ها به ما کمک می‌کنند **برنامه‌نویسی غیرهمزمان (Asynchronous Programming)** انجام دهیم یا خیر. برای این منظور از نمایش زیر استفاده می‌کنیم:
 <div align="center">
-    
-![Conventions-UsedThis-Book](../../assets/image/02/Table%202-1.jpeg) 
+
+![Conventions-UsedThis-Book](../../../assets/image/02/Table%202-1.jpeg)
 </div>
 
 ### **نکته‌ای برای یادآوری** 📝
@@ -188,8 +193,8 @@ The main thread is completed.
 * زمانی که باید یک **وضعیت اضافی (state)** را به **Task** ارسال کنید که بعداً از طریق ویژگی **Task.AsyncState** قابل بازیابی باشد.
 
 <div align="center">
-    
-![Conventions-UsedThis-Book](../../assets/image/02/Table%202-2.jpeg) 
+
+![Conventions-UsedThis-Book](../../../assets/image/02/Table%202-2.jpeg)
 </div>
 
 ### **نکته‌ای که باید به خاطر بسپارید** 📝
@@ -258,8 +263,8 @@ task.Start();
 بیایید یک رویکرد جایگزین را بررسی کنیم. در زمان نگارش این کتاب، کلاس **Task** دارای سازنده‌های زیر است (شکل ۲-۱ را ببینید).
 
 <div align="center">
-    
-![Conventions-UsedThis-Book](../../assets/image/02/Table%202-3.jpeg) 
+
+![Conventions-UsedThis-Book](../../../assets/image/02/Table%202-3.jpeg)
 </div>
 
 ### **شکل ۲-۱. نمای جزئی از نسخه‌های Overload شده سازنده‌های Task** 🖼️
@@ -343,6 +348,7 @@ var task5 = Task.Factory.StartNew(PrintNumbersVersion2, 10);
 برای تجربه این روش‌ها، پروژه **Chapter2\_Demo2A\_PassingValues** را دانلود کنید و آن‌ها را اجرا کنید.
 
 ---
+
 ### **برگرداندن مقادیر از Taskها** 🔄
 
 وقتی یک **Task** را اجرا می‌کنید، ممکن است نیاز داشته باشید به **مقدار نهایی** آن دسترسی داشته باشید.
@@ -365,9 +371,10 @@ var task = Task.Run(() => "Hello");
 var result = task.Result;
 WriteLine(result);
 ```
+
 <div align="center">
-    
-![Conventions-UsedThis-Book](../../assets/image/02/Table%202-4.jpeg) 
+
+![Conventions-UsedThis-Book](../../../assets/image/02/Table%202-4.jpeg)
 </div>
 
 ### **نکته‌ای که باید به خاطر بسپارید** 📝
@@ -437,6 +444,7 @@ The main thread is completed.
 در نتیجه، نتوانستیم از **مزایای کامل برنامه‌نویسی غیرهمزمان (asynchronous programming)** استفاده کنیم. همین مشکل زمانی که از متد **Wait** هم استفاده کنید رخ می‌دهد.
 
 ---
+
 ### **جلسه پرسش و پاسخ (Q\&A Session)** ❓💬
 
 **سوال 2.3**
@@ -638,9 +646,10 @@ Task.Delay(1000);
 CS4014 Because this call is not awaited, execution of the current 
 method continues before the call is completed. Consider applying the ‘await’ operator to the result of the call.
 ```
+
 <div align="center">
-    
-![Conventions-UsedThis-Book](../../assets/image/02/Table%202-5.jpeg) 
+
+![Conventions-UsedThis-Book](../../../assets/image/02/Table%202-5.jpeg)
 </div>
 
 ### **بیشتر درباره Sleep و Delay** ⏱️
@@ -732,8 +741,8 @@ The end of main.
 
 این خروجی نشان می‌دهد که این بار **main thread** منتظر تکمیل **processOrderTask** نمانده است.
 <div align="center">
-    
-![Conventions-UsedThis-Book](../../assets/image/02/Table%202-6.jpeg) 
+
+![Conventions-UsedThis-Book](../../../assets/image/02/Table%202-6.jpeg)
 </div>
 
 ### **نکات مهم** 📝
@@ -832,8 +841,8 @@ The end of main.
 
 توجه داشته باشید که این بار خروجی نشان می‌دهد **printLuckyNumberTask اجرای خود را کامل کرده است**، اما مشخص نمی‌کند که **processOrderTask** اجرا شده یا خیر، زیرا ما فقط وضعیت **printLuckyNumberTask** را بررسی کردیم.
 <div align="center">
-    
-![Conventions-UsedThis-Book](../../assets/image/02/Table%202-7.jpeg) 
+
+![Conventions-UsedThis-Book](../../../assets/image/02/Table%202-7.jpeg)
 </div>
 
 ### **نکته مهم** 📝
@@ -875,12 +884,13 @@ The end of main.
 * چگونه می‌توان **مقدار/مقادیر** را به Task منتقل کرد؟
 * چگونه می‌توان **مقداری را از Task بازگرداند**؟
 * چگونه می‌توان **مکانیزم انتظار** را در برنامه‌نویسی Task به کار برد؟ ✅
+
 ### **تمرین‌ها** 🏋️‍♂️
 
 برای بررسی درک خود، سعی کنید تمرین‌های زیر را انجام دهید:
 <div align="center">
-    
-![Conventions-UsedThis-Book](../../assets/image/02/Table%202-8.jpeg) 
+
+![Conventions-UsedThis-Book](../../../assets/image/02/Table%202-8.jpeg)
 </div>
 
 ### **نکته مهم** 📝

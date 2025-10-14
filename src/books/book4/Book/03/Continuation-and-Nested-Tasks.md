@@ -1,3 +1,7 @@
+---
+layout: layout.njk
+title: ادامه و Task های تو در تو 
+---
 # فصل سوم: ادامه و Taskهای تو در تو 🧵
 
 این فصل مروری بر Task Continuations، Taskهای تو در تو (Nested Tasks) و موضوعات مرتبط ارائه می‌دهد.
@@ -45,8 +49,8 @@ var orderTask = inviteTask.ContinueWith(previousTask =>
 همان‌طور که می‌بینید، یک توقف یک ثانیه‌ای داخل `orderTask` گذاشته شده است. اگرچه این کار لازم نبود، اما این خط کد برای شبیه‌سازی **تأخیر بین وظیفه دعوت از دوستان و سفارش غذا** نگه داشته شده است.
 
 <div align="center">
-    
-![Conventions-UsedThis-Book](../../assets/image/03/Table%203-1.jpeg) 
+
+![Conventions-UsedThis-Book](../../../assets/image/03/Table%203-1.jpeg)
 </div>
 
 نکته مهم ⚠️
@@ -112,8 +116,8 @@ Food is ordered now.
 قطعاً می‌توانید. اما اجازه دهید **تکنیکی با استفاده از enumeration به نام `TaskContinuationOptions`** به شما نشان دهم که این وضعیت را مدیریت می‌کند. تصویر زیر (Figure 3-1) از Visual Studio **اعضای مختلف `TaskContinuationOptions`** را نشان می‌دهد:
 
 <div align="center">
-    
-![Conventions-UsedThis-Book](../../assets/image/03/Table%203-2.jpeg) 
+
+![Conventions-UsedThis-Book](../../../assets/image/03/Table%203-2.jpeg)
 </div>
 
 نکته مهم ⚠️
@@ -221,8 +225,8 @@ var arrangeDinnerTask = Task.Factory.ContinueWhenAll(
 ```
 
 <div align="center">
-    
-![Conventions-UsedThis-Book](../../assets/image/03/Table%203-3.jpeg) 
+
+![Conventions-UsedThis-Book](../../../assets/image/03/Table%203-3.jpeg)
 </div>
 
 نکته مهم ⚠️
@@ -317,8 +321,8 @@ var inviteTask = Task.Run(() =>
 
 وقتی در یک محیط **چندنخی (multithreaded)** با چندین وظیفه کار می‌کنید، ضروری است که **وظایف همراه با وضعیت آن‌ها شناسایی شوند**. با استفاده از `Task.CurrentId` می‌توانید **شناسه (ID) وظیفه‌ای که در حال اجراست** را دریافت کنید.
 <div align="center">
-    
-![Conventions-UsedThis-Book](../../assets/image/03/Table%203-4.jpeg) 
+
+![Conventions-UsedThis-Book](../../../assets/image/03/Table%203-4.jpeg)
 </div>
 
 نکته مهم ⚠️
@@ -327,8 +331,8 @@ var inviteTask = Task.Run(() =>
 
 چرخه عمر یک **نمونه Task** از مراحل مختلفی عبور می‌کند. ویژگی `Status` برای بررسی **وضعیت فعلی** استفاده می‌شود. هنگام بررسی، خواهید دید که این ویژگی **نوع enum به نام TaskStatus** را برمی‌گرداند که اعضای زیادی دارد. اجازه دهید یک **تصویر از Visual Studio** برای نمایش آن‌ها ارائه کنم (Figure 3-2).
 <div align="center">
-    
-![Conventions-UsedThis-Book](../../assets/image/03/Table%203-5.jpeg) 
+
+![Conventions-UsedThis-Book](../../../assets/image/03/Table%203-5.jpeg)
 </div>
 
 ### وضعیت نهایی یک Task و تحلیل آن 📝
@@ -448,8 +452,8 @@ The task 1's status is: Faulted
 
 📌 برای انتخاب تنظیمات موردنظر: روی **Solution Explorer** راست‌کلیک کنید ➤ **Configuration Manager…** ➤ **Debug یا Release** را برای پروژه انتخاب کنید.
 <div align="center">
-    
-![Conventions-UsedThis-Book](../../assets/image/03/Table%203-6.jpeg) 
+
+![Conventions-UsedThis-Book](../../../assets/image/03/Table%203-6.jpeg)
 </div>
 
 نکته مهم ⚠️
@@ -483,8 +487,8 @@ The task 1's status is: Faulted
 
 کد زیر دو نمونه Task به نام‌های **parent** و **child** ایجاد می‌کند. توجه داشته باشید که **وظیفه فرزند داخل وظیفه والد ایجاد شده است**. با این حال، من **وظیفه فرزند را به والد متصل نکردم**. به همین دلیل، خط `TaskCreationOptions.AttachedToParent` در کد زیر **کامنت شده است**.
 <div align="center">
-    
-![Conventions-UsedThis-Book](../../assets/image/03/Table%203-7.jpeg) 
+
+![Conventions-UsedThis-Book](../../../assets/image/03/Table%203-7.jpeg)
 </div>
 
 نکته مهم ⚠️
@@ -566,9 +570,10 @@ The child task has started.
 The child task has finished.
 The parent task has finished now.
 ```
+
 <div align="center">
-    
-![Conventions-UsedThis-Book](../../assets/image/03/Table%203-8.jpeg) 
+
+![Conventions-UsedThis-Book](../../../assets/image/03/Table%203-8.jpeg)
 </div>
 
 نکات مهم ⚠️
@@ -662,8 +667,8 @@ System.Threading.Tasks.Task`1[System.Int32]
 
 از **.NET 4 به بعد**، می‌توانید از یکی از **متدهای Extension به نام `Unwrap`** استفاده کنید تا هر `Task<Task<TResult>>` را به `Task<TResult>` تبدیل کنید (یا `Task<Task>` به `Task`). این وظیفه جدید نماینده **وظیفه داخلی (inner nested task)** خواهد بود و **وضعیت لغو و استثناها** را نیز شامل می‌شود.
 <div align="center">
-    
-![Conventions-UsedThis-Book](../../assets/image/03/Table%203-9.jpeg) 
+
+![Conventions-UsedThis-Book](../../../assets/image/03/Table%203-9.jpeg)
 </div>
 
 ### متد Unwrap 🔄
@@ -739,12 +744,13 @@ WriteLine($"Received: {await someTask3.Result}");
 • چگونه می‌توان شاخه‌های مختلف ایجاد کرد تا از **ادامه شرطی وظیفه** استفاده شود؟
 • چگونه می‌توان **وضعیت وظیفه فعلی** را بررسی کرد؟
 • چگونه می‌توان یک **وظیفه تو در تو ایجاد، مدیریت و unwrap** کرد؟
+
 ### تمرین‌ها 📝
 
 برای بررسی میزان درک خود، **تمرین‌های زیر را انجام دهید** (برای این تمرین‌ها نیازی به مدیریت استثناها یا لغو وظایف نیست):
 <div align="center">
-    
-![Conventions-UsedThis-Book](../../assets/image/03/Table%203-10.jpeg) 
+
+![Conventions-UsedThis-Book](../../../assets/image/03/Table%203-10.jpeg)
 </div>
 
 ### یادآوری ⚠️
@@ -944,4 +950,3 @@ WriteLine(getGift.Result);
 ```
 Sunny wins a book and a laptop.
 ```
-
