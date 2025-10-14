@@ -1017,4 +1017,18 @@ html[data-theme="light"] .copy-btn:hover {
     margin-inline: auto;
 }
 
+/* فقط روی صفحاتی که داخل مسیر /Book/ هستن */
+body[data-page*="/Book/"] .site-main img {
+    border-radius: 12px;
+    max-width: 100%;
+    display: block;
+    margin: 1rem auto;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
+}
 
+/* مطمئن شو بقیه تصاویر مثل کاور کتاب‌ها دست‌نخورده بمونن */
+.book-card img,
+.cover img {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}

@@ -1,5 +1,57 @@
-<h1><em>۴</em></h1>
-<h2>نوشتن توابع تمیز</h2>
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>نوشتن توابع تمیز</title>
+  <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
+  <link rel="stylesheet" href="/styles/main.css">
+<link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<style>
+@font-face {
+  font-family: 'Vazir';
+  src: url('/fonts/Vazir-FD-WOL.ttf') format('truetype');
+  font-display: swap;
+}
+body {
+  font-family: 'Vazir', sans-serif;
+}
+</style>
+
+</head>
+<body>
+  <!-- هدر مشترک -->
+  <header class="header">
+    <div class="container nav-wrap">
+      <a class="brand" href="/">
+        <img src="/icone/logo.svg" alt="Gitab" width="28" height="28">
+        <span>Gitab</span>
+      </a>
+
+      <nav class="nav">
+        <a href="/">خانه</a>
+        <a href="/books/list-books">کتاب‌ها</a>
+        <a href="#">همکاری</a>
+        <a href="#">درباره‌ما</a>
+      </nav>
+
+     <div class="nav-actions">
+  <button id="themeToggle" class="icon-btn theme-btn" aria-label="تغییر حالت">
+    <img class="icon-sun" src="/icone/sun.svg" alt="روشن">
+    <img class="icon-moon" src="/icone/moon.svg" alt="تاریک">
+  </button>
+
+  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
+    <img src="/icone/github.svg" alt="GitHub">
+  </a>
+</div>
+
+  </header>
+
+
+<main class="site-main book-page ">
+  <h1>فصل چهارم: نوشتن توابع تمیز</h1>
 <p>توابع تمیز (Clean functions) متدهایی هستند که کوچک بوده (دارای دو یا کمتر آرگومان هستند) و از تکرار (duplication) اجتناب می‌کنند. متد ایده‌آل هیچ پارامتری ندارد و وضعیت برنامه (program's state) را تغییر نمی‌دهد. متدهای کوچک کمتر مستعد استثناها (exceptions) هستند، بنابراین شما کدی بسیار مستحکم‌تر (robust) خواهید نوشت که در بلندمدت به نفع شما خواهد بود، زیرا باگ‌های کمتری برای رفع کردن خواهید داشت.</p>
 <p>برنامه‌نویسی تابعی (Functional programming) یک متدولوژی کدنویسی نرم‌افزار است که محاسبات را به عنوان ارزیابی ریاضیاتی محاسبات (mathematical evaluation of computations) در نظر می‌گیرد. این فصل مزایای در نظر گرفتن محاسبات به عنوان ارزیابی توابع ریاضیاتی را به شما آموزش می‌دهد تا از تغییر وضعیت یک شیء (object's state) جلوگیری کنید.</p>
 <p>متدهای بزرگ (که با نام توابع نیز شناخته می‌شوند) می‌توانند برای خواندن دست و پا گیر و مستعد خطا باشند، بنابراین نوشتن متدهای کوچک مزایای خود را دارد. از این رو، به بررسی چگونگی تقسیم متدهای بزرگ به متدهای کوچک‌تر خواهیم پرداخت. در این فصل، برنامه‌نویسی تابعی (functional programming) در C# و نحوه نوشتن متدهای کوچک و تمیز را پوشش خواهیم داد.</p>
@@ -119,7 +171,7 @@
     }
 }
 </code></pre>
-<p>در کد بالا، به وضوح می‌توان دید که دو مکان وجود دارد که ممکن است یک ArgumentNullException در آن‌ها ایجاد شود. اولین خط کدی که به طور بالقوه می‌تواند یک ArgumentNullException را ایجاد کند، nameTextBox.Text = _dataItem.Name; است؛ دومین خط کدی که ممکن است به طور بالقوه همان استثنا را ایجاد کند، DescriptionTextBox.Text = _dataItem.Description; است. می‌توانیم ببینیم که هندلر استثنا (exception handler)، استثنا را هنگام وقوع می‌گیرد، آن را در کنسول می‌نویسد، و سپس به سادگی آن را دوباره به پشته (stack) پرتاب می‌کند.</p>
+<p>در کد بالا، به وضوح می‌توان دید که دو مکان وجود دارد که ممکن است یک ArgumentNullException در آن‌ها ایجاد شود. اولین خط کدی که به طور بالقوه می‌تواند یک ArgumentNullException را ایجاد کند، nameTextBox.Text = _dataItem.Name; است؛ دومین خط کدی که ممکن است به طور بالقوه همان استثنا را ایجاد کند، DescriptionTextBox.Text =_dataItem.Description; است. می‌توانیم ببینیم که هندلر استثنا (exception handler)، استثنا را هنگام وقوع می‌گیرد، آن را در کنسول می‌نویسد، و سپس به سادگی آن را دوباره به پشته (stack) پرتاب می‌کند.</p>
 <p>توجه داشته باشید که از دیدگاه خوانایی انسانی، ۸ خط کد بلوک try/catch را تشکیل می‌دهند.</p>
 <p>شما می‌توانید مدیریت استثنای try/catch را به طور کامل با یک خط متن با نوشتن اعتبارسنج آرگومان (argument validator) خودتان جایگزین کنید. برای توضیح این موضوع، یک مثال ارائه خواهیم داد.</p>
 <p>بیایید با نگاهی به کلاس ArgumentValidator شروع کنیم. هدف این کلاس، پرتاب یک ArgumentNullException با نام متدی است که حاوی آرگومان null است:</p>
@@ -458,3 +510,79 @@ emailFrom, password, emailTo, subject, message, mediaType</span>)</span>
 <p>در اینجا منابع اضافی برای شما آورده شده است تا بتوانید عمیق‌تر به قلمرو برنامه‌نویسی تابعی C# بپردازید:</p>
 <p>Functional C# اثر Wisnu Anggoro: <a href="https://www.packtpub.com/application-development/functional-c">https://www.packtpub.com/application-development/functional-c</a>. این کتاب به برنامه‌نویسی تابعی C# اختصاص دارد و اگر می‌خواهید بیشتر بدانید، جای خوبی برای شروع است.</p>
 <p>Functional Programming in C# اثر Jovan Poppavic (MSFT): <a href="https://www.codeproject.com/Articles/375166/Functional-programming-in-Csharp">https://www.codeproject.com/Articles/375166/Functional-programming-in-Csharp</a>. این یک مقاله عمیق در مورد برنامه‌نویسی تابعی C# است. حاوی نمودار است و دارای امتیاز ۵ ستاره است.</p>
+
+</main>
+
+
+ 
+
+  <!-- فوتر مشترک -->
+  <footer class="footer">
+    <div class="container">
+      <p>
+        <img src="/icone/copyright.svg" alt="کپی‌رایت" width="14" height="14"
+             style="vertical-align:middle;margin-inline:4px">
+        <span id="y"></span> Gitab — برای توسعه‌دهندگان
+      </p>
+    </div>
+  </footer>
+
+  <!-- سال + اسکریپت تم -->
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    (() => {
+      const root = document.documentElement;
+      const btn = document.getElementById('themeToggle');
+      const KEY = 'gitab-theme';
+      const media = window.matchMedia('(prefers-color-scheme: dark)');
+      const getEffective = s => s === 'auto' ? (media.matches ? 'dark' : 'light') : s;
+      function updateTheme(s) {
+        root.setAttribute('data-theme', s);
+        const mode = getEffective(s);
+        root.dataset.colorMode = mode;
+        btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
+      }
+      const saved = localStorage.getItem(KEY) || 'auto';
+      updateTheme(saved);
+      btn.addEventListener('click', () => {
+        const curr = localStorage.getItem(KEY) || 'auto';
+        const next = curr === 'auto' ? 'dark' : curr === 'dark' ? 'light' : 'auto';
+        localStorage.setItem(KEY, next);
+        updateTheme(next);
+      });
+      media.addEventListener('change', () => {
+        if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
+      });
+      window.addEventListener('DOMContentLoaded', () => updateTheme(saved));
+    })();
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
+<script>
+  document.body.dataset.page = window.location.pathname;
+</script>
+
+</body>
+
+</html>

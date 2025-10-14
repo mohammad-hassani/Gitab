@@ -1,0 +1,1074 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>End-to-End</title>
+  <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
+  <link rel="stylesheet" href="/styles/main.css">
+<link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<style>
+@font-face {
+  font-family: 'Vazir';
+  src: url('/fonts/Vazir-FD-WOL.ttf') format('truetype');
+  font-display: swap;
+}
+body {
+  font-family: 'Vazir', sans-serif;
+}
+</style>
+
+</head>
+<body>
+  <!-- هدر مشترک -->
+  <header class="header">
+    <div class="container nav-wrap">
+      <a class="brand" href="/">
+        <img src="/icone/logo.svg" alt="Gitab" width="28" height="28">
+        <span>Gitab</span>
+      </a>
+
+      <nav class="nav">
+        <a href="/">خانه</a>
+        <a href="/books/list-books">کتاب‌ها</a>
+        <a href="#">همکاری</a>
+        <a href="#">درباره‌ما</a>
+      </nav>
+
+     <div class="nav-actions">
+  <button id="themeToggle" class="icon-btn theme-btn" aria-label="تغییر حالت">
+    <img class="icon-sun" src="/icone/sun.svg" alt="روشن">
+    <img class="icon-moon" src="/icone/moon.svg" alt="تاریک">
+  </button>
+
+  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
+    <img src="/icone/github.svg" alt="GitHub">
+  </a>
+</div>
+
+  </header>
+
+
+<main class="site-main book-page ">
+  <h1>فصل هفتم:  تست سیستم End-to-End</h1>
+<p><strong>تست سیستم End-to-End (E2E)</strong> به معنی <strong>تست خودکار کل سیستم به‌صورت کامل و یکپارچه</strong> است. 👨‍💻 وقتی شما به‌عنوان برنامه‌نویس کدی می‌نویسید، <strong>تست‌های واحد (Unit Tests)</strong> برای بخش کوچکی از برنامه‌تان انجام می‌دهید. اما این تنها <strong>بخشی کوچک از تصویر بزرگ‌تر سیستم</strong> است. بنابراین در این فصل به موضوعات زیر می‌پردازیم:</p>
+<ul>
+<li>انجام <strong>تست‌های E2E</strong></li>
+<li>کدنویسی و تست <strong>کارخانه‌ها (Factories)</strong></li>
+<li>کدنویسی و تست <strong>تزریق وابستگی (Dependency Injection)</strong></li>
+<li><strong>تست ماژولارسازی (Modularization)</strong></li>
+</ul>
+<p>در پایان این فصل شما مهارت‌های زیر را به دست خواهید آورد:</p>
+<ol>
+<li>توانایی تعریف <strong>تست E2E</strong></li>
+<li>توانایی انجام <strong>تست E2E</strong></li>
+<li>توانایی توضیح اینکه <strong>کارخانه‌ها</strong> چه هستند و چطور استفاده می‌شوند</li>
+<li>توانایی درک اینکه <strong>تزریق وابستگی</strong> چیست و چگونه از آن استفاده کنیم</li>
+<li>توانایی درک اینکه <strong>ماژولارسازی</strong> چیست و چطور از آن بهره ببریم</li>
+</ol>
+<hr>
+<h3>تست E2E چیست؟</h3>
+<p>فرض کنید پروژه‌تان را تمام کرده‌اید و تمام <strong>تست‌های واحد</strong> شما با موفقیت عبور کرده‌اند. ✅ اما پروژه شما بخشی از یک <strong>سیستم بزرگ‌تر</strong> است. این سیستم بزرگ‌تر نیاز به تست دارد تا مطمئن شویم <strong>کد شما و کدهای دیگر بخش‌ها</strong> که با آن در ارتباط هستند، <strong>به‌درستی با هم کار می‌کنند</strong>.</p>
+<p>گاهی <strong>کدی که به‌صورت مجزا تست شده است</strong>، هنگام <strong>ادغام در یک سیستم بزرگ‌تر</strong> دچار مشکل می‌شود. همچنین، اضافه شدن کدهای جدید می‌تواند باعث <strong>خرابی سیستم‌های موجود</strong> شود. به همین دلیل، انجام <strong>تست E2E</strong> که به آن <strong>تست یکپارچه (Integration Testing)</strong> نیز گفته می‌شود، بسیار مهم است.</p>
+<hr>
+<h3>تست یکپارچه (Integration Testing)</h3>
+<p><strong>تست یکپارچه</strong> وظیفه دارد <strong>کل جریان برنامه را از ابتدا تا انتها</strong> بررسی کند. این نوع تست معمولاً از <strong>مرحله جمع‌آوری نیازمندی‌ها</strong> آغاز می‌شود:</p>
+<ol>
+<li>ابتدا <strong>نیازمندی‌های سیستم را جمع‌آوری و مستندسازی</strong> می‌کنید.</li>
+<li>سپس <strong>طراحی تمام کامپوننت‌ها</strong> را انجام می‌دهید و <strong>تست‌های هر زیرسیستم</strong> را مشخص می‌کنید.</li>
+<li>بعد، <strong>تست‌های E2E برای کل سیستم</strong> را طراحی می‌کنید.</li>
+<li>در ادامه، بر اساس نیازمندی‌ها، <strong>کدنویسی</strong> می‌کنید و <strong>تست‌های واحد خودتان را پیاده‌سازی</strong> می‌کنید.</li>
+<li>پس از کامل شدن کد و موفقیت در تست‌ها، کد در <strong>محیط تست</strong> به کل سیستم <strong>ادغام</strong> می‌شود و <strong>تست‌های E2E اجرا می‌شوند</strong>.</li>
+</ol>
+<p>معمولاً <strong>تست‌های E2E به‌صورت دستی</strong> انجام می‌شوند، اما هرجا امکان‌پذیر باشد، می‌توان آنها را <strong>خودکارسازی (Automation)</strong> کرد.</p>
+<p>شکل زیر سیستمی را نشان می‌دهد که از <strong>دو زیرسیستم همراه با ماژول‌ها و یک پایگاه داده</strong> تشکیل شده است. در <strong>تست E2E</strong>، تمام این ماژول‌ها به‌صورت <strong>دستی، خودکار، یا ترکیبی از هر دو روش</strong> تست خواهند شد. 🛠️</p>
+<div align="center">
+<p><img src="../../../assets/image/07/Table%207-1.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h3>تمرکز اصلی در تست‌های E2E</h3>
+<p>ورودی‌ها و خروجی‌های هر سیستم، <strong>اصلی‌ترین بخش‌هایی هستند که در تست‌ها باید بررسی شوند</strong>. ❗ شما باید از خودتان بپرسید:<br>
+<strong>آیا اطلاعات صحیح به هر سیستم وارد و از آن خارج می‌شوند؟</strong></p>
+<p>علاوه بر این، هنگام ساخت تست‌های <strong>E2E</strong> باید به <strong>۳ موضوع کلیدی</strong> توجه کنید:</p>
+<ol>
+<li><strong>چه قابلیت‌هایی برای کاربر وجود خواهد داشت</strong> و هر قابلیت چه مراحلی را انجام می‌دهد؟</li>
+<li><strong>چه شرایطی برای هر قابلیت و هر مرحله از آن وجود خواهد داشت؟</strong></li>
+<li><strong>چه سناریوهای مختلفی وجود دارند که باید برای آنها کیس‌های تست طراحی کنیم؟</strong></li>
+</ol>
+<hr>
+<p>هر <strong>زیرسیستم</strong> دارای یک یا چند <strong>ویژگی (Feature)</strong> است که ارائه می‌کند. هر ویژگی شامل چندین <strong>عمل (Action)</strong> است که باید به ترتیب مشخصی اجرا شوند. این عملیات <strong>ورودی‌هایی دریافت می‌کنند و خروجی‌هایی تولید می‌کنند</strong>. همچنین، <strong>ارتباطاتی بین ویژگی‌ها و قابلیت‌ها وجود دارد</strong> که باید آنها را شناسایی کنید. پس از این مرحله، باید مشخص کنید که هر قابلیت <strong>قابلیت استفاده مجدد دارد یا مستقل است</strong>.</p>
+<hr>
+<h3>مثال: سیستم آزمون آنلاین 🎓</h3>
+<p>بیایید یک سناریوی ساده را در نظر بگیریم: <strong>یک سیستم آزمون آنلاین</strong>.<br>
+در این سیستم:</p>
+<ul>
+<li><strong>معلم‌ها</strong> و <strong>دانش‌آموزها</strong> وارد سیستم می‌شوند (<strong>Login</strong>).</li>
+<li>اگر <strong>معلم</strong> وارد شود، به <strong>کنسول مدیریت (Admin Console)</strong> هدایت می‌شود.</li>
+<li>اگر <strong>دانش‌آموز</strong> وارد شود، به <strong>منوی آزمون‌ها (Test Menu)</strong> منتقل می‌شود تا یک یا چند آزمون انجام دهد.</li>
+</ul>
+<p>در این مثال، در واقع <strong>۳ زیرسیستم</strong> داریم:</p>
+<ol>
+<li><strong>سیستم ورود (Login System)</strong></li>
+<li><strong>سیستم مدیریت (Admin System)</strong></li>
+<li><strong>سیستم آزمون (Test System)</strong></li>
+</ol>
+<hr>
+<p>در این سیستم <strong>دو جریان اجرایی (Flow)</strong> وجود دارد:</p>
+<ul>
+<li><strong>جریان مدیریت (Admin Flow)</strong></li>
+<li><strong>جریان آزمون (Test Flow)</strong></li>
+</ul>
+<p>برای هر جریان باید <strong>شرایط و کیس‌های تست</strong> تعریف شوند.</p>
+<p>ما از همین سناریوی ساده‌ی <strong>سیستم ورود به آزمون آنلاین</strong> به‌عنوان <strong>نمونه‌ی E2E</strong> استفاده خواهیم کرد. البته در دنیای واقعی، تست‌های E2E بسیار <strong>پیچیده‌تر و گسترده‌تر</strong> از آنچه در این فصل بررسی می‌کنیم هستند.</p>
+<p>هدف این فصل این است که <strong>ذهنتان را با مفهوم تست‌های E2E آشنا کنیم و بهترین روش‌های پیاده‌سازی آن را نشان دهیم</strong>. به همین دلیل همه‌چیز را <strong>تا جای ممکن ساده نگه می‌داریم</strong> تا پیچیدگی باعث از بین رفتن اصل مطلب نشود.</p>
+<hr>
+<h3>هدف این بخش</h3>
+<p>هدف ما این است که <strong>۳ اپلیکیشن کنسولی</strong> بسازیم که کل سیستم را تشکیل دهند:</p>
+<ul>
+<li><strong>ماژول ورود (Login Module)</strong></li>
+<li><strong>ماژول مدیریت (Admin Module)</strong></li>
+<li><strong>ماژول آزمون (Test Module)</strong></li>
+</ul>
+<p>سپس، بعد از ساخت این ماژول‌ها، آنها را به‌صورت <strong>دستی تست خواهیم کرد</strong>.</p>
+<p><strong>شکل بعدی</strong> نحوه تعامل این سیستم‌ها با هم را نشان می‌دهد. ما از <strong>ماژول ورود (Login)</strong> شروع خواهیم کرد.</p>
+<div align="center">
+<p><img src="../../../assets/image/07/Table%207-2.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h3>ماژول ورود (Login Module – زیرسیستم ورود)</h3>
+<p>اولین بخش سیستم ما نیاز دارد که <strong>معلم‌ها و دانش‌آموزها با استفاده از یک نام کاربری و گذرواژه وارد سیستم شوند</strong>. 📝<br>
+<strong>لیست وظایف این بخش به شکل زیر است:</strong></p>
+<ol>
+<li>
+<p>وارد کردن <strong>نام کاربری</strong></p>
+</li>
+<li>
+<p>وارد کردن <strong>گذرواژه</strong></p>
+</li>
+<li>
+<p>فشردن گزینه <strong>Cancel</strong> (برای ریست کردن نام کاربری و گذرواژه)</p>
+</li>
+<li>
+<p>فشردن گزینه <strong>OK</strong></p>
+</li>
+<li>
+<p>اگر <strong>نام کاربری نامعتبر باشد</strong>، باید یک پیام خطا در صفحه ورود نمایش داده شود.</p>
+</li>
+<li>
+<p>اگر <strong>کاربر معتبر باشد</strong>، آنگاه موارد زیر اجرا می‌شوند:</p>
+<ul>
+<li>اگر کاربر <strong>معلم</strong> باشد، <strong>کنسول مدیریت (Admin Console)</strong> بارگذاری می‌شود.</li>
+<li>اگر کاربر <strong>دانش‌آموز</strong> باشد، <strong>کنسول آزمون (Test Console)</strong> بارگذاری می‌شود.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3>ساخت اپلیکیشن کنسولی</h3>
+<p>بیایید با ساخت یک <strong>اپلیکیشن کنسولی</strong> شروع کنیم و نام آن را <strong>CH07_Logon</strong> بگذاریم.</p>
+<p>در کلاس <strong>Program.cs</strong>، کد پیش‌فرض را با کد زیر جایگزین کنید:</p>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> System;
+<span class="hljs-keyword">using</span> System.Collections.Generic;
+<span class="hljs-keyword">using</span> System.Diagnostics;
+<span class="hljs-keyword">using</span> System.Linq;
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">CH07_Logon</span>
+{
+    <span class="hljs-keyword">internal</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Program</span>
+    {
+        <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Main</span>(<span class="hljs-params"><span class="hljs-built_in">string</span>[] <span class="hljs-keyword">args</span></span>)</span>
+        {
+            DoLogin(<span class="hljs-string">&quot;Welcome to the test platform&quot;</span>);
+        }
+    }
+}
+</code></pre>
+<p>متد <strong>DoLogin()</strong> رشته‌ی ارسال‌شده را گرفته و آن را به‌عنوان <strong>عنوان (Title)</strong> استفاده می‌کند. از آنجایی که هنوز وارد سیستم نشده‌ایم، عنوان برابر خواهد بود با:</p>
+<p><code>Welcome to the test platform</code></p>
+<p>حالا باید متد <strong>DoLogin()</strong> را اضافه کنیم. کد این متد به شکل زیر است:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">DoLogin</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> message</span>)</span>
+{
+    Console.WriteLine(<span class="hljs-string">&quot;----------------------------&quot;</span>);
+    Console.WriteLine(message);
+    Console.WriteLine(<span class="hljs-string">&quot;----------------------------&quot;</span>);
+    Console.Write(<span class="hljs-string">&quot;Enter your username: &quot;</span>);
+    <span class="hljs-keyword">var</span> usr = Console.ReadLine();
+    Console.Write(<span class="hljs-string">&quot;Enter your password: &quot;</span>);
+    <span class="hljs-keyword">var</span> pwd = ReadPassword();
+    ValidateUser(usr, pwd);
+}
+</code></pre>
+<p>کد بالا <strong>یک پیام دریافت می‌کند و آن را به‌عنوان عنوان در پنجره کنسول نمایش می‌دهد</strong>. سپس از کاربر می‌خواهد <strong>نام کاربری و گذرواژه</strong> خود را وارد کند.<br>
+متد <strong>ReadPassword()</strong> تمام ورودی‌های کاربر را می‌خواند و کاراکترها را با <strong>ستاره (*)</strong> جایگزین می‌کند تا ورودی مخفی شود. در نهایت، نام کاربری و گذرواژه به متد <strong>ValidateUser()</strong> ارسال می‌شوند تا اعتبارسنجی شوند.</p>
+<hr>
+<h3>افزودن متد ReadPassword()</h3>
+<p>ابتدا متد زیر را اضافه می‌کنیم:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">string</span> <span class="hljs-title">ReadPassword</span>()</span>
+{
+    <span class="hljs-keyword">return</span> ReadPassword(<span class="hljs-string">&#x27;*&#x27;</span>);
+}
+</code></pre>
+<p>این متد ساده است و فقط یک متد Overload دیگر به نام خودش را صدا می‌زند و <strong>کاراکتر ماسک گذرواژه</strong> را ارسال می‌کند. حالا متد Overload را پیاده‌سازی می‌کنیم:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">string</span> <span class="hljs-title">ReadPassword</span>(<span class="hljs-params"><span class="hljs-built_in">char</span> mask</span>)</span>
+{
+    <span class="hljs-keyword">const</span> <span class="hljs-built_in">int</span> enter = <span class="hljs-number">13</span>, backspace = <span class="hljs-number">8</span>, controlBackspace = <span class="hljs-number">127</span>;
+    <span class="hljs-built_in">int</span>[] filtered = { <span class="hljs-number">0</span>, <span class="hljs-number">27</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>, <span class="hljs-number">32</span> };
+    <span class="hljs-keyword">var</span> pass = <span class="hljs-keyword">new</span> Stack&lt;<span class="hljs-built_in">char</span>&gt;();
+    <span class="hljs-built_in">char</span> chr = (<span class="hljs-built_in">char</span>)<span class="hljs-number">0</span>;
+    <span class="hljs-keyword">while</span> ((chr = Console.ReadKey(<span class="hljs-literal">true</span>).KeyChar) != enter)
+    {
+        <span class="hljs-keyword">if</span> (chr == backspace)
+        {
+            <span class="hljs-keyword">if</span> (pass.Count &gt; <span class="hljs-number">0</span>)
+            {
+                Console.Write(<span class="hljs-string">&quot;\b \b&quot;</span>);
+                pass.Pop();
+            }
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (chr == controlBackspace)
+        {
+            <span class="hljs-keyword">while</span> (pass.Count &gt; <span class="hljs-number">0</span>)
+            {
+                Console.Write(<span class="hljs-string">&quot;\b \b&quot;</span>);
+                pass.Pop();
+            }
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (filtered.Count(x =&gt; chr == x) &lt;= <span class="hljs-number">0</span>)
+        {
+            pass.Push((<span class="hljs-built_in">char</span>)chr);
+            Console.Write(mask);
+        }
+    }
+    Console.WriteLine();
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">string</span>(pass.Reverse().ToArray());
+}
+</code></pre>
+<hr>
+<h3>توضیح متد ReadPassword()</h3>
+<p>این متد Overload یک <strong>کاراکتر ماسک گذرواژه</strong> دریافت می‌کند. نحوه کار آن:</p>
+<ul>
+<li>هر کلید زده شده را بررسی و در <strong>استک (Stack)</strong> ذخیره می‌کند.</li>
+<li>اگر کلید <strong>Enter</strong> زده شود، حلقه تمام می‌شود.</li>
+<li>اگر کلید <strong>Backspace/Delete</strong> زده شود، آخرین کاراکتر واردشده حذف می‌شود.</li>
+<li>اگر کاراکتر واردشده جزو <strong>کاراکترهای فیلترشده</strong> نباشد، به استک اضافه شده و <strong>کاراکتر ماسک</strong> در صفحه نمایش داده می‌شود.</li>
+<li>در انتها پس از فشردن <strong>Enter</strong>، استک معکوس شده و به رشته تبدیل می‌شود.</li>
+</ul>
+<hr>
+<h3>افزودن متد ValidateUser()</h3>
+<p>آخرین متدی که برای این زیرسیستم نیاز داریم:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ValidateUser</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> usr, <span class="hljs-built_in">string</span> pwd</span>)</span>
+{
+    <span class="hljs-keyword">if</span> (usr.Equals(<span class="hljs-string">&quot;admin&quot;</span>) &amp;&amp; pwd.Equals(<span class="hljs-string">&quot;letmein&quot;</span>))
+    {
+        <span class="hljs-keyword">var</span> process = <span class="hljs-keyword">new</span> Process();
+        process.StartInfo.FileName =
+ <span class="hljs-string">@&quot;..\..\..\CH07_Admin\bin\Debug\CH07_Admin.exe&quot;</span>;
+        process.StartInfo.Arguments = <span class="hljs-string">&quot;admin&quot;</span>;
+        process.Start();
+    }
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (usr.Equals(<span class="hljs-string">&quot;student&quot;</span>) &amp;&amp; pwd.Equals(<span class="hljs-string">&quot;letmein&quot;</span>))
+    {
+        <span class="hljs-keyword">var</span> process = <span class="hljs-keyword">new</span> Process();
+        process.StartInfo.FileName =
+ <span class="hljs-string">@&quot;..\..\..\CH07_Test\bin\Debug\CH07_Test.exe&quot;</span>;
+        process.StartInfo.Arguments = <span class="hljs-string">&quot;test&quot;</span>;
+        process.Start();
+    }
+    <span class="hljs-keyword">else</span>
+    {
+        Console.Clear();
+        DoLogin(<span class="hljs-string">&quot;Invalid username or password&quot;</span>);
+    }
+}
+</code></pre>
+<hr>
+<h3>توضیح متد ValidateUser()</h3>
+<p>این متد <strong>نام کاربری و گذرواژه</strong> را بررسی می‌کند:</p>
+<ul>
+<li>اگر اطلاعات واردشده با <strong>admin / letmein</strong> مطابقت داشته باشد، <strong>کنسول مدیریت</strong> اجرا می‌شود.</li>
+<li>اگر اطلاعات واردشده با <strong>student / letmein</strong> مطابقت داشته باشد، <strong>کنسول آزمون</strong> اجرا می‌شود.</li>
+<li>در غیر این صورت، <strong>کنسول پاک شده</strong> و پیام خطا نمایش داده می‌شود، سپس دوباره فرآیند ورود آغاز می‌شود.</li>
+</ul>
+<p>پس از ورود موفق، <strong>زیرسیستم مربوطه بارگذاری شده و ماژول ورود پایان می‌یابد</strong>. ✅</p>
+<h3>ماژول مدیریت (Admin Module – زیرسیستم مدیریت)</h3>
+<p><strong>زیرسیستم مدیریت</strong> جایی است که تمام کارهای مدیریتی سیستم انجام می‌شود. این عملیات شامل موارد زیر است:</p>
+<ul>
+<li><strong>وارد کردن (Import)</strong> دانش‌آموزان</li>
+<li><strong>خروجی گرفتن (Export)</strong> از لیست دانش‌آموزان</li>
+<li><strong>افزودن</strong> دانش‌آموز</li>
+<li><strong>حذف</strong> دانش‌آموز</li>
+<li><strong>ویرایش پروفایل</strong> دانش‌آموز</li>
+<li><strong>اختصاص آزمون‌ها</strong> به دانش‌آموزان</li>
+<li><strong>تغییر گذرواژه مدیر</strong></li>
+<li><strong>پشتیبان‌گیری از داده‌ها</strong></li>
+<li><strong>بازیابی داده‌ها</strong></li>
+<li><strong>حذف کامل داده‌ها</strong></li>
+<li><strong>مشاهده گزارش‌ها</strong></li>
+<li><strong>خروجی گرفتن از گزارش‌ها</strong></li>
+<li><strong>ذخیره گزارش‌ها</strong></li>
+<li><strong>چاپ گزارش‌ها</strong></li>
+<li><strong>خروج از سیستم</strong></li>
+</ul>
+<p>البته برای این تمرین، <strong>هیچ‌کدام از این قابلیت‌ها را پیاده‌سازی نمی‌کنیم</strong>. این‌ها را به‌عنوان <strong>تمرین و سرگرمی</strong> به خود شما واگذار می‌کنم. 😉<br>
+آنچه برای ما مهم است، این است که <strong>ماژول مدیریت فقط در صورت ورود موفق (Login)</strong> بارگذاری شود. اگر کسی بدون ورود بخواهد این ماژول را اجرا کند، <strong>پیام خطا نمایش داده می‌شود</strong> و با فشردن یک کلید، کاربر به <strong>ماژول ورود</strong> بازگردانده می‌شود.</p>
+<p>ورود موفق زمانی انجام می‌شود که کاربر <strong>به‌عنوان مدیر وارد شود</strong> و برنامه <strong>Admin</strong> با آرگومان <strong>admin</strong> اجرا گردد.</p>
+<hr>
+<h3>ساخت اپلیکیشن کنسولی CH07_Admin</h3>
+<p>در Visual Studio یک <strong>کنسول اپلیکیشن</strong> بسازید و نام آن را <strong>CH07_Admin</strong> بگذارید. سپس متد <strong>Main()</strong> را به شکل زیر به‌روزرسانی کنید:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Main</span>(<span class="hljs-params"><span class="hljs-built_in">string</span>[] <span class="hljs-keyword">args</span></span>)</span>
+{
+    <span class="hljs-keyword">if</span> ((<span class="hljs-keyword">args</span>.Count() &gt; <span class="hljs-number">0</span>) &amp;&amp; (<span class="hljs-keyword">args</span>[<span class="hljs-number">0</span>].Equals(<span class="hljs-string">&quot;admin&quot;</span>)))
+    {
+        DisplayMainScreen();
+    }
+    <span class="hljs-keyword">else</span>
+    {
+        DisplayMainScreenError();
+    }
+}
+</code></pre>
+<p>متد <strong>Main()</strong> بررسی می‌کند که:</p>
+<ol>
+<li>آرگومان‌ها بیشتر از ۰ باشند.</li>
+<li>اولین آرگومان <strong>admin</strong> باشد.</li>
+</ol>
+<p>اگر هر دو شرط برقرار باشد، متد <strong>DisplayMainScreen()</strong> اجرا می‌شود، در غیر این صورت، متد <strong>DisplayMainScreenError()</strong> که پیام خطا نشان می‌دهد فراخوانی خواهد شد.</p>
+<hr>
+<h3>متد DisplayMainScreen()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">DisplayMainScreen</span>()</span>
+{
+    Console.WriteLine(<span class="hljs-string">&quot;------------------------------------&quot;</span>);
+    Console.WriteLine(<span class="hljs-string">&quot;Test Platform Administrator Console&quot;</span>);
+    Console.WriteLine(<span class="hljs-string">&quot;------------------------------------&quot;</span>);
+    Console.WriteLine(<span class="hljs-string">&quot;Press any key to exit&quot;</span>);
+    Console.ReadKey();
+    Process.Start(<span class="hljs-string">@&quot;..\..\..\CH07_Logon\bin\Debug\CH07_Logon.exe&quot;</span>);
+}
+</code></pre>
+<p>این متد بسیار ساده است:</p>
+<ul>
+<li>یک عنوان و پیام نمایش می‌دهد.</li>
+<li>منتظر فشردن کلید از طرف کاربر می‌ماند.</li>
+<li>پس از فشردن کلید، کاربر را به <strong>ماژول ورود</strong> هدایت می‌کند و برنامه خارج می‌شود.</li>
+</ul>
+<hr>
+<h3>متد DisplayMainScreenError()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">DisplayMainScreenError</span>()</span>
+{
+    Console.WriteLine(<span class="hljs-string">&quot;------------------------------------&quot;</span>);
+    Console.WriteLine(<span class="hljs-string">&quot;Test Platform Administrator Console&quot;</span>);
+    Console.WriteLine(<span class="hljs-string">&quot;------------------------------------&quot;</span>);
+    Console.WriteLine(<span class="hljs-string">&quot;You must login to use the admin module.&quot;</span>);
+    Console.WriteLine(<span class="hljs-string">&quot;Press any key to exit&quot;</span>);
+    Console.ReadKey();
+    Process.Start(<span class="hljs-string">@&quot;..\..\..\CH07_Logon\bin\Debug\CH07_Logon.exe&quot;</span>);
+}
+</code></pre>
+<p>این متد نشان می‌دهد که ماژول بدون ورود اجرا شده که <strong>مجاز نیست</strong>. پس از نمایش پیام، با فشردن کلید کاربر به <strong>ماژول ورود</strong> برمی‌گردد.</p>
+<hr>
+<h3>ماژول آزمون (Test Module – زیرسیستم آزمون)</h3>
+<p><strong>زیرسیستم آزمون</strong> شامل یک <strong>منو</strong> است که:</p>
+<ul>
+<li>لیست آزمون‌هایی که دانش‌آموز باید انجام دهد را نمایش می‌دهد.</li>
+<li>امکان انتخاب یک آزمون برای شروع را فراهم می‌کند.</li>
+<li>پس از پایان آزمون، <strong>نتایج ذخیره شده</strong> و کاربر به منو بازگردانده می‌شود.</li>
+<li>آزمون انجام‌شده از لیست حذف می‌شود.</li>
+<li>با خروج از این ماژول، کاربر به <strong>ماژول ورود</strong> بازگردانده می‌شود.</li>
+</ul>
+<p>در این تمرین نیز پیاده‌سازی کامل این قابلیت‌ها به شما واگذار شده است. مهم‌ترین نکته این است که <strong>ماژول آزمون فقط زمانی اجرا شود که کاربر وارد سیستم شده باشد</strong>. همچنین وقتی کاربر از این ماژول خارج شود، به <strong>ماژول ورود</strong> برگردد.</p>
+<p>این ماژول تقریباً مشابه ماژول مدیریت است. برای همین سریع جلو می‌رویم.</p>
+<hr>
+<h3>به‌روزرسانی متد Main() در ماژول آزمون</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Main</span>(<span class="hljs-params"><span class="hljs-built_in">string</span>[] <span class="hljs-keyword">args</span></span>)</span>
+{
+    <span class="hljs-keyword">if</span> ((<span class="hljs-keyword">args</span>.Count() &gt; <span class="hljs-number">0</span>) &amp;&amp; (<span class="hljs-keyword">args</span>[<span class="hljs-number">0</span>].Equals(<span class="hljs-string">&quot;test&quot;</span>)))
+    {
+        DisplayMainScreen();
+    }
+    <span class="hljs-keyword">else</span>
+    {
+        DisplayMainScreenError();
+    }
+}
+</code></pre>
+<hr>
+<h3>متد DisplayMainScreen()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">DisplayMainScreen</span>()</span>
+{
+    Console.WriteLine(<span class="hljs-string">&quot;------------------------------------&quot;</span>);
+    Console.WriteLine(<span class="hljs-string">&quot;Test Platform Student Console&quot;</span>);
+    Console.WriteLine(<span class="hljs-string">&quot;------------------------------------&quot;</span>);
+    Console.WriteLine(<span class="hljs-string">&quot;Press any key to exit&quot;</span>);
+    Console.ReadKey();
+    Process.Start(<span class="hljs-string">@&quot;..\..\..\CH07_Logon\bin\Debug\CH07_Logon.exe&quot;</span>);
+}
+</code></pre>
+<hr>
+<h3>متد DisplayMainScreenError()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">DisplayMainScreenError</span>()</span>
+{
+    Console.WriteLine(<span class="hljs-string">&quot;------------------------------------&quot;</span>);
+    Console.WriteLine(<span class="hljs-string">&quot;Test Platform Student Console&quot;</span>);
+    Console.WriteLine(<span class="hljs-string">&quot;------------------------------------&quot;</span>);
+    Console.WriteLine(<span class="hljs-string">&quot;You must login to use the student module.&quot;</span>);
+    Console.WriteLine(<span class="hljs-string">&quot;Press any key to exit&quot;</span>);
+    Console.ReadKey();
+    Process.Start(<span class="hljs-string">@&quot;..\..\..\CH07_Logon\bin\Debug\CH07_Logon.exe&quot;</span>);
+}
+</code></pre>
+<p>این متد نیز مشابه متد ماژول مدیریت است. اگر بدون ورود اجرا شود، پیغام خطا داده و کاربر را به <strong>ماژول ورود</strong> هدایت می‌کند.</p>
+<hr>
+<p>حالا که هر سه ماژول را نوشتیم (<strong>ورود، مدیریت، آزمون</strong>)، در بخش بعدی به <strong>تست این ماژول‌ها</strong> می‌پردازیم.</p>
+<h3>تست کردن سیستم سه‌ماژوله با استفاده از E2E 🧪</h3>
+<p>در این بخش، قرار است یک تست دستی <strong>End-to-End (E2E)</strong> روی سیستم سه‌ماژوله خود انجام دهیم. هدف این است که ماژول ورود (<strong>Login Module</strong>) را آزمایش کنیم تا مطمئن شویم فقط ورودهای معتبر اجازه دسترسی به ماژول ادمین (<strong>Admin Module</strong>) یا ماژول تست (<strong>Test Module</strong>) را دارند.</p>
+<ul>
+<li>وقتی یک <strong>ادمین معتبر</strong> وارد سیستم می‌شود، باید ماژول ادمین نمایش داده شود و ماژول ورود بسته شود.</li>
+<li>وقتی یک <strong>دانش‌آموز معتبر</strong> وارد سیستم می‌شود، باید ماژول تست نمایش داده شود و ماژول ورود بسته شود.</li>
+</ul>
+<p>حالا اگر تلاش کنیم بدون ورود به سیستم، <strong>ماژول ادمین</strong> را اجرا کنیم، باید پیغامی دریافت کنیم که ابتدا باید وارد سیستم شویم. با فشردن هر کلید، ماژول ادمین بسته شده و ماژول ورود اجرا خواهد شد. همین رفتار برای <strong>ماژول تست</strong> نیز باید برقرار باشد؛ یعنی اگر بدون ورود آن را اجرا کنیم، هشداری دریافت می‌کنیم که باید ابتدا وارد سیستم شویم و با فشردن یک کلید، ماژول تست بسته شده و ماژول ورود اجرا می‌شود.</p>
+<h4>حالا مراحل تست دستی را با هم مرور می‌کنیم</h4>
+<p><strong>۱.</strong> مطمئن شوید که همه پروژه‌ها ساخته (Build) شده‌اند، سپس <strong>ماژول ورود (Login Module)</strong> را اجرا کنید. باید صفحه‌ای مشابه تصویر زیر را مشاهده کنید:</p>
+<div align="center">
+<p><img src="../../../assets/image/07/Table%207-3.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p><strong>۲.</strong> یک <strong>نام کاربری و/یا رمز عبور اشتباه</strong> وارد کنید و کلید <strong>Enter</strong> را فشار دهید. در این صورت، صفحه زیر را مشاهده خواهید کرد:</p>
+<div align="center">
+<p><img src="../../../assets/image/07/Table%207-4.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p><strong>۳.</strong> کلید <strong>Enter</strong> را فشار دهید. در صورت ورود موفق، باید صفحه ماژول مدیر (<strong>admin module</strong>) را مشاهده کنید:</p>
+<div align="center">
+<p><img src="../../../assets/image/07/Table%207-5.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p><strong>۴.</strong> هر کلیدی را فشار دهید تا خارج شوید، سپس باید دوباره صفحه ماژول ورود (<strong>login module</strong>) را مشاهده کنید:</p>
+<div align="center">
+<p><img src="../../../assets/image/07/Table%207-6.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p><strong>۵.</strong> نام کاربری را <strong>student</strong> و رمز عبور را <strong>letmein</strong> وارد کنید. سپس کلید <strong>Enter</strong> را فشار دهید و باید صفحه ماژول دانش‌آموز (<strong>student module</strong>) نمایش داده شود:</p>
+<div align="center">
+<p><img src="../../../assets/image/07/Table%207-7.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p><strong>۶.</strong> اکنون تلاش کنید <strong>ماژول ادمین (Admin Module)</strong> را بدون ورود به سیستم اجرا کنید، و باید صفحه زیر را مشاهده کنید:</p>
+<div align="center">
+<p><img src="../../../assets/image/07/Table%207-8.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p><strong>۷.</strong> حالا تلاش کنید <strong>ماژول تست (Test Module)</strong> را بدون ورود به سیستم اجرا کنید، و باید صفحه زیر را مشاهده کنید:</p>
+<div align="center">
+<p><img src="../../../assets/image/07/Table%207-9.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>اکنون ما <strong>تست E2E دستی</strong> سیستم خود که شامل <strong>سه ماژول</strong> است را با موفقیت انجام دادیم ✅. این روش بهترین راه برای بررسی یک سیستم در هنگام <strong>تست E2E</strong> محسوب می‌شود.</p>
+<p>تست‌های واحد (<strong>Unit Tests</strong>) شما در این مرحله بسیار مفید خواهند بود و باعث می‌شوند که این مرحله نسبتاً ساده و بدون مشکل طی شود. تا زمانی که به این مرحله برسید، باگ‌ها و خطاهای اصلی باید شناسایی و رفع شده باشند.</p>
+<p>اما همان‌طور که همیشه وجود دارد، امکان بروز مشکلات هنوز هست؛ به همین دلیل، <strong>اجرای دستی کل سیستم</strong> ارزش زیادی دارد. با این کار می‌توانید <strong>به‌صورت بصری و تعاملی</strong> بررسی کنید که سیستم همان‌طور که انتظار می‌رود رفتار می‌کند. 👀</p>
+<p>سیستم‌های بزرگ‌تر از <strong>کارخانه‌ها (Factories)</strong> و <strong>تزریق وابستگی (Dependency Injection)</strong> استفاده می‌کنند. در بخش‌های بعدی این فصل، ابتدا به <strong>کارخانه‌ها</strong> و سپس به <strong>تزریق وابستگی</strong> خواهیم پرداخت. 🏭🔗</p>
+<h3>کارخانه‌ها (Factories) 🏭</h3>
+<p><strong>کارخانه‌ها</strong> با استفاده از <strong>الگوی متد کارخانه (Factory Method Pattern)</strong> پیاده‌سازی می‌شوند. هدف این الگو این است که <strong>ایجاد اشیا (Objects) بدون مشخص کردن کلاس‌های آن‌ها</strong> ممکن شود. این کار از طریق فراخوانی <strong>متد کارخانه (Factory Method)</strong> انجام می‌شود.</p>
+<p>هدف اصلی <strong>متد کارخانه</strong>، <strong>ایجاد یک نمونه (Instance) از یک کلاس</strong> است.</p>
+<hr>
+<h3>موارد استفاده از الگوی متد کارخانه</h3>
+<p>شما از <strong>الگوی متد کارخانه</strong> در سناریوهای زیر استفاده می‌کنید:</p>
+<ol>
+<li>وقتی کلاس قادر نیست نوع شیءی که باید ساخته شود را پیش‌بینی کند.</li>
+<li>وقتی <strong>زیرکلاس (Subclass)</strong> باید نوع شیء را مشخص کند که ساخته شود.</li>
+<li>وقتی کلاس <strong>کنترل ساخت اشیا</strong> را بر عهده دارد.</li>
+</ol>
+<hr>
+<h3>نمودار مثال</h3>
+<p>(در این بخش، یک نمودار برای نشان دادن نحوه تعامل کارخانه و اشیا ارائه می‌شود.)</p>
+<div align="center">
+<p><img src="../../../assets/image/07/Table%207-10.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h3>توضیح و پیاده‌سازی الگوی Factory در پروژه‌های .NET 🏭💻</h3>
+<p>همان‌طور که از نمودار قبلی مشاهده می‌کنید، اجزای اصلی به شرح زیر هستند:</p>
+<ul>
+<li><strong>Factory</strong>: این کلاس <strong>اینترفیس FactoryMethod()</strong> را فراهم می‌کند که یک نوع (Type) را بازمی‌گرداند.</li>
+<li><strong>ConcreteFactory</strong>: این کلاس متد <strong>FactoryMethod()</strong> را <strong>Override</strong> یا <strong>Implement</strong> می‌کند تا یک نوع مشخص (Concrete Type) بازگردانده شود.</li>
+<li><strong>ConcreteObject</strong>: این کلاس یا از کلاس پایه <strong>Base Class</strong> ارث‌بری می‌کند یا اینترفیس مربوطه را <strong>Implement</strong> می‌کند.</li>
+</ul>
+<hr>
+<h3>سناریوی عملی</h3>
+<p>فرض کنید شما سه مشتری مختلف دارید که هر کدام نیاز به یک <strong>پایگاه داده رابطه‌ای (Relational Database)</strong> متفاوت به‌عنوان منبع داده‌های Backend دارند:</p>
+<ul>
+<li>مشتری اول: <strong>Oracle Database</strong></li>
+<li>مشتری دوم: <strong>SQL Server</strong></li>
+<li>مشتری سوم: <strong>MySQL</strong></li>
+</ul>
+<p>در جریان <strong>تست E2E</strong>، شما نیاز دارید که سیستم خود را روی هر یک از این پایگاه‌های داده آزمایش کنید. اما چگونه می‌توان برنامه را <strong>یک بار نوشت و روی هر پایگاه داده اجرا کرد؟</strong> 🤔</p>
+<p>اینجاست که <strong>الگوی Factory Method</strong> وارد عمل می‌شود.</p>
+<ul>
+<li>در هنگام نصب یا پیکربندی اولیه برنامه، می‌توان از کاربر خواست که پایگاه داده مورد نظر خود را انتخاب کند.</li>
+<li>این اطلاعات می‌تواند در یک <strong>فایل پیکربندی (Configuration File)</strong> به صورت <strong>رمزنگاری‌شده</strong> ذخیره شود.</li>
+<li>هنگام اجرای برنامه، رشته اتصال پایگاه داده (<strong>Connection String</strong>) خوانده و رمزگشایی می‌شود و سپس به متد کارخانه ارسال می‌شود.</li>
+<li>در نهایت، یک <strong>شیء اتصال مناسب به پایگاه داده</strong> ساخته و بازگردانده می‌شود تا توسط برنامه استفاده شود.</li>
+</ul>
+<hr>
+<h3>ایجاد پروژه و فایل پیکربندی</h3>
+<p>یک <strong>Console Application</strong> در Visual Studio بسازید و نام آن را <strong>CH07_Factories</strong> بگذارید.</p>
+<p>در فایل <strong>App.config</strong> کد زیر را قرار دهید:</p>
+<pre class="hljs"><code><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;utf-8&quot;</span> ?&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">configuration</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">startup</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">supportedRuntime</span> <span class="hljs-attr">version</span>=<span class="hljs-string">&quot;v4.0&quot;</span> <span class="hljs-attr">sku</span>=<span class="hljs-string">&quot;.NETFramework,Version=v4.8&quot;</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">startup</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">connectionStrings</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">clear</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">add</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;SqlServer&quot;</span>
+         <span class="hljs-attr">connectionString</span>=<span class="hljs-string">&quot;Data Source=SqlInstanceName;Initial Catalog=DbName;Integrated Security=True&quot;</span>
+         <span class="hljs-attr">providerName</span>=<span class="hljs-string">&quot;System.Data.SqlClient&quot;</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">add</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;Oracle&quot;</span>
+         <span class="hljs-attr">connectionString</span>=<span class="hljs-string">&quot;Data Source=OracleInstance;User Id=usr;Password=pwd;Integrated Security=no;&quot;</span>
+         <span class="hljs-attr">providerName</span>=<span class="hljs-string">&quot;System.Data.OracleClient&quot;</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">add</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;MySQL&quot;</span>
+         <span class="hljs-attr">connectionString</span>=<span class="hljs-string">&quot;Server=MySqlInstance;Database=MySqlDb;Uid=usr;Pwd=pwd;&quot;</span>
+         <span class="hljs-attr">providerName</span>=<span class="hljs-string">&quot;System.Data.MySqlClient&quot;</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">connectionStrings</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">configuration</span>&gt;</span>
+</code></pre>
+<blockquote>
+<p>در اینجا برای ساده‌تر کردن مثال، رشته‌های اتصال <strong>رمزنگاری نشده</strong> هستند، اما در محیط واقعی، حتماً رشته‌های اتصال را <strong>رمزنگاری کنید</strong>. 🔒</p>
+</blockquote>
+<hr>
+<h3>پیاده‌سازی کلاس Factory</h3>
+<p>ابتدا کلاس <strong>Abstract Factory</strong> را ایجاد می‌کنیم:</p>
+<pre class="hljs"><code><span class="hljs-keyword">namespace</span> <span class="hljs-title">CH07_Factories</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Factory</span>
+    {
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> IDatabaseConnection <span class="hljs-title">FactoryMethod</span>()</span>;
+    }
+}
+</code></pre>
+<p>سپس اینترفیس <strong>IDatabaseConnection</strong> را تعریف می‌کنیم:</p>
+<pre class="hljs"><code><span class="hljs-keyword">namespace</span> <span class="hljs-title">CH07_Factories</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title">IDatabaseConnection</span>
+    {
+        <span class="hljs-built_in">string</span> ConnectionString { <span class="hljs-keyword">get</span>; }
+        <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">OpenConnection</span>()</span>;
+        <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">CloseConnection</span>()</span>;
+    }
+}
+</code></pre>
+<blockquote>
+<p>اینترفیس شامل:</p>
+<ul>
+<li><strong>ConnectionString</strong> فقط برای خواندن</li>
+<li>متد <strong>OpenConnection()</strong> برای باز کردن اتصال</li>
+<li>متد <strong>CloseConnection()</strong> برای بستن اتصال</li>
+</ul>
+</blockquote>
+<hr>
+<h3>پیاده‌سازی کلاس‌های اتصال به پایگاه داده</h3>
+<p><strong>SQL Server</strong>:</p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">SqlServerDbConnection</span> : <span class="hljs-title">IDatabaseConnection</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> ConnectionString { <span class="hljs-keyword">get</span>; }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">SqlServerDbConnection</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> connectionString</span>)</span>
+    {
+        ConnectionString = connectionString;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">CloseConnection</span>()</span>
+    {
+        Console.WriteLine(<span class="hljs-string">&quot;SQL Server Database Connection Closed.&quot;</span>);
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OpenConnection</span>()</span>
+    {
+        Console.WriteLine(<span class="hljs-string">&quot;SQL Server Database Connection Opened.&quot;</span>);
+    }
+}
+</code></pre>
+<p><strong>Oracle Database</strong>:</p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">OracleDbConnection</span> : <span class="hljs-title">IDatabaseConnection</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> ConnectionString { <span class="hljs-keyword">get</span>; }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">OracleDbConnection</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> connectionString</span>)</span>
+    {
+        ConnectionString = connectionString;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">CloseConnection</span>()</span>
+    {
+        Console.WriteLine(<span class="hljs-string">&quot;Oracle Database Connection Closed.&quot;</span>);
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OpenConnection</span>()</span>
+    {
+        Console.WriteLine(<span class="hljs-string">&quot;Oracle Database Connection Opened.&quot;</span>);
+    }
+}
+</code></pre>
+<p><strong>MySQL Database</strong>:</p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">MySqlDbConnection</span> : <span class="hljs-title">IDatabaseConnection</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> ConnectionString { <span class="hljs-keyword">get</span>; }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">MySqlDbConnection</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> connectionString</span>)</span>
+    {
+        ConnectionString = connectionString;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">CloseConnection</span>()</span>
+    {
+        Console.WriteLine(<span class="hljs-string">&quot;MySQL Database Connection Closed.&quot;</span>);
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OpenConnection</span>()</span>
+    {
+        Console.WriteLine(<span class="hljs-string">&quot;MySQL Database Connection Opened.&quot;</span>);
+    }
+}
+</code></pre>
+<hr>
+<h3>پیاده‌سازی ConcreteFactory</h3>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> System.Configuration;
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">CH07_Factories</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ConcreteFactory</span> : <span class="hljs-title">Factory</span>
+    {
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> ConnectionStringSettings _connectionStringSettings;
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">ConcreteFactory</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> connectionStringName</span>)</span>
+        {
+            _connectionStringSettings = GetDbConnectionSettings(connectionStringName);
+        }
+
+        <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> ConnectionStringSettings <span class="hljs-title">GetDbConnectionSettings</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> connectionStringName</span>)</span>
+        {
+            <span class="hljs-keyword">return</span> ConfigurationManager.ConnectionStrings[connectionStringName];
+        }
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">override</span> IDatabaseConnection <span class="hljs-title">FactoryMethod</span>()</span>
+        {
+            <span class="hljs-keyword">var</span> providerName = _connectionStringSettings.ProviderName;
+            <span class="hljs-keyword">var</span> connectionString = _connectionStringSettings.ConnectionString;
+
+            <span class="hljs-keyword">switch</span> (providerName)
+            {
+                <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;System.Data.SqlClient&quot;</span>:
+                    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> SqlServerDbConnection(connectionString);
+                <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;System.Data.OracleClient&quot;</span>:
+                    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> OracleDbConnection(connectionString);
+                <span class="hljs-keyword">case</span> <span class="hljs-string">&quot;System.Data.MySqlClient&quot;</span>:
+                    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> MySqlDbConnection(connectionString);
+                <span class="hljs-literal">default</span>:
+                    <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+            }
+        }
+    }
+}
+</code></pre>
+<blockquote>
+<p>در این متد، ابتدا <strong>ConnectionStringSettings</strong> خوانده شده و بسته به <strong>ProviderName</strong>، شیء مناسب ساخته و بازگردانده می‌شود.</p>
+</blockquote>
+<hr>
+<h3>نوشتن تست‌های NUnit برای Factory</h3>
+<p>ابتدا یک <strong>NUnit Test Project</strong> بسازید، به پروژه <strong>CH07_Factories</strong> رفرنس اضافه کنید و <strong>System.Configuration.ConfigurationManager</strong> را از NuGet نصب کنید.</p>
+<p><strong>تست SQL Server:</strong></p>
+<pre class="hljs"><code>[<span class="hljs-meta">Test</span>]
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">IsSqlServerDbConnection</span>()</span>
+{
+    <span class="hljs-keyword">var</span> factory = <span class="hljs-keyword">new</span> ConcreteFactory(<span class="hljs-string">&quot;SqlServer&quot;</span>);
+    <span class="hljs-keyword">var</span> connection = factory.FactoryMethod();
+    Assert.IsInstanceOf&lt;SqlServerDbConnection&gt;(connection);
+}
+</code></pre>
+<p><strong>تست Oracle:</strong></p>
+<pre class="hljs"><code>[<span class="hljs-meta">Test</span>]
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">IsOracleDbConnection</span>()</span>
+{
+    <span class="hljs-keyword">var</span> factory = <span class="hljs-keyword">new</span> ConcreteFactory(<span class="hljs-string">&quot;Oracle&quot;</span>);
+    <span class="hljs-keyword">var</span> connection = factory.FactoryMethod();
+    Assert.IsInstanceOf&lt;OracleDbConnection&gt;(connection);
+}
+</code></pre>
+<p><strong>تست MySQL:</strong></p>
+<pre class="hljs"><code>[<span class="hljs-meta">Test</span>]
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">IsMySqlDbConnection</span>()</span>
+{
+    <span class="hljs-keyword">var</span> factory = <span class="hljs-keyword">new</span> ConcreteFactory(<span class="hljs-string">&quot;MySQL&quot;</span>);
+    <span class="hljs-keyword">var</span> connection = factory.FactoryMethod();
+    Assert.IsInstanceOf&lt;MySqlDbConnection&gt;(connection);
+}
+</code></pre>
+<blockquote>
+<p>اگر تست‌ها اجرا نشوند، علت این است که متغیر <code>_connectionStringSettings</code> مقداردهی نشده است. با تغییر <strong>Constructor</strong> به شکل زیر مشکل حل می‌شود:</p>
+</blockquote>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">ConcreteFactory</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> connectionStringName</span>)</span>
+{
+    _connectionStringSettings = GetDbConnectionSettings(connectionStringName);
+}
+</code></pre>
+<blockquote>
+<p>همچنین مطمئن شوید NUnit به <strong>App.config</strong> درست دسترسی دارد تا رشته‌های اتصال خوانده شوند.</p>
+</blockquote>
+<p>این کار به شما <strong>اطلاع می‌دهد که NUnit به دنبال تنظیمات رشته‌های اتصال (Connection String)</strong> در کجا است. اگر این فایل وجود نداشته باشد، می‌توانید آن را <strong>به‌صورت دستی ایجاد کرده</strong> و محتوای فایل اصلی <strong>App.config</strong> خود را در آن کپی کنید.</p>
+<p>اما مشکل این روش این است که <strong>فایل احتمالاً در Build بعدی حذف خواهد شد</strong>. برای اینکه این تغییر <strong>همیشگی شود</strong>، می‌توانید یک <strong>دستور Post-build Event</strong> به پروژه تست خود اضافه کنید.</p>
+<hr>
+<h3>مراحل افزودن Post-build Event</h3>
+<ol>
+<li>روی پروژه تست کلیک راست کرده و <strong>Properties</strong> را انتخاب کنید.</li>
+<li>در تب Properties، گزینه <strong>Build Events</strong> را انتخاب کنید.</li>
+<li>در بخش <strong>Post-build event command line</strong>، دستور زیر را اضافه کنید:</li>
+</ol>
+<pre class="hljs"><code><span class="hljs-built_in">xcopy</span> &quot;$(ProjectDir)App.config&quot; &quot;$(ProjectDir)bin\Debug\netcoreapp3.<span class="hljs-number">1</span>\&quot; /Y /I /R
+</code></pre>
+<hr>
+<p>اسکرین‌شات زیر صفحه <strong>Build Events</strong> در پنجره <strong>Project Properties</strong> را نشان می‌دهد که <strong>Post-build event command line</strong> در آن قرار گرفته است:</p>
+<div align="center">
+<p><img src="../../../assets/image/07/Table%207-11.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>🖼️ این روش تضمین می‌کند که فایل App.config همیشه به مسیر خروجی (<strong>Output Directory</strong>) کپی شود و NUnit بتواند رشته‌های اتصال را پیدا کند.</p>
+<p>این کار باعث می‌شود که <strong>فایل گمشده در پوشه خروجی پروژه تست</strong> ایجاد شود. در سیستم شما، این فایل ممکن است به نام <strong>testhost.x86.dll.config</strong> باشد، همان‌طور که در سیستم من است. ✅</p>
+<p>حالا <strong>Buildها</strong> باید بدون مشکل اجرا شوند.</p>
+<p>اگر <strong>نوع بازگشتی (Return Type)</strong> یکی از <strong>Caseها در FactoryMethod()</strong> را تغییر دهید، خواهید دید که <strong>تست شما شکست می‌خورد</strong>، همان‌طور که در اسکرین‌شات زیر نشان داده شده است:</p>
+<p>🖼️ این رفتار نشان می‌دهد که تست‌های خودکار <strong>درستی عملکرد FactoryMethod</strong> را به‌طور دقیق بررسی می‌کنند و هرگونه تغییر اشتباه به سرعت شناسایی می‌شود.</p>
+<div align="center">
+<p><img src="../../../assets/image/07/Table%207-12.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>کد را به <strong>نوع صحیح بازگردانید</strong> تا تست‌های شما اکنون موفق شوند ✅.</p>
+<p>ما اکنون دیدیم که چگونه می‌توان یک سیستم را <strong>به‌صورت دستی E2E تست کرد</strong>، همچنین چگونه از <strong>Factoryها</strong> استفاده کنیم و چگونه می‌توان به‌صورت خودکار بررسی کرد که Factoryها طبق انتظار عمل می‌کنند.</p>
+<p>حالا به <strong>Dependency Injection (DI)</strong> می‌پردازیم و نحوه <strong>E2E تست کردن آن</strong> را بررسی می‌کنیم.</p>
+<hr>
+<h2>Dependency Injection 🔗</h2>
+<p><strong>Dependency Injection (DI)</strong> به شما کمک می‌کند کدی <strong>با اتصال ضعیف (loosely coupled)</strong> تولید کنید، با جدا کردن رفتار کد از وابستگی‌های آن. این کار باعث می‌شود کد <strong>خواناتر، قابل تست، توسعه و نگهداری آسان‌تر</strong> شود.<br>
+کد خواناتر است زیرا <strong>اصل Single Responsibility</strong> رعایت می‌شود و کد کوچکتر و مدیریت آن آسان‌تر می‌شود. با تکیه بر <strong>انتزاعات (Abstractions)</strong> به جای پیاده‌سازی‌ها، می‌توان کد را راحت‌تر <strong>گسترش داد</strong>.</p>
+<p>انواع DI قابل پیاده‌سازی شامل موارد زیر است:<br>
+1️⃣ Constructor Injection<br>
+2️⃣ Property/Setter Injection<br>
+3️⃣ Method Injection</p>
+<p>نسخه ساده DI بدون <strong>Container</strong> انجام می‌شود، اما بهترین روش <strong>استفاده از DI Container</strong> است.<br>
+به زبان ساده، <strong>DI Container</strong> یک فریم‌ورک ثبت است که وابستگی‌ها را ایجاد کرده و هنگام نیاز آنها را تزریق می‌کند.</p>
+<hr>
+<h2>نوشتن DI خودمان 🛠️</h2>
+<p>ابتدا <strong>Dependency Container، Interface، سرویس‌ها و Client</strong> را ایجاد می‌کنیم و سپس <strong>تست‌ها</strong> را می‌نویسیم.</p>
+<blockquote>
+<p>توجه: در اکثر پروژه‌های واقعی، تست‌ها <strong>بعد از نوشتن نرم‌افزار</strong> نوشته می‌شوند، حتی اگر TDD استفاده نشود یا کدهای شخص ثالث بدون تست باشند.</p>
+</blockquote>
+<hr>
+<h3>Dependency Container</h3>
+<p>یک <strong>Class Library</strong> جدید با نام <strong>CH07_DependencyInjection</strong> بسازید و یک کلاس به نام <strong>DependencyContainer</strong> ایجاد کنید:</p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">readonly</span> IDictionary&lt;Type, Type&gt; Types = <span class="hljs-keyword">new</span> Dictionary&lt;Type, Type&gt;();
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">readonly</span> IDictionary&lt;Type, <span class="hljs-built_in">object</span>&gt; Instances = <span class="hljs-keyword">new</span> Dictionary&lt;Type, <span class="hljs-built_in">object</span>&gt;();
+
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Register</span>&lt;<span class="hljs-title">TContract</span>, <span class="hljs-title">TImplementation</span>&gt;()</span>
+{
+    Types[<span class="hljs-keyword">typeof</span>(TContract)] = <span class="hljs-keyword">typeof</span>(TImplementation);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Register</span>&lt;<span class="hljs-title">TContract</span>, <span class="hljs-title">TImplementation</span>&gt;(<span class="hljs-params">TImplementation instance</span>)</span>
+{
+    Instances[<span class="hljs-keyword">typeof</span>(TContract)] = instance;
+}
+</code></pre>
+<ul>
+<li><strong>Types</strong>: نگهدارنده نوع‌ها</li>
+<li><strong>Instances</strong>: نگهدارنده نمونه‌ها</li>
+<li><strong>Register</strong>: ثبت نوع‌ها یا نمونه‌ها</li>
+</ul>
+<p>سپس برای <strong>Resolve کردن نوع‌ها هنگام اجرا</strong>:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> T <span class="hljs-title">Resolve</span>&lt;<span class="hljs-title">T</span>&gt;()</span>
+{
+    <span class="hljs-keyword">return</span> (T)Resolve(<span class="hljs-keyword">typeof</span>(T));
+}
+
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">object</span> <span class="hljs-title">Resolve</span>(<span class="hljs-params">Type contract</span>)</span>
+{
+    <span class="hljs-keyword">if</span> (Instances.ContainsKey(contract))
+    {
+        <span class="hljs-keyword">return</span> Instances[contract];
+    }
+    <span class="hljs-keyword">else</span>
+    {
+        Type implementation = Types[contract];
+        ConstructorInfo constructor = implementation.GetConstructors()[<span class="hljs-number">0</span>];
+        ParameterInfo[] constructorParameters = constructor.GetParameters();
+        <span class="hljs-keyword">if</span> (constructorParameters.Length == <span class="hljs-number">0</span>)
+        {
+            <span class="hljs-keyword">return</span> Activator.CreateInstance(implementation);
+        }
+        List&lt;<span class="hljs-built_in">object</span>&gt; parameters = <span class="hljs-keyword">new</span> List&lt;<span class="hljs-built_in">object</span>&gt;(constructorParameters.Length);
+        <span class="hljs-keyword">foreach</span> (ParameterInfo parameterInfo <span class="hljs-keyword">in</span> constructorParameters)
+        {
+            parameters.Add(Resolve(parameterInfo.ParameterType));
+        }
+        <span class="hljs-keyword">return</span> constructor.Invoke(parameters.ToArray());
+    }
+}
+</code></pre>
+<ul>
+<li>اگر نمونه‌ای موجود باشد، بازگردانده می‌شود</li>
+<li>در غیر اینصورت نمونه جدید ساخته می‌شود و وابستگی‌ها با بازگشت فراخوانی می‌شوند</li>
+</ul>
+<hr>
+<h3>Interface سرویس‌ها</h3>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title">IService</span>
+{
+    <span class="hljs-function"><span class="hljs-built_in">string</span> <span class="hljs-title">WhoAreYou</span>()</span>;
+}
+</code></pre>
+<ul>
+<li><strong>ServiceOne</strong>:</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ServiceOne</span> : <span class="hljs-title">IService</span>
+{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> <span class="hljs-title">WhoAreYou</span>()</span>
+    {
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;CH07_DependencyInjection.ServiceOne()&quot;</span>;
+    }
+}
+</code></pre>
+<ul>
+<li><strong>ServiceTwo</strong>:</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ServiceTwo</span> : <span class="hljs-title">IService</span>
+{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> <span class="hljs-title">WhoAreYou</span>()</span>
+    {
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;CH07_DependencyInjection.ServiceTwo()&quot;</span>;
+    }
+}
+</code></pre>
+<hr>
+<h3>Client برای DI</h3>
+<pre class="hljs"><code><span class="hljs-keyword">private</span> IService _service;
+
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Client</span>()</span> { }
+
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Client</span>(<span class="hljs-params">IService service</span>)</span>
+{
+    _service = service;
+}
+
+<span class="hljs-keyword">public</span> IService Service
+{
+    <span class="hljs-keyword">get</span> { <span class="hljs-keyword">return</span> _service; }
+    <span class="hljs-keyword">set</span> { _service = <span class="hljs-keyword">value</span>; }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> <span class="hljs-title">GetServiceName</span>(<span class="hljs-params">IService service</span>)</span>
+{
+    <span class="hljs-keyword">return</span> service.WhoAreYou();
+}
+</code></pre>
+<ul>
+<li><strong>Constructor Injection</strong>: از طریق سازنده</li>
+<li><strong>Property Injection</strong>: از طریق Property</li>
+<li><strong>Method Injection</strong>: از طریق متد</li>
+</ul>
+<hr>
+<h3>تست DI ⚙️</h3>
+<p>1️⃣ ایجاد <strong>Test Project</strong> با نام <strong>CH07_DependencyInjection.Tests</strong><br>
+2️⃣ Setup:</p>
+<pre class="hljs"><code>[<span class="hljs-meta">TestInitialize</span>]
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Setup</span>()</span>
+{
+    DependencyContainer.Register&lt;ServiceOne, ServiceOne&gt;();
+    DependencyContainer.Register&lt;ServiceTwo, ServiceTwo&gt;();
+}
+</code></pre>
+<p>3️⃣ تست Resolve:</p>
+<pre class="hljs"><code>[<span class="hljs-meta">TestMethod</span>]
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">DependencyContainerTestServiceOne</span>()</span>
+{
+    <span class="hljs-keyword">var</span> serviceOne = DependencyContainer.Resolve&lt;ServiceOne&gt;();
+    Assert.IsInstanceOfType(serviceOne, <span class="hljs-keyword">typeof</span>(ServiceOne));
+}
+
+[<span class="hljs-meta">TestMethod</span>]
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">DependencyContainerTestServiceTwo</span>()</span>
+{
+    <span class="hljs-keyword">var</span> serviceTwo = DependencyContainer.Resolve&lt;ServiceTwo&gt;();
+    Assert.IsInstanceOfType(serviceTwo, <span class="hljs-keyword">typeof</span>(ServiceTwo));
+}
+</code></pre>
+<p>4️⃣ تست Constructor Injection:</p>
+<pre class="hljs"><code>[<span class="hljs-meta">TestMethod</span>]
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ConstructorInjectionTestServiceOne</span>()</span>
+{
+    <span class="hljs-keyword">var</span> serviceOne = DependencyContainer.Resolve&lt;ServiceOne&gt;();
+    <span class="hljs-keyword">var</span> client = <span class="hljs-keyword">new</span> Client(serviceOne);
+    Assert.IsInstanceOfType(client.Service, <span class="hljs-keyword">typeof</span>(ServiceOne));
+}
+
+[<span class="hljs-meta">TestMethod</span>]
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ConstructorInjectionTestServiceTwo</span>()</span>
+{
+    <span class="hljs-keyword">var</span> serviceTwo = DependencyContainer.Resolve&lt;ServiceTwo&gt;();
+    <span class="hljs-keyword">var</span> client = <span class="hljs-keyword">new</span> Client(serviceTwo);
+    Assert.IsInstanceOfType(client.Service, <span class="hljs-keyword">typeof</span>(ServiceTwo));
+}
+</code></pre>
+<p>5️⃣ تست Property Injection:</p>
+<pre class="hljs"><code>[<span class="hljs-meta">TestMethod</span>]
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">PropertyInjectTestServiceOne</span>()</span>
+{
+    <span class="hljs-keyword">var</span> serviceOne = DependencyContainer.Resolve&lt;ServiceOne&gt;();
+    <span class="hljs-keyword">var</span> client = <span class="hljs-keyword">new</span> Client();
+    client.Service = serviceOne;
+    Assert.IsInstanceOfType(client.Service, <span class="hljs-keyword">typeof</span>(ServiceOne));
+}
+
+[<span class="hljs-meta">TestMethod</span>]
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">PropertyInjectTestServiceTwo</span>()</span>
+{
+    <span class="hljs-keyword">var</span> serviceTwo = DependencyContainer.Resolve&lt;ServiceTwo&gt;();
+    <span class="hljs-keyword">var</span> client = <span class="hljs-keyword">new</span> Client();
+    client.Service = serviceTwo;
+    Assert.IsInstanceOfType(client.Service, <span class="hljs-keyword">typeof</span>(ServiceTwo));
+}
+</code></pre>
+<p>6️⃣ تست Method Injection:</p>
+<pre class="hljs"><code>[<span class="hljs-meta">TestMethod</span>]
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">MethodInjectionTestServiceOne</span>()</span>
+{
+    <span class="hljs-keyword">var</span> serviceOne = DependencyContainer.Resolve&lt;ServiceOne&gt;();
+    <span class="hljs-keyword">var</span> client = <span class="hljs-keyword">new</span> Client();
+    Assert.AreEqual(client.GetServiceName(serviceOne), <span class="hljs-string">&quot;CH07_DependencyInjection.ServiceOne()&quot;</span>);
+}
+
+[<span class="hljs-meta">TestMethod</span>]
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">MethodInjectionTestServiceTwo</span>()</span>
+{
+    <span class="hljs-keyword">var</span> serviceTwo = DependencyContainer.Resolve&lt;ServiceTwo&gt;();
+    <span class="hljs-keyword">var</span> client = <span class="hljs-keyword">new</span> Client();
+    Assert.AreEqual(client.GetServiceName(serviceTwo), <span class="hljs-string">&quot;CH07_DependencyInjection.ServiceTwo()&quot;</span>);
+}
+</code></pre>
+<p>✅ با این روش، تمام <strong>انواع تزریق وابستگی (Constructor, Property, Method)</strong> تست و صحت عملکرد آن‌ها تأیید می‌شود.</p>
+<h3>مدولار کردن سیستم 🧩</h3>
+<p>یک سیستم از <strong>یک یا چند ماژول (Module)</strong> تشکیل شده است.<br>
+وقتی یک سیستم شامل <strong>دو یا چند ماژول</strong> باشد، باید <strong>تعامل بین آن‌ها</strong> را تست کنید تا مطمئن شوید که همه چیز <strong>طبق انتظار با هم کار می‌کنند</strong>.</p>
+<p>بیایید سیستم یک <strong>API</strong> را در نظر بگیریم که در نمودار زیر نشان داده شده است:</p>
+<div align="center">
+<p><img src="../../../assets/image/07/Table%207-13.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>همان‌طور که در نمودار قبلی مشاهده می‌کنید، ما یک <strong>کلاینت (Client)</strong> داریم که از طریق یک <strong>API</strong> به یک <strong>ذخیره‌گاه داده (Data Store)</strong> در ابر دسترسی پیدا می‌کند. کلاینت یک درخواست به <strong>سرور HTTP</strong> می‌فرستد. این درخواست ابتدا <strong>احراز هویت (Authentication)</strong> می‌شود. پس از تأیید هویت، درخواست <strong>مجوز دسترسی (Authorization)</strong> برای استفاده از API را دریافت می‌کند. داده‌های ارسال شده توسط کلاینت <strong>deserialize</strong> می‌شوند و سپس به <strong>لایه کسب‌وکار (Business Layer)</strong> منتقل می‌شوند. لایه کسب‌وکار سپس عملیات <strong>خواندن، درج، به‌روزرسانی، یا حذف</strong> را روی ذخیره‌گاه داده انجام می‌دهد. در نهایت، داده‌ها از پایگاه داده از طریق لایه کسب‌وکار، سپس از لایه <strong>Serialization</strong> و نهایتاً به کلاینت بازگردانده می‌شوند. 🔄</p>
+<p>همان‌طور که می‌بینید، ما چندین ماژول داریم که با یکدیگر تعامل دارند:</p>
+<ul>
+<li><strong>Security (احراز هویت و مجوز دسترسی)</strong> که با <strong>Serialization/Deserialization</strong> تعامل دارد.</li>
+<li><strong>Serialization</strong> که با <strong>لایه کسب‌وکار</strong> تعامل دارد و شامل تمام منطق کسب‌وکار است.</li>
+<li><strong>لایه کسب‌وکار (Business Logic)</strong> که با <strong>ذخیره‌گاه داده</strong> تعامل دارد.</li>
+</ul>
+<p>با نگاه به این سه نکته، می‌توانیم <strong>تست‌های متعددی</strong> برای <strong>اتوماتیک کردن فرآیند E2E</strong> بنویسیم. بسیاری از این تست‌ها در واقع <strong>تست‌های واحد (Unit Tests)</strong> هستند که در مجموعه تست‌های یکپارچه‌سازی ما گنجانده می‌شوند.</p>
+<p>می‌توانیم موارد زیر را تست کنیم:</p>
+<ol>
+<li>ورود صحیح (Correct login) ✅</li>
+<li>ورود نادرست (Incorrect login) ❌</li>
+<li>دسترسی مجاز (Authorized access) 🔑</li>
+<li>دسترسی غیرمجاز (Unauthorized access) 🚫</li>
+<li>سریال‌سازی داده‌ها (Serialization of data) 🗄️</li>
+<li>غیرسریال‌سازی داده‌ها (Deserialization of data) 📤</li>
+<li>منطق کسب‌وکار (Business logic) 🧠</li>
+<li>خواندن از پایگاه داده (Database read) 📖</li>
+<li>به‌روزرسانی پایگاه داده (Database update) 🔄</li>
+<li>درج در پایگاه داده (Database insert) ➕</li>
+<li>حذف از پایگاه داده (Database delete) ❌</li>
+</ol>
+<p>همچنین می‌توانیم <strong>تست‌های یکپارچه‌سازی (Integration Tests)</strong> را بنویسیم:</p>
+<ul>
+<li>ارسال درخواست خواندن (Send a read request)</li>
+<li>ارسال درخواست درج (Send an insert request)</li>
+<li>ارسال درخواست ویرایش (Send an edit request)</li>
+<li>ارسال درخواست حذف (Send a delete request)</li>
+</ul>
+<p>این چهار تست می‌توانند با <strong>نام‌کاربری و رمز عبور صحیح</strong> و داده‌های درست نوشته شوند و همچنین برای <strong>نام‌کاربری یا رمز عبور اشتباه</strong> و <strong>داده‌های نادرست</strong> نیز نوشته شوند.</p>
+<p>بنابراین، می‌توانیم <strong>تست یکپارچه‌سازی</strong> را با استفاده از <strong>تست‌های واحد برای هر ماژول</strong> انجام دهیم و سپس تست‌هایی بنویسیم که <strong>فقط تعامل بین دو ماژول را بررسی کنند</strong>. همچنین می‌توانیم تست‌هایی بنویسیم که یک <strong>عملیات کامل E2E</strong> را اجرا کنند.</p>
+<p>اما با وجود اینکه همه این‌ها را با کد تست می‌کنیم، <strong>باید سیستم را به صورت دستی نیز بررسی کنیم</strong> تا مطمئن شویم که همه چیز طبق انتظار عمل می‌کند.</p>
+<p>وقتی همه این تست‌ها با موفقیت انجام شد، می‌توانیم با <strong>اطمینان کامل کد را به محیط تولید (Production) منتشر کنیم</strong>. ✅</p>
+<hr>
+<h3>جمع‌بندی 📚</h3>
+<p>در این فصل ما با <strong>E2E Testing</strong> (که به آن <strong>Integration Testing</strong> نیز گفته می‌شود) آشنا شدیم. دیدیم که می‌توان <strong>تست‌های خودکار</strong> نوشت، اما اهمیت <strong>تست دستی کل برنامه از دید کاربر نهایی</strong> را نیز درک کردیم.</p>
+<p>در مورد <strong>Factories</strong>، مثال کاربرد آن را در <strong>اتصال به پایگاه داده</strong> دیدیم. سناریویی را بررسی کردیم که در آن کاربران می‌توانند از <strong>هر پایگاه داده‌ای که می‌خواهند</strong> استفاده کنند. رشته اتصال (Connection String) بارگذاری می‌شود و بر اساس آن، <strong>شیء اتصال به پایگاه داده مناسب ایجاد و بازگردانده می‌شود</strong>. همچنین دیدیم چگونه می‌توان <strong>Factories را برای هر پایگاه داده تست کرد</strong>.</p>
+<p><strong>Dependency Injection (DI)</strong> این امکان را می‌دهد که یک کلاس با چند <strong>پیاده‌سازی مختلف از یک Interface</strong> کار کند. ما یک <strong>Dependency Container</strong> نوشتیم و این Interface را توسط دو کلاس پیاده‌سازی کردیم. سپس این پیاده‌سازی‌ها در Container ثبت و هنگام نیاز فراخوانی شدند. تست‌های واحد برای <strong>Constructor Injection، Property Injection و Method Injection</strong> نوشته شد.</p>
+<p>در نهایت، با <strong>مدولار کردن سیستم</strong> آشنا شدیم. یک برنامه ساده ممکن است <strong>تنها یک ماژول</strong> داشته باشد، اما هر چه برنامه پیچیده‌تر شود، تعداد ماژول‌ها بیشتر می‌شود و احتمال بروز خطا افزایش می‌یابد. بنابراین، <strong>تست تعامل بین ماژول‌ها بسیار مهم است</strong>.</p>
+<p><strong>تست‌های واحد</strong> می‌توانند خود ماژول‌ها را بررسی کنند و <strong>تست‌های یکپارچه‌سازی</strong> تعامل بین ماژول‌ها را در یک <strong>سناریوی کامل از ابتدا تا انتها</strong> تست می‌کنند.</p>
+<hr>
+<p>در فصل بعد، به <strong>بهترین شیوه‌ها در کار با Threading و Concurrency</strong> می‌پردازیم. اما قبل از آن، <strong>سؤال‌هایی برای سنجش دانش شما از این فصل</strong> داریم:</p>
+<h3>سوالات ❓</h3>
+<ol>
+<li>E2E Testing چیست؟</li>
+<li>یک اصطلاح دیگر برای E2E Testing چیست؟</li>
+<li>در E2E Testing چه روش‌هایی باید به کار گرفته شوند؟</li>
+<li>Factory چیست و چرا از آن استفاده می‌کنیم؟</li>
+<li>DI چیست؟</li>
+<li>چرا باید از Dependency Container استفاده کنیم؟</li>
+</ol>
+<h3>مطالعه بیشتر 📖</h3>
+<p>کتاب <strong>Dependency Injection in .NET</strong> توسط Manning، شما را با DI در .NET آشنا می‌کند و سپس شما را با فریمورک‌های مختلف DI راهنمایی می‌کند.</p>
+
+</main>
+
+
+ 
+
+  <!-- فوتر مشترک -->
+  <footer class="footer">
+    <div class="container">
+      <p>
+        <img src="/icone/copyright.svg" alt="کپی‌رایت" width="14" height="14"
+             style="vertical-align:middle;margin-inline:4px">
+        <span id="y"></span> Gitab — برای توسعه‌دهندگان
+      </p>
+    </div>
+  </footer>
+
+  <!-- سال + اسکریپت تم -->
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    (() => {
+      const root = document.documentElement;
+      const btn = document.getElementById('themeToggle');
+      const KEY = 'gitab-theme';
+      const media = window.matchMedia('(prefers-color-scheme: dark)');
+      const getEffective = s => s === 'auto' ? (media.matches ? 'dark' : 'light') : s;
+      function updateTheme(s) {
+        root.setAttribute('data-theme', s);
+        const mode = getEffective(s);
+        root.dataset.colorMode = mode;
+        btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
+      }
+      const saved = localStorage.getItem(KEY) || 'auto';
+      updateTheme(saved);
+      btn.addEventListener('click', () => {
+        const curr = localStorage.getItem(KEY) || 'auto';
+        const next = curr === 'auto' ? 'dark' : curr === 'dark' ? 'light' : 'auto';
+        localStorage.setItem(KEY, next);
+        updateTheme(next);
+      });
+      media.addEventListener('change', () => {
+        if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
+      });
+      window.addEventListener('DOMContentLoaded', () => updateTheme(saved));
+    })();
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
+<script>
+  document.body.dataset.page = window.location.pathname;
+</script>
+
+</body>
+
+</html>

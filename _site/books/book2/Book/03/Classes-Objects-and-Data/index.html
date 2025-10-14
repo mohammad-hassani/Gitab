@@ -1,57 +1,950 @@
-<h1>3</h1>
-<h2>Classes, Objects, and Data Structures</h2>
-<p>در این فصل، به سازمان‌دهی، قالب‌بندی و مستندسازی کلاس‌ها می‌پردازیم. همچنین به نحوه‌ی نوشتن اشیاء و ساختارهای داده‌ای پاک در زبان #C می‌پردازیم که از قانون دمیتر (Law of Demeter) پیروی می‌کنند.</p>
-<p>علاوه بر این، به اشیاء و ساختارهای داده‌ای تغییرناپذیر (immutable) نیز نگاه خواهیم انداخت و بررسی خواهیم کرد که رابط‌ها (interfaces) و کلاس‌هایی که مجموعه‌های تغییرناپذیر را تعریف می‌کنند در فضای نام (namespace)<br>
-System.Collections.Immutable قرار دارند.</p>
-<p>موضوعات کلی که در این فصل پوشش داده می‌شوند:</p>
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>کلاس‌ها، اشیاء و ساختارهای داده‌ای</title>
+  <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
+  <link rel="stylesheet" href="/styles/main.css">
+<link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<style>
+@font-face {
+  font-family: 'Vazir';
+  src: url('/fonts/Vazir-FD-WOL.ttf') format('truetype');
+  font-display: swap;
+}
+body {
+  font-family: 'Vazir', sans-serif;
+}
+</style>
+
+</head>
+<body>
+  <!-- هدر مشترک -->
+  <header class="header">
+    <div class="container nav-wrap">
+      <a class="brand" href="/">
+        <img src="/icone/logo.svg" alt="Gitab" width="28" height="28">
+        <span>Gitab</span>
+      </a>
+
+      <nav class="nav">
+        <a href="/">خانه</a>
+        <a href="/books/list-books">کتاب‌ها</a>
+        <a href="#">همکاری</a>
+        <a href="#">درباره‌ما</a>
+      </nav>
+
+     <div class="nav-actions">
+  <button id="themeToggle" class="icon-btn theme-btn" aria-label="تغییر حالت">
+    <img class="icon-sun" src="/icone/sun.svg" alt="روشن">
+    <img class="icon-moon" src="/icone/moon.svg" alt="تاریک">
+  </button>
+
+  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
+    <img src="/icone/github.svg" alt="GitHub">
+  </a>
+</div>
+
+  </header>
+
+
+<main class="site-main book-page ">
+  <h1>فصل سوم:  کلاس‌ها، اشیاء و ساختارهای داده‌ای 🏛️📦</h1>
+<p>در این فصل، به <strong>سازمان‌دهی، قالب‌بندی و کامنت‌گذاری کلاس‌ها</strong> می‌پردازیم. همچنین یاد می‌گیریم چگونه <strong>اشیاء و ساختارهای داده‌ای تمیز در C#</strong> بنویسیم که <strong>قانون دمتر (Law of Demeter)</strong> را رعایت کنند. علاوه بر این، با <strong>اشیاء و ساختارهای داده‌ای غیرقابل تغییر (Immutable)</strong> و <strong>اینترفیس‌ها و کلاس‌هایی که مجموعه‌های غیرقابل تغییر را در فضای نام <code>System.Collections.Immutable</code> تعریف می‌کنند</strong> آشنا می‌شویم.</p>
+<p>موضوعات اصلی این فصل عبارت‌اند از:</p>
 <ul>
-<li>
-<p>سازمان‌دهی کلاس‌ها</p>
-</li>
-<li>
-<p>کامنت‌گذاری برای تولید مستندات</p>
-</li>
-<li>
-<p>انسجام (Cohesion) و کوپلینگ (Coupling)</p>
-</li>
-<li>
-<p>قانون دمیتر (Law of Demeter)</p>
-</li>
-<li>
-<p>اشیاء و ساختارهای داده‌ای تغییرناپذیر</p>
-</li>
+<li>سازمان‌دهی کلاس‌ها 🗂️</li>
+<li>کامنت‌گذاری برای تولید مستندات 📝</li>
+<li>Cohesion و Coupling ⚙️</li>
+<li>قانون دمتر (Law of Demeter) 📏</li>
+<li>اشیاء و ساختارهای داده‌ای غیرقابل تغییر 🔒</li>
 </ul>
-<p>مهارت‌هایی که با پیشرفت در این فصل کسب خواهید کرد:</p>
+<hr>
+<h3>مهارت‌هایی که در این فصل می‌آموزید 💡</h3>
+<p>با پیشرفت در این فصل، مهارت‌های زیر را خواهید آموخت:</p>
 <ul>
-<li>
-<p>چگونگی سازمان‌دهی مؤثر کلاس‌ها با استفاده از فضای نام (namespace)</p>
-</li>
-<li>
-<p>کلاس‌هایی خواهید نوشت که کوچکتر، معنادارتر و دارای تنها یک مسئولیت (Single Responsibility) باشند</p>
-</li>
-<li>
-<p>در هنگام نوشتن APIهای خود، می‌توانید مستندات مناسبی برای توسعه‌دهندگان ارائه دهید، با استفاده از کامنت‌هایی که ابزارهای تولید مستندات را پشتیبانی می‌کنند</p>
-</li>
-<li>
-<p>برنامه‌هایی که می‌نویسید، به دلیل انسجام بالا و کوپلینگ پایین، به راحتی قابل توسعه و تغییر خواهند بود</p>
-</li>
-<li>
-<p>در نهایت، می‌توانید قانون دمیتر را اعمال کرده و ساختارهای داده‌ای تغییرناپذیر بنویسید و از آن‌ها استفاده کنید</p>
-</li>
+<li><strong>سازمان‌دهی مؤثر کلاس‌ها با استفاده از Namespace‌ها</strong>.</li>
+<li><strong>کوچک و معنادار کردن کلاس‌ها</strong> با پیروی از اصل <strong>مسئولیت واحد (Single Responsibility)</strong>.</li>
+<li><strong>نوشتن مستندات خوب برای توسعه‌دهندگان</strong> با ارائه کامنت‌هایی که ابزارهای تولید مستندات را پشتیبانی کنند.</li>
+<li><strong>سهولت در تغییر و توسعه برنامه‌ها</strong> به دلیل <strong>Cohesion بالا و Coupling پایین</strong>.</li>
+<li><strong>پیاده‌سازی قانون دمتر و استفاده از داده‌های غیرقابل تغییر</strong>.</li>
 </ul>
-<p>شروع کنیم<br>
-بیایید با بررسی نحوه‌ی سازمان‌دهی مؤثر کلاس‌ها با استفاده از namespaceها شروع کنیم.</p>
-<h2>پیش‌نیازهای فنی</h2>
-<p>می‌توانید کدهای مربوط به این فصل را در گیت‌هاب مشاهده کنید:<br>
-🔗 <a href="https://github.com/PacktPublishing/Clean-Code-in-C-/tree/master/CH03">https://github.com/PacktPublishing/Clean-Code-in-C-/tree/master/CH03</a></p>
-<h2>سازمان‌دهی کلاس‌ها</h2>
-<p>یکی از ویژگی‌های بارز پروژه‌ای پاک این است که کلاس‌ها در آن به‌خوبی سازمان‌دهی شده‌اند.</p>
-<p>از پوشه‌ها برای گروه‌بندی کلاس‌هایی که به هم مرتبط هستند، استفاده می‌شود</p>
-<p>کلاس‌های موجود در این پوشه‌ها درون namespaceهایی قرار دارند که با نام اسمبلی (assembly) و ساختار پوشه‌ها همخوانی دارند</p>
-<p>هر interface، class، struct و enum باید در فایل سورس جداگانه‌ی خودش و در namespace مناسب قرار گیرد.<br>
-فایل‌های سورس باید به‌صورت منطقی و سازمان‌یافته در پوشه‌های مناسب گروه‌بندی شوند<br>
-و namespace هر فایل سورس باید با نام اسمبلی و ساختار پوشه‌ها تطابق داشته باشد.</p>
-<p>📸 تصویر زیر ساختار تمیز فایل‌ها و پوشه‌ها را نمایش می‌دهد:</p>
+<p>پس بیایید ابتدا ببینیم چگونه می‌توانیم کلاس‌ها را <strong>به‌صورت مؤثر با استفاده از Namespace‌ها سازمان‌دهی کنیم</strong>.</p>
+<hr>
+<h3>پیش‌نیازهای فنی ⚙️</h3>
+<p>کد این فصل را می‌توانید در GitHub مشاهده کنید:<br>
+<a href="https://github.com/PacktPublishing/Clean-Code-in-C-/tree/master/CH03">Clean Code in C# – Chapter 3</a></p>
+<hr>
+<h3>سازمان‌دهی کلاس‌ها 🗂️</h3>
+<p>ویژگی برجسته یک پروژه تمیز، داشتن <strong>کلاس‌های به‌خوبی سازمان‌دهی‌شده</strong> است.</p>
+<ul>
+<li><strong>پوشه‌ها (Folders)</strong> برای گروه‌بندی کلاس‌هایی که به هم مرتبط هستند استفاده می‌شوند.</li>
+<li>کلاس‌های داخل پوشه‌ها باید <strong>در Namespaceهایی قرار گیرند که با نام اسمبلی و ساختار پوشه‌ها مطابقت دارند</strong>.</li>
+</ul>
+<p>هر <strong>اینترفیس، کلاس، ساختار (struct) و Enum</strong> باید <strong>فایل منبع جداگانه</strong> در <strong>Namespace صحیح</strong> داشته باشد.</p>
+<ul>
+<li>فایل‌های منبع باید <strong>به‌صورت منطقی در پوشه‌های مناسب گروه‌بندی</strong> شوند.</li>
+<li>Namespaceهای فایل‌ها باید <strong>با نام اسمبلی و ساختار پوشه‌ها مطابقت داشته باشند</strong>.</li>
+</ul>
+<p>اسکرین‌شات زیر، ساختار پوشه‌ها و فایل‌های تمیز را نشان می‌دهد:</p>
 <div align="center">
 <p><img src="../../../assets/image/03/Table%203-1.jpeg" alt="Conventions-UsedThis-Book"></p>
 </div>
+<h3>سازمان‌دهی کلاس‌ها و Namespace‌ها 🗂️💡</h3>
+<p>قرار دادن بیش از یک <strong>اینترفیس، کلاس، struct یا enum</strong> در یک فایل منبع <strong>ایده‌ی خوبی نیست</strong>. دلیل این امر این است که پیدا کردن آیتم‌ها را دشوار می‌کند، حتی اگر IntelliSense در دسترس باشد.</p>
+<p>در طراحی <strong>Namespaceها</strong>، بهتر است از <strong>Pascal Casing</strong> استفاده کنید و ترتیب زیر را رعایت کنید:<br>
+<strong>نام شرکت → نام محصول → نام فناوری → نام جمع مؤلفه‌ها</strong><br>
+مثال:</p>
+<pre class="hljs"><code>FakeCompany.Product.Wpf.Feature.Subnamespace {} <span class="hljs-comment">// مشخص برای محصول، فناوری و ویژگی</span>
+</code></pre>
+<p>شروع با <strong>نام شرکت</strong> کمک می‌کند تا از تداخل Namespaceها جلوگیری شود. مثلاً اگر هم Microsoft و هم FakeCompany یک Namespace به نام System داشته باشند، می‌توان با نام شرکت تشخیص داد کدام System مدنظر است.</p>
+<p>کدهایی که قابلیت استفاده مجدد در چند پروژه را دارند، بهتر است در <strong>Assemblies جداگانه</strong> قرار گیرند:</p>
+<pre class="hljs"><code>FakeCompany.Wpf.Feature.Subnamespace {} <span class="hljs-comment">/* مشخص برای فناوری و ویژگی، قابل استفاده در چند محصول */</span>
+</code></pre>
+<p>هنگام استفاده از تست‌ها در کد (مثل <strong>Test-Driven Development (TDD)</strong>)، بهتر است کلاس‌های تست را در <strong>Assemblies جداگانه</strong> نگه دارید. نام Assembly تست باید <strong>نام Assembly اصلی + Tests</strong> باشد:</p>
+<pre class="hljs"><code>FakeCompany.Core.Feature {} <span class="hljs-comment">/* بدون وابستگی به فناوری و مشخص برای ویژگی، قابل استفاده در چند محصول */</span>
+</code></pre>
+<p>هرگز تست‌های مربوط به Assemblyهای مختلف را در یک Assembly تست قرار ندهید؛ همیشه آن‌ها را جدا نگه دارید.</p>
+<p>علاوه بر این، <strong>Namespace و نوع (Type)</strong> نباید نام یکسان داشته باشند، زیرا ممکن است باعث <strong>تداخل کامپایلر</strong> شود. هنگام جمع‌بندی Namespaceها، نیازی به جمع بستن نام شرکت‌ها، محصولات و مخفف‌ها نیست.</p>
+<p><strong>خلاصه قوانین سازمان‌دهی کلاس‌ها:</strong></p>
+<ol>
+<li>از <strong>Pascal Casing</strong> با ترتیب نام شرکت، محصول، فناوری و نام جمع مؤلفه‌ها استفاده کنید.</li>
+<li>آیتم‌های قابل استفاده مجدد را در <strong>Assemblies جداگانه</strong> قرار دهید.</li>
+<li>از یکسان بودن نام <strong>Namespace و Type</strong> پرهیز کنید.</li>
+<li>نام‌های شرکت و محصول و مخفف‌ها را جمع نبندید.</li>
+</ol>
+<hr>
+<h3>مسئولیت کلاس‌ها 🎯</h3>
+<p>یک کلاس باید <strong>فقط یک مسئولیت</strong> داشته باشد.</p>
+<p><strong>مسئولیت</strong> کاری است که به کلاس واگذار شده است. در اصول <strong>SOLID</strong>، حرف <strong>S</strong> به <strong>Single Responsibility Principle (SRP)</strong> اشاره دارد. طبق این اصل، یک کلاس باید <strong>فقط بر یک جنبه از ویژگی مورد پیاده‌سازی تمرکز کند</strong> و مسئولیت آن جنبه به‌طور کامل در کلاس محصور شود. بنابراین، هرگز نباید بیش از یک مسئولیت به یک کلاس واگذار شود.</p>
+<p>مثال نقض SRP:</p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">MultipleResponsibilities</span>
+{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> <span class="hljs-title">DecryptString</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> text, SecurityAlgorithm algorithm</span>)</span> { <span class="hljs-comment">/* ... */</span> }
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> <span class="hljs-title">EncryptString</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> text, SecurityAlgorithm algorithm</span>)</span> { <span class="hljs-comment">/* ... */</span> }
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> <span class="hljs-title">ReadTextFromFile</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> filename</span>)</span> { <span class="hljs-comment">/* ... */</span> }
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> <span class="hljs-title">SaveTextToFile</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> text, <span class="hljs-built_in">string</span> filename</span>)</span> { <span class="hljs-comment">/* ... */</span> }
+}
+</code></pre>
+<p>در کلاس بالا، <strong>وظایف رمزنگاری</strong> با متدهای <code>DecryptString</code> و <code>EncryptString</code> و <strong>دسترسی به فایل</strong> با متدهای <code>ReadTextFromFile</code> و <code>SaveTextToFile</code> ترکیب شده‌اند. این کلاس <strong>اصل SRP را نقض می‌کند</strong>.</p>
+<hr>
+<h3>تفکیک کلاس‌ها برای رعایت SRP ✂️</h3>
+<p>کلاس را به دو کلاس جداگانه تقسیم می‌کنیم: یکی برای <strong>رمزنگاری</strong> و دیگری برای <strong>دسترسی به فایل</strong>:</p>
+<pre class="hljs"><code><span class="hljs-keyword">namespace</span> <span class="hljs-title">FakeCompany.Core.Security</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Cryptography</span>
+    {
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> <span class="hljs-title">DecryptString</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> text, SecurityAlgorithm algorithm</span>)</span> { <span class="hljs-comment">/* ... */</span> }
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> <span class="hljs-title">EncryptString</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> text, SecurityAlgorithm algorithm</span>)</span> { <span class="hljs-comment">/* ... */</span> }
+    }
+}
+</code></pre>
+<p>با این کار، <strong>کد رمزنگاری قابل استفاده مجدد</strong> برای رشته‌ها در محصولات و فناوری‌های مختلف می‌شود و کلاس <code>Cryptography</code> با <strong>SRP مطابقت دارد</strong>.</p>
+<p>پارامتر <code>SecurityAlgorithm</code> در کلاس <code>Cryptography</code> یک <strong>enum</strong> است و در <strong>فایل منبع جداگانه</strong> قرار دارد تا کد <strong>تمیز، مینیمال و سازمان‌دهی شده</strong> باقی بماند:</p>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> System;
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">FakeCompany.Core.Security</span>
+{
+    [<span class="hljs-meta">Flags</span>]
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">enum</span> SecurityAlgorithm
+    {
+        Aes,
+        AesCng,
+        MD5,
+        SHA5
+    }
+}
+</code></pre>
+<hr>
+<h3>کلاس TextFile و رعایت SRP 🗃️</h3>
+<p>کلاس زیر نیز مطابق SRP طراحی شده و <strong>قابل استفاده مجدد</strong> است:</p>
+<pre class="hljs"><code><span class="hljs-keyword">namespace</span> <span class="hljs-title">FakeCompany.Core.FileSystem</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">TextFile</span>
+    {
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> <span class="hljs-title">ReadTextFromFile</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> filename</span>)</span> { <span class="hljs-comment">/* ... */</span> }
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> <span class="hljs-title">SaveTextToFile</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> text, <span class="hljs-built_in">string</span> filename</span>)</span> { <span class="hljs-comment">/* ... */</span> }
+    }
+}
+</code></pre>
+<p>این کلاس در Namespace مناسب <strong>core filesystem</strong> قرار دارد و می‌توان آن را در محصولات و فناوری‌های مختلف استفاده کرد.</p>
+<hr>
+<p>در ادامه، به <strong>کامنت‌گذاری کلاس‌ها</strong> برای کمک به سایر توسعه‌دهندگان می‌پردازیم.</p>
+<h3>کامنت‌گذاری برای تولید مستندات 📝📚</h3>
+<p>مستندسازی کد منبع همیشه یک ایده‌ی خوب است، چه پروژه داخلی باشد و چه نرم‌افزاری که قرار است توسط سایر توسعه‌دهندگان استفاده شود. پروژه‌های داخلی به دلیل <strong>تغییرات مداوم توسعه‌دهندگان</strong> و اغلب <strong>مستندسازی ضعیف یا کم</strong> دچار مشکل می‌شوند و این باعث می‌شود توسعه‌دهندگان جدید زمان بیشتری برای یادگیری صرف کنند. بسیاری از APIهای شخص ثالث نیز به دلیل <strong>مستندسازی ضعیف برای توسعه‌دهندگان</strong> موفقیت چندانی پیدا نمی‌کنند و adopters به دلیل ناامیدی از مستندات ناقص، استفاده از APIها را رها می‌کنند.</p>
+<p>همیشه بهتر است که <strong>اعلان حق نسخه‌برداری (copyright)</strong> را در بالای هر فایل منبع درج کنید و بر روی <strong>namespaceها، interfaceها، کلاس‌ها، enumها، structها، متدها و propertyها</strong> کامنت‌گذاری داشته باشید.</p>
+<p>کامنت‌های copyright باید <strong>در بالای فایل منبع و بالای using statements</strong> قرار گیرند و به صورت یک کامنت چندخطی نوشته شوند که با <code>/*</code> شروع و با <code>*/</code> پایان می‌یابد:</p>
+<pre class="hljs"><code><span class="hljs-comment">/**************************************************************************
+********
+* Copyright 2019 PacktPub
+*
+* Permission is hereby granted, free of charge, to any person obtaining a
+* copy of this software and associated documentation files (the &quot;Software&quot;), to
+* deal in the Software without restriction, including without limitation the
+* rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+* sell copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+***************************************************************************/</span>
+</code></pre>
+<hr>
+<h3>مستندسازی namespace و کلاس‌ها با کامنت XML 🔖</h3>
+<p>در مثال زیر می‌بینیم که <strong>namespace</strong> و <strong>کلاس</strong> و متدها با کامنت مستندسازی شده‌اند:</p>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> System;
+
+<span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;summary&gt;</span></span>
+<span class="hljs-comment"><span class="hljs-doctag">///</span> The CH3.Core.Security namespace contains fundamental types used</span>
+<span class="hljs-comment"><span class="hljs-doctag">///</span> for the purpose of implementing application security.</span>
+<span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;/summary&gt;</span></span>
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">CH3.Core.Security</span>
+{
+    <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;summary&gt;</span></span>
+    <span class="hljs-comment"><span class="hljs-doctag">///</span> Encrypts and decrypts provided strings based on the selected</span>
+    <span class="hljs-comment"><span class="hljs-doctag">///</span> algorithm.</span>
+    <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;/summary&gt;</span></span>
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Cryptography</span>
+    {
+        <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;summary&gt;</span></span>
+        <span class="hljs-comment"><span class="hljs-doctag">///</span> Decrypts a string using the selected algorithm.</span>
+        <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;/summary&gt;</span></span>
+        <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;param name=&quot;text&quot;&gt;</span>The string to be decrypted.<span class="hljs-doctag">&lt;/param&gt;</span></span>
+        <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;param name=&quot;algorithm&quot;&gt;</span>The cryptographic algorithm used to decrypt the string.<span class="hljs-doctag">&lt;/param&gt;</span></span>
+        <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;returns&gt;</span>Decrypted string<span class="hljs-doctag">&lt;/returns&gt;</span></span>
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> <span class="hljs-title">DecryptString</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> text, SecurityAlgorithm algorithm</span>)</span>
+        {
+            <span class="hljs-comment">// ...implementation...</span>
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> NotImplementedException();
+        }
+
+        <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;summary&gt;</span></span>
+        <span class="hljs-comment"><span class="hljs-doctag">///</span> Encrypts a string using the selected algorithm.</span>
+        <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;/summary&gt;</span></span>
+        <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;param name=&quot;text&quot;&gt;</span>The string to encrypt.<span class="hljs-doctag">&lt;/param&gt;</span></span>
+        <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;param name=&quot;algorithm&quot;&gt;</span>The cryptographic algorithm used to encrypt the string.<span class="hljs-doctag">&lt;/param&gt;</span></span>
+        <span class="hljs-comment"><span class="hljs-doctag">///</span> <span class="hljs-doctag">&lt;returns&gt;</span>Encrypted string<span class="hljs-doctag">&lt;/returns&gt;</span></span>
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> <span class="hljs-title">EncryptString</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> text, SecurityAlgorithm algorithm</span>)</span>
+        {
+            <span class="hljs-comment">// ...implementation...</span>
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> NotImplementedException();
+        }
+    }
+}
+</code></pre>
+<p>در این نمونه:</p>
+<ul>
+<li>کامنت‌های مستندسازی با <code>///</code> شروع می‌شوند و <strong>مستقیماً بالای آیتم مورد نظر</strong> قرار دارند.</li>
+<li>Visual Studio با تایپ سه اسلش <code>///</code> به‌صورت خودکار <strong>تگ‌های XML</strong> را بر اساس خط زیر ایجاد می‌کند.</li>
+<li>در مثال بالا، <strong>namespace</strong> و کلاس تنها دارای <code>&lt;summary&gt;</code> هستند، اما متدها شامل <strong>summary، توضیح پارامترها و return</strong> نیز هستند.</li>
+</ul>
+<p>در ادامه، جدول مربوط به <strong>تگ‌های مختلف XML</strong> که می‌توانید در کامنت‌ها استفاده کنید، ارائه می‌شود.</p>
+<div align="center">
+<p><img src="../../../assets/image/03/Table%203-2.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h3>چسبندگی (Cohesion) و وابستگی (Coupling) ⚙️🔗</h3>
+<p>در یک اسمبلی C# با طراحی خوب، کدها به‌درستی <strong>گروه‌بندی می‌شوند</strong>. این حالت به <strong>چسبندگی بالا (High Cohesion)</strong> معروف است. وقتی کدهایی کنار هم قرار می‌گیرند که به هم تعلق ندارند، <strong>چسبندگی پایین (Low Cohesion)</strong> رخ می‌دهد.</p>
+<p>همچنین، شما می‌خواهید کلاس‌های مرتبط تا حد امکان مستقل باشند. هرچه یک کلاس بیشتر به کلاس دیگری وابسته باشد، <strong>وابستگی (Coupling) بیشتری</strong> دارد که به آن <strong>وابستگی شدید (Tight Coupling)</strong> گفته می‌شود. هرچه کلاس‌ها مستقل‌تر باشند، <strong>چسبندگی پایین</strong> و <strong>وابستگی کمتر</strong> داریم که به آن <strong>Loose Coupling</strong> می‌گوییم.</p>
+<p>در یک کلاس خوب، هدف این است که <strong>چسبندگی بالا و وابستگی کم</strong> داشته باشیم. در ادامه مثال‌هایی از <strong>وابستگی شدید</strong> و سپس <strong>وابستگی کم</strong> ارائه می‌شود.</p>
+<hr>
+<h3>مثال از وابستگی شدید (Tight Coupling) ⚠️</h3>
+<p>در کد زیر، کلاس <code>TightCouplingA</code> <strong>encapsulation</strong> را نقض می‌کند و متغیر <code>_name</code> را به‌طور مستقیم در دسترس قرار می‌دهد. این متغیر باید <strong>private</strong> باشد و تنها از طریق <strong>propertyها یا متدهای کلاس</strong> تغییر کند. اگرچه property <code>Name</code> متدهای get و set را برای اعتبارسنجی فراهم می‌کند، اما این کار تقریباً بی‌فایده است، زیرا این بررسی‌ها قابل دور زدن هستند:</p>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> System.Diagnostics;
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">CH3.Coupling</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">TightCouplingA</span>
+    {
+        <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> _name;
+        <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Name
+        {
+            <span class="hljs-keyword">get</span> { }
+            <span class="hljs-keyword">set</span> { }
+        }
+    }
+}
+</code></pre>
+<p>در کد دیگر، کلاس <code>TightCouplingB</code> یک نمونه از <code>TightCouplingA</code> ایجاد می‌کند و <strong>وابستگی شدید</strong> بین دو کلاس ایجاد می‌کند، زیرا مستقیماً به متغیر <code>_name</code> دسترسی دارد و آن را null می‌کند و سپس مقدار آن را چاپ می‌کند:</p>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> System.Diagnostics;
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">CH3.Coupling</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">TightCouplingB</span>
+    {
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">TightCouplingB</span>()</span>
+        {
+            TightCouplingA tca = <span class="hljs-keyword">new</span> TightCouplingA();
+            tca._name = <span class="hljs-literal">null</span>;
+            Debug.WriteLine(<span class="hljs-string">&quot;Name is &quot;</span> + tca._name);
+        }
+    }
+}
+</code></pre>
+<hr>
+<h3>مثال از وابستگی کم (Loose Coupling) ✅</h3>
+<p>در این مثال، دو کلاس داریم: <code>LooseCouplingA</code> و <code>LooseCouplingB</code>.</p>
+<ul>
+<li>کلاس <code>LooseCouplingA</code> یک <strong>فیلد private به نام <code>_name</code></strong> دارد و مقدار آن از طریق یک property عمومی تنظیم می‌شود.</li>
+<li>کلاس <code>LooseCouplingB</code> یک نمونه از <code>LooseCouplingA</code> ایجاد می‌کند و از طریق property <code>Name</code> به مقدار آن دسترسی پیدا می‌کند. از آنجا که فیلد <code>_name</code> مستقیماً قابل دسترسی نیست، بررسی‌ها در هنگام get و set اعمال می‌شوند.</li>
+</ul>
+<p>کد نمونه <code>LooseCouplingA</code>:</p>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> System.Diagnostics;
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">CH3.Coupling</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">LooseCouplingA</span>
+    {
+        <span class="hljs-keyword">private</span> <span class="hljs-built_in">string</span> _name;
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> <span class="hljs-built_in">string</span> _stringIsEmpty = <span class="hljs-string">&quot;String is empty&quot;</span>;
+        <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Name
+        {
+            <span class="hljs-keyword">get</span>
+            {
+                <span class="hljs-keyword">if</span> (_name.Equals(<span class="hljs-built_in">string</span>.Empty))
+                    <span class="hljs-keyword">return</span> _stringIsEmpty;
+                <span class="hljs-keyword">else</span>
+                    <span class="hljs-keyword">return</span> _name;
+            }
+            <span class="hljs-keyword">set</span>
+            {
+                <span class="hljs-keyword">if</span> (<span class="hljs-keyword">value</span>.Equals(<span class="hljs-built_in">string</span>.Empty))
+                    Debug.WriteLine(<span class="hljs-string">&quot;Exception: String length must be greater than zero.&quot;</span>);
+            }
+        }
+    }
+}
+</code></pre>
+<p>کد نمونه <code>LooseCouplingB</code>:</p>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> System.Diagnostics;
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">CH3.Coupling</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">LooseCouplingB</span>
+    {
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">LooseCouplingB</span>()</span>
+        {
+            LooseCouplingA lca = <span class="hljs-keyword">new</span> LooseCouplingA();
+            lca = <span class="hljs-literal">null</span>;
+            Debug.WriteLine(<span class="hljs-string">$&quot;Name is <span class="hljs-subst">{lca.Name}</span>&quot;</span>);
+        }
+    }
+}
+</code></pre>
+<p>در اینجا، <code>LooseCouplingB</code> نمی‌تواند مستقیماً به فیلد <code>_name</code> دسترسی داشته باشد و بنابراین تغییرات از طریق property انجام می‌شود.</p>
+<hr>
+<p>با این مثال‌ها، <strong>وابستگی شدید و کم</strong> را فهمیدیم و یاد گرفتیم که چگونه از کدهای با وابستگی زیاد اجتناب کنیم و کدهای با وابستگی کم بنویسیم.</p>
+<p>در ادامه، به بررسی <strong>چسبندگی پایین و چسبندگی بالا</strong> خواهیم پرداخت.</p>
+<h3>مثال از چسبندگی پایین (Low Cohesion) ⚠️</h3>
+<p>وقتی یک کلاس بیش از یک مسئولیت داشته باشد، به آن <strong>کلاس با چسبندگی پایین</strong> گفته می‌شود. در مثال زیر، کلاس <code>LowCohesion</code> چندین مسئولیت دارد:</p>
+<pre class="hljs"><code><span class="hljs-keyword">namespace</span> <span class="hljs-title">CH3.Cohesion</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">LowCohesion</span>
+    {
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ConnectToDatasource</span>()</span> { }
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ExtractDataFromDataSource</span>()</span> { }
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">TransformDataForReport</span>()</span> { }
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">AssignDataAndGenerateReport</span>()</span> { }
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">PrintReport</span>()</span> { }
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">CloseConnectionToDataSource</span>()</span> { }
+    }
+}
+</code></pre>
+<p>مشخص است که این کلاس حداقل سه مسئولیت مختلف دارد:</p>
+<ol>
+<li>اتصال به دیتابیس و قطع اتصال از آن</li>
+<li>استخراج داده‌ها و آماده‌سازی برای گزارش</li>
+<li>تولید گزارش و چاپ آن</li>
+</ol>
+<p>این ساختار به وضوح <strong>اصل Single Responsibility Principle (SRP)</strong> را نقض می‌کند. بنابراین نیاز است کلاس را به چند کلاس کوچک‌تر تقسیم کنیم که هر کدام یک مسئولیت دارند.</p>
+<hr>
+<h3>مثال از چسبندگی بالا (High Cohesion) ✅</h3>
+<p>در این مثال، کلاس <code>LowCohesion</code> به سه کلاس جداگانه تقسیم شده که هر کدام <strong>یک مسئولیت مشخص</strong> دارند: <code>Connection</code>، <code>DataProcessor</code> و <code>ReportGenerator</code>.</p>
+<h4>کلاس Connection</h4>
+<p>این کلاس تنها متدهای مرتبط با اتصال به دیتابیس را دارد:</p>
+<pre class="hljs"><code><span class="hljs-keyword">namespace</span> <span class="hljs-title">CH3.Cohesion</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Connection</span>
+    {
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ConnectToDatasource</span>()</span> { }
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">CloseConnectionToDataSource</span>()</span> { }
+    }
+}
+</code></pre>
+<p>نام کلاس <code>Connection</code> است و فقط وظیفه اتصال به دیتابیس را بر عهده دارد؛ بنابراین <strong>چسبندگی بالایی دارد</strong>.</p>
+<hr>
+<h4>کلاس DataProcessor</h4>
+<p>این کلاس دو متد برای پردازش داده‌ها دارد: استخراج داده‌ها و آماده‌سازی آن‌ها برای گزارش:</p>
+<pre class="hljs"><code><span class="hljs-keyword">namespace</span> <span class="hljs-title">CH3.Cohesion</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">DataProcessor</span>
+    {
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ExtractDataFromDataSource</span>()</span> { }
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">TransformDataForReport</span>()</span> { }
+    }
+}
+</code></pre>
+<p>این کلاس نیز مثال دیگری از <strong>چسبندگی بالا</strong> است.</p>
+<hr>
+<h4>کلاس ReportGenerator</h4>
+<p>این کلاس تنها متدهای مرتبط با تولید و چاپ گزارش را دارد:</p>
+<pre class="hljs"><code><span class="hljs-keyword">namespace</span> <span class="hljs-title">CH3.Cohesion</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ReportGenerator</span>
+    {
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">AssignDataAndGenerateReport</span>()</span> { }
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">PrintReport</span>()</span> { }
+    }
+}
+</code></pre>
+<p>این کلاس نیز <strong>چسبندگی بالایی</strong> دارد و وظیفه مشخص و محدودی انجام می‌دهد.</p>
+<hr>
+<p>با بررسی سه کلاس بالا، می‌بینیم که هر کلاس فقط متدهای مرتبط با مسئولیت خودش را دارد و بنابراین <strong>چسبندگی بالایی دارند</strong>.</p>
+<p>در ادامه، نوبت به <strong>طراحی کد برای تغییرپذیری (Design for Change)</strong> می‌رسد، جایی که از <strong>Interfaceها به جای کلاس‌ها</strong> استفاده می‌کنیم تا بتوانیم کد را از طریق <strong>Dependency Injection</strong> و <strong>Inversion of Control</strong> به سازنده‌ها و متدها تزریق کنیم.</p>
+<h3>طراحی برای تغییر (Design for Change) 🔄</h3>
+<p>وقتی <strong>برای تغییر طراحی می‌کنیم</strong>، باید تمرکز خود را از <em>چیست</em> به <em>چگونه</em> تغییر دهیم:</p>
+<ul>
+<li><strong>چیست (What):</strong> نیازمندی کسب‌وکار. این نیازها غالباً تغییر می‌کنند و نرم‌افزار باید انعطاف‌پذیر باشد تا بتواند به‌موقع و با بودجه مشخص آن‌ها را برآورده کند. کسب‌وکار اهمیتی به چگونگی پیاده‌سازی ندارد، فقط انتظار دارد نیازها به‌طور دقیق و به موقع تحقق یابند.</li>
+<li><strong>چگونه (How):</strong> تیم‌های نرم‌افزار و زیرساخت به چگونگی پیاده‌سازی نیازها توجه دارند. نرم‌افزار باید طوری طراحی شود که به تغییرات نیازها پاسخ دهد و با تغییرات نسخه‌های نرم‌افزار و رفع باگ‌ها یا افزودن ویژگی‌های جدید، قابل نگهداری باشد.</li>
+</ul>
+<hr>
+<h3>برنامه‌نویسی مبتنی بر رابط (Interface-Oriented Programming – IOP) 🛠️</h3>
+<p><strong>IOP</strong> به ما اجازه می‌دهد کدی <strong>چندریختی (polymorphic)</strong> بنویسیم.</p>
+<ul>
+<li>در <strong>OOP</strong>، چندریختی یعنی کلاس‌های مختلف می‌توانند پیاده‌سازی‌های متفاوتی از یک <strong>اینترفیس مشترک</strong> داشته باشند.</li>
+<li>با استفاده از اینترفیس‌ها، نرم‌افزار قابل تغییر و توسعه برای برآوردن نیازهای کسب‌وکار می‌شود.</li>
+</ul>
+<h4>مثال اتصال به دیتابیس با اینترفیس</h4>
+<p>فرض کنید برنامه‌ای باید به دیتابیس‌های مختلف متصل شود. چطور می‌توان کد دیتابیس را بدون توجه به نوع دیتابیس یکسان نگه داشت؟ پاسخ: استفاده از <strong>اینترفیس</strong>.</p>
+<p>ابتدا اینترفیس <code>IConnection</code> تعریف می‌شود:</p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title">IConnection</span>
+{
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Open</span>()</span>;
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Close</span>()</span>;
+}
+</code></pre>
+<p>سپس کلاس‌های اتصال به MongoDB و SQL Server این اینترفیس را پیاده‌سازی می‌کنند:</p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">MongoDbConnection</span> : <span class="hljs-title">IConnection</span>
+{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Open</span>()</span> =&gt; Console.WriteLine(<span class="hljs-string">&quot;Opened MongoDB connection.&quot;</span>);
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Close</span>()</span> =&gt; Console.WriteLine(<span class="hljs-string">&quot;Closed MongoDB connection.&quot;</span>);
+}
+
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">SqlServerConnection</span> : <span class="hljs-title">IConnection</span>
+{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Open</span>()</span> =&gt; Console.WriteLine(<span class="hljs-string">&quot;Opened SQL Server Connection.&quot;</span>);
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Close</span>()</span> =&gt; Console.WriteLine(<span class="hljs-string">&quot;Closed SQL Server Connection.&quot;</span>);
+}
+</code></pre>
+<p>کلاس <code>Database</code> اینترفیس <code>IConnection</code> را دریافت می‌کند و از طریق آن عملیات باز و بسته کردن اتصال را انجام می‌دهد:</p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Database</span>
+{
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> IConnection _connection;
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Database</span>(<span class="hljs-params">IConnection connection</span>)</span>
+    {
+        _connection = connection;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OpenConnection</span>()</span> =&gt; _connection.Open();
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">CloseConnection</span>()</span> =&gt; _connection.Close();
+}
+</code></pre>
+<h4>استفاده از اینترفیس‌ها در برنامه</h4>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Main</span>(<span class="hljs-params"><span class="hljs-built_in">string</span>[] <span class="hljs-keyword">args</span></span>)</span>
+{
+    <span class="hljs-keyword">var</span> mongoDb = <span class="hljs-keyword">new</span> MongoDbConnection();
+    <span class="hljs-keyword">var</span> sqlServer = <span class="hljs-keyword">new</span> SqlServerConnection();
+
+    <span class="hljs-keyword">var</span> db = <span class="hljs-keyword">new</span> Database(mongoDb);
+    db.OpenConnection();
+    db.CloseConnection();
+
+    db = <span class="hljs-keyword">new</span> Database(sqlServer);
+    db.OpenConnection();
+    db.CloseConnection();
+}
+</code></pre>
+<p><strong>خروجی کنسول:</strong></p>
+<pre class="hljs"><code>Opened MongoDB connection.
+Closed MongoDB connection.
+Opened SQL Server Connection.
+Closed SQL Server Connection.
+</code></pre>
+<hr>
+<h3>مزایا ✅</h3>
+<ul>
+<li><strong>قابلیت گسترش:</strong> برای پشتیبانی از دیتابیس‌های جدید، کافیست کلاس‌های جدیدی که <code>IConnection</code> را پیاده‌سازی می‌کنند اضافه کنیم.</li>
+<li><strong>کد تمیز و قابل تست:</strong> استفاده از <strong>Dependency Injection</strong> و <strong>Inversion of Control</strong> باعث می‌شود کلاس‌ها <strong>loosely coupled</strong> و راحت قابل تست باشند.</li>
+<li><strong>انعطاف‌پذیری:</strong> نرم‌افزار می‌تواند با تغییر نیازها یا نسخه‌ها بدون تغییر کد موجود سازگار شود.</li>
+</ul>
+<hr>
+<p>💡 <strong>تزریق وابستگی و وارونگی کنترل (Dependency Injection و Inversion of Control)</strong></p>
+<p>در زبان C#، ما توانایی پاسخگویی به نیازهای تغییرپذیر نرم‌افزار را با استفاده از <strong>Dependency Injection (DI)</strong> و <strong>Inversion of Control (IoC)</strong> داریم. این دو اصطلاح معانی متفاوتی دارند، اما اغلب به‌طور متداول به یک مفهوم به‌کار می‌روند.</p>
+<p>با <strong>IoC</strong>، شما یک چارچوب برنامه‌نویسی می‌کنید که وظایف را با فراخوانی ماژول‌ها انجام می‌دهد. یک <strong>IoC container</strong> برای نگهداری ثبت ماژول‌ها استفاده می‌شود. این ماژول‌ها هنگام درخواست کاربر یا درخواست پیکربندی بارگذاری می‌شوند.</p>
+<p><strong>DI</strong> وابستگی‌های داخلی کلاس‌ها را حذف می‌کند. سپس اشیاء وابسته توسط یک فراخوان خارجی <strong>تزریق (injected)</strong> می‌شوند. یک <strong>IoC container</strong> از DI استفاده می‌کند تا اشیاء وابسته را به یک شیء یا متد تزریق کند.</p>
+<p>در این فصل، منابع مفیدی ارائه می‌شود که به شما در درک IoC و DI کمک می‌کنند. سپس قادر خواهید بود از این تکنیک‌ها در برنامه‌های خود استفاده کنید.<br>
+بیایید ببینیم چگونه می‌توانیم <strong>DI و IoC ساده خودمان را بدون استفاده از چارچوب‌های شخص ثالث</strong> پیاده‌سازی کنیم. ✅</p>
+<hr>
+<h3>مثال از <strong>Dependency Injection (DI)</strong></h3>
+<p>در این مثال، ما DI ساده خود را پیاده‌سازی می‌کنیم.<br>
+یک <strong>interface</strong> به نام <code>ILogger</code> داریم که فقط یک متد با یک پارامتر رشته‌ای دارد.<br>
+سپس کلاسی به نام <code>TextFileLogger</code> می‌سازیم که <strong>ILogger</strong> را پیاده‌سازی می‌کند و رشته را در یک فایل متنی خروجی می‌دهد.<br>
+در نهایت، کلاسی به نام <code>Worker</code> خواهیم داشت که <strong>constructor injection</strong> و <strong>method injection</strong> را نشان می‌دهد.</p>
+<hr>
+<p>این <strong>interface</strong> یک متد دارد که برای کلاس‌های پیاده‌ساز به منظور خروجی پیام استفاده می‌شود:</p>
+<pre class="hljs"><code><span class="hljs-keyword">namespace</span> <span class="hljs-title">CH3.DependencyInjection</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title">ILogger</span>
+    {
+        <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">OutputMessage</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> message</span>)</span>;
+    }
+}
+</code></pre>
+<p>کلاس <code>TextFileLogger</code> <strong>ILogger</strong> را پیاده‌سازی می‌کند و پیام را در یک فایل متنی ذخیره می‌کند:</p>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> System;
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">CH3.DependencyInjection</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">TextFileLogger</span> : <span class="hljs-title">ILogger</span>
+    {
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OutputMessage</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> message</span>)</span>
+        {
+            System.IO.File.WriteAllText(FileName(), message);
+        }
+
+        <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-built_in">string</span> <span class="hljs-title">FileName</span>()</span>
+        {
+            <span class="hljs-keyword">var</span> timestamp = DateTime.Now.ToFileTimeUtc().ToString();
+            <span class="hljs-keyword">var</span> path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            <span class="hljs-keyword">return</span> <span class="hljs-string">$&quot;<span class="hljs-subst">{path}</span>_<span class="hljs-subst">{timestamp}</span>&quot;</span>;
+        }
+    }
+}
+</code></pre>
+<hr>
+<p>کلاس <code>Worker</code> نمونه‌ای از <strong>constructor DI</strong> و <strong>method DI</strong> ارائه می‌دهد. توجه کنید که پارامتر یک <strong>interface</strong> است. بنابراین هر کلاسی که آن interface را پیاده‌سازی کند می‌تواند در زمان اجرا <strong>تزریق شود</strong>:</p>
+<pre class="hljs"><code><span class="hljs-keyword">namespace</span> <span class="hljs-title">CH3.DependencyInjection</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Worker</span>
+    {
+        <span class="hljs-keyword">private</span> ILogger _logger;
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Worker</span>(<span class="hljs-params">ILogger logger</span>)</span>
+        {
+            _logger = logger;
+            _logger.OutputMessage(<span class="hljs-string">&quot;This constructor has been injected with a logger!&quot;</span>);
+        }
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">DoSomeWork</span>(<span class="hljs-params">ILogger logger</span>)</span>
+        {
+            logger.OutputMessage(<span class="hljs-string">&quot;This method has been injected with a logger!&quot;</span>);
+        }
+    }
+}
+</code></pre>
+<hr>
+<p>متد <code>DependencyInject</code> این مثال را اجرا می‌کند تا <strong>DI در عمل</strong> نشان داده شود:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">DependencyInject</span>()</span>
+{
+    <span class="hljs-keyword">var</span> logger = <span class="hljs-keyword">new</span> TextFileLogger();
+    <span class="hljs-keyword">var</span> di = <span class="hljs-keyword">new</span> Worker(logger);
+    di.DoSomeWork(logger);
+}
+</code></pre>
+<p>همان‌طور که در کد می‌بینید، ابتدا یک نمونه جدید از کلاس <code>TextFileLogger</code> ساخته می‌شود.<br>
+این شیء سپس به <strong>constructor</strong> کلاس <code>Worker</code> تزریق می‌شود.<br>
+سپس متد <code>DoSomeWork</code> فراخوانی شده و همان نمونه <code>TextFileLogger</code> به آن ارسال می‌شود.<br>
+در این مثال ساده، مشاهده کردیم که چگونه می‌توان <strong>کد را از طریق constructor و متدها به یک کلاس تزریق کرد</strong>.</p>
+<hr>
+<p>✅ نکته کلیدی: این کد وابستگی بین <code>Worker</code> و <code>TextFileLogger</code> را حذف می‌کند.<br>
+این باعث می‌شود که به راحتی بتوانیم <strong>TextFileLogger</strong> را با هر نوع لاگر دیگری که <strong>ILogger</strong> را پیاده‌سازی می‌کند جایگزین کنیم.<br>
+مثلاً می‌توانستیم از <strong>event viewer logger</strong> یا حتی <strong>database logger</strong> استفاده کنیم.<br>
+استفاده از <strong>DI</strong> راهی عالی برای کاهش <strong>coupling</strong> در کد شما است.</p>
+<hr>
+<p>حال که <strong>DI</strong> را دیدیم، نوبت به بررسی <strong>IoC</strong> می‌رسد و در ادامه به آن خواهیم پرداخت. 🔄</p>
+<hr>
+<p>💡 <strong>مثالی از IoC (Inversion of Control)</strong></p>
+<p>در این مثال، قصد داریم <strong>وابستگی‌ها را در یک IoC container ثبت کنیم</strong> و سپس از <strong>DI</strong> برای تزریق وابستگی‌های لازم استفاده کنیم.</p>
+<p>در کد زیر، یک <strong>IoC container</strong> داریم. این container وابستگی‌هایی که باید تزریق شوند را در یک <strong>dictionary</strong> ثبت می‌کند و مقادیر را از <strong>metadata پیکربندی</strong> می‌خواند:</p>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> System;
+<span class="hljs-keyword">using</span> System.Collections.Generic;
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">CH3.InversionOfControl</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Container</span>
+    {
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">delegate</span> <span class="hljs-built_in">object</span> <span class="hljs-title">Creator</span>(<span class="hljs-params">Container container</span>)</span>;
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> Dictionary&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">object</span>&gt; configuration = <span class="hljs-keyword">new</span> Dictionary&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">object</span>&gt;();
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> Dictionary&lt;Type, Creator&gt; typeToCreator = <span class="hljs-keyword">new</span> Dictionary&lt;Type, Creator&gt;();
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Dictionary</span>&lt;<span class="hljs-title">string</span>, <span class="hljs-title">object</span>&gt; Configuration</span>
+        {
+            <span class="hljs-keyword">get</span> { <span class="hljs-keyword">return</span> configuration; }
+        }
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Register</span>&lt;<span class="hljs-title">T</span>&gt;(<span class="hljs-params">Creator creator</span>)</span>
+        {
+            typeToCreator.Add(<span class="hljs-keyword">typeof</span>(T), creator);
+        }
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> T <span class="hljs-title">Create</span>&lt;<span class="hljs-title">T</span>&gt;()</span>
+        {
+            <span class="hljs-keyword">return</span> (T)typeToCreator[<span class="hljs-keyword">typeof</span>(T)](<span class="hljs-keyword">this</span>);
+        }
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> T <span class="hljs-title">GetConfiguration</span>&lt;<span class="hljs-title">T</span>&gt;(<span class="hljs-params"><span class="hljs-built_in">string</span> name</span>)</span>
+        {
+            <span class="hljs-keyword">return</span> (T)configuration[name];
+        }
+    }
+}
+</code></pre>
+<p>سپس یک <strong>container</strong> می‌سازیم و از آن برای پیکربندی <strong>metadata</strong>، ثبت انواع و ایجاد نمونه‌های وابستگی استفاده می‌کنیم:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">InversionOfControl</span>()</span>
+{
+    Container container = <span class="hljs-keyword">new</span> Container();
+    container.Configuration[<span class="hljs-string">&quot;message&quot;</span>] = <span class="hljs-string">&quot;Hello World!&quot;</span>;
+    container.Register&lt;ILogger&gt;(<span class="hljs-built_in">delegate</span>
+    {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> TextFileLogger();
+    });
+    container.Register&lt;Worker&gt;(<span class="hljs-built_in">delegate</span>
+    {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Worker(container.Create&lt;ILogger&gt;());
+    });
+}
+</code></pre>
+<hr>
+<p>✅ نکته: با استفاده از این روش، <strong>ایجاد، مدیریت و تزریق وابستگی‌ها به صورت متمرکز</strong> انجام می‌شود و کلاس‌ها دیگر به جزئیات پیاده‌سازی وابستگی‌ها وابسته نیستند.</p>
+<p>حالا بیایید به <strong>قانون دمیتر (Law of Demeter)</strong> بپردازیم تا ببینیم چگونه می‌توان دانش یک شیء را محدود به نزدیک‌ترین وابستگی‌ها کرد و از ایجاد <strong>navigation trains</strong> جلوگیری نمود.</p>
+<hr>
+<p>💡 <strong>قانون دمیتر (Law of Demeter)</strong></p>
+<p>هدف قانون دمیتر حذف <strong>navigation trains</strong> (شمارش نقاط یا dot counting) و ایجاد <strong>encapsulation خوب</strong> با کد <strong>loosely coupled</strong> است.</p>
+<p>یک متد که از یک <strong>navigation train</strong> اطلاع دارد، قانون دمیتر را می‌شکند. به مثال زیر توجه کنید:</p>
+<pre class="hljs"><code>report.Database.Connection.Open(); <span class="hljs-comment">// قانون دمیتر نقض شده است</span>
+</code></pre>
+<p>هر واحد کد باید دانش محدودی داشته باشد. این دانش باید فقط مربوط به کدی باشد که <strong>به‌طور نزدیک مرتبط</strong> است.</p>
+<p>با استفاده از قانون دمیتر، باید <strong>tell و not ask</strong> کنید. یعنی تنها می‌توانید متدهای اشیایی را فراخوانی کنید که یکی از موارد زیر باشند:</p>
+<ul>
+<li>به عنوان <strong>arguments</strong> ارسال شده‌اند</li>
+<li>به صورت <strong>local</strong> ساخته شده‌اند</li>
+<li><strong>Instance variables</strong></li>
+<li><strong>Globals</strong></li>
+</ul>
+<p>پیاده‌سازی قانون دمیتر ممکن است دشوار باشد، اما مزایای <strong>tell به جای ask</strong> ارزشمند است. یکی از این مزایا، <strong>کاهش coupling در کد</strong> است.</p>
+<p>در ادامه، ابتدا یک مثال <strong>نادرست که قانون دمیتر را می‌شکند</strong> و سپس یک مثال <strong>صحیح که قانون دمیتر را رعایت می‌کند</strong> را مشاهده خواهیم کرد.</p>
+<hr>
+<p>💡 <strong>مثال خوب و بد (chaining) از قانون دمیتر</strong></p>
+<p>در <strong>مثال خوب</strong>، ما یک متغیر نمونه به نام <code>report</code> داریم. روی این شیء متد باز کردن اتصال (Open Connection) فراخوانی می‌شود. این کار <strong>قانون دمیتر را نقض نمی‌کند</strong>.</p>
+<p>کد زیر، کلاس <code>Connection</code> را نشان می‌دهد که یک متد برای باز کردن اتصال دارد:</p>
+<pre class="hljs"><code><span class="hljs-keyword">namespace</span> <span class="hljs-title">CH3.LawOfDemeter</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Connection</span>
+    {
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Open</span>()</span>
+        {
+            <span class="hljs-comment">// ... پیاده‌سازی ...</span>
+        }
+    }
+}
+</code></pre>
+<p>کلاس <code>Database</code> یک شیء <code>Connection</code> می‌سازد و اتصال را باز می‌کند:</p>
+<pre class="hljs"><code><span class="hljs-keyword">namespace</span> <span class="hljs-title">CH3.LawOfDemeter</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Database</span>
+    {
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Database</span>()</span>
+        {
+            Connection = <span class="hljs-keyword">new</span> Connection();
+        }
+
+        <span class="hljs-keyword">public</span> Connection Connection { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OpenConnection</span>()</span>
+        {
+            Connection.Open();
+        }
+    }
+}
+</code></pre>
+<p>در کلاس <code>Report</code>، یک شیء <code>Database</code> ایجاد می‌کنیم و سپس اتصال به پایگاه داده باز می‌شود:</p>
+<pre class="hljs"><code><span class="hljs-keyword">namespace</span> <span class="hljs-title">CH3.LawOfDemeter</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Report</span>
+    {
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Report</span>()</span>
+        {
+            Database = <span class="hljs-keyword">new</span> Database();
+        }
+
+        <span class="hljs-keyword">public</span> Database Database { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">OpenConnection</span>()</span>
+        {
+            Database.OpenConnection();
+        }
+    }
+}
+</code></pre>
+<p>تا اینجا، ما <strong>کد خوبی داریم که قانون دمیتر را رعایت می‌کند</strong>.</p>
+<hr>
+<p>اما کد زیر <strong>این قانون را نقض می‌کند</strong>.</p>
+<p>در کلاس <code>Example</code>، قانون دمیتر شکسته می‌شود زیرا از <strong>method chaining</strong> استفاده شده است، مانند:</p>
+<pre class="hljs"><code>report.Database.Connection.Open();
+</code></pre>
+<p>کد نمونه:</p>
+<pre class="hljs"><code><span class="hljs-keyword">namespace</span> <span class="hljs-title">CH3.LawOfDemeter</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Example</span>
+    {
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">BadExample_Chaining</span>()</span>
+        {
+            <span class="hljs-keyword">var</span> report = <span class="hljs-keyword">new</span> Report();
+            report.Database.Connection.Open(); <span class="hljs-comment">// نقض قانون دمیتر</span>
+        }
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">GoodExample</span>()</span>
+        {
+            <span class="hljs-keyword">var</span> report = <span class="hljs-keyword">new</span> Report();
+            report.OpenConnection(); <span class="hljs-comment">// رعایت قانون دمیتر</span>
+        }
+    }
+}
+</code></pre>
+<p>در این <strong>مثال بد</strong>، ابتدا getter کلاس <code>Database</code> روی متغیر نمونه <code>report</code> فراخوانی می‌شود که مشکلی ندارد. اما سپس getter <code>Connection</code> فراخوانی می‌شود که شیء متفاوتی برمی‌گرداند. نهایتاً متد <code>Open()</code> روی آن شیء فراخوانی می‌شود. این <strong>همه مراحل قانون دمیتر را نقض می‌کنند</strong>.</p>
+<hr>
+<p>💡 <strong>اشیاء و ساختارهای داده غیرقابل تغییر (Immutable objects and data structures)</strong></p>
+<p>نوع‌های <strong>immutable</strong> معمولاً به عنوان <strong>value types</strong> در نظر گرفته می‌شوند. در value types، وقتی مقدار داده شد، انتظار داریم تغییر نکند. اما می‌توان <strong>اشیاء immutable</strong> و <strong>ساختارهای داده immutable</strong> نیز داشت.</p>
+<p><strong>Immutable types</strong> نوعی هستند که <strong>وضعیت داخلی‌شان پس از مقداردهی اولیه تغییر نمی‌کند</strong>.</p>
+<p>رفتار این نوع‌ها باعث <strong>شگفتی یا سردرگمی برنامه‌نویسان نمی‌شود</strong> و بنابراین با <strong>اصل کمترین شگفتی (POLA)</strong> مطابقت دارد. این نوع‌ها پیش‌بینی‌پذیر هستند و برنامه‌نویسان می‌توانند <strong>رفتار آن‌ها را به راحتی تحلیل کنند</strong>.</p>
+<p>از آنجا که <strong>immutable types قابل پیش‌بینی و تغییرناپذیر</strong> هستند، برنامه‌نویس با هیچ مشکل غیرمنتظره‌ای مواجه نمی‌شود و نیازی به نگرانی درباره اثرات نامطلوب ناشی از تغییرات آن‌ها نیست.</p>
+<p>این ویژگی‌ها باعث می‌شوند که <strong>immutable types برای به اشتراک‌گذاری بین threads ایده‌آل باشند</strong>، زیرا <strong>thread-safe</strong> هستند و نیازی به برنامه‌نویسی دفاعی نیست.</p>
+<p>زمانی که یک <strong>نوع immutable</strong> ایجاد می‌کنید و از <strong>اعتبارسنجی اشیاء (object validation)</strong> استفاده می‌کنید، شیء شما <strong>در طول عمرش معتبر باقی می‌ماند</strong>.</p>
+<p>🔹 حالا بیایید یک <strong>مثال عملی از یک نوع immutable در C#</strong> ببینیم.<br>
+💎 <strong>مثالی از یک نوع immutable</strong></p>
+<p>اکنون می‌خواهیم یک <strong>شیء immutable</strong> را بررسی کنیم. شیء <code>Person</code> در کد زیر دارای سه متغیر عضو <strong>private</strong> است. تنها زمانی که می‌توان این متغیرها را مقداردهی کرد، <strong>در زمان ساخت شیء و داخل constructor</strong> است. پس از آن، برای کل طول عمر شیء، قابل تغییر نیستند. هر متغیر تنها از طریق <strong>properties فقط خواندنی (read-only)</strong> قابل دسترسی است:</p>
+<pre class="hljs"><code><span class="hljs-keyword">namespace</span> <span class="hljs-title">CH3.ImmutableObjectsAndDataStructures</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Person</span>
+    {
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> <span class="hljs-built_in">int</span> _id;
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> <span class="hljs-built_in">string</span> _firstName;
+        <span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> <span class="hljs-built_in">string</span> _lastName;
+
+        <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> Id =&gt; _id;
+        <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> FirstName =&gt; _firstName;
+        <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> LastName =&gt; _lastName;
+        <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> FullName =&gt; <span class="hljs-string">$&quot;<span class="hljs-subst">{_firstName}</span> <span class="hljs-subst">{_lastName}</span>&quot;</span>;
+        <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> FullNameReversed =&gt; <span class="hljs-string">$&quot;<span class="hljs-subst">{_lastName}</span>, <span class="hljs-subst">{_firstName}</span>&quot;</span>;
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Person</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> id, <span class="hljs-built_in">string</span> firstName, <span class="hljs-built_in">string</span> lastName</span>)</span>
+        {
+            _id = id;
+            _firstName = firstName;
+            _lastName = lastName;
+        }
+    }
+}
+</code></pre>
+<p>حالا که دیدیم نوشتن <strong>اشیاء و ساختارهای داده immutable</strong> چقدر ساده است، بیایید به <strong>داده‌ها و متدها در اشیاء</strong> بپردازیم.</p>
+<hr>
+<p>📦 <strong>اشیاء باید داده‌ها را مخفی و متدها را آشکار کنند</strong></p>
+<p>وضعیت شیء شما در <strong>متغیرهای عضو (member variables)</strong> ذخیره می‌شود. این متغیرها <strong>داده (data)</strong> هستند.</p>
+<p>داده نباید به‌صورت مستقیم قابل دسترسی باشد. شما باید تنها <strong>از طریق متدها و properties آشکار، به داده دسترسی بدهید</strong>.</p>
+<hr>
+<h3>چرا باید داده‌ها را مخفی و متدها را آشکار کنیم؟</h3>
+<p>مخفی کردن داده‌ها و آشکار کردن متدها در دنیای OOP به عنوان <strong>encapsulation</strong> شناخته می‌شود.</p>
+<p><strong>Encapsulation</strong>، جزئیات داخلی یک کلاس را از جهان بیرون مخفی می‌کند. این کار باعث می‌شود بتوانید <strong>value types</strong> را بدون شکستن پیاده‌سازی‌های موجود تغییر دهید.</p>
+<p>داده‌ها می‌توانند <strong>خواندنی/نوشتنی، فقط نوشتنی، یا فقط خواندنی</strong> باشند که انعطاف بیشتری برای دسترسی و استفاده از داده به شما می‌دهد. همچنین می‌توانید ورودی‌ها را اعتبارسنجی کنید و از دریافت مقادیر نامعتبر جلوگیری کنید.</p>
+<p>Encapsulation همچنین باعث می‌شود <strong>تست کلاس‌ها راحت‌تر</strong> باشد و کلاس‌ها <strong>قابل استفاده مجدد و قابل توسعه</strong> شوند.</p>
+<hr>
+<h3>مثال از Encapsulation</h3>
+<p>کد زیر یک کلاس <strong>encapsulated</strong> را نشان می‌دهد. شیء <code>Car</code> <strong>mutable</strong> است. دارای properties است که <strong>داده‌ها را پس از مقداردهی توسط constructor می‌خوانند و می‌نویسند</strong>.</p>
+<p>Constructor و <strong>set properties</strong> اعتبارسنجی پارامترها را انجام می‌دهند. اگر مقدار نامعتبر باشد، <strong>یک استثنا (exception) پرتاب می‌شود</strong>، در غیر این صورت مقدار برگردانده شده و داده تنظیم می‌شود:</p>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> System;
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">CH3.Encapsulation</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Car</span>
+    {
+        <span class="hljs-keyword">private</span> <span class="hljs-built_in">string</span> _make;
+        <span class="hljs-keyword">private</span> <span class="hljs-built_in">string</span> _model;
+        <span class="hljs-keyword">private</span> <span class="hljs-built_in">int</span> _year;
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Car</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> make, <span class="hljs-built_in">string</span> model, <span class="hljs-built_in">int</span> year</span>)</span>
+        {
+            _make = ValidateMake(make);
+            _model = ValidateModel(model);
+            _year = ValidateYear(year);
+        }
+
+        <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-built_in">string</span> <span class="hljs-title">ValidateMake</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> make</span>)</span>
+        {
+            <span class="hljs-keyword">if</span> (make.Length &gt;= <span class="hljs-number">3</span>)
+                <span class="hljs-keyword">return</span> make;
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ArgumentException(<span class="hljs-string">&quot;Make must be three characters or more.&quot;</span>);
+        }
+
+        <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Make
+        {
+            <span class="hljs-keyword">get</span> { <span class="hljs-keyword">return</span> _make; }
+            <span class="hljs-keyword">set</span> { _make = ValidateMake(<span class="hljs-keyword">value</span>); }
+        }
+
+        <span class="hljs-comment">// سایر متدها و properties برای اختصار حذف شده‌اند</span>
+    }
+}
+</code></pre>
+<p>✅ <strong>مزیت کد بالا:</strong> اگر نیاز به تغییر <strong>اعتبارسنجی داده‌ها</strong> داشته باشید، می‌توانید این کار را بدون <strong>شکستن پیاده‌سازی کلاس</strong> انجام دهید.</p>
+<p>💾 <strong>ساختارهای داده باید داده‌ها را آشکار کنند و متد نداشته باشند</strong></p>
+<p>ساختارها (<strong>struct</strong>) با کلاس‌ها متفاوتند چون از <strong>برابری مقداری (value equality)</strong> به جای <strong>برابری مرجعی (reference equality)</strong> استفاده می‌کنند.<br>
+به جز این مورد، تفاوت زیادی بین struct و class وجود ندارد.</p>
+<p>یک بحث وجود دارد که آیا در یک <strong>ساختار داده</strong> باید متغیرها عمومی (<strong>public</strong>) باشند یا آن‌ها را پشت <strong>get و set properties</strong> مخفی کنیم. این انتخاب کاملاً به شما بستگی دارد، اما شخصاً همیشه فکر می‌کنم بهتر است حتی در structها هم داده‌ها را مخفی نگه داشته و تنها از طریق <strong>properties و متدها</strong> دسترسی بدهیم.</p>
+<p>یک نکته مهم برای داشتن <strong>ساختار داده تمیز و امن</strong> این است که پس از ایجاد struct، نباید اجازه دهید از طریق متدها یا get properties تغییر کند. دلیل این کار این است که تغییرات روی ساختارهای داده موقتی ممکن است از بین بروند و بی‌اثر باشند.</p>
+<hr>
+<h3>مثال ساده‌ای از ساختار داده</h3>
+<p>کد زیر یک <strong>ساختار داده ساده</strong> را نشان می‌دهد:</p>
+<pre class="hljs"><code><span class="hljs-keyword">namespace</span> <span class="hljs-title">CH3.Encapsulation</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">struct</span> Person
+    {
+        <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> Id { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+        <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> FirstName { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+        <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> LastName { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Person</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> id, <span class="hljs-built_in">string</span> firstName, <span class="hljs-built_in">string</span> lastName</span>)</span>
+        {
+            Id = id;
+            FirstName = firstName;
+            LastName = lastName;
+        }
+    }
+}
+</code></pre>
+<p>همان‌طور که می‌بینید، ساختار داده خیلی با کلاس تفاوت ندارد؛ همچنان دارای <strong>constructor و properties</strong> است.</p>
+<hr>
+<h3>🔹 جمع‌بندی فصل</h3>
+<p>در این فصل، ما درباره موارد زیر یاد گرفتیم:</p>
+<ol>
+<li><strong>سازماندهی namespaceها</strong> در فولدرها و بسته‌ها و اینکه چگونه سازماندهی خوب می‌تواند از مشکلات namespace جلوگیری کند.</li>
+<li><strong>کلاس‌ها و مسئولیت‌ها</strong> و دلیل اینکه هر کلاس باید تنها یک مسئولیت داشته باشد.</li>
+<li><strong>Cohesion و Coupling</strong> و اهمیت <strong>بالا بودن cohesion و پایین بودن coupling</strong>.</li>
+<li><strong>مستندسازی خوب</strong> که نیازمند کامنت‌گذاری صحیح اعضای عمومی (<strong>public members</strong>) در ابزارهای تولید مستندات است و استفاده از <strong>XML comments</strong>.</li>
+<li><strong>طراحی برای تغییر</strong> با مثال‌های پایه‌ای <strong>DI و IoC</strong>.</li>
+<li><strong>قانون Demeter</strong> و اینکه چگونه باید فقط با دوستان نزدیک صحبت کرد و از زنجیره‌سازی (<strong>chaining</strong>) اجتناب کرد.</li>
+<li><strong>اشیاء و ساختارهای داده</strong> و اینکه چه داده‌هایی را باید مخفی کرد و چه داده‌هایی را باید عمومی نگه داشت.</li>
+</ol>
+<hr>
+<p>در فصل بعدی، به طور مختصر به <strong>برنامه‌نویسی تابعی (functional programming) در C#</strong> می‌پردازیم و یاد می‌گیریم <strong>چگونه متدهای کوچک و تمیز بنویسیم</strong>. همچنین یاد می‌گیریم از داشتن بیش از دو پارامتر در متدها اجتناب کنیم، زیرا متدهای با پارامتر زیاد می‌توانند دست‌وپاگیر شوند. علاوه بر این، <strong>اجتناب از تکرار کد</strong> را نیز بررسی خواهیم کرد، زیرا تکرار کد می‌تواند منبع مشکلات و باگ‌ها باشد: وقتی یک قسمت اصلاح شود، ممکن است نسخه‌های دیگر هنوز در کد باقی بمانند. ✅<br>
+❓ <strong>سؤالات فصل ۳</strong></p>
+<p>1️⃣ چگونه می‌توانیم کلاس‌های خود را در C# سازماندهی کنیم؟<br>
+2️⃣ یک کلاس باید چند مسئولیت داشته باشد؟<br>
+3️⃣ چگونه برای تولیدکننده‌های مستندات (<strong>document generators</strong>) روی کد خود کامنت‌گذاری کنیم؟<br>
+4️⃣ <strong>Cohesion</strong> چه معنایی دارد؟<br>
+5️⃣ <strong>Coupling</strong> چه معنایی دارد؟<br>
+6️⃣ آیا <strong>cohesion</strong> باید بالا باشد یا پایین؟<br>
+7️⃣ آیا <strong>coupling</strong> باید <strong>tight</strong> باشد یا <strong>loose</strong>؟<br>
+8️⃣ چه مکانیزم‌هایی وجود دارند که به شما کمک می‌کنند برای تغییر طراحی کنید؟<br>
+9️⃣ <strong>DI</strong> چیست؟<br>
+🔟 <strong>IoC</strong> چیست؟<br>
+1️⃣1️⃣ یکی از مزایای استفاده از اشیاء <strong>immutable</strong> چیست؟<br>
+1️⃣2️⃣ اشیاء باید چه چیزهایی را مخفی کنند و چه چیزهایی را آشکار سازند؟<br>
+1️⃣3️⃣ ساختارها (<strong>structures</strong>) باید چه چیزهایی را مخفی کنند و چه چیزهایی را آشکار سازند؟</p>
+<hr>
+<p>📚 <strong>مطالعه بیشتر</strong></p>
+<ul>
+<li>
+<p>برای جزئیات بیشتر در مورد انواع مختلف <strong>cohesion و coupling</strong> می‌توانید به لینک زیر مراجعه کنید:<br>
+<a href="https://www.geeksforgeeks.org/software-engineering-coupling-and-cohesion/">GeeksforGeeks – Coupling and Cohesion</a></p>
+</li>
+<li>
+<p>آموزش‌های زیادی در مورد <strong>IoC</strong> در این لینک در دسترس است:<br>
+<a href="https://www.tutorialsteacher.com/ioc/">TutorialsTeacher – IoC</a> ✅</p>
+</li>
+</ul>
+
+</main>
+
+
+ 
+
+  <!-- فوتر مشترک -->
+  <footer class="footer">
+    <div class="container">
+      <p>
+        <img src="/icone/copyright.svg" alt="کپی‌رایت" width="14" height="14"
+             style="vertical-align:middle;margin-inline:4px">
+        <span id="y"></span> Gitab — برای توسعه‌دهندگان
+      </p>
+    </div>
+  </footer>
+
+  <!-- سال + اسکریپت تم -->
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    (() => {
+      const root = document.documentElement;
+      const btn = document.getElementById('themeToggle');
+      const KEY = 'gitab-theme';
+      const media = window.matchMedia('(prefers-color-scheme: dark)');
+      const getEffective = s => s === 'auto' ? (media.matches ? 'dark' : 'light') : s;
+      function updateTheme(s) {
+        root.setAttribute('data-theme', s);
+        const mode = getEffective(s);
+        root.dataset.colorMode = mode;
+        btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
+      }
+      const saved = localStorage.getItem(KEY) || 'auto';
+      updateTheme(saved);
+      btn.addEventListener('click', () => {
+        const curr = localStorage.getItem(KEY) || 'auto';
+        const next = curr === 'auto' ? 'dark' : curr === 'dark' ? 'light' : 'auto';
+        localStorage.setItem(KEY, next);
+        updateTheme(next);
+      });
+      media.addEventListener('change', () => {
+        if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
+      });
+      window.addEventListener('DOMContentLoaded', () => updateTheme(saved));
+    })();
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
+<script>
+  document.body.dataset.page = window.location.pathname;
+</script>
+
+</body>
+
+</html>

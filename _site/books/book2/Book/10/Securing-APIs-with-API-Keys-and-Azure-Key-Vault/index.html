@@ -1,0 +1,1382 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>امن‌سازی APIها با کلیدهای API و Azure Key Vault</title>
+  <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
+  <link rel="stylesheet" href="/styles/main.css">
+<link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<style>
+@font-face {
+  font-family: 'Vazir';
+  src: url('/fonts/Vazir-FD-WOL.ttf') format('truetype');
+  font-display: swap;
+}
+body {
+  font-family: 'Vazir', sans-serif;
+}
+</style>
+
+</head>
+<body>
+  <!-- هدر مشترک -->
+  <header class="header">
+    <div class="container nav-wrap">
+      <a class="brand" href="/">
+        <img src="/icone/logo.svg" alt="Gitab" width="28" height="28">
+        <span>Gitab</span>
+      </a>
+
+      <nav class="nav">
+        <a href="/">خانه</a>
+        <a href="/books/list-books">کتاب‌ها</a>
+        <a href="#">همکاری</a>
+        <a href="#">درباره‌ما</a>
+      </nav>
+
+     <div class="nav-actions">
+  <button id="themeToggle" class="icon-btn theme-btn" aria-label="تغییر حالت">
+    <img class="icon-sun" src="/icone/sun.svg" alt="روشن">
+    <img class="icon-moon" src="/icone/moon.svg" alt="تاریک">
+  </button>
+
+  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
+    <img src="/icone/github.svg" alt="GitHub">
+  </a>
+</div>
+
+  </header>
+
+
+<main class="site-main book-page ">
+  <h1>فصل دهم: 🔒 امن‌سازی APIها با کلیدهای API و Azure Key Vault</h1>
+<p>در این فصل، می‌خواهیم ببینیم چگونه می‌توانیم اسرار و اطلاعات حساس را در <strong>Azure Key Vault</strong> نگه‌داری کنیم. همچنین بررسی خواهیم کرد که چگونه می‌توانیم با استفاده از <strong>کلیدهای API</strong>، کلیدهای خود را با <strong>احراز هویت</strong> و <strong>مجوز مبتنی بر نقش (Role-Based Authorization)</strong> امن کنیم. برای کسب تجربه عملی در زمینه امنیت API، یک <strong>API کامل و کاربردی در حوزه FinTech</strong> خواهیم ساخت.</p>
+<p>API ما داده‌های API شخص ثالث را با استفاده از یک <strong>کلید خصوصی</strong> (که در Azure Key Vault محفوظ است) استخراج خواهد کرد. سپس API خود را با دو کلید API امن خواهیم کرد؛ یک کلید برای استفاده داخلی و کلید دوم برای کاربران خارجی.</p>
+<p>موضوعاتی که در این فصل پوشش داده می‌شوند:</p>
+<ol>
+<li>دسترسی به <strong>Morningstar API</strong></li>
+<li>ذخیره کلید Morningstar API در <strong>Azure Key Vault</strong></li>
+<li>ایجاد برنامه وب <strong>dividend calendar</strong> با <strong><a href="http://ASP.NET">ASP.NET</a> Core</strong> در Azure</li>
+<li>انتشار برنامه وب خود</li>
+<li>استفاده از کلید API برای امن‌سازی API تقویم سود سهام</li>
+<li>تست امنیت کلید API</li>
+<li>افزودن کدهای تقویم سود سهام</li>
+<li>محدودسازی (Throttling) استفاده از API</li>
+</ol>
+<hr>
+<h3>🎯 اهداف فصل</h3>
+<p>با مطالعه این فصل، شما با اصول طراحی خوب API آشنا خواهید شد و مهارت‌های لازم برای ارتقای توانایی‌های خود در کار با API را کسب خواهید کرد. این فصل به شما کمک می‌کند تا مهارت‌های زیر را بیاموزید:</p>
+<ul>
+<li>امن‌سازی یک API با <strong>کلید API مشتری (Client API Key)</strong> 🔑</li>
+<li>ذخیره و بازیابی اسرار با استفاده از <strong>Azure Key Vault</strong></li>
+<li>اجرای دستورات API با <strong>Postman</strong> برای ارسال و دریافت داده</li>
+<li>درخواست و استفاده از APIهای شخص ثالث در <strong><a href="http://RapidAPI.com">RapidAPI.com</a></strong></li>
+<li>محدودسازی استفاده از API (<strong>API Throttling</strong>)</li>
+<li>نوشتن <strong>FinTech APIs</strong> که از داده‌های مالی آنلاین استفاده می‌کنند 💹</li>
+</ul>
+<hr>
+<h3>⚙️ پیش‌نیازهای فنی</h3>
+<p>برای بهره‌مندی کامل از این فصل، مطمئن شوید که پیش‌نیازهای فنی زیر را آماده کرده‌اید:</p>
+<ul>
+<li><strong>Visual Studio 2019 Community Edition</strong> یا نسخه بالاتر</li>
+<li>کلید شخصی <strong>Morningstar API</strong> از <a href="https://rapidapi.com/integraatio/api/morningstar1">RapidAPI</a></li>
+<li><strong>RestSharp</strong> (<a href="http://restsharp.org/">http://restsharp.org/</a>)</li>
+<li><strong>Swashbuckle.AspNetCore 5</strong> یا بالاتر</li>
+<li><strong>Postman</strong> (<a href="https://www.postman.com/">https://www.postman.com/</a>)</li>
+<li><strong>Swagger</strong> (<a href="https://swagger.io">https://swagger.io</a>)</li>
+</ul>
+<hr>
+<h3>🚀 شروع پروژه API – تقویم سود سهام</h3>
+<p>بهترین روش یادگیری، <strong>یادگیری با عمل کردن</strong> است. بنابراین، ما یک API کاربردی می‌سازیم و آن را امن می‌کنیم. این API ممکن است کامل نباشد و جا برای بهبود داشته باشد، اما شما می‌توانید این بهبودها را خودتان پیاده‌سازی کرده و پروژه را توسعه دهید. هدف اصلی این است که یک API کاملاً عملی داشته باشیم که <strong>یک کار انجام دهد:</strong> بازگرداندن داده‌های مالی شامل <strong>تمام سود سهام شرکت‌ها در سال جاری</strong>.</p>
+<p>API تقویم سود سهام ما، که در این فصل خواهیم ساخت، <strong>با کلید API احراز هویت</strong> می‌شود. بسته به کلید استفاده شده، <strong>Authorization</strong> تعیین می‌کند که کاربر داخلی است یا خارجی. کنترلر متد مناسب را با توجه به نوع کاربر اجرا می‌کند. در این فصل تنها <strong>متد کاربران داخلی</strong> پیاده‌سازی خواهد شد، اما شما می‌توانید <strong>متد کاربران خارجی</strong> را نیز به عنوان تمرین خودتان بسازید.</p>
+<p><strong>متد داخلی</strong> یک کلید API را از Azure Key Vault استخراج می‌کند و <strong>چندین فراخوانی API به API شخص ثالث</strong> انجام می‌دهد. داده‌ها در <strong>فرمت JSON</strong> بازگردانی شده، به اشیاء تبدیل (Deserialize) می‌شوند و سپس برای استخراج <strong>پرداخت سود سهام آینده</strong> پردازش می‌شوند و به یک <strong>لیست سود سهام</strong> اضافه می‌شوند. این لیست در نهایت به <strong>فرمت JSON</strong> به فراخواننده بازگردانده می‌شود.</p>
+<p>نتیجه نهایی، یک فایل JSON است که شامل <strong>تمام پرداخت‌های برنامه‌ریزی‌شده سود سهام برای سال جاری</strong> است. کاربر نهایی می‌تواند این داده‌ها را به لیستی از سود سهام تبدیل کند و با استفاده از <strong>LINQ</strong> آن را پرس‌وجو کند.</p>
+<hr>
+<h3>🏗️ ساختار پروژه</h3>
+<p>پروژه‌ای که در این فصل خواهیم ساخت، یک <strong>Web API</strong> است که <strong>JSON پردازش‌شده</strong> از APIهای مالی شخص ثالث را بازمی‌گرداند. پروژه، <strong>لیستی از شرکت‌ها از یک بورس مشخص</strong> دریافت می‌کند و سپس برای هر شرکت، داده‌های <strong>سود سهام</strong> را دریافت می‌کند. داده‌های سود سهام برای سال جاری پردازش می‌شوند و در نهایت به <strong>فراخواننده API</strong> در قالب <strong>JSON</strong> بازگردانده می‌شوند.</p>
+<p>کاربر نهایی می‌تواند داده‌های JSON را به <strong>اشیاء C#</strong> تبدیل کند و روی این اشیاء <strong>پرس‌وجوهای LINQ</strong> انجام دهد، مثلاً دریافت پرداخت‌های سود سهام <strong>ماه بعد</strong> یا <strong>پرداخت‌های ماه جاری</strong>.</p>
+<p>APIهایی که استفاده خواهیم کرد، بخشی از <strong>Morningstar API</strong> هستند که از طریق <strong><a href="http://RapidAPI.com">RapidAPI.com</a></strong> در دسترس‌اند. شما می‌توانید برای دریافت <strong>کلید API رایگان Morningstar</strong> ثبت‌نام کنید. ما API خود را با یک <strong>سیستم ورود (Login)</strong> امن خواهیم کرد، جایی که کاربران با <strong>ایمیل و رمز عبور</strong> وارد می‌شوند.</p>
+<p>برای ارسال <strong>درخواست‌های POST و GET</strong> به API تقویم سود سهام، به <strong>Postman</strong> نیز نیاز خواهیم داشت.</p>
+<hr>
+<h3>🧩 جزئیات پروژه</h3>
+<p>راه‌حل ما شامل یک پروژه خواهد بود: یک <strong><a href="http://ASP.NET">ASP.NET</a> Core Application</strong> که <strong>Target Framework</strong> آن <strong>.NET Core 3.1</strong> یا بالاتر است.</p>
+<p>در ادامه، نحوه <strong>دسترسی به Morningstar API</strong> را بررسی خواهیم کرد. ✅</p>
+<h3>🌐 دسترسی به Morningstar API</h3>
+<p>به آدرس <a href="https://rapidapi.com/integraatio/api/morningstar1">https://rapidapi.com/integraatio/api/morningstar1</a> بروید و <strong>کلید دسترسی API</strong> خود را درخواست کنید. این API یک <strong>Freemium API</strong> است، به این معنا که شما مجاز هستید تعداد مشخصی فراخوانی را به صورت رایگان برای مدت محدودی انجام دهید و پس از آن نیاز به پرداخت هزینه دارید. کمی زمان بگذارید و مستندات API را مطالعه کنید. به <strong>پلن‌های قیمتی</strong> توجه کنید و پس از دریافت کلید، آن را <strong>محرمانه نگه دارید</strong> 🔑.</p>
+<p>APIهایی که ما به آن‌ها علاقه‌مندیم به شرح زیر هستند:</p>
+<ul>
+<li><strong>GET /companies/list-by-exchange:</strong> این API لیستی از کشورها برای بورس مشخص‌شده را باز می‌گرداند.</li>
+<li><strong>GET /dividends:</strong> این API تمام اطلاعات <strong>پرداخت سود سهام تاریخی و فعلی</strong> برای شرکت مشخص‌شده را دریافت می‌کند.</li>
+</ul>
+<p>قسمت اول درخواست API، <strong>HTTP verb GET</strong> است که برای بازیابی یک منبع استفاده می‌شود.<br>
+قسمت دوم، منبعی است که می‌خواهیم دریافت کنیم. در این مثال، منبع <strong>/companies/list-by-exchange</strong> است. همان‌طور که در مورد دوم لیست بالا می‌بینیم، ما منبع <strong>/dividends</strong> را دریافت می‌کنیم.</p>
+<p>می‌توانید هر API را در مرورگر امتحان کنید و داده بازگشتی را مشاهده کنید. توصیه می‌کنم قبل از ادامه، این کار را انجام دهید. این کار به شما کمک می‌کند تا با روند کاری که در پیش داریم، آشنا شوید. جریان اصلی کاری ما به این صورت است:</p>
+<ol>
+<li>دریافت لیست شرکت‌هایی که به بورس مشخصی تعلق دارند</li>
+<li>حلقه زدن روی هر شرکت برای دریافت داده‌های سود سهام</li>
+<li>اگر داده سود سهام دارای تاریخ پرداخت آینده باشد، به <strong>تقویم سود سهام</strong> اضافه می‌شود؛ در غیر این صورت، نادیده گرفته می‌شود.</li>
+</ol>
+<p>مهم نیست یک شرکت چند داده سود سهام دارد؛ ما تنها به <strong>اولین رکورد</strong> که <strong>به‌روزترین</strong> است، علاقه‌مندیم.</p>
+<p>حالا که کلید API خود را دارید (فرض بر این است که مراحل را دنبال کرده‌اید)، می‌توانیم <strong>ساخت API خود را شروع کنیم</strong> 🚀.</p>
+<hr>
+<h3>🔐 ذخیره کلید Morningstar API در Azure Key Vault</h3>
+<p>ما از <strong>Azure Key Vault</strong> و <strong>Managed Service Identity (MSI)</strong> در یک برنامه وب <strong><a href="http://ASP.NET">ASP.NET</a> Core</strong> استفاده خواهیم کرد. بنابراین، قبل از ادامه، به یک <strong>اشتراک Azure</strong> نیاز دارید. برای مشتریان جدید، یک پیشنهاد رایگان ۱۲ ماهه در دسترس است: <a href="http://azure.microsoft.com/en-us/free">Azure Free</a></p>
+<p>به عنوان توسعه‌دهندگان وب، <strong>نگهداری اسرار در کد</strong> کار مناسبی نیست، زیرا کد می‌تواند <strong>مهندسی معکوس</strong> شود. اگر کد منبع باز باشد، خطر <strong>بارگذاری کلیدهای شخصی یا سازمانی در سیستم کنترل نسخه عمومی</strong> وجود دارد.</p>
+<p>راه حل این مشکل، <strong>ذخیره امن اسرار</strong> است؛ اما این خود یک <strong>چالش</strong> ایجاد می‌کند: برای دسترسی به کلیدهای محرمانه، نیاز به <strong>احراز هویت</strong> داریم. چگونه می‌توانیم این چالش را حل کنیم؟</p>
+<p>با <strong>فعال‌سازی MSI</strong> برای سرویس Azure خود می‌توانیم این مشکل را حل کنیم. در نتیجه، <strong>یک Service Principal توسط Azure</strong> تولید می‌شود. این Service Principal توسط برنامه‌هایی که توسط کاربر توسعه داده شده‌اند، برای دسترسی به منابع Microsoft Azure استفاده می‌شود. برای Service Principal می‌توان از <strong>گواهی دیجیتال (Certificate)</strong> یا <strong>نام کاربری و رمز عبور</strong> همراه با <strong>هر نقش دلخواه</strong> که مجموعه مجوزهای لازم را دارد، استفاده کرد.</p>
+<p>کسی که کنترل حساب Azure را دارد، مشخص می‌کند هر سرویس چه وظایف خاصی را می‌تواند انجام دهد. معمولاً بهتر است از <strong>محدودیت کامل</strong> شروع کنید و تنها وقتی نیاز بود قابلیت‌ها را اضافه کنید.</p>
+<p><strong>نمودار زیر</strong> روابط بین برنامه‌های وب <a href="http://ASP.NET">ASP.NET</a> Core، MSI و سرویس Azure ما را نشان می‌دهد:</p>
+<div align="center">
+<p><img src="../../../assets/image/10/Table%2010-1.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h3>🏢 استفاده از Azure AD و MSI برای احراز هویت</h3>
+<p><strong>Azure Active Directory (Azure AD)</strong> توسط <strong>MSI</strong> برای تزریق <strong>Service Principal</strong> به نمونه سرویس استفاده می‌شود. یک منبع Azure به نام <strong>Local Metadata Service</strong> برای دریافت <strong>Access Token</strong> استفاده می‌شود و برای احراز هویت دسترسی سرویس به <strong>Azure Key Vault</strong> کاربرد دارد.</p>
+<p>کد ما سپس با <strong>Local Metadata Service</strong> که روی منبع Azure در دسترس است، تماس می‌گیرد تا <strong>Access Token</strong> را دریافت کند. این Access Token که از <strong>Local MSI Endpoint</strong> استخراج شده، توسط کد ما برای <strong>احراز هویت در سرویس Azure Key Vault</strong> استفاده می‌شود 🔑.</p>
+<hr>
+<h3>🔹 ورود به Azure و ایجاد Resource Group</h3>
+<p>Azure CLI را باز کرده و دستور زیر را برای ورود به Azure تایپ کنید:</p>
+<pre class="hljs"><code>az login
+</code></pre>
+<p>پس از ورود موفق، می‌توانیم یک <strong>Resource Group</strong> ایجاد کنیم. Resource Groupها <strong>کانتینرهای منطقی</strong> هستند که منابع Azure در آن‌ها مستقر و مدیریت می‌شوند.</p>
+<p>برای ایجاد یک Resource Group در <strong>East US</strong>، دستور زیر را اجرا کنید:</p>
+<pre class="hljs"><code>az group create --name <span class="hljs-string">&quot;&lt;YourResourceGroupName&gt;&quot;</span> --location <span class="hljs-string">&quot;East US&quot;</span>
+</code></pre>
+<p>این <strong>Resource Group</strong> را در طول فصل برای تمام مراحل استفاده خواهیم کرد.</p>
+<hr>
+<h3>🔑 ایجاد Key Vault</h3>
+<p>برای ایجاد یک <strong>Key Vault</strong>، اطلاعات زیر مورد نیاز است:</p>
+<ol>
+<li><strong>نام Key Vault:</strong> رشته‌ای بین ۳ تا ۲۴ کاراکتر، فقط شامل اعداد ۰-۹، حروف کوچک و بزرگ a-z، A-Z و خط تیره (-)</li>
+<li><strong>نام Resource Group</strong></li>
+<li><strong>مکان (Location):</strong> مثلا East US یا West US</li>
+</ol>
+<p>در Azure CLI، دستور زیر را وارد کنید:</p>
+<pre class="hljs"><code>az keyvault create --name <span class="hljs-string">&quot;&lt;YourKeyVaultName&gt;&quot;</span> --resource-group <span class="hljs-string">&quot;&lt;YourResourceGroupName&gt;&quot;</span> --location <span class="hljs-string">&quot;East US&quot;</span>
+</code></pre>
+<p>در این مرحله، فقط <strong>حساب Azure شما</strong> مجاز به انجام عملیات روی Key Vault است. در صورت نیاز می‌توانید حساب‌های دیگر را اضافه کنید.</p>
+<hr>
+<h3>🔹 افزودن کلید Morningstar API به Key Vault</h3>
+<p>کلیدی که باید به پروژه اضافه کنیم، <strong>MorningstarApiKey</strong> است. برای افزودن این کلید به Key Vault، دستور زیر را اجرا کنید:</p>
+<pre class="hljs"><code>az keyvault secret <span class="hljs-built_in">set</span> --vault-name <span class="hljs-string">&quot;&lt;YourKeyVaultName&gt;&quot;</span> --name <span class="hljs-string">&quot;MorningstarApiKey&quot;</span> --value <span class="hljs-string">&quot;&lt;YourMorningstarApiKey&gt;&quot;</span>
+</code></pre>
+<p>اکنون Key Vault شما، <strong>کلید Morningstar API</strong> را ذخیره کرده است. برای بررسی درست ذخیره شدن مقدار، دستور زیر را اجرا کنید:</p>
+<pre class="hljs"><code>az keyvault secret show --name <span class="hljs-string">&quot;MorningstarApiKey&quot;</span> --vault-name <span class="hljs-string">&quot;&lt;YourKeyVaultName&gt;&quot;</span>
+</code></pre>
+<p>اگر همه چیز درست باشد، مقدار کلید در <strong>کنسول نمایش داده می‌شود</strong> و نام و مقدار کلید ذخیره‌شده را خواهید دید ✅.</p>
+<hr>
+<h3>🌐 ایجاد برنامه وب <a href="http://ASP.NET">ASP.NET</a> Core – تقویم سود سهام در Azure</h3>
+<p>برای تکمیل این مرحله از پروژه، به <strong>Visual Studio 2019</strong> با <strong><a href="http://ASP.NET">ASP.NET</a> و Web Development Workload</strong> نصب‌شده نیاز دارید.</p>
+<p>۱. ایجاد یک <strong><a href="http://ASP.NET">ASP.NET</a> Core Web Application جدید</strong>:</p>
+<div align="center">
+<p><img src="../../../assets/image/10/Table%2010-2.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>۲. مطمئن شوید که <strong>API</strong> انتخاب شده و گزینه <strong>No Authentication</strong> تنظیم شده باشد 🔧</p>
+<div align="center">
+<p><img src="../../../assets/image/10/Table%2010-3.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>۳. یک <strong>API نمونه پیش‌بینی وضعیت هوا</strong> تعریف شده است و در مرورگر، <strong>کد JSON</strong> زیر را نمایش می‌دهد:</p>
+<pre class="hljs"><code><span class="hljs-punctuation">[</span>
+  <span class="hljs-punctuation">{</span><span class="hljs-attr">&quot;date&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;2020-04-13T20:02:22.8144942+01:00&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;temperatureC&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">0</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;temperatureF&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">32</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;summary&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Balmy&quot;</span><span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span><span class="hljs-attr">&quot;date&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;2020-04-14T20:02:22.8234349+01:00&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;temperatureC&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">13</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;temperatureF&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">55</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;summary&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Warm&quot;</span><span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span><span class="hljs-attr">&quot;date&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;2020-04-15T20:02:22.8234571+01:00&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;temperatureC&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">3</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;temperatureF&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">37</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;summary&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Scorching&quot;</span><span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span><span class="hljs-attr">&quot;date&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;2020-04-16T20:02:22.8234587+01:00&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;temperatureC&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">-2</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;temperatureF&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">29</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;summary&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Sweltering&quot;</span><span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span><span class="hljs-attr">&quot;date&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;2020-04-17T20:02:22.8234602+01:00&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;temperatureC&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">-13</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;temperatureF&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">9</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;summary&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Cool&quot;</span><span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">]</span>
+</code></pre>
+<hr>
+<h3>☁️ انتشار برنامه وب ما در Azure</h3>
+<p>قبل از اینکه بتوانیم برنامه‌های وب خود را منتشر کنیم، ابتدا باید یک <strong>Azure App Service جدید</strong> ایجاد کنیم تا برنامه را روی آن منتشر کنیم.<br>
+برای این کار، نیاز به یک <strong>Resource Group</strong> برای نگهداری App Service داریم و همچنین به یک <strong>Hosting Plan جدید</strong> که شامل <strong>مکان، اندازه و ویژگی‌های سرور وب</strong> باشد، نیاز داریم.</p>
+<p>مراحل مورد نیاز به شرح زیر است:</p>
+<p>۱. مطمئن شوید که از <strong>Visual Studio</strong> به <strong>حساب Azure خود وارد شده‌اید</strong>.<br>
+برای ایجاد App Service، روی پروژه‌ای که تازه ایجاد کرده‌اید <strong>راست‌کلیک</strong> کرده و گزینه <strong>Publish</strong> را از منو انتخاب کنید.<br>
+این کار، پنجره <strong>Pick a publish target</strong> را نمایش می‌دهد، همان‌طور که در تصویر زیر مشاهده می‌کنید:</p>
+<div align="center">
+<p><img src="../../../assets/image/10/Table%2010-4.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>۲. گزینه <strong>App Service | Create New</strong> را انتخاب کرده و روی <strong>Create Profile</strong> کلیک کنید.<br>
+سپس یک <strong>Hosting Plan جدید</strong> ایجاد کنید، همان‌طور که در مثال زیر نشان داده شده است:</p>
+<div align="center">
+<p><img src="../../../assets/image/10/Table%2010-5.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>۳. <strong>Resource Group</strong> را انتخاب کنید. همچنین توصیه می‌شود که <strong>تنظیمات Application Insights</strong> را نیز پیکربندی کنید 🔍</p>
+<div align="center">
+<p><img src="../../../assets/image/10/Table%2010-6.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>۴. روی <strong>Create</strong> کلیک کنید تا App Service شما ایجاد شود. پس از ایجاد، صفحه <strong>Publish</strong> شما باید به این شکل باشد:</p>
+<div align="center">
+<p><img src="../../../assets/image/10/Table%2010-7.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>۵. در این مرحله، می‌توانید روی <strong>Site URL</strong> کلیک کنید. این کار، آدرس سایت شما را در مرورگر باز می‌کند.<br>
+اگر سرویس شما به‌درستی پیکربندی و در حال اجرا باشد، مرورگر باید صفحه زیر را نمایش دهد:</p>
+<div align="center">
+<p><img src="../../../assets/image/10/Table%2010-8.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>۶. بیایید <strong>API خود را منتشر کنیم</strong>. روی دکمه <strong>Publish</strong> کلیک کنید. وقتی وب‌سایت اجرا شد، ابتدا یک <strong>صفحه خطا</strong> نمایش داده می‌شود.</p>
+<p>آدرس URL را به شکل زیر تغییر دهید:</p>
+<pre class="hljs"><code>https://dividend-calendar.azurewebsites.net/weatherforecast
+</code></pre>
+<p>اکنون صفحه وب باید <strong>کد JSON API پیش‌بینی وضعیت هوا</strong> را نمایش دهد:</p>
+<pre class="hljs"><code><span class="hljs-punctuation">[</span>
+  <span class="hljs-punctuation">{</span><span class="hljs-attr">&quot;date&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;2020-04-13T19:36:26.9794202+00:00&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;temperatureC&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">40</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;temperatureF&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">103</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;summary&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Hot&quot;</span><span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span><span class="hljs-attr">&quot;date&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;2020-04-14T19:36:26.9797346+00:00&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;temperatureC&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">7</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;temperatureF&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">44</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;summary&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Bracing&quot;</span><span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span><span class="hljs-attr">&quot;date&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;2020-04-15T19:36:26.9797374+00:00&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;temperatureC&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">8</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;temperatureF&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">46</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;summary&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Scorching&quot;</span><span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span><span class="hljs-attr">&quot;date&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;2020-04-16T19:36:26.9797389+00:00&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;temperatureC&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">11</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;temperatureF&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">51</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;summary&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Freezing&quot;</span><span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span><span class="hljs-attr">&quot;date&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;2020-04-17T19:36:26.9797403+00:00&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;temperatureC&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">3</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;temperatureF&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">37</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;summary&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;Hot&quot;</span><span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">]</span>
+</code></pre>
+<p>خدمات ما اکنون <strong>زنده و فعال</strong> است ✅.<br>
+اگر وارد <strong>Azure Portal</strong> شوید و به <strong>Resource Group</strong> مربوط به <strong>Hosting Plan</strong> خود بروید، چهار منبع خواهید دید:</p>
+<ol>
+<li><strong>App Service:</strong> dividend-calendar</li>
+<li><strong>Application Insights:</strong> dividend-calendar</li>
+<li><strong>App Service Plan:</strong> DividendCalendarHostingPlan</li>
+<li><strong>Key Vault:</strong> هر نامی که برای Key Vault خود انتخاب کرده‌اید. در مثال من، نام آن <strong>Keys-APIs</strong> است، همان‌طور که در تصویر نشان داده شده است.</li>
+</ol>
+<div align="center">
+<p><img src="../../../assets/image/10/Table%2010-9.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>اگر از <strong>صفحه اصلی Azure Portal</strong> (<a href="https://portal.azure.com/#home">https://portal.azure.com/#home</a>) روی <strong>App Service</strong> خود کلیک کنید، خواهید دید که می‌توانید:</p>
+<ul>
+<li>به سرویس خود دسترسی داشته باشید و آن را مرور کنید 🌐</li>
+<li>سرویس را <strong>متوقف (Stop)</strong> کنید ⏹️</li>
+<li>سرویس را <strong>راه‌اندازی مجدد (Restart)</strong> کنید 🔄</li>
+<li>سرویس را <strong>حذف (Delete)</strong> کنید 🗑️</li>
+</ul>
+<div align="center">
+<p><img src="../../../assets/image/10/Table%2010-10.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h3>🗂️ آماده‌سازی پروژه و شروع ساخت تقویم سود سهام</h3>
+<p>حالا که پروژه ما با <strong>Application Insights</strong> آماده است و <strong>کلید Morningstar API</strong> به‌صورت امن ذخیره شده، می‌توانیم <strong>ساخت تقویم سود سهام</strong> را آغاز کنیم.</p>
+<hr>
+<h3>🔑 استفاده از کلید API برای امن‌سازی Dividend Calendar API</h3>
+<p>برای امن‌سازی دسترسی به <strong>Dividend Calendar API</strong>، از <strong>کلید API مشتری (Client API Key)</strong> استفاده خواهیم کرد. روش‌های مختلفی برای اشتراک‌گذاری کلیدهای مشتری با کاربران وجود دارد، اما ما اینجا به آن نمی‌پردازیم؛ شما می‌توانید استراتژی خود را داشته باشید. تمرکز ما روی <strong>فعال‌سازی دسترسی احراز هویت‌شده و مجاز به API</strong> است.</p>
+<p>برای ساده‌تر کردن کار، از <strong>الگوی Repository</strong> استفاده می‌کنیم.</p>
+<ul>
+<li>این الگو کمک می‌کند برنامه ما از <strong>منبع داده زیرین جدا شود</strong>.</li>
+<li>نگهداری و تغییر منبع داده بدون تأثیر بر برنامه را آسان‌تر می‌کند.</li>
+</ul>
+<p>در پروژه ما، کلیدها در یک کلاس تعریف خواهند شد، اما در یک پروژه تجاری، بهتر است کلیدها در <strong>Data Store</strong> مانند <strong>Cosmos DB، SQL Server یا Azure Key Vault</strong> ذخیره شوند. استفاده از <strong>Repository Pattern</strong> به شما این امکان را می‌دهد که <strong>کنترل کامل روی منبع داده داشته باشید</strong>.</p>
+<hr>
+<h3>🏗️ راه‌اندازی Repository</h3>
+<p>۱. یک <strong>پوشه جدید با نام Repository</strong> به پروژه اضافه کنید.<br>
+۲. یک <strong>Interface</strong> به نام <code>IRepository</code> و یک کلاس به نام <code>InMemoryRepository</code> که این Interface را پیاده‌سازی می‌کند، اضافه کنید.</p>
+<p><strong>کد Interface:</strong></p>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> CH09_DividendCalendar.Security.Authentication;
+<span class="hljs-keyword">using</span> System.Threading.Tasks;
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">CH09_DividendCalendar.Repository</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title">IRepository</span>
+    {
+        <span class="hljs-function">Task&lt;ApiKey&gt; <span class="hljs-title">GetApiKey</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> providedApiKey</span>)</span>;
+    }
+}
+</code></pre>
+<ul>
+<li>این Interface یک متد برای <strong>دریافت کلید API</strong> تعریف می‌کند.</li>
+<li>کلاس <code>ApiKey</code> بعداً تعریف خواهد شد.</li>
+</ul>
+<hr>
+<h3>⚙️ پیاده‌سازی InMemoryRepository</h3>
+<p><strong>Usingها:</strong></p>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> CH09_DividendCalendar.Security.Authentication;
+<span class="hljs-keyword">using</span> CH09_DividendCalendar.Security.Authorisation;
+<span class="hljs-keyword">using</span> System;
+<span class="hljs-keyword">using</span> System.Collections.Generic;
+<span class="hljs-keyword">using</span> System.Linq;
+<span class="hljs-keyword">using</span> System.Threading.Tasks;
+</code></pre>
+<ul>
+<li><strong>Namespaceهای Security</strong> زمانی ایجاد خواهند شد که کلاس‌های <strong>Authentication و Authorization</strong> اضافه شوند.</li>
+</ul>
+<p><strong>کلاس Repository:</strong></p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">InMemoryRepository</span> : <span class="hljs-title">IRepository</span>
+{
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> IDictionary&lt;<span class="hljs-built_in">string</span>, ApiKey&gt; _apiKeys;
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> Task&lt;ApiKey&gt; <span class="hljs-title">GetApiKey</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> providedApiKey</span>)</span>
+    {
+        _apiKeys.TryGetValue(providedApiKey, <span class="hljs-keyword">out</span> <span class="hljs-keyword">var</span> key);
+        <span class="hljs-keyword">return</span> Task.FromResult(key);
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">InMemoryRepository</span>()</span>
+    {
+        <span class="hljs-keyword">var</span> existingApiKeys = <span class="hljs-keyword">new</span> List&lt;ApiKey&gt;
+        {
+            <span class="hljs-keyword">new</span> ApiKey(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;Internal&quot;</span>, <span class="hljs-string">&quot;C5BFF7F0-B4DF-475E-A331F737424F013C&quot;</span>, <span class="hljs-keyword">new</span> DateTime(<span class="hljs-number">2019</span>, <span class="hljs-number">01</span>, <span class="hljs-number">01</span>),
+                <span class="hljs-keyword">new</span> List&lt;<span class="hljs-built_in">string</span>&gt; { Roles.Internal }),
+            <span class="hljs-keyword">new</span> ApiKey(<span class="hljs-number">2</span>, <span class="hljs-string">&quot;External&quot;</span>, <span class="hljs-string">&quot;9218FACE-3EAC-6574C3F0-08357FEDABE9&quot;</span>, <span class="hljs-keyword">new</span> DateTime(<span class="hljs-number">2020</span>, <span class="hljs-number">4</span>, <span class="hljs-number">15</span>),
+                <span class="hljs-keyword">new</span> List&lt;<span class="hljs-built_in">string</span>&gt; { Roles.External })
+        };
+        _apiKeys = existingApiKeys.ToDictionary(x =&gt; x.Key, x =&gt; x);
+    }
+}
+</code></pre>
+<ul>
+<li><strong>کلاس InMemoryRepository</strong> متد <code>GetApiKey()</code> را پیاده‌سازی می‌کند و یک <strong>Dictionary از کلیدهای API</strong> برمی‌گرداند.</li>
+<li>این کلیدها در متغیر <code>_apiKeys</code> ذخیره می‌شوند.</li>
+<li><strong>Constructor</strong> یک کلید داخلی برای استفاده داخلی و یک کلید خارجی برای استفاده خارجی ایجاد می‌کند و آن‌ها را به <strong>Dictionary</strong> تبدیل می‌کند.</li>
+</ul>
+<hr>
+<h3>📡 استفاده از X-Api-Key</h3>
+<p>ما از <strong>HTTP Header</strong> به نام <code>X-Api-Key</code> استفاده خواهیم کرد که <strong>کلید API مشتری</strong> را نگه‌داری کرده و برای <strong>احراز هویت و مجوز</strong> به API ارسال می‌شود.</p>
+<p>۱. یک پوشه جدید به نام <strong>Shared</strong> بسازید و فایلی به نام <code>ApiKeyConstants</code> اضافه کنید.<br>
+۲. کد زیر را وارد کنید:</p>
+<pre class="hljs"><code><span class="hljs-keyword">namespace</span> <span class="hljs-title">CH09_DividendCalendar.Shared</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">struct</span> ApiKeyConstants
+    {
+        <span class="hljs-keyword">public</span> <span class="hljs-keyword">const</span> <span class="hljs-built_in">string</span> HeaderName = <span class="hljs-string">&quot;X-Api-Key&quot;</span>;
+        <span class="hljs-keyword">public</span> <span class="hljs-keyword">const</span> <span class="hljs-built_in">string</span> MorningstarApiKeyUrl =
+            <span class="hljs-string">&quot;https://&lt;YOUR_KEY_VAULT_NAME&gt;.vault.azure.net/secrets/MorningstarApiKey&quot;</span>;
+    }
+}
+</code></pre>
+<ul>
+<li>
+<p>این فایل شامل دو <strong>ثابت (Constant)</strong> است:</p>
+<ol>
+<li><strong>HeaderName:</strong> برای تعیین هویت کاربر</li>
+<li><strong>MorningstarApiKeyUrl:</strong> آدرس کلید Morningstar API در Azure Key Vault</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h3>📄 تنظیم JSON Naming Policy</h3>
+<p>از آنجا که با داده‌های JSON کار می‌کنیم، نیاز به <strong>تنظیم سیاست نام‌گذاری JSON</strong> داریم.</p>
+<p>۱. یک پوشه به نام <strong>Json</strong> بسازید و کلاس <code>DefaultJsonSerializerOptions</code> را اضافه کنید:</p>
+<pre class="hljs"><code><span class="hljs-keyword">using</span> System.Text.Json;
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">CH09_DividendCalendar.Json</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title">DefaultJsonSerializerOptions</span>
+    {
+        <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> JsonSerializerOptions Options =&gt; <span class="hljs-keyword">new</span> JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            IgnoreNullValues = <span class="hljs-literal">true</span>
+        };
+    }
+}
+</code></pre>
+<ul>
+<li>این کلاس <strong>نام‌گذاری camelCase</strong> را اعمال می‌کند و مقادیر Null را نادیده می‌گیرد.</li>
+</ul>
+<hr>
+<p>اکنون آماده‌ایم تا <strong>احراز هویت و مجوز</strong> را به API خود اضافه کنیم ✅.</p>
+<h3>🔒 راه‌اندازی Authentication و Authorization</h3>
+<p>حال به سراغ ساخت <strong>کلاس‌های امنیتی برای احراز هویت و مجوز</strong> می‌رویم. قبل از شروع، بهتر است تفاوت بین <strong>Authentication</strong> و <strong>Authorization</strong> را روشن کنیم:</p>
+<ul>
+<li><strong>Authentication (احراز هویت):</strong> بررسی اینکه آیا کاربر مجاز به دسترسی به API ما هست یا نه.</li>
+<li><strong>Authorization (مجوز):</strong> تعیین سطح دسترسی و حقوق کاربر پس از ورود به API.</li>
+</ul>
+<hr>
+<h3>🛡️ افزودن Authentication</h3>
+<p>۱. یک پوشه به نام <strong>Security</strong> به پروژه اضافه کنید.<br>
+۲. درون این پوشه، دو پوشه جدید به نام‌های <strong>Authentication</strong> و <strong>Authorisation</strong> ایجاد کنید.<br>
+۳. ابتدا کلاس‌های <strong>Authentication</strong> را اضافه می‌کنیم. اولین کلاس <code>ApiKey</code> است.</p>
+<p><strong>ویژگی‌های کلاس ApiKey:</strong></p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> Id { <span class="hljs-keyword">get</span>; }
+<span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Owner { <span class="hljs-keyword">get</span>; }
+<span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Key { <span class="hljs-keyword">get</span>; }
+<span class="hljs-keyword">public</span> DateTime Created { <span class="hljs-keyword">get</span>; }
+<span class="hljs-keyword">public</span> IReadOnlyCollection&lt;<span class="hljs-built_in">string</span>&gt; Roles { <span class="hljs-keyword">get</span>; }
+</code></pre>
+<ul>
+<li>این ویژگی‌ها اطلاعات مربوط به <strong>کلید API و مالک آن</strong> را ذخیره می‌کنند.</li>
+<li>مقداردهی از طریق <strong>Constructor</strong> انجام می‌شود:</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">ApiKey</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> id, <span class="hljs-built_in">string</span> owner, <span class="hljs-built_in">string</span> key, DateTime created,
+    IReadOnlyCollection&lt;<span class="hljs-built_in">string</span>&gt; roles</span>)</span>
+{
+    Id = id;
+    Owner = owner ?? <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ArgumentNullException(<span class="hljs-keyword">nameof</span>(owner));
+    Key = key ?? <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ArgumentNullException(<span class="hljs-keyword">nameof</span>(key));
+    Created = created;
+    Roles = roles ?? <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ArgumentNullException(<span class="hljs-keyword">nameof</span>(roles));
+}
+</code></pre>
+<hr>
+<h3>⚠️ کلاس UnauthorizedProblemDetails</h3>
+<p>در صورت عدم موفقیت در احراز هویت، کاربر با <strong>Error 403 Unauthorized</strong> مواجه می‌شود.</p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">UnauthorizedProblemDetails</span> : <span class="hljs-title">ProblemDetails</span>
+{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">UnauthorizedProblemDetails</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> details = <span class="hljs-literal">null</span></span>)</span>
+    {
+        Title = <span class="hljs-string">&quot;Forbidden&quot;</span>;
+        Detail = details;
+        Status = <span class="hljs-number">403</span>;
+        Type = <span class="hljs-string">&quot;https://httpstatuses.com/403&quot;</span>;
+    }
+}
+</code></pre>
+<ul>
+<li>این کلاس از <code>Microsoft.AspNetCore.Mvc.ProblemDetails</code> ارث‌بری می‌کند و جزئیات خطا را ارائه می‌دهد.</li>
+</ul>
+<hr>
+<h3>🧩 افزودن AuthenticationBuilderExtensions</h3>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title">AuthenticationBuilderExtensions</span>
+{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> AuthenticationBuilder <span class="hljs-title">AddApiKeySupport</span>(<span class="hljs-params">
+        <span class="hljs-keyword">this</span> AuthenticationBuilder authenticationBuilder,
+        Action&lt;ApiKeyAuthenticationOptions&gt; options
+    </span>)</span>
+    {
+        <span class="hljs-keyword">return</span> authenticationBuilder
+            .AddScheme&lt;ApiKeyAuthenticationOptions, ApiKeyAuthenticationHandler&gt;(
+                ApiKeyAuthenticationOptions.DefaultScheme, options);
+    }
+}
+</code></pre>
+<ul>
+<li>این متد، <strong>پشتیبانی از کلید API</strong> را به سرویس احراز هویت اضافه می‌کند.</li>
+<li>در متد <code>ConfigureServices</code> کلاس <code>Startup</code> فراخوانی خواهد شد.</li>
+</ul>
+<hr>
+<h3>⚙️ کلاس ApiKeyAuthenticationOptions</h3>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ApiKeyAuthenticationOptions</span> : <span class="hljs-title">AuthenticationSchemeOptions</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">const</span> <span class="hljs-built_in">string</span> DefaultScheme = <span class="hljs-string">&quot;API Key&quot;</span>;
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Scheme =&gt; DefaultScheme;
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> AuthenticationType = DefaultScheme;
+}
+</code></pre>
+<ul>
+<li>این کلاس از <code>AuthenticationSchemeOptions</code> ارث‌بری می‌کند و <strong>Default Scheme</strong> را روی <strong>API Key Authentication</strong> تنظیم می‌کند.</li>
+</ul>
+<hr>
+<h3>🔑 کلاس ApiKeyAuthenticationHandler</h3>
+<p>این کلاس <strong>اصلی برای اعتبارسنجی کلید API</strong> و اطمینان از دسترسی مشتری به API است:</p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ApiKeyAuthenticationHandler</span> : <span class="hljs-title">AuthenticationHandler</span>&lt;<span class="hljs-title">ApiKeyAuthenticationOptions</span>&gt;
+{
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">const</span> <span class="hljs-built_in">string</span> ProblemDetailsContentType = <span class="hljs-string">&quot;application/problem+json&quot;</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> IRepository _repository;
+}
+</code></pre>
+<ul>
+<li>از <code>AuthenticationHandler</code> ارث‌بری می‌کند و از <code>ApiKeyAuthenticationOptions</code> استفاده می‌کند.</li>
+<li>نوع محتوا برای جزئیات خطا <code>application/problem+json</code> است.</li>
+<li><code>_repository</code> به عنوان محل نگهداری کلیدهای API تعریف شده است.</li>
+</ul>
+<hr>
+<h3>🔧 Constructor</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">ApiKeyAuthenticationHandler</span>(<span class="hljs-params">
+    IOptionsMonitor&lt;ApiKeyAuthenticationOptions&gt; options,
+    ILoggerFactory logger,
+    UrlEncoder encoder,
+    ISystemClock clock,
+    IRepository repository
+</span>) : <span class="hljs-title">base</span>(<span class="hljs-params">options, logger, encoder, clock</span>)</span>
+{
+    _repository = repository ?? <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> ArgumentNullException(<span class="hljs-keyword">nameof</span>(repository));
+}
+</code></pre>
+<ul>
+<li>پارامترها به کلاس پایه ارسال می‌شوند.</li>
+<li>اگر repository خالی باشد، استثنای NullArgument پرتاب می‌شود.</li>
+</ul>
+<hr>
+<h3>⚡ متدهای HandleChallengeAsync و HandleForbiddenAsync</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> <span class="hljs-keyword">async</span> Task <span class="hljs-title">HandleChallengeAsync</span>(<span class="hljs-params">AuthenticationProperties properties</span>)</span>
+{
+    Response.StatusCode = <span class="hljs-number">401</span>;
+    Response.ContentType = ProblemDetailsContentType;
+    <span class="hljs-keyword">var</span> problemDetails = <span class="hljs-keyword">new</span> UnauthorizedProblemDetails();
+    <span class="hljs-keyword">await</span> Response.WriteAsync(JsonSerializer.Serialize(problemDetails, DefaultJsonSerializerOptions.Options));
+}
+
+<span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> <span class="hljs-keyword">async</span> Task <span class="hljs-title">HandleForbiddenAsync</span>(<span class="hljs-params">AuthenticationProperties properties</span>)</span>
+{
+    Response.StatusCode = <span class="hljs-number">403</span>;
+    Response.ContentType = ProblemDetailsContentType;
+    <span class="hljs-keyword">var</span> problemDetails = <span class="hljs-keyword">new</span> ForbiddenProblemDetails();
+    <span class="hljs-keyword">await</span> Response.WriteAsync(JsonSerializer.Serialize(problemDetails, DefaultJsonSerializerOptions.Options));
+}
+</code></pre>
+<ul>
+<li><code>HandleChallengeAsync()</code> وقتی احراز هویت کاربر موفق نباشد، <strong>Error 401 Unauthorized</strong> برمی‌گرداند.</li>
+<li><code>HandleForbiddenAsync()</code> وقتی بررسی مجوز کاربر شکست بخورد، <strong>Error 403 Forbidden</strong> برمی‌گرداند.</li>
+</ul>
+<hr>
+<h3>🔍 متد HandleAuthenticateAsync</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> <span class="hljs-keyword">async</span> Task&lt;AuthenticateResult&gt; <span class="hljs-title">HandleAuthenticateAsync</span>()</span>
+{
+    <span class="hljs-keyword">if</span> (!Request.Headers.TryGetValue(ApiKeyConstants.HeaderName, <span class="hljs-keyword">out</span> <span class="hljs-keyword">var</span> apiKeyHeaderValues))
+        <span class="hljs-keyword">return</span> AuthenticateResult.NoResult();
+
+    <span class="hljs-keyword">var</span> providedApiKey = apiKeyHeaderValues.FirstOrDefault();
+    <span class="hljs-keyword">if</span> (apiKeyHeaderValues.Count == <span class="hljs-number">0</span> || <span class="hljs-built_in">string</span>.IsNullOrWhiteSpace(providedApiKey))
+        <span class="hljs-keyword">return</span> AuthenticateResult.NoResult();
+
+    <span class="hljs-keyword">var</span> existingApiKey = <span class="hljs-keyword">await</span> _repository.GetApiKey(providedApiKey);
+    <span class="hljs-keyword">if</span> (existingApiKey != <span class="hljs-literal">null</span>) {
+        <span class="hljs-keyword">var</span> claims = <span class="hljs-keyword">new</span> List&lt;Claim&gt; { <span class="hljs-keyword">new</span> Claim(ClaimTypes.Name, existingApiKey.Owner) };
+        claims.AddRange(existingApiKey.Roles.Select(role =&gt; <span class="hljs-keyword">new</span> Claim(ClaimTypes.Role, role)));
+        <span class="hljs-keyword">var</span> identity = <span class="hljs-keyword">new</span> ClaimsIdentity(claims, Options.AuthenticationType);
+        <span class="hljs-keyword">var</span> identities = <span class="hljs-keyword">new</span> List&lt;ClaimsIdentity&gt; { identity };
+        <span class="hljs-keyword">var</span> principal = <span class="hljs-keyword">new</span> ClaimsPrincipal(identities);
+        <span class="hljs-keyword">var</span> ticket = <span class="hljs-keyword">new</span> AuthenticationTicket(principal, Options.Scheme);
+        <span class="hljs-keyword">return</span> AuthenticateResult.Success(ticket);
+    }
+    <span class="hljs-keyword">return</span> AuthenticateResult.Fail(<span class="hljs-string">&quot;Invalid API Key provided.&quot;</span>);
+}
+</code></pre>
+<ul>
+<li>ابتدا بررسی می‌کند که <strong>Header موجود است یا نه</strong>.</li>
+<li>اگر Header یا مقدار آن موجود نباشد، <code>AuthenticateResult.NoResult()</code> برمی‌گرداند.</li>
+<li>کلید سمت سرور از <strong>Repository</strong> دریافت می‌شود و اعتبارسنجی انجام می‌شود.</li>
+<li>اگر کلید معتبر باشد، <strong>Claims</strong> برای کاربر تنظیم و <code>AuthenticateResult.Success()</code> برگردانده می‌شود.</li>
+<li>در غیر این صورت، <strong>پیغام خطای Invalid API Key</strong> برگردانده می‌شود.</li>
+</ul>
+<hr>
+<p>✅ با این کار <strong>احراز هویت (Authentication)</strong> کامل شد. مرحله بعدی، <strong>پیاده‌سازی Authorization</strong> است.</p>
+<h3>🛡️ افزودن Authorization</h3>
+<p>کلاس‌های <strong>Authorization</strong> را در پوشه <strong>Authorisation</strong> اضافه می‌کنیم.</p>
+<hr>
+<h3>🔑 تعریف نقش‌ها (Roles)</h3>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">struct</span> Roles
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">const</span> <span class="hljs-built_in">string</span> Internal = <span class="hljs-string">&quot;Internal&quot;</span>;
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">const</span> <span class="hljs-built_in">string</span> External = <span class="hljs-string">&quot;External&quot;</span>;
+}
+</code></pre>
+<ul>
+<li>API ما هم برای <strong>کاربران داخلی</strong> و هم <strong>کاربران خارجی</strong> طراحی شده است.</li>
+<li>اما در نسخه حداقلی (MVP)، فقط کد <strong>کاربران داخلی</strong> پیاده‌سازی خواهد شد.</li>
+</ul>
+<hr>
+<h3>📜 تعریف سیاست‌ها (Policies)</h3>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">struct</span> Policies
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">const</span> <span class="hljs-built_in">string</span> Internal = <span class="hljs-keyword">nameof</span>(Internal);
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">const</span> <span class="hljs-built_in">string</span> External = <span class="hljs-keyword">nameof</span>(External);
+}
+</code></pre>
+<ul>
+<li>دو سیاست برای <strong>کاربران داخلی و خارجی</strong> تعریف شده است.</li>
+</ul>
+<hr>
+<h3>⚠️ کلاس ForbiddenProblemDetails</h3>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ForbiddenProblemDetails</span> : <span class="hljs-title">ProblemDetails</span>
+{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">ForbiddenProblemDetails</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> details = <span class="hljs-literal">null</span></span>)</span>
+    {
+        Title = <span class="hljs-string">&quot;Forbidden&quot;</span>;
+        Detail = details;
+        Status = <span class="hljs-number">403</span>;
+        Type = <span class="hljs-string">&quot;https://httpstatuses.com/403&quot;</span>;
+    }
+}
+</code></pre>
+<ul>
+<li>این کلاس <strong>جزئیات مشکل Forbidden</strong> را ارائه می‌دهد اگر کاربر احراز هویت‌شده <strong>دسترسی لازم را نداشته باشد</strong>.</li>
+<li>می‌توانید یک رشته به Constructor ارسال کنید تا اطلاعات بیشتری ارائه شود.</li>
+</ul>
+<hr>
+<h3>🧩 Authorization Handlers</h3>
+<h4>ExternalAuthorisationHandler</h4>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ExternalAuthorisationHandler</span> : <span class="hljs-title">AuthorizationHandler</span>&lt;<span class="hljs-title">ExternalRequirement</span>&gt;
+{
+    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> Task <span class="hljs-title">HandleRequirementAsync</span>(<span class="hljs-params">
+        AuthorizationHandlerContext context,
+        ExternalRequirement requirement
+    </span>)</span>
+    {
+        <span class="hljs-keyword">if</span> (context.User.IsInRole(Roles.External))
+            context.Succeed(requirement);
+        <span class="hljs-keyword">return</span> Task.CompletedTask;
+    }
+}
+
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ExternalRequirement</span> : <span class="hljs-title">IAuthorizationRequirement</span>
+{
+}
+</code></pre>
+<ul>
+<li>کلاس <code>ExternalRequirement</code> خالی است و Interface <code>IAuthorizationRequirement</code> را پیاده‌سازی می‌کند.</li>
+<li>Handler بررسی می‌کند که آیا کاربر نقش <strong>External</strong> دارد یا خیر و مجوز را اعمال می‌کند.</li>
+</ul>
+<hr>
+<h4>InternalAuthorisationHandler</h4>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">InternalAuthorisationHandler</span> : <span class="hljs-title">AuthorizationHandler</span>&lt;<span class="hljs-title">InternalRequirement</span>&gt;
+{
+    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">override</span> Task <span class="hljs-title">HandleRequirementAsync</span>(<span class="hljs-params">
+        AuthorizationHandlerContext context,
+        InternalRequirement requirement
+    </span>)</span>
+    {
+        <span class="hljs-keyword">if</span> (context.User.IsInRole(Roles.Internal))
+            context.Succeed(requirement);
+        <span class="hljs-keyword">return</span> Task.CompletedTask;
+    }
+}
+
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">InternalRequirement</span> : <span class="hljs-title">IAuthorizationRequirement</span>
+{
+}
+</code></pre>
+<ul>
+<li>Handler داخلی مجوز کاربران داخلی را بررسی می‌کند.</li>
+<li>اگر کاربر نقش <strong>Internal</strong> داشته باشد، دسترسی داده می‌شود؛ در غیر این صورت، رد می‌شود.</li>
+</ul>
+<hr>
+<h3>⚙️ بروزرسانی کلاس Startup</h3>
+<h4>متد Configure</h4>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Configure</span>(<span class="hljs-params">IApplicationBuilder app, IHostEnvironment env</span>)</span>
+{
+    <span class="hljs-keyword">if</span> (env.IsDevelopment())
+    {
+        app.UseDeveloperExceptionPage();
+    }
+    app.UseRouting();
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.UseEndpoints(endpoints =&gt;
+    {
+        endpoints.MapControllers();
+    });
+}
+</code></pre>
+<ul>
+<li>اگر در حالت توسعه باشیم، صفحه استثناها به صفحه توسعه‌دهنده تغییر می‌کند.</li>
+<li>از Routing برای تطبیق <strong>URIs با Actions کنترلرها</strong> استفاده می‌شود.</li>
+<li>سپس احراز هویت و مجوز فعال می‌شود و در نهایت Endpoints از کنترلرها map می‌شوند.</li>
+</ul>
+<hr>
+<h4>متد ConfigureServices</h4>
+<pre class="hljs"><code>services.AddAuthentication(options =&gt;
+{
+    options.DefaultAuthenticateScheme = ApiKeyAuthenticationOptions.DefaultScheme;
+    options.DefaultChallengeScheme = ApiKeyAuthenticationOptions.DefaultScheme;
+})
+.AddApiKeySupport(options =&gt; { });
+
+services.AddAuthorization(options =&gt;
+{
+    options.AddPolicy(Policies.Internal, policy =&gt;
+        policy.Requirements.Add(<span class="hljs-keyword">new</span> InternalRequirement()));
+    options.AddPolicy(Policies.External, policy =&gt;
+        policy.Requirements.Add(<span class="hljs-keyword">new</span> ExternalRequirement()));
+});
+</code></pre>
+<ul>
+<li><strong>Default Scheme</strong> روی <strong>API Key Authentication</strong> تنظیم شده است.</li>
+<li><code>AddApiKeySupport()</code> از <strong>Extension Method</strong> اضافه شده در <code>AuthenticationBuilderExtensions</code> استفاده می‌کند.</li>
+<li>سپس <strong>سیاست‌های داخلی و خارجی</strong> اضافه شده و با <code>InternalRequirement</code> و <code>ExternalRequirement</code> پیوند داده می‌شوند.</li>
+</ul>
+<hr>
+<p>✅ حالا تمام کلاس‌های <strong>امنیت API Key</strong> اضافه شدند و می‌توانیم با <strong>Postman</strong> صحت عملکرد <strong>Authentication و Authorization</strong> را تست کنیم.</p>
+<h3>🧪 تست امنیت API Key</h3>
+<p>در این بخش، قصد داریم <strong>احراز هویت و مجوز API Key</strong> خود را با <strong>Postman</strong> تست کنیم.</p>
+<hr>
+<h3>۱️⃣ ایجاد کنترلر DividendCalendar</h3>
+<p>به پوشه <strong>Controllers</strong> یک کلاس به نام <code>DividendCalendar</code> اضافه کنید و آن را به شکل زیر بروزرسانی کنید:</p>
+<pre class="hljs"><code>[<span class="hljs-meta">ApiController</span>]
+[<span class="hljs-meta">Route(<span class="hljs-string">&quot;api/[controller]&quot;</span>)</span>]
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">DividendCalendar</span> : <span class="hljs-title">ControllerBase</span>
+{
+    [<span class="hljs-meta">Authorize(Policy = Policies.Internal)</span>]
+    [<span class="hljs-meta">HttpGet(<span class="hljs-string">&quot;internal&quot;</span>)</span>]
+    <span class="hljs-function"><span class="hljs-keyword">public</span> IActionResult <span class="hljs-title">GetDividendCalendar</span>()</span>
+    {
+        <span class="hljs-keyword">var</span> message = <span class="hljs-string">$&quot;Hello from <span class="hljs-subst">{<span class="hljs-keyword">nameof</span>(GetDividendCalendar)}</span>.&quot;</span>;
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> ObjectResult(message);
+    }
+
+    [<span class="hljs-meta">Authorize(Policy = Policies.External)</span>]
+    [<span class="hljs-meta">HttpGet(<span class="hljs-string">&quot;external&quot;</span>)</span>]
+    <span class="hljs-function"><span class="hljs-keyword">public</span> IActionResult <span class="hljs-title">External</span>()</span>
+    {
+        <span class="hljs-keyword">var</span> message = <span class="hljs-string">&quot;External access is currently unavailable.&quot;</span>;
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> ObjectResult(message);
+    }
+}
+</code></pre>
+<ul>
+<li>این کلاس <strong>تمام عملکردهای API Dividend Calendar</strong> را شامل می‌شود.</li>
+<li>حتی اگر در نسخه اولیه (MVP) <strong>کاربران خارجی فعال نباشند</strong>، همچنان می‌توانیم احراز هویت و مجوزهای داخلی و خارجی را تست کنیم.</li>
+</ul>
+<hr>
+<h3>۲️⃣ تست با Postman</h3>
+<p>۱. <strong>Postman</strong> را باز کنید و یک درخواست جدید <strong>GET</strong> بسازید.<br>
+2. URL زیر را وارد کنید:</p>
+<pre class="hljs"><code>https://localhost:44325/api/dividendcalendar/internal
+</code></pre>
+<p>۳. روی <strong>Send</strong> کلیک کنید.</p>
+<ul>
+<li>این درخواست، <strong>احراز هویت و مجوز داخلی</strong> را تست می‌کند.</li>
+<li>اگر کلید API معتبر باشد، پیام زیر برگردانده می‌شود:</li>
+</ul>
+<pre class="hljs"><code>Hello from GetDividendCalendar.
+</code></pre>
+<ul>
+<li>در غیر این صورت، پیام خطای 401 یا 403 نمایش داده می‌شود.</li>
+</ul>
+<hr>
+<p>با این کار، <strong>امنیت API Key</strong> ما در محیط توسعه تست شده و آماده مرحله بعدی می‌باشد.</p>
+<div align="center">
+<p><img src="../../../assets/image/10/Table%2010-11.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h3>🔐 تست امنیت API بدون کلید</h3>
+<p>همان‌طور که مشاهده می‌کنید، <strong>بدون قرار دادن API Key</strong> در درخواست API، پاسخ <strong>401 Unauthorized</strong> دریافت می‌شود و JSON خطا مطابق با کلاس <strong>ForbiddenProblemDetails</strong> نمایش داده می‌شود.</p>
+<hr>
+<h3>۱️⃣ افزودن هدر X-Api-Key</h3>
+<ul>
+<li>در Postman به بخش <strong>Headers</strong> بروید و هدر زیر را اضافه کنید:</li>
+</ul>
+<pre class="hljs"><code>Key: X-Api-Key
+Value: C5BFF7F0-B4DF-475E-A331-F737424F013C
+</code></pre>
+<hr>
+<h3>۲️⃣ ارسال درخواست</h3>
+<ul>
+<li>پس از افزودن هدر، روی <strong>Send</strong> کلیک کنید.</li>
+<li>این بار، با وجود <strong>API Key معتبر</strong>، پاسخ موفقیت‌آمیز داخلی دریافت می‌کنید:</li>
+</ul>
+<pre class="hljs"><code>Hello from GetDividendCalendar.
+</code></pre>
+<p>✅ بدین ترتیب، <strong>احراز هویت و مجوز کاربران داخلی</strong> با موفقیت تست شد.</p>
+<div align="center">
+<p><img src="../../../assets/image/10/Table%2010-12.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h3>✅ دریافت وضعیت 200 OK</h3>
+<ul>
+<li>حالا وضعیت پاسخ <strong>200 OK</strong> خواهید داشت.</li>
+<li>این یعنی <strong>درخواست API با موفقیت انجام شده است</strong>.</li>
+<li>نتیجه درخواست را می‌توانید در <strong>Body</strong> مشاهده کنید.</li>
+<li><strong>کاربران داخلی</strong> پیام زیر را خواهند دید:</li>
+</ul>
+<pre class="hljs"><code>Hello from GetDividendCalendar.
+</code></pre>
+<hr>
+<h3>🔄 تست مسیر خارجی</h3>
+<ul>
+<li>درخواست را دوباره اجرا کنید، اما این بار <strong>URL را از internal به external تغییر دهید</strong>.</li>
+<li>URL جدید باید به شکل زیر باشد:</li>
+</ul>
+<pre class="hljs"><code>https://localhost:44325/api/dividendcalendar/external
+</code></pre>
+<ul>
+<li>این کار امکان بررسی <strong>دسترسی و مجوز کاربران خارجی</strong> را فراهم می‌کند.</li>
+</ul>
+<div align="center">
+<p><img src="../../../assets/image/10/Table%2010-13.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h3>⛔ دریافت وضعیت 403 Forbidden</h3>
+<ul>
+<li>اکنون باید وضعیت پاسخ <strong>403 Forbidden</strong> را دریافت کنید و <strong>JSON خطا</strong> مطابق با ForbiddenProblemDetails نمایش داده شود.</li>
+<li>دلیل این امر این است که <strong>API Key معتبر است</strong>، اما مسیر مربوط به <strong>کاربران خارجی</strong> است و <strong>کاربر خارجی دسترسی به API داخلی ندارد</strong>.</li>
+</ul>
+<hr>
+<h3>۱️⃣ تغییر مقدار هدر X-Api-Key</h3>
+<ul>
+<li>مقدار هدر <strong>X-Api-Key</strong> را به شکل زیر تغییر دهید:</li>
+</ul>
+<pre class="hljs"><code>Value: 9218FACE-3EAC-6574-C3F0-08357FEDABE9
+</code></pre>
+<hr>
+<h3>۲️⃣ ارسال مجدد درخواست</h3>
+<ul>
+<li>پس از تغییر مقدار هدر، روی <strong>Send</strong> کلیک کنید.</li>
+<li>حالا درخواست با <strong>API Key خارجی معتبر</strong> ارسال شده و باید بتوانید <strong>دسترسی خارجی را با موفقیت بررسی کنید</strong>.</li>
+</ul>
+<div align="center">
+<p><img src="../../../assets/image/10/Table%2010-14.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<h3>✅ مشاهده وضعیت 200 OK</h3>
+<ul>
+<li>اکنون وضعیت پاسخ <strong>200 OK</strong> را مشاهده خواهید کرد و در بخش body پیام زیر نمایش داده می‌شود:</li>
+</ul>
+<pre class="hljs"><code>External access is currently unavailable
+</code></pre>
+<ul>
+<li>خبر خوب! سیستم <strong>امنیت مبتنی بر نقش</strong> ما با استفاده از <strong>API key authentication و authorization</strong> تست شده و کار می‌کند.</li>
+<li>قبل از اینکه حتی <strong>FinTech API</strong> واقعی خود را اضافه کنیم، <strong>API Key امنیتی</strong> را پیاده‌سازی و آزمایش کرده‌ایم. بنابراین امنیت API را <strong>قبل از نوشتن حتی یک خط کد از API واقعی</strong> رعایت کرده‌ایم.</li>
+<li>اکنون می‌توانیم با اطمینان شروع کنیم به ساخت <strong>Dividend Calendar API</strong>، زیرا می‌دانیم امنیت آن برقرار است. 🛡️</li>
+</ul>
+<hr>
+<h2>📝 افزودن کد Dividend Calendar</h2>
+<ul>
+<li>API داخلی ما تنها یک هدف دارد: ساخت یک <strong>آرایه از dividend ها</strong> که قرار است در سال جاری پرداخت شوند.</li>
+<li>شما می‌توانید پروژه را توسعه دهید تا <strong>JSON را در یک فایل یا پایگاه داده ذخیره کنید</strong> و به این ترتیب تنها <strong>یک بار در ماه به API داخلی فراخوانی بزنید</strong> تا هزینه‌ها کاهش یابد.</li>
+<li>نقش خارجی می‌تواند به داده‌ها از <strong>فایل یا پایگاه داده</strong> هر زمان که نیاز است دسترسی پیدا کند.</li>
+</ul>
+<hr>
+<h3>۱️⃣ ایجاد مدل Dividend</h3>
+<ul>
+<li>مدل داخلی ما قبلاً کنترلر دارد و امنیت آن از دسترسی غیرمجاز جلوگیری می‌کند.</li>
+<li>اکنون باید <strong>JSON dividend calendar</strong> را تولید کنیم تا متد ما بازگرداند.</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Dividend</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Mic { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Ticker { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> CompanyName { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">float</span> DividendYield { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">float</span> Amount { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> DateTime? ExDividendDate { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> DateTime? DeclarationDate { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> DateTime? RecordDate { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> DateTime? PaymentDate { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> DividendType { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> CurrencyCode { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+}
+</code></pre>
+<ul>
+<li>
+<p>این فیلدها شامل موارد زیر هستند:</p>
+<ul>
+<li><strong>Mic:</strong> کد شناسایی بازار (ISO 10383 Market Identification Code)</li>
+<li><strong>Ticker:</strong> نماد سهام</li>
+<li><strong>CompanyName:</strong> نام شرکت</li>
+<li><strong>DividendYield:</strong> نسبت سود سالانه شرکت به قیمت سهم</li>
+<li><strong>Amount:</strong> مبلغ پرداختی به ازای هر سهم</li>
+<li><strong>ExDividendDate:</strong> آخرین تاریخ خرید سهم برای دریافت سود بعدی</li>
+<li><strong>DeclarationDate:</strong> تاریخ اعلام پرداخت سود توسط شرکت</li>
+<li><strong>RecordDate:</strong> تاریخی که شرکت بررسی می‌کند چه کسانی حق دریافت سود دارند</li>
+<li><strong>PaymentDate:</strong> تاریخ دریافت سود توسط سهامداران</li>
+<li><strong>DividendType:</strong> نوع سود (مثلاً Cash, Stock, Property و…)</li>
+<li><strong>CurrencyCode:</strong> واحد پول پرداخت</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3>۲️⃣ ایجاد مدل Company</h3>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Company</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> MIC { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Currency { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Ticker { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> SecurityId { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> CompanyName { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+}
+</code></pre>
+<ul>
+<li>تفاوت بین <strong>CurrencyCode</strong> در Dividend و <strong>Currency</strong> در Company به دلیل فرآیند <strong>Object Mapping JSON</strong> است تا از بروز استثناهای قالب‌بندی جلوگیری شود.</li>
+</ul>
+<hr>
+<h3>۳️⃣ ایجاد مدل Companies</h3>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Companies</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> Total { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> Offset { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> List&lt;Company&gt; Results { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> ResponseStatus { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+}
+</code></pre>
+<ul>
+<li>
+<p>توضیح فیلدها:</p>
+<ul>
+<li><strong>Total:</strong> تعداد کل رکوردهای بازگشتی از API</li>
+<li><strong>Offset:</strong> جابجایی رکورد</li>
+<li><strong>Results:</strong> لیست شرکت‌ها</li>
+<li><strong>ResponseStatus:</strong> اطلاعات وضعیت پاسخ، مخصوصاً در صورت بروز خطا</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3>۴️⃣ ایجاد مدل Dividends</h3>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">Dividends</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> Total { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> Offset { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> List&lt;Dictionary&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">string</span>&gt;&gt; Results { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> ResponseStatus ResponseStatus { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+}
+</code></pre>
+<ul>
+<li>فیلدها مشابه کلاس قبلی هستند، به جز <strong>Results</strong> که شامل لیست پرداخت‌های dividend برای هر شرکت مشخص است.</li>
+</ul>
+<hr>
+<h3>۵️⃣ ایجاد مدل ResponseStatus</h3>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">ResponseStatus</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> ErrorCode { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> Message { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> StackTrace { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> List&lt;Dictionary&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">string</span>&gt;&gt; Errors { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> List&lt;Dictionary&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">string</span>&gt;&gt; Meta { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+}
+</code></pre>
+<ul>
+<li>
+<p>توضیح فیلدها:</p>
+<ul>
+<li><strong>ErrorCode:</strong> شماره خطا</li>
+<li><strong>Message:</strong> پیام خطا</li>
+<li><strong>StackTrace:</strong> اطلاعات دیباگ خطا</li>
+<li><strong>Errors:</strong> لیست خطاها</li>
+<li><strong>Meta:</strong> لیست متادیتای خطا</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>✅ تا این مرحله، تمام مدل‌های لازم برای <strong>API Dividend Calendar</strong> آماده شده‌اند و می‌توانیم به نوشتن منطق پردازش داده‌ها و بازگرداندن JSON ادامه دهیم.</p>
+<h3>🛠️ پیاده‌سازی فراخوانی‌های API برای ساخت Dividend Calendar</h3>
+<p>حال که تمام <strong>مدل‌های لازم</strong> آماده شده‌اند، می‌توانیم شروع کنیم به <strong>فراخوانی‌های API</strong> برای ساخت <strong>تقویم پرداخت dividend</strong>.</p>
+<hr>
+<h3>۱️⃣ متد FormatStringDate()</h3>
+<pre class="hljs"><code><span class="hljs-keyword">private</span> DateTime? FormatStringDate(<span class="hljs-built_in">string</span> date)
+{
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">string</span>.IsNullOrEmpty(date) ? (DateTime?)<span class="hljs-literal">null</span> : DateTime.Parse(date);
+}
+</code></pre>
+<ul>
+<li>این متد یک <strong>رشته تاریخ</strong> می‌گیرد.</li>
+<li>اگر رشته <strong>null یا خالی</strong> باشد، مقدار null باز می‌گرداند.</li>
+<li>در غیر این صورت، رشته را به <strong>DateTime nullable</strong> تبدیل کرده و باز می‌گرداند. 🗓️</li>
+</ul>
+<hr>
+<h3>۲️⃣ متد GetMorningstarApiKey()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">async</span> Task&lt;<span class="hljs-built_in">string</span>&gt; <span class="hljs-title">GetMorningstarApiKey</span>()</span>
+{
+    <span class="hljs-keyword">try</span>
+    {
+        AzureServiceTokenProvider azureServiceTokenProvider = <span class="hljs-keyword">new</span> AzureServiceTokenProvider();
+        KeyVaultClient keyVaultClient = <span class="hljs-keyword">new</span> KeyVaultClient(
+            <span class="hljs-keyword">new</span> KeyVaultClient.AuthenticationCallback(
+                azureServiceTokenProvider.KeyVaultTokenCallback
+            )
+        );
+
+        <span class="hljs-keyword">var</span> secret = <span class="hljs-keyword">await</span> keyVaultClient.GetSecretAsync(ApiKeyConstants.MorningstarApiKeyUrl)
+                                         .ConfigureAwait(<span class="hljs-literal">false</span>);
+        <span class="hljs-keyword">return</span> secret.Value;
+    }
+    <span class="hljs-keyword">catch</span> (KeyVaultErrorException keyVaultException)
+    {
+        <span class="hljs-keyword">return</span> keyVaultException.Message;
+    }
+}
+</code></pre>
+<ul>
+<li>این متد <strong>AzureServiceTokenProvider</strong> را ایجاد می‌کند.</li>
+<li>سپس یک <strong>KeyVaultClient</strong> می‌سازد که عملیات رمزنگاری انجام می‌دهد.</li>
+<li>با فراخوانی <strong>GetSecretAsync</strong>، API Key مربوط به Morningstar از <strong>Azure Key Vault</strong> دریافت می‌شود.</li>
+<li>در صورت بروز خطا، پیام خطا بازگردانده می‌شود. 🔑</li>
+</ul>
+<hr>
+<h3>۳️⃣ متد GetCompanies()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> Companies <span class="hljs-title">GetCompanies</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> mic</span>)</span>
+{
+    <span class="hljs-keyword">var</span> client = <span class="hljs-keyword">new</span> RestClient(<span class="hljs-string">$&quot;https://morningstar1.p.rapidapi.com/companies/list-by-exchange?Mic=<span class="hljs-subst">{mic}</span>&quot;</span>);
+    <span class="hljs-keyword">var</span> request = <span class="hljs-keyword">new</span> RestRequest(Method.GET);
+    request.AddHeader(<span class="hljs-string">&quot;x-rapidapi-host&quot;</span>, <span class="hljs-string">&quot;morningstar1.p.rapidapi.com&quot;</span>);
+    request.AddHeader(<span class="hljs-string">&quot;x-rapidapi-key&quot;</span>, GetMorningstarApiKey().Result);
+    request.AddHeader(<span class="hljs-string">&quot;accept&quot;</span>, <span class="hljs-string">&quot;string&quot;</span>);
+    IRestResponse response = client.Execute(request);
+    <span class="hljs-keyword">return</span> JsonConvert.DeserializeObject&lt;Companies&gt;(response.Content);
+}
+</code></pre>
+<ul>
+<li>این متد یک <strong>REST client</strong> می‌سازد که لیست شرکت‌های موجود در بورس مشخص شده را باز می‌گرداند.</li>
+<li>نوع درخواست <strong>GET</strong> است و هدرهای <strong>x-rapidapi-host، x-rapidapi-key و accept</strong> اضافه می‌شوند.</li>
+<li>سپس JSON بازگشتی به مدل <strong>Companies</strong> دسیریالایز می‌شود. 🏢</li>
+</ul>
+<hr>
+<h3>۴️⃣ متد GetDividends()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> Dividends <span class="hljs-title">GetDividends</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> mic, <span class="hljs-built_in">string</span> ticker</span>)</span>
+{
+    <span class="hljs-keyword">var</span> client = <span class="hljs-keyword">new</span> RestClient(<span class="hljs-string">$&quot;https://morningstar1.p.rapidapi.com/dividends?Ticker=<span class="hljs-subst">{ticker}</span>&amp;Mic=<span class="hljs-subst">{mic}</span>&quot;</span>);
+    <span class="hljs-keyword">var</span> request = <span class="hljs-keyword">new</span> RestRequest(Method.GET);
+    request.AddHeader(<span class="hljs-string">&quot;x-rapidapi-host&quot;</span>, <span class="hljs-string">&quot;morningstar1.p.rapidapi.com&quot;</span>);
+    request.AddHeader(<span class="hljs-string">&quot;x-rapidapi-key&quot;</span>, GetMorningstarApiKey().Result);
+    request.AddHeader(<span class="hljs-string">&quot;accept&quot;</span>, <span class="hljs-string">&quot;string&quot;</span>);
+    IRestResponse response = client.Execute(request);
+    <span class="hljs-keyword">return</span> JsonConvert.DeserializeObject&lt;Dividends&gt;(response.Content);
+}
+</code></pre>
+<ul>
+<li>مشابه <strong>GetCompanies()</strong> است، اما این بار <strong>dividends</strong> هر شرکت مشخص را باز می‌گرداند. 💰</li>
+</ul>
+<hr>
+<h3>۵️⃣ متد BuildDividendCalendar()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> List&lt;Dividend&gt; <span class="hljs-title">BuildDividendCalendar</span>()</span>
+{
+    <span class="hljs-keyword">const</span> <span class="hljs-built_in">string</span> MIC = <span class="hljs-string">&quot;XLON&quot;</span>;
+    <span class="hljs-keyword">var</span> thisYearsDividends = <span class="hljs-keyword">new</span> List&lt;Dividend&gt;();
+    <span class="hljs-keyword">var</span> companies = GetCompanies(MIC);
+
+    <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">var</span> company <span class="hljs-keyword">in</span> companies.Results) {
+        <span class="hljs-keyword">var</span> dividends = GetDividends(MIC, company.Ticker);
+        <span class="hljs-keyword">if</span> (dividends.Results == <span class="hljs-literal">null</span>)
+            <span class="hljs-keyword">continue</span>;
+
+        <span class="hljs-keyword">var</span> currentDividend = dividends.Results.FirstOrDefault();
+        <span class="hljs-keyword">if</span> (currentDividend == <span class="hljs-literal">null</span> || currentDividend[<span class="hljs-string">&quot;payableDt&quot;</span>] == <span class="hljs-literal">null</span>)
+            <span class="hljs-keyword">continue</span>;
+
+        <span class="hljs-keyword">var</span> dateDiff = DateTime.Compare(
+            DateTime.Parse(currentDividend[<span class="hljs-string">&quot;payableDt&quot;</span>]),
+            <span class="hljs-keyword">new</span> DateTime(DateTime.Now.Year - <span class="hljs-number">1</span>, <span class="hljs-number">12</span>, <span class="hljs-number">31</span>)
+        );
+
+        <span class="hljs-keyword">if</span> (dateDiff &gt; <span class="hljs-number">0</span>) {
+            <span class="hljs-keyword">var</span> payableDate = DateTime.Parse(currentDividend[<span class="hljs-string">&quot;payableDt&quot;</span>]);
+            <span class="hljs-keyword">var</span> dividend = <span class="hljs-keyword">new</span> Dividend() {
+                Mic = MIC,
+                Ticker = company.Ticker,
+                CompanyName = company.CompanyName,
+                ExDividendDate = FormatStringDate(currentDividend[<span class="hljs-string">&quot;exDividendDt&quot;</span>]),
+                DeclarationDate = FormatStringDate(currentDividend[<span class="hljs-string">&quot;declarationDt&quot;</span>]),
+                RecordDate = FormatStringDate(currentDividend[<span class="hljs-string">&quot;recordDt&quot;</span>]),
+                PaymentDate = FormatStringDate(currentDividend[<span class="hljs-string">&quot;payableDt&quot;</span>]),
+                Amount = <span class="hljs-built_in">float</span>.Parse(currentDividend[<span class="hljs-string">&quot;amount&quot;</span>])
+            };
+            thisYearsDividends.Add(dividend);
+        }
+    }
+
+    <span class="hljs-keyword">return</span> thisYearsDividends;
+}
+</code></pre>
+<ul>
+<li>در این نسخه، MIC <strong>سخت‌کد شده به &quot;XLON&quot;</strong> (بورس لندن) است.</li>
+<li>در آینده می‌توانیم این متد و <strong>endpoint</strong> عمومی را برای دریافت MIC به عنوان پارامتر به‌روزرسانی کنیم.</li>
+<li>ابتدا لیست <strong>شرکت‌ها</strong> از Morningstar API دریافت می‌شود.</li>
+<li>سپس برای هر شرکت، <strong>dividendهای آن شرکت</strong> گرفته می‌شود و بررسی می‌کنیم که تاریخ پرداخت بعد از <strong>31 دسامبر سال قبل</strong> باشد.</li>
+<li>در نهایت، لیست <strong>dividendهای امسال</strong> ساخته می‌شود و بازگردانده می‌شود. 🔄</li>
+</ul>
+<hr>
+<h3>۶️⃣ به‌روزرسانی GetDividendCalendar()</h3>
+<pre class="hljs"><code>[<span class="hljs-meta">Authorize(Policy = Policies.Internal)</span>]
+[<span class="hljs-meta">HttpGet(<span class="hljs-string">&quot;internal&quot;</span>)</span>]
+<span class="hljs-function"><span class="hljs-keyword">public</span> IActionResult <span class="hljs-title">GetDividendCalendar</span>()</span>
+{
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> ObjectResult(JsonConvert.SerializeObject(BuildDividendCalendar()));
+}
+</code></pre>
+<ul>
+<li>این متد <strong>لیست dividendهای امسال</strong> را به صورت JSON سریالایز شده باز می‌گرداند.</li>
+<li>اگر پروژه را در <strong>Postman</strong> با <strong>internal x-api-key</strong> اجرا کنید، پس از حدود <strong>20 دقیقه</strong> JSON زیر برگردانده می‌شود:</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-punctuation">[</span><span class="hljs-punctuation">{</span><span class="hljs-attr">&quot;Mic&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;XLON&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;Ticker&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;ABDP&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;CompanyName&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;AB Dynamics PLC&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;DividendYield&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">0.0</span><span class="hljs-punctuation">,</span><span class="hljs-attr">&quot;Amount&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-number">0.0279</span><span class="hljs-punctuation">,</span>...<span class="hljs-punctuation">}</span><span class="hljs-punctuation">]</span>
+</code></pre>
+<ul>
+<li>⚠️ این کوئری <strong>زمان زیادی</strong> می‌برد (~20 دقیقه) و نتایج <strong>در طول سال تغییر می‌کند</strong>.</li>
+<li>پیشنهاد: می‌توان API را <strong>ماهانه اجرا</strong> کرد و JSON را در <strong>فایل یا پایگاه داده</strong> ذخیره نمود. سپس endpoint خارجی از این داده ذخیره شده استفاده کند. 🗄️</li>
+</ul>
+<h3>⏱️ محدودسازی (Throttle) API</h3>
+<p>هنگامی که APIها را در دسترس قرار می‌دهید، <strong>باید آن‌ها را محدود کنید (Throttle)</strong>.<br>
+روش‌های مختلفی برای این کار وجود دارد؛ مثل <strong>محدود کردن تعداد کاربران همزمان</strong> یا <strong>تعداد فراخوانی‌ها در یک بازه زمانی مشخص</strong>.</p>
+<p>در این بخش، ما می‌خواهیم API خود را طوری محدود کنیم که <strong>فقط یک بار در ماه، روز 25 اجرا شود</strong>.</p>
+<hr>
+<h3>۱️⃣ اضافه کردن کلید به appsettings.json</h3>
+<p>در فایل <strong>appsettings.json</strong>، خط زیر را اضافه کنید:</p>
+<pre class="hljs"><code><span class="hljs-attr">&quot;MorningstarNextRunDate&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">null</span></span><span class="hljs-punctuation">,</span>
+</code></pre>
+<ul>
+<li>این مقدار، <strong>تاریخ اجرای بعدی API</strong> را ذخیره خواهد کرد. 📅</li>
+</ul>
+<hr>
+<h3>۲️⃣ کلاس AppSettings</h3>
+<p>در ریشه پروژه، کلاس زیر را اضافه کنید:</p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">AppSettings</span>
+{
+    <span class="hljs-keyword">public</span> DateTime? MorningstarNextRunDate { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+}
+</code></pre>
+<ul>
+<li>این <strong>property</strong>، مقدار مربوط به کلید <strong>MorningstarNextRunDate</strong> را نگه می‌دارد.</li>
+</ul>
+<hr>
+<h3>۳️⃣ متد AddOrUpdateAppSetting()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">AddOrUpdateAppSetting</span>&lt;<span class="hljs-title">T</span>&gt;(<span class="hljs-params"><span class="hljs-built_in">string</span> sectionPathKey, T <span class="hljs-keyword">value</span></span>)</span>
+{
+    <span class="hljs-keyword">try</span>
+    {
+        <span class="hljs-keyword">var</span> filePath = Path.Combine(AppContext.BaseDirectory, <span class="hljs-string">&quot;appsettings.json&quot;</span>);
+        <span class="hljs-built_in">string</span> json = File.ReadAllText(filePath);
+        <span class="hljs-built_in">dynamic</span> jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
+        SetValueRecursively(sectionPathKey, jsonObj, <span class="hljs-keyword">value</span>);
+        <span class="hljs-built_in">string</span> output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
+        File.WriteAllText(filePath, output);
+    }
+    <span class="hljs-keyword">catch</span> (Exception ex)
+    {
+        Console.WriteLine(<span class="hljs-string">&quot;Error writing app settings | {0}&quot;</span>, ex.Message);
+    }
+}
+</code></pre>
+<ul>
+<li>این متد <strong>appsettings.json</strong> را می‌خواند، JSON را دسیریالایز می‌کند، مقدار مورد نظر را تنظیم می‌کند و دوباره JSON را در فایل ذخیره می‌کند. 📝</li>
+</ul>
+<hr>
+<h3>۴️⃣ متد SetValueRecursively()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SetValueRecursively</span>&lt;<span class="hljs-title">T</span>&gt;(<span class="hljs-params"><span class="hljs-built_in">string</span> sectionPathKey, <span class="hljs-built_in">dynamic</span> jsonObj, T <span class="hljs-keyword">value</span></span>)</span>
+{
+    <span class="hljs-keyword">var</span> remainingSections = sectionPathKey.Split(<span class="hljs-string">&quot;:&quot;</span>, <span class="hljs-number">2</span>);
+    <span class="hljs-keyword">var</span> currentSection = remainingSections[<span class="hljs-number">0</span>];
+    <span class="hljs-keyword">if</span> (remainingSections.Length &gt; <span class="hljs-number">1</span>)
+    {
+        <span class="hljs-keyword">var</span> nextSection = remainingSections[<span class="hljs-number">1</span>];
+        SetValueRecursively(nextSection, jsonObj[currentSection], <span class="hljs-keyword">value</span>);
+    }
+    <span class="hljs-keyword">else</span>
+    {
+        jsonObj[currentSection] = <span class="hljs-keyword">value</span>;
+    }
+}
+</code></pre>
+<ul>
+<li>این متد، مسیر کلید را به صورت <strong>بازگشتی</strong> دنبال می‌کند و در نهایت مقدار مورد نظر را تنظیم می‌کند. 🔄</li>
+</ul>
+<hr>
+<h3>۵️⃣ تعریف ThrottleMonthDay</h3>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">const</span> <span class="hljs-built_in">int</span> ThrottleMonthDay = <span class="hljs-number">25</span>;
+</code></pre>
+<ul>
+<li>این مقدار برای بررسی <strong>روز اجرای ماهانه API</strong> استفاده می‌شود.</li>
+</ul>
+<hr>
+<h3>۶️⃣ متد ThrottleMessage()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-built_in">string</span> <span class="hljs-title">ThrottleMessage</span>()</span>
+{
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;This API call can only be made once on the 25th of each month.&quot;</span>;
+}
+</code></pre>
+<ul>
+<li>این متد پیام هشدار محدودیت را برمی‌گرداند. 🚫</li>
+</ul>
+<hr>
+<h3>۷️⃣ دسترسی به AppSettings در Controller</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">DividendCalendarController</span>(<span class="hljs-params">IOptions&lt;AppSettings&gt; appSettings</span>)</span>
+{
+    _appSettings = appSettings.Value;
+}
+</code></pre>
+<ul>
+<li>این <strong>constructor</strong>، امکان دسترسی به مقادیر <strong>appsettings.json</strong> را فراهم می‌کند.</li>
+</ul>
+<hr>
+<h3>۸️⃣ پیکربندی در Startup</h3>
+<pre class="hljs"><code><span class="hljs-keyword">var</span> appSettingsSection = Configuration.GetSection(<span class="hljs-string">&quot;AppSettings&quot;</span>);
+services.Configure&lt;AppSettings&gt;(appSettingsSection);
+</code></pre>
+<ul>
+<li>این خطوط اجازه می‌دهند <strong>AppSettings</strong> به صورت <strong>Dependency Injection</strong> در controller در دسترس باشد.</li>
+</ul>
+<hr>
+<h3>۹️⃣ متد SetMorningstarNextRunDate()</h3>
+<pre class="hljs"><code><span class="hljs-keyword">private</span> DateTime? SetMorningstarNextRunDate()
+{
+    <span class="hljs-built_in">int</span> month;
+    <span class="hljs-keyword">if</span> (DateTime.Now.Day &lt; <span class="hljs-number">25</span>)
+        month = DateTime.Now.Month;
+    <span class="hljs-keyword">else</span>
+        month = DateTime.Now.AddMonths(<span class="hljs-number">1</span>).Month;
+
+    <span class="hljs-keyword">var</span> date = <span class="hljs-keyword">new</span> DateTime(DateTime.Now.Year, month, ApiKeyConstants.ThrottleMonthDay);
+
+    AppSettings.AddOrUpdateAppSetting&lt;DateTime?&gt;(<span class="hljs-string">&quot;MorningstarNextRunDate&quot;</span>, date);
+
+    <span class="hljs-keyword">return</span> date;
+}
+</code></pre>
+<ul>
+<li>بررسی می‌کند که روز <strong>فعلی کمتر از 25</strong> باشد یا نه.</li>
+<li>سپس <strong>تاریخ اجرای بعدی</strong> را محاسبه و در <strong>appsettings.json</strong> ذخیره می‌کند.</li>
+</ul>
+<hr>
+<h3>🔟 متد CanExecuteApiRequest()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">CanExecuteApiRequest</span>()</span>
+{
+    DateTime? nextRunDate = _appSettings.MorningstarNextRunDate;
+    <span class="hljs-keyword">if</span> (!nextRunDate.HasValue)
+        nextRunDate = SetMorningstarNextRunDate();
+
+    <span class="hljs-keyword">if</span> (DateTime.Now.Day == ApiKeyConstants.ThrottleMonthDay)
+    {
+        <span class="hljs-keyword">if</span> (nextRunDate.Value.Month == DateTime.Now.Month)
+        {
+            SetMorningstarNextRunDate();
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+        }
+        <span class="hljs-keyword">else</span>
+        {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        }
+    }
+    <span class="hljs-keyword">else</span>
+    {
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+}
+</code></pre>
+<ul>
+<li>بررسی می‌کند که آیا <strong>API در روز 25 ماه جاری</strong> قابل اجرا است یا خیر.</li>
+<li>اگر شرط‌ها برقرار باشند، <strong>true</strong> برمی‌گردد، در غیر این صورت <strong>false</strong>. ✅</li>
+</ul>
+<hr>
+<h3>۱۱️⃣ به‌روزرسانی GetDividendCalendar()</h3>
+<pre class="hljs"><code>[<span class="hljs-meta">Authorize(Policy = Policies.Internal)</span>]
+[<span class="hljs-meta">HttpGet(<span class="hljs-string">&quot;internal&quot;</span>)</span>]
+<span class="hljs-function"><span class="hljs-keyword">public</span> IActionResult <span class="hljs-title">GetDividendCalendar</span>()</span>
+{
+    <span class="hljs-keyword">if</span> (CanExecuteApiRequest())
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> ObjectResult(JsonConvert.SerializeObject(BuildDividendCalendar()));
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> ObjectResult(ThrottleMessage());
+}
+</code></pre>
+<ul>
+<li>اکنون وقتی کاربر داخلی API را فراخوانی می‌کند، <strong>اعتبارسنجی محدودیت</strong> انجام می‌شود.</li>
+<li>اگر شرایط اجرا فراهم باشد، JSON تقویم dividend بازگردانده می‌شود، در غیر این صورت <strong>پیام محدودیت</strong> نمایش داده می‌شود. ⏳</li>
+</ul>
+<hr>
+<h3>✅ جمع‌بندی</h3>
+<ul>
+<li>پروژه کامل شد، اما <strong>جا برای بهبود و توسعه</strong> وجود دارد.</li>
+<li>مرحله بعدی: <strong>مستندسازی API</strong> و <strong>استقرار آن</strong> همراه با <strong>لاگ‌گیری و مانیتورینگ</strong>.</li>
+<li><strong>Logging</strong> برای ذخیره جزئیات استثناها و پیگیری استفاده از API مفید است.</li>
+<li><strong>Monitoring</strong> برای بررسی سلامت API و دریافت هشدار در صورت بروز مشکل کاربرد دارد.</li>
+</ul>
+<p>این تمرین می‌تواند تجربه بسیار خوبی برای توسعه و بهبود مهارت‌های شما باشد. 🌟</p>
+<h3>📚 خلاصه فصل ۱۰ – امنیت API با API Key و Azure Key Vault</h3>
+<p>در این فصل، شما با یک <strong>API شخص ثالث</strong> ثبت‌نام کردید و <strong>کلید API مخصوص خودتان</strong> را دریافت کردید. این کلید در <strong>Azure Key Vault</strong> ذخیره شد تا از دسترسی کاربران غیرمجاز محافظت شود. 🔑</p>
+<p>سپس یک برنامه <strong><a href="http://ASP.NET">ASP.NET</a> Core</strong> ایجاد کرده و آن را در <strong>Azure</strong> منتشر کردید. بعد از آن، به <strong>امن‌سازی برنامه وب</strong> با استفاده از <strong>احراز هویت (Authentication)</strong> و <strong>مجوزدهی مبتنی بر نقش (Role-based Authorization)</strong> پرداختید.</p>
+<hr>
+<h3>🔒 امنیت و مجوزدهی</h3>
+<ul>
+<li>
+<p><strong>Authorization</strong> که تنظیم شد، با استفاده از <strong>API Key</strong> انجام می‌شود.</p>
+</li>
+<li>
+<p>در این پروژه، از دو <strong>API Key</strong> استفاده شد:</p>
+<ol>
+<li>یکی برای <strong>کاربران داخلی</strong></li>
+<li>یکی برای <strong>کاربران خارجی</strong></li>
+</ol>
+</li>
+<li>
+<p><strong>تست امنیت API و API Key</strong> با <strong>Postman</strong> انجام شد.</p>
+<ul>
+<li>Postman یک ابزار بسیار کاربردی برای <strong>تست درخواست‌ها و پاسخ‌های HTTP</strong> است. 🛠️</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3>📆 API Dividend Calendar</h3>
+<ul>
+<li>سپس کد <strong>Dividend Calendar API</strong> اضافه شد و <strong>دسترسی داخلی و خارجی</strong> بر اساس <strong>API Key</strong> فعال شد.</li>
+<li>پروژه چندین <strong>فراخوانی API</strong> انجام داد تا <strong>لیستی از شرکت‌هایی که قصد پرداخت سود سهام دارند</strong> ایجاد شود.</li>
+<li>در نهایت، داده‌ها به <strong>JSON</strong> سریالایز شده و به کاربر بازگردانده شدند.</li>
+<li>پروژه طوری محدود شد که <strong>فقط یک بار در ماه اجرا شود</strong>.</li>
+</ul>
+<hr>
+<h3>💡 نتیجه</h3>
+<p>با طی کردن این فصل:</p>
+<ul>
+<li>شما یک <strong>FinTech API</strong> ایجاد کرده‌اید که <strong>هر ماه یک بار اجرا می‌شود</strong>.</li>
+<li>این API <strong>اطلاعات پرداخت سود سهام سال جاری</strong> را ارائه می‌دهد.</li>
+<li>کاربران می‌توانند این داده‌ها را <strong>دسیریالایز کرده</strong> و با <strong>LINQ</strong>، داده‌های مورد نظر خود را استخراج کنند.</li>
+</ul>
+<hr>
+<h3>🔧 فصل بعدی</h3>
+<p>در فصل بعدی، از <strong>PostSharp</strong> برای پیاده‌سازی <strong>برنامه‌نویسی مبتنی بر Aspect (AOP)</strong> استفاده می‌کنیم.<br>
+با این فریمورک AOP، یاد می‌گیریم که چگونه <strong>عملکردهای مشترک</strong> مثل <strong>مدیریت استثنا، لاگ‌گیری، امنیت و تراکنش‌ها</strong> را در برنامه‌هایمان مدیریت کنیم.</p>
+<hr>
+<h3>❓ سوالات تمرینی</h3>
+<ol>
+<li>چه URLهایی منابع خوبی برای <strong>میزبانی API خود</strong> و <strong>دسترسی به API شخص ثالث</strong> هستند؟</li>
+<li>دو بخش لازم برای <strong>امن‌سازی API</strong> چیست؟</li>
+<li><strong>Claims</strong> چیست و چرا باید از آن‌ها استفاده کنید؟</li>
+<li>از <strong>Postman</strong> برای چه کاری استفاده می‌کنید؟</li>
+<li>چرا باید از <strong>Repository Pattern</strong> برای ذخیره داده‌ها استفاده کنید؟</li>
+</ol>
+<hr>
+<h3>📖 مطالعه بیشتر</h3>
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/aspnet/web-api/overview/security/individual-accounts-in-web-api">Microsoft: Web API Security Guide</a> – راهنمای جامع امنیت وب API</li>
+<li><a href="https://docs.microsoft.com/en-us/aspnet/web-forms/overview/older-versions-security/membership/creating-the-membership-schema-in-sqlserver-vb">ASP.NET Membership Database</a> – ایجاد پایگاه داده عضویت</li>
+<li><a href="https://www.iso20022.org/10383/iso-10383-market-identifier-codes">ISO 10383 MIC</a> – درباره ISO 10383 MIC</li>
+<li><a href="https://docs.microsoft.com/en-gb/azure/key-vault/vs-key-vault-addconnected-service">Adding Key Vault via Visual Studio</a></li>
+<li><a href="https://aka.ms/installazurecliwindows">Azure CLI MSI Installer</a></li>
+<li><a href="https://docs.microsoft.com/en-us/azure/key-vault/service-to-service-authentication">Azure Service-to-Service Authentication</a></li>
+<li><a href="https://azure.microsoft.com/en-gb/free/?WT.mc_id=A261C142F">Azure Free Subscription</a></li>
+<li><a href="https://docs.microsoft.com/en-us/azure/key-vault/basic-concepts">Azure Key Vault Basics</a></li>
+<li><a href="https://docs.microsoft.com/en-us/azure/app-service/app-service-webget-started-dotnet">Creating a .NET Core App in Azure</a></li>
+<li><a href="https://docs.microsoft.com/en-gb/azure/app-service/overview-hostingplans">Azure App Service Plans Overview</a></li>
+<li><a href="https://docs.microsoft.com/en-us/azure/key-vault/tutorial-net-createvault-azure-web-app">Tutorial: Using Azure Key Vault with Web App</a></li>
+</ul>
+
+</main>
+
+
+ 
+
+  <!-- فوتر مشترک -->
+  <footer class="footer">
+    <div class="container">
+      <p>
+        <img src="/icone/copyright.svg" alt="کپی‌رایت" width="14" height="14"
+             style="vertical-align:middle;margin-inline:4px">
+        <span id="y"></span> Gitab — برای توسعه‌دهندگان
+      </p>
+    </div>
+  </footer>
+
+  <!-- سال + اسکریپت تم -->
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    (() => {
+      const root = document.documentElement;
+      const btn = document.getElementById('themeToggle');
+      const KEY = 'gitab-theme';
+      const media = window.matchMedia('(prefers-color-scheme: dark)');
+      const getEffective = s => s === 'auto' ? (media.matches ? 'dark' : 'light') : s;
+      function updateTheme(s) {
+        root.setAttribute('data-theme', s);
+        const mode = getEffective(s);
+        root.dataset.colorMode = mode;
+        btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
+      }
+      const saved = localStorage.getItem(KEY) || 'auto';
+      updateTheme(saved);
+      btn.addEventListener('click', () => {
+        const curr = localStorage.getItem(KEY) || 'auto';
+        const next = curr === 'auto' ? 'dark' : curr === 'dark' ? 'light' : 'auto';
+        localStorage.setItem(KEY, next);
+        updateTheme(next);
+      });
+      media.addEventListener('change', () => {
+        if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
+      });
+      window.addEventListener('DOMContentLoaded', () => updateTheme(saved));
+    })();
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
+<script>
+  document.body.dataset.page = window.location.pathname;
+</script>
+
+</body>
+
+</html>

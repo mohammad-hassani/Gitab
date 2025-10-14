@@ -1,0 +1,1511 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Threading and Concurrency</title>
+  <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
+  <link rel="stylesheet" href="/styles/main.css">
+<link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<style>
+@font-face {
+  font-family: 'Vazir';
+  src: url('/fonts/Vazir-FD-WOL.ttf') format('truetype');
+  font-display: swap;
+}
+body {
+  font-family: 'Vazir', sans-serif;
+}
+</style>
+
+</head>
+<body>
+  <!-- هدر مشترک -->
+  <header class="header">
+    <div class="container nav-wrap">
+      <a class="brand" href="/">
+        <img src="/icone/logo.svg" alt="Gitab" width="28" height="28">
+        <span>Gitab</span>
+      </a>
+
+      <nav class="nav">
+        <a href="/">خانه</a>
+        <a href="/books/list-books">کتاب‌ها</a>
+        <a href="#">همکاری</a>
+        <a href="#">درباره‌ما</a>
+      </nav>
+
+     <div class="nav-actions">
+  <button id="themeToggle" class="icon-btn theme-btn" aria-label="تغییر حالت">
+    <img class="icon-sun" src="/icone/sun.svg" alt="روشن">
+    <img class="icon-moon" src="/icone/moon.svg" alt="تاریک">
+  </button>
+
+  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
+    <img src="/icone/github.svg" alt="GitHub">
+  </a>
+</div>
+
+  </header>
+
+
+<main class="site-main book-page ">
+  <h1>فصل هشتم:  <strong>Threading و Concurrency</strong></h1>
+<p>یک <strong>Process (فرآیند)</strong> در اصل همان برنامه‌ای است که روی یک سیستم‌عامل در حال اجرا است. این فرآیند از چندین <strong>Thread (رشته‌ی اجرایی)</strong> ساخته می‌شود.<br>
+<strong>Thread of execution (رشته‌ی اجرایی)</strong> مجموعه‌ای از دستورهاست که توسط یک Process صادر می‌شود.</p>
+<p>قابلیت اجرای بیش از یک Thread به‌صورت هم‌زمان، <strong>Multi-Threading (چندریسمانی)</strong> نامیده می‌شود.<br>
+در این فصل قرار است به موضوع <strong>Multi-Threading</strong> و <strong>Concurrency (هم‌زمانی)</strong> بپردازیم.</p>
+<p>هر Thread برای اجرا، یک مقدار مشخصی زمان دریافت می‌کند و این اجرا توسط <strong>Thread Scheduler (زمان‌بند رشته‌ها)</strong> به صورت چرخشی مدیریت می‌شود. زمان‌بند، با استفاده از تکنیکی به نام <strong>Time Slicing</strong> زمان اجرا را بین Threadها تقسیم می‌کند و هر Thread را در زمان تعیین‌شده برای اجرا به CPU می‌فرستد. ⚙️</p>
+<p><strong>Concurrency</strong> یعنی توانایی اجرای بیش از یک Thread دقیقاً در یک لحظه. این موضوع تنها در کامپیوترهایی ممکن است که بیش از یک <strong>Processor Core (هسته پردازنده)</strong> داشته باشند. هرچه تعداد هسته‌ها بیشتر باشد، تعداد بیشتری از Threadها می‌توانند به‌طور هم‌زمان اجرا شوند. 🖥️💡</p>
+<p>در طول بررسی <strong>Concurrency</strong> و <strong>Threading</strong> در این فصل، با مشکلاتی مثل <strong>Blocking (انسداد)</strong>، <strong>Deadlock (بن‌بست)</strong> و <strong>Race Condition (شرایط رقابتی)</strong> روبه‌رو می‌شویم. همچنین یاد می‌گیریم چطور با استفاده از اصول <strong>Clean Code</strong> این مشکلات را حل کنیم. ✅</p>
+<hr>
+<h3>✨ مباحثی که در این فصل پوشش داده خواهند شد</h3>
+<ol>
+<li>درک <strong>چرخه حیات Thread</strong></li>
+<li>افزودن <strong>پارامتر به Thread</strong></li>
+<li>استفاده از <strong>Thread Pool</strong></li>
+<li>استفاده از <strong>Mutual Exclusion Object</strong> با Threadهای همگام (Synchronous)</li>
+<li>کار با Threadهای موازی با استفاده از <strong>Semaphore</strong></li>
+<li>محدود کردن تعداد <strong>پردازنده‌ها و Threadها</strong> در <strong>Thread Pool</strong></li>
+<li>جلوگیری از <strong>Deadlock</strong></li>
+<li>جلوگیری از <strong>Race Condition</strong></li>
+<li>درک <strong>Static Constructorها و Methodها</strong></li>
+<li>آشنایی با <strong>Mutability (قابلیت تغییرپذیری)</strong>، <strong>Immutability (تغییرناپذیری)</strong> و <strong>Thread Safety</strong></li>
+<li><strong>Synchronized Method Dependencies</strong></li>
+<li>استفاده از کلاس <strong>Interlocked</strong> برای تغییر وضعیت‌های ساده</li>
+<li>توصیه‌های عمومی 📝</li>
+</ol>
+<hr>
+<h3>🎯 پس از پایان این فصل شما توانایی‌های زیر را کسب خواهید کرد</h3>
+<ul>
+<li>درک و توضیح <strong>چرخه حیات Thread</strong></li>
+<li>آشنایی با <strong>Foreground Thread</strong> و <strong>Background Thread</strong> و توانایی استفاده از آن‌ها</li>
+<li>مدیریت و کنترل سرعت اجرای Threadها (<strong>Throttle</strong>) و تعیین تعداد پردازنده‌های هم‌زمان با استفاده از <strong>Thread Pool</strong></li>
+<li>درک اثر <strong>Static Constructorها</strong> و <strong>Methodها</strong> در ارتباط با <strong>Multi-Threading</strong> و <strong>Concurrency</strong></li>
+<li>در نظر گرفتن تأثیر <strong>Mutability</strong> و <strong>Immutability</strong> بر <strong>Thread Safety</strong></li>
+<li>درک علت بروز <strong>Race Condition</strong> و روش‌های جلوگیری از آن</li>
+<li>درک علت وقوع <strong>Deadlock</strong> و راه‌های پیشگیری از آن</li>
+<li>توانایی انجام تغییرات ساده در وضعیت‌ها با استفاده از کلاس <strong>Interlocked</strong></li>
+</ul>
+<hr>
+<h3>⚡ پیش‌نیاز اجرای کدهای این فصل</h3>
+<p>برای اجرای کدهای این فصل به یک <strong>.NET Framework Console Application</strong> نیاز دارید.<br>
+مگر در مواقعی که به‌طور خاص ذکر شده باشد، تمام کدها درون کلاس <strong>Program</strong> قرار خواهند گرفت. 🖊️</p>
+<h3>🔄 درک <strong>چرخه‌ی حیات Thread</strong></h3>
+<p>در زبان <strong>C#</strong>، هر <strong>Thread</strong> (رشته‌ی اجرایی) دارای یک <strong>چرخه‌ی حیات</strong> مشخص است.<br>
+این چرخه، مراحلی را نشان می‌دهد که یک Thread از زمان ایجاد شدن تا پایان کارش طی می‌کند.</p>
+<p>چرخه‌ی حیات Thread به صورت زیر است: 🧩</p>
+<div align="center">
+<p><img src="../../../assets/image/08/Table%208-1.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>وقتی یک <strong>Thread (رشته)</strong> شروع به کار می‌کند، وارد حالت <strong>Running (در حال اجرا)</strong> می‌شود. در این حالت، رشته می‌تواند وارد حالت‌های <strong>Wait (انتظار)</strong>، <strong>Sleep (خواب)</strong>، <strong>Join (پیوستن)</strong>، <strong>Stop (توقف)</strong> یا <strong>Suspended (معلق)</strong> شود. همچنین رشته‌ها می‌توانند <strong>Aborted (متوقف‌شده)</strong> شوند. رشته‌های متوقف‌شده وارد حالت <strong>Stop</strong> می‌شوند. شما می‌توانید با استفاده از متدهای <strong>Suspend()</strong> و <strong>Resume()</strong> یک رشته را به ترتیب معلق کرده و دوباره ادامه دهید.</p>
+<p>یک رشته زمانی وارد حالت <strong>Wait</strong> می‌شود که متد <strong>Monitor.Wait(object obj)</strong> فراخوانی شود. سپس این رشته زمانی ادامه پیدا می‌کند که متد <strong>Monitor.Pulse(object obj)</strong> فراخوانی شود.<br>
+رشته‌ها با فراخوانی متد <strong>Thread.Sleep(int millisecondsTimeout)</strong> به حالت خواب می‌روند. پس از گذشت زمان مشخص‌شده، رشته دوباره به حالت اجرا بازمی‌گردد.</p>
+<p>متد <strong>Thread.Join()</strong> باعث می‌شود یک رشته وارد حالت انتظار شود. رشته‌ای که Join شده است در حالت انتظار باقی می‌ماند تا تمام رشته‌های وابسته به آن اجرا شوند و سپس به حالت اجرا بازمی‌گردد. با این حال، اگر هر یک از رشته‌های وابسته متوقف شوند (<strong>Aborted</strong>)، این رشته هم متوقف شده و وارد حالت <strong>Stop</strong> می‌شود.<br>
+رشته‌هایی که کامل اجرا شده‌اند یا متوقف شده‌اند، دیگر قابل شروع مجدد نیستند.</p>
+<p>رشته‌ها می‌توانند در <strong>Foreground (پیش‌زمینه)</strong> یا <strong>Background (پس‌زمینه)</strong> اجرا شوند. بیایید با رشته‌های پیش‌زمینه شروع کنیم:</p>
+<h3>🔵 رشته‌های پیش‌زمینه (Foreground Threads)</h3>
+<p>به‌صورت پیش‌فرض، رشته‌ها در پیش‌زمینه اجرا می‌شوند. یک <strong>Process (فرآیند)</strong> زمانی که حداقل یک رشته پیش‌زمینه در حال اجرا باشد، همچنان فعال باقی می‌ماند. حتی اگر متد <strong>Main()</strong> تمام شود اما هنوز یک رشته پیش‌زمینه در حال اجرا باشد، فرآیند برنامه تا پایان کار آن رشته فعال خواهد ماند. ایجاد یک رشته پیش‌زمینه بسیار ساده است، همان‌طور که در کد زیر می‌بینید:</p>
+<pre class="hljs"><code><span class="hljs-keyword">var</span> foregroundThread = <span class="hljs-keyword">new</span> Thread(SomeMethodName);
+foregroundThread.Start();
+</code></pre>
+<h3>🟢 رشته‌های پس‌زمینه (Background Threads)</h3>
+<p>ایجاد رشته پس‌زمینه مشابه رشته‌های پیش‌زمینه است، با این تفاوت که شما باید به‌صورت صریح مشخص کنید که رشته در پس‌زمینه اجرا شود، همان‌طور که در مثال زیر نشان داده شده است:</p>
+<pre class="hljs"><code><span class="hljs-keyword">var</span> backgroundThread = <span class="hljs-keyword">new</span> Thread(SomeMethodName);
+backgroundThread.IsBackground = <span class="hljs-literal">true</span>;
+backgroundThread.Start();
+</code></pre>
+<p>رشته‌های پس‌زمینه برای انجام کارهای جانبی و حفظ <strong>واکنش‌پذیری رابط کاربری</strong> استفاده می‌شوند. زمانی که فرآیند اصلی پایان یابد، هر رشته پس‌زمینه‌ای که در حال اجرا باشد نیز خاتمه پیدا می‌کند. اما حتی اگر فرآیند اصلی پایان یابد، رشته‌های پیش‌زمینه‌ای که در حال اجرا هستند، تا زمان کامل شدنشان اجرا خواهند شد.</p>
+<hr>
+<h3>➕ افزودن پارامتر به رشته‌ها (Adding Thread Parameters)</h3>
+<p>روش‌هایی که در رشته‌ها اجرا می‌شوند معمولاً پارامتر دارند. بنابراین هنگام اجرای یک متد درون یک رشته، باید بدانیم چگونه پارامترهای آن متد را به رشته ارسال کنیم.</p>
+<p>فرض کنید متد زیر را داریم که دو عدد صحیح (<strong>int</strong>) را با هم جمع کرده و نتیجه را برمی‌گرداند:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">int</span> <span class="hljs-title">Add</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> a, <span class="hljs-built_in">int</span> b</span>)</span>
+{
+    <span class="hljs-keyword">return</span> a + b;
+}
+</code></pre>
+<p>همان‌طور که می‌بینید، این متد ساده است. دو پارامتر به نام‌های <strong>a</strong> و <strong>b</strong> دارد. این دو پارامتر باید به رشته ارسال شوند تا متد <strong>Add()</strong> به‌درستی اجرا شود.</p>
+<p>در ادامه یک متد نمونه اضافه می‌کنیم که همین کار را انجام می‌دهد:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ThreadParametersExample</span>()</span>
+{
+    <span class="hljs-built_in">int</span> result = <span class="hljs-number">0</span>;
+    Thread thread = <span class="hljs-keyword">new</span> Thread(() =&gt; { result = Add(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>); });
+    thread.Start();
+    thread.Join();
+    Message(<span class="hljs-string">$&quot;The addition of 1 plus 2 is <span class="hljs-subst">{result}</span>.&quot;</span>);
+}
+</code></pre>
+<p>در این متد، ابتدا یک متغیر <strong>int</strong> با مقدار اولیه 0 تعریف می‌کنیم. سپس یک رشته جدید ایجاد می‌کنیم که متد <strong>Add()</strong> را با مقادیر <strong>1</strong> و <strong>2</strong> فراخوانی کرده و نتیجه را در متغیر ذخیره می‌کند. رشته را اجرا می‌کنیم و با متد <strong>Join()</strong> منتظر می‌مانیم تا اجرای رشته تمام شود. در نهایت، نتیجه را در پنجره <strong>Console</strong> چاپ می‌کنیم.</p>
+<p>برای این کار، متد <strong>Message()</strong> را اضافه می‌کنیم:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">internal</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Message</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> message</span>)</span>
+{
+    Console.WriteLine(message);
+}
+</code></pre>
+<p>متد <strong>Message()</strong> یک رشته متنی را دریافت کرده و در پنجره کنسول نمایش می‌دهد. حالا کافی است متد <strong>Main()</strong> را به‌روزرسانی کنیم:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Main</span>(<span class="hljs-params"><span class="hljs-built_in">string</span>[] <span class="hljs-keyword">args</span></span>)</span>
+{
+    ThreadParametersExample();
+    Message(<span class="hljs-string">&quot;=== Press any Key to exit ===&quot;</span>);
+    Console.ReadKey();
+}
+</code></pre>
+<p>در متد <strong>Main()</strong>، ابتدا متد نمونه خود را فراخوانی می‌کنیم و سپس منتظر می‌مانیم تا کاربر کلیدی را فشار دهد تا برنامه بسته شود. خروجی که باید مشاهده کنید به‌صورت زیر خواهد بود: 👇</p>
+<div align="center">
+<p><img src="../../../assets/image/08/Table%208-2.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>همان‌طور که مشاهده کردید، اعداد <strong>1</strong> و <strong>2</strong> پارامترهای متدی بودند که به متد جمع ارسال شدند و مقدار <strong>3</strong> خروجی‌ای بود که رشته برگرداند.</p>
+<hr>
+<h2>🌀 استفاده از <strong>Thread Pool (استخر رشته)</strong></h2>
+<p>یک <strong>Thread Pool</strong> باعث بهبود عملکرد برنامه می‌شود، چون در هنگام شروع برنامه مجموعه‌ای از رشته‌ها ایجاد می‌کند. هر زمان یک رشته نیاز باشد، یکی از رشته‌های موجود در استخر برای انجام یک کار اختصاص داده می‌شود. پس از انجام آن کار، رشته دوباره به استخر برگردانده شده و قابل استفاده مجدد خواهد بود.</p>
+<p>از آنجایی که ایجاد رشته در <strong>.NET</strong> هزینه‌بر است، می‌توان با استفاده از <strong>Thread Pool</strong> عملکرد را بهبود بخشید. هر فرآیند دارای تعداد مشخصی رشته است که براساس منابع سیستم (مثل حافظه و CPU) تعیین می‌شود. البته می‌توان تعداد رشته‌های استفاده‌شده در استخر را کم یا زیاد کرد، اما معمولاً بهتر است این مدیریت را به خود استخر بسپاریم و به‌صورت دستی تنظیمات انجام ندهیم.</p>
+<p>روش‌های مختلف برای ایجاد یک <strong>Thread Pool</strong> عبارت‌اند از:</p>
+<ul>
+<li>استفاده از <strong>Task Parallel Library (TPL)</strong> (در <strong>.NET Framework 4.0</strong> و بالاتر)</li>
+<li>استفاده از <strong>ThreadPool.QueueUserWorkItem()</strong></li>
+<li>استفاده از <strong>Asynchronous Delegates (نماینده‌های ناهمزمان)</strong></li>
+<li>استفاده از <strong>BackgroundWorker</strong></li>
+</ul>
+<blockquote>
+<p><strong>نکته مهم:</strong> به‌طور کلی، <strong>Thread Pool</strong> معمولاً برای برنامه‌های <strong>Server-side (سمت سرور)</strong> استفاده می‌شود. برای برنامه‌های <strong>Client-side (سمت کاربر)</strong>، بهتر است از رشته‌های <strong>Foreground</strong> و <strong>Background</strong> بسته به نیاز استفاده کنید.</p>
+</blockquote>
+<p>در این کتاب، ما فقط به <strong>TPL</strong> و متد <strong>QueueUserWorkItem()</strong> می‌پردازیم. برای یادگیری روش‌های دیگر می‌توانید به لینک زیر مراجعه کنید:<br>
+<a href="http://www.albahari.com/threading/">http://www.albahari.com/threading/</a></p>
+<hr>
+<h2>⚡ کتابخانه <strong>Task Parallel Library (TPL)</strong></h2>
+<p>در C#، یک عملیات ناهمزمان توسط یک <strong>Task (وظیفه)</strong> نمایش داده می‌شود. هر <strong>Task</strong> در C# توسط کلاس <strong>Task</strong> در <strong>TPL</strong> نمایش داده می‌شود. همان‌طور که از نامش پیداست، <strong>Task Parallelism</strong> امکان اجرای هم‌زمان چند <strong>Task</strong> را فراهم می‌کند که در بخش‌های بعدی درباره آن یاد می‌گیریم.</p>
+<p>اولین متدی که از کلاس <strong>Parallel</strong> بررسی می‌کنیم، متد <strong>Invoke()</strong> است.</p>
+<hr>
+<h3>🔄 <strong>Parallel.Invoke()</strong></h3>
+<p>در اولین مثال، سه متد مختلف را با استفاده از <strong>Parallel.Invoke()</strong> فراخوانی می‌کنیم. سه متد زیر را اضافه کنید:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">MethodOne</span>()</span>
+{
+    Message(<span class="hljs-string">$&quot;MethodOne Executed: Thread Id(<span class="hljs-subst">{Thread.CurrentThread.ManagedThreadId}</span>)&quot;</span>);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">MethodTwo</span>()</span>
+{
+    Message(<span class="hljs-string">$&quot;MethodTwo Executed: Thread Id(<span class="hljs-subst">{Thread.CurrentThread.ManagedThreadId}</span>)&quot;</span>);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">MethodThree</span>()</span>
+{
+    Message(<span class="hljs-string">$&quot;MethodThree Executed: Thread Id(<span class="hljs-subst">{Thread.CurrentThread.ManagedThreadId}</span>)&quot;</span>);
+}
+</code></pre>
+<p>همان‌طور که می‌بینید، این سه متد تقریباً مشابه هستند و تنها نام‌ها و پیام چاپ‌شده در کنسول متفاوت است که توسط متد <strong>Message()</strong> (که قبلاً نوشتیم) نمایش داده می‌شود.</p>
+<p>حالا متد <strong>UsingTaskParallelLibrary()</strong> را اضافه می‌کنیم تا این سه متد را به‌صورت موازی اجرا کنیم:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">UsingTaskParallelLibrary</span>()</span>
+{
+    Message(<span class="hljs-string">$&quot;UsingTaskParallelLibrary Started: Thread Id = (<span class="hljs-subst">{Thread.CurrentThread.ManagedThreadId}</span>)&quot;</span>);
+    Parallel.Invoke(MethodOne, MethodTwo, MethodThree);
+    Message(<span class="hljs-string">&quot;UsingTaskParallelLibrary Completed.&quot;</span>);
+}
+</code></pre>
+<p>در این متد، ابتدا پیامی در پنجره <strong>Console</strong> چاپ می‌کنیم تا نشان دهد شروع متد آغاز شده است. سپس متدهای <strong>MethodOne</strong>، <strong>MethodTwo</strong> و <strong>MethodThree</strong> را به‌صورت موازی اجرا می‌کنیم. پس از آن، پیامی در <strong>Console</strong> چاپ می‌کنیم تا مشخص شود متد به انتهای اجرای خود رسیده است و سپس منتظر می‌مانیم تا کاربر کلیدی را فشار دهد و در نهایت متد خاتمه پیدا کند.</p>
+<p>کد را اجرا کنید و باید خروجی زیر را مشاهده کنید: 👇</p>
+<div align="center">
+<p><img src="../../../assets/image/08/Table%208-3.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>در تصویر قبلی، مشاهده می‌کنید که <strong>رشته شماره 1</strong> دوباره استفاده شده است. حالا بیایید به سراغ حلقه <strong>Parallel.For()</strong> برویم.</p>
+<hr>
+<h2>🔁 <strong>Parallel.For()</strong></h2>
+<p>در مثال بعدی مربوط به <strong>TPL</strong>، به یک حلقه ساده <strong>Parallel.For()</strong> نگاه می‌کنیم. متد زیر را به کلاس <strong>Program</strong> در یک برنامه <strong>Console</strong> جدید با <strong>.NET Framework</strong> اضافه کنید:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Method</span>()</span>
+{
+    Message(<span class="hljs-string">$&quot;Method Executed: Thread Id(<span class="hljs-subst">{Thread.CurrentThread.ManagedThreadId}</span>)&quot;</span>);
+}
+</code></pre>
+<p>این متد تنها یک رشته متنی را در پنجره <strong>Console</strong> چاپ می‌کند.</p>
+<p>حالا متدی ایجاد می‌کنیم که حلقه <strong>Parallel.For()</strong> را اجرا کند:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">UsingTaskParallelLibraryFor</span>()</span>
+{
+    Message(<span class="hljs-string">$&quot;UsingTaskParallelLibraryFor Started: Thread Id = (<span class="hljs-subst">{Thread.CurrentThread.ManagedThreadId}</span>)&quot;</span>);
+    Parallel.For(<span class="hljs-number">0</span>, <span class="hljs-number">1000</span>, X =&gt; Method());
+    Message(<span class="hljs-string">&quot;UsingTaskParallelLibraryFor Completed.&quot;</span>);
+}
+</code></pre>
+<p>در این متد، از عدد <strong>0 تا 1000</strong> حلقه می‌زنیم و در هر تکرار، متد <strong>Method()</strong> را فراخوانی می‌کنیم. در طول اجرای این حلقه، خواهید دید که رشته‌ها در فراخوانی‌های مختلف دوباره استفاده می‌شوند، همان‌طور که در تصویر زیر مشخص است: 👇</p>
+<div align="center">
+<p><img src="../../../assets/image/08/Table%208-4.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>حالا می‌خواهیم به سراغ استفاده از متد <strong>ThreadPool.QueueUserWorkItem()</strong> برویم.</p>
+<hr>
+<h2>🧵 <strong>ThreadPool.QueueUserWorkItem()</strong></h2>
+<p>متد <strong>ThreadPool.QueueUserWorkItem()</strong> یک متد <strong>WaitCallback</strong> را دریافت کرده و آن را برای اجرا در صف قرار می‌دهد.<br>
+<strong>WaitCallback</strong> یک <strong>Delegate (نماینده)</strong> است که نشان‌دهنده متدی است که باید توسط یک رشته در <strong>Thread Pool</strong> اجرا شود. وقتی یک رشته آزاد شود، این متد اجرا خواهد شد.</p>
+<p>بیایید یک مثال ساده اضافه کنیم. ابتدا متد زیر را تعریف می‌کنیم:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">WaitCallbackMethod</span>(<span class="hljs-params">Object _</span>)</span>
+{
+    Message(<span class="hljs-string">&quot;Hello from WaitCallBackMethod!&quot;</span>);
+}
+</code></pre>
+<p>این متد یک پارامتر از نوع <strong>Object</strong> دریافت می‌کند، اما چون از آن استفاده نمی‌کنیم، از متغیر <strong>discard (_)</strong> استفاده شده است. سپس پیامی در پنجره <strong>Console</strong> چاپ می‌شود.</p>
+<p>حالا کد فراخوانی این متد را اضافه می‌کنیم:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ThreadPoolQueueUserWorkItem</span>()</span>
+{
+    ThreadPool.QueueUserWorkItem(WaitCallbackMethod);
+    Message(<span class="hljs-string">&quot;Main thread does some work, then sleeps.&quot;</span>);
+    Thread.Sleep(<span class="hljs-number">1000</span>);
+    Message(<span class="hljs-string">&quot;Main thread exits.&quot;</span>);
+}
+</code></pre>
+<p>همان‌طور که می‌بینید، از کلاس <strong>ThreadPool</strong> برای قرار دادن <strong>WaitCallbackMethod()</strong> در صف <strong>Thread Pool</strong> استفاده کردیم. سپس رشته اصلی (Main thread) کمی کار انجام داده و به خواب می‌رود. در این زمان، یک رشته آزاد از استخر رشته‌ها انتخاب شده و متد <strong>WaitCallbackMethod()</strong> اجرا می‌شود. سپس رشته به استخر برگردانده شده و قابل استفاده مجدد خواهد بود. اجرای برنامه به رشته اصلی بازمی‌گردد و در نهایت برنامه خاتمه پیدا می‌کند.</p>
+<hr>
+<h2>🔒 استفاده از <strong>Mutex</strong> با رشته‌های همزمان</h2>
+<p>در بخش بعدی، به سراغ <strong>Mutex (شیء قفل‌کننده)</strong> می‌رویم.</p>
+<p>در C#، یک <strong>Mutex</strong> یک شیء قفل‌کننده رشته است که می‌تواند بین چندین فرآیند کار کند. تنها فرآیندی که درخواست یا آزادسازی یک منبع را دارد، می‌تواند <strong>Mutex</strong> را تغییر دهد. زمانی که یک <strong>Mutex</strong> قفل شود، بقیه فرآیندها باید در صف منتظر بمانند. وقتی قفل آزاد شد، بقیه می‌توانند به منبع دسترسی داشته باشند. چندین رشته می‌توانند از یک <strong>Mutex</strong> استفاده کنند، اما فقط به‌صورت <strong>همزمان‌سازی شده (Synchronous)</strong>.</p>
+<h3>مزایای استفاده از Mutex</h3>
+<ul>
+<li><strong>Mutex</strong> یک قفل ساده است که قبل از ورود به بخش حساس از کد گرفته می‌شود و هنگام خروج از آن آزاد می‌شود.</li>
+<li>چون در هر لحظه تنها یک رشته وارد بخش حساس می‌شود، داده‌ها در حالت سازگار باقی می‌مانند و <strong>Race Condition (تداخل داده‌ها)</strong> رخ نمی‌دهد.</li>
+</ul>
+<h3>معایب استفاده از Mutex</h3>
+<ul>
+<li><strong>Starvation (گرسنگی رشته)</strong>: اگر رشته‌ای قفل را در اختیار داشته باشد و به خواب برود یا متوقف شود، رشته‌های دیگر نمی‌توانند ادامه دهند.</li>
+<li>وقتی یک <strong>Mutex</strong> قفل شده است، فقط همان رشته‌ای که قفل را گرفته می‌تواند آن را آزاد کند. هیچ رشته دیگری نمی‌تواند قفل را بگیرد یا آزاد کند.</li>
+<li>در هر لحظه فقط یک رشته اجازه ورود به بخش حساس را دارد. این موضوع می‌تواند باعث هدر رفت زمان <strong>CPU</strong> شود، زیرا پیاده‌سازی Mutex ممکن است به حالت <strong>Busy Waiting (انتظار فعال)</strong> منجر شود.</li>
+</ul>
+<hr>
+<h3>✏️ برنامه نمونه برای استفاده از Mutex</h3>
+<p>ابتدا در بالای کلاس، متغیر زیر را اضافه کنید:</p>
+<pre class="hljs"><code><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">readonly</span> Mutex _mutex = <span class="hljs-keyword">new</span> Mutex();
+</code></pre>
+<p>در اینجا، یک شیء ابتدایی به نام <strong>_mutex</strong> تعریف کرده‌ایم که برای همگام‌سازی بین فرآیندها استفاده خواهد شد.</p>
+<p>حالا متدی برای نمایش همگام‌سازی رشته‌ها با استفاده از Mutex اضافه می‌کنیم:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ThreadSynchronisationUsingMutex</span>()</span>
+{
+    <span class="hljs-keyword">try</span>
+    {
+        _mutex.WaitOne();
+        Message(<span class="hljs-string">$&quot;Domain Entered By: <span class="hljs-subst">{Thread.CurrentThread.Name}</span>&quot;</span>);
+        Thread.Sleep(<span class="hljs-number">500</span>);
+        Message(<span class="hljs-string">$&quot;Domain Left By: <span class="hljs-subst">{Thread.CurrentThread.Name}</span>&quot;</span>);
+    }
+    <span class="hljs-keyword">finally</span>
+    {
+        _mutex.ReleaseMutex();
+    }
+}
+</code></pre>
+<p>در این متد، رشته جاری تا زمانی که <strong>Wait Handle</strong> (دستگیره انتظار) سیگنال دریافت کند، بلوکه می‌شود. وقتی سیگنال داده شود، رشته بعدی می‌تواند وارد شود. پس از پایان کار، سایر رشته‌ها از حالت انتظار آزاد شده و امکان دسترسی به Mutex را خواهند داشت.</p>
+<p>متد بعدی برای اجرای نمونه Mutex:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">MutexExample</span>()</span>
+{
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">1</span>; i &lt;= <span class="hljs-number">10</span>; i++)
+    {
+        <span class="hljs-keyword">var</span> thread = <span class="hljs-keyword">new</span> Thread(ThreadSynchronisationUsingMutex)
+        {
+            Name = <span class="hljs-string">$&quot;Mutex Example Thread: <span class="hljs-subst">{i}</span>&quot;</span>
+        };
+        thread.Start();
+    }
+}
+</code></pre>
+<p>در این متد، 10 رشته ایجاد کرده و آن‌ها را شروع می‌کنیم. هر رشته متد <strong>ThreadSynchronisationUsingMutex()</strong> را اجرا می‌کند.</p>
+<p>در نهایت، متد <strong>Main()</strong> را به‌روزرسانی کنید:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Main</span>(<span class="hljs-params"><span class="hljs-built_in">string</span>[] <span class="hljs-keyword">args</span></span>)</span>
+{
+    SemaphoreExample();
+    Console.ReadKey();
+}
+</code></pre>
+<p>متد <strong>Main()</strong> نمونه‌ی استفاده از <strong>Mutex</strong> ما را اجرا می‌کند. خروجی باید مشابه تصویر زیر باشد: 👇</p>
+<div align="center">
+<p><img src="../../../assets/image/08/Table%208-5.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>مثالی که اجرا کردیم ممکن است هر بار اعداد مختلفی برای رشته‌ها نشان دهد. حتی اگر اعداد مشابه باشند، ممکن است ترتیب نمایش آن‌ها متفاوت باشد.</p>
+<p>حالا که با <strong>Mutex</strong> آشنا شدیم، بیایید به <strong>Semaphore (سِمافور)</strong> بپردازیم.</p>
+<hr>
+<h2>🟡 کار با رشته‌های موازی با استفاده از <strong>Semaphore</strong></h2>
+<p>در برنامه‌های چندرشته‌ای (<strong>Multi-threaded Applications</strong>)، یک عدد غیرمنفی به نام <strong>Semaphore</strong> بین رشته‌ها به اشتراک گذاشته می‌شود. این مقدار می‌تواند <strong>۱</strong> یا <strong>۲</strong> باشد که در همگام‌سازی به‌ترتیب به معنی <strong>انتظار (Wait)</strong> و <strong>سیگنال (Signal)</strong> است.<br>
+می‌توان یک Semaphore را به تعدادی <strong>Buffer (حافظه موقت)</strong> مرتبط کرد تا فرآیندهای مختلف به‌صورت هم‌زمان روی هرکدام کار کنند.</p>
+<p>به‌طور خلاصه، <strong>Semaphore</strong> یک مکانیزم سیگنال‌دهی است که از انواع <strong>Integer</strong> و <strong>Binary</strong> بوده و با عملیات <strong>Wait</strong> و <strong>Signal</strong> قابل تغییر است. اگر منابع آزاد موجود نباشند، فرآیندهایی که نیاز به منبع دارند باید عملیات <strong>Wait</strong> را اجرا کنند تا زمانی که مقدار Semaphore بزرگ‌تر از صفر شود. Semaphore می‌تواند چندین رشته برنامه را مدیریت کند و هر شیء می‌تواند آن را تغییر دهد، منبع بگیرد یا آزاد کند.</p>
+<h3>مزایای Semaphore</h3>
+<ul>
+<li>چندین رشته می‌توانند به‌طور هم‌زمان به بخش حساس از کد دسترسی داشته باشند.</li>
+<li>Semaphore در سطح هسته (<strong>Kernel</strong>) اجرا می‌شود و وابسته به ماشین نیست.</li>
+<li>بخش حساس کد در برابر چندین فرآیند محافظت می‌شود و برخلاف Mutex، Semaphore زمان پردازشی و منابع را هدر نمی‌دهد.</li>
+</ul>
+<h3>معایب Semaphore</h3>
+<ul>
+<li><strong>Priority Inversion (وارونگی اولویت)</strong>: زمانی رخ می‌دهد که یک رشته با اولویت بالا مجبور باشد منتظر آزاد شدن Semaphore توسط یک رشته با اولویت پایین بماند.</li>
+<li>اگر رشته‌های با اولویت متوسط جلوی تکمیل شدن رشته‌های با اولویت پایین را بگیرند، مشکل <strong>Unbounded Priority Inversion</strong> پیش می‌آید که در آن نمی‌توان تأخیر رشته‌های اولویت بالا را پیش‌بینی کرد.</li>
+<li>سیستم‌عامل باید همه عملیات <strong>Wait</strong> و <strong>Signal</strong> را پیگیری کند که پیچیدگی ایجاد می‌کند.</li>
+<li>استفاده از Semaphore قراردادی است و اجباری نیست، اما اگر عملیات <strong>Wait</strong> و <strong>Signal</strong> را در ترتیب درست انجام ندهید، خطر <strong>Deadlock (قفل بن‌بست)</strong> وجود دارد.</li>
+<li>در سیستم‌های بزرگ، ممکن است <strong>Modularity (ماژولار بودن)</strong> کاهش یابد و کد در معرض خطاهای برنامه‌نویسی و نقض قفل‌ها قرار گیرد.</li>
+</ul>
+<hr>
+<h3>✏️ برنامه نمونه با استفاده از Semaphore</h3>
+<p>ابتدا یک متغیر Semaphore تعریف می‌کنیم:</p>
+<pre class="hljs"><code><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">readonly</span> Semaphore _semaphore = <span class="hljs-keyword">new</span> Semaphore(<span class="hljs-number">2</span>, <span class="hljs-number">4</span>);
+</code></pre>
+<p>پارامتر اول مشخص می‌کند چند درخواست می‌توانند به‌طور هم‌زمان پذیرفته شوند.<br>
+پارامتر دوم حداکثر تعداد درخواست‌هایی را که می‌توان هم‌زمان پذیرفت مشخص می‌کند.</p>
+<p>حالا متد <strong>StartSemaphore()</strong> را اضافه می‌کنیم:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">StartSemaphore</span>(<span class="hljs-params"><span class="hljs-built_in">object</span> id</span>)</span>
+{
+    Console.WriteLine(<span class="hljs-string">$&quot;Object <span class="hljs-subst">{id}</span> wants semaphore access.&quot;</span>);
+    <span class="hljs-keyword">try</span>
+    {
+        _semaphore.WaitOne();
+        Console.WriteLine(<span class="hljs-string">$&quot;Object <span class="hljs-subst">{id}</span> gained semaphore access.&quot;</span>);
+        Thread.Sleep(<span class="hljs-number">1000</span>);
+        Console.WriteLine(<span class="hljs-string">$&quot;Object <span class="hljs-subst">{id}</span> has exited semaphore.&quot;</span>);
+    }
+    <span class="hljs-keyword">finally</span>
+    {
+        _semaphore.Release();
+    }
+}
+</code></pre>
+<p>در این متد، رشته جاری تا زمانی که <strong>Wait Handle</strong> سیگنال دریافت کند بلوکه می‌شود. سپس رشته کار خود را انجام می‌دهد و در پایان Semaphore آزاد می‌شود و مقدارش به حالت قبلی برمی‌گردد.</p>
+<p>حالا متد <strong>SemaphoreExample()</strong> را اضافه کنید:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SemaphoreExample</span>()</span>
+{
+    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">1</span>; i &lt;= <span class="hljs-number">10</span>; i++)
+    {
+        Thread t = <span class="hljs-keyword">new</span> Thread(StartSemaphore);
+        t.Start(i);
+    }
+}
+</code></pre>
+<p>این مثال ۱۰ رشته ایجاد می‌کند که متد <strong>StartSemaphore()</strong> را اجرا می‌کنند.</p>
+<p>در نهایت، متد <strong>Main()</strong> را به‌روزرسانی کنید:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Main</span>(<span class="hljs-params"><span class="hljs-built_in">string</span>[] <span class="hljs-keyword">args</span></span>)</span>
+{
+    SemaphoreExample();
+    Console.ReadKey();
+}
+</code></pre>
+<p>متد <strong>Main()</strong> متد <strong>SemaphoreExample()</strong> را فراخوانی کرده و سپس منتظر می‌ماند تا کاربر کلیدی را فشار دهد تا برنامه خاتمه پیدا کند. خروجی باید مشابه تصویر زیر باشد: 👇</p>
+<div align="center">
+<p><img src="../../../assets/image/08/Table%208-6.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>بیایید به نحوه محدود کردن تعداد <strong>پردازنده‌ها و رشته‌ها در Thread Pool</strong> بپردازیم.</p>
+<hr>
+<h2>⚙️ محدود کردن تعداد پردازنده‌ها و رشته‌ها در <strong>Thread Pool</strong></h2>
+<p>گاهی اوقات نیاز است که تعداد پردازنده‌ها و رشته‌های مورد استفاده توسط برنامه خود را محدود کنید.</p>
+<h3>محدود کردن پردازنده‌ها</h3>
+<p>برای کاهش تعداد پردازنده‌های مورد استفاده، ابتدا پردازش جاری را دریافت کرده و مقدار <strong>ProcessorAffinity</strong> آن را تنظیم می‌کنیم.<br>
+مثلاً فرض کنید یک کامپیوتر چهار هسته‌ای داریم و می‌خواهیم فقط از دو هسته اول استفاده کنیم. مقدار باینری دو هسته اول برابر است با <code>11</code> که در حالت عدد صحیح برابر با <strong>3</strong> است.</p>
+<p>متدی در یک برنامه جدید <strong>.NET Framework Console</strong> ایجاد می‌کنیم و نام آن را <strong>AssignCores()</strong> می‌گذاریم:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">AssignCores</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> cores</span>)</span>
+{
+    Process.GetCurrentProcess().ProcessorAffinity = <span class="hljs-keyword">new</span> IntPtr(cores);
+}
+</code></pre>
+<p>در این متد، یک عدد صحیح به عنوان ورودی می‌دهیم. این عدد توسط <strong>.NET Framework</strong> به مقدار باینری تبدیل می‌شود و پردازنده‌هایی که مقدار ۱ دارند استفاده می‌شوند، در حالی که پردازنده‌هایی که مقدارشان ۰ است، استفاده نخواهند شد.<br>
+مثال‌ها:</p>
+<ul>
+<li><code>0110 (6)</code> → استفاده از هسته‌های 2 و 3</li>
+<li><code>1100 (3)</code> → استفاده از هسته‌های 1 و 2</li>
+<li><code>0011 (12)</code> → استفاده از هسته‌های 3 و 4</li>
+</ul>
+<blockquote>
+<p>اگر نیاز به یادآوری باینری دارید، می‌توانید به <a href="https://www.computerhope.com/jargon/b/binary.htm">این لینک</a> مراجعه کنید.</p>
+</blockquote>
+<hr>
+<h3>تنظیم حداکثر تعداد رشته‌ها</h3>
+<p>برای تنظیم حداکثر تعداد رشته‌ها، متد <strong>SetMaxThreads()</strong> از کلاس <strong>ThreadPool</strong> را فراخوانی می‌کنیم. این متد دو پارامتر می‌گیرد:</p>
+<ol>
+<li>حداکثر تعداد <strong>Worker Threads</strong> در Thread Pool</li>
+<li>حداکثر تعداد <strong>Asynchronous I/O Threads</strong> در Thread Pool</li>
+</ol>
+<p>متد زیر را برای تنظیم حداکثر تعداد رشته‌ها اضافه می‌کنیم:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SetMaxThreads</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> workerThreads, <span class="hljs-built_in">int</span> asyncIoThreads</span>)</span>
+{
+    ThreadPool.SetMaxThreads(workerThreads, asyncIoThreads);
+}
+</code></pre>
+<p>همان‌طور که می‌بینید، تنظیم حداکثر تعداد رشته‌ها و پردازنده‌ها بسیار ساده است. در اغلب مواقع نیازی به انجام این کار در برنامه‌ها نیست، مگر اینکه برنامه شما با مشکلات عملکرد مواجه شود. اگر برنامه مشکلی در عملکرد ندارد، بهتر است تعداد رشته‌ها و پردازنده‌ها را تنظیم نکنید.</p>
+<hr>
+<h2>🛑 جلوگیری از <strong>Deadlocks (قفل بن‌بست)</strong></h2>
+<p>یک <strong>Deadlock</strong> زمانی رخ می‌دهد که دو یا چند رشته در حال اجرا هستند و منتظر یکدیگر برای تکمیل هستند. این مشکل در برنامه‌ها باعث <strong>گیر کردن برنامه</strong> می‌شود و برای کاربر نهایی می‌تواند بسیار خطرناک باشد، چرا که ممکن است داده‌ها از بین بروند یا خراب شوند.</p>
+<h3>مثال واقعی</h3>
+<p>فرض کنید یک تراکنش بانکی بزرگ داریم که باید <strong>£1 میلیون</strong> از حساب بانکی یک مشتری برای پرداخت مالیات HMRC برداشت شود.</p>
+<ul>
+<li>پول از حساب کسب‌وکار مشتری برداشت می‌شود</li>
+<li>قبل از اینکه پول به حساب HMRC واریز شود، یک <strong>Deadlock</strong> رخ می‌دهد</li>
+<li>هیچ گزینه بازیابی وجود ندارد و برنامه باید خاتمه یابد و دوباره اجرا شود</li>
+</ul>
+<p>نتیجه: حساب بانکی کسب‌وکار <strong>£1 میلیون</strong> کاهش می‌یابد اما مالیات پرداخت نشده است و مشتری هنوز مسئول پرداخت آن است. این مثال اهمیت جلوگیری از رخ دادن <strong>Deadlocks</strong> را نشان می‌دهد.</p>
+<p>برای ساده‌تر کردن موضوع، ما با <strong>دو رشته</strong> کار خواهیم کرد، همان‌طور که در نمودار زیر نشان داده شده است:</p>
+<div align="center">
+<p><img src="../../../assets/image/08/Table%208-7.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>ما رشته‌هایمان را <strong>Thread 1</strong> و <strong>Thread 2</strong> و منابعمان را <strong>Resource 1</strong> و <strong>Resource 2</strong> می‌نامیم.</p>
+<ul>
+<li><strong>Thread 1</strong> یک <strong>Lock</strong> روی <strong>Resource 1</strong> می‌گیرد.</li>
+<li><strong>Thread 2</strong> یک <strong>Lock</strong> روی <strong>Resource 2</strong> می‌گیرد.</li>
+</ul>
+<p>حالا:</p>
+<ul>
+<li><strong>Thread 1</strong> نیاز دارد به <strong>Resource 2</strong> دسترسی پیدا کند، اما باید منتظر بماند چون <strong>Thread 2</strong> آن را قفل کرده است.</li>
+<li><strong>Thread 2</strong> نیاز دارد به <strong>Resource 1</strong> دسترسی پیدا کند، اما باید منتظر بماند چون <strong>Thread 1</strong> آن را قفل کرده است.</li>
+</ul>
+<p>نتیجه این است که هم <strong>Thread 1</strong> و هم <strong>Thread 2</strong> در حالت <strong>Wait</strong> قرار می‌گیرند. از آنجا که هیچ‌یک از رشته‌ها نمی‌توانند ادامه دهند تا دیگری منبعش را آزاد کند، هر دو رشته وارد وضعیت <strong>Deadlock (قفل بن‌بست)</strong> می‌شوند. زمانی که یک برنامه کامپیوتری در حالت <strong>Deadlock</strong> قرار دارد، برنامه گیر می‌کند و مجبور می‌شوید آن را خاتمه دهید.</p>
+<p>یک مثال کد برای <strong>Deadlock</strong> بهترین راه برای توضیح این موضوع است. در بخش بعدی، یک مثال عملی از <strong>Deadlock</strong> می‌نویسیم.</p>
+<hr>
+<h2>🖥️ کدنویسی مثال Deadlock</h2>
+<p>بهترین روش برای فهم این موضوع، یک مثال عملی است. ما دو متد خواهیم نوشت که هر کدام دارای دو <strong>Lock</strong> مختلف هستند. این متدها اشیایی را قفل می‌کنند که متد دیگر به آن نیاز دارد. چون هر رشته منابعی را که رشته دیگر نیاز دارد قفل می‌کند، هر دو رشته وارد حالت <strong>Deadlock</strong> می‌شوند. بعد از اینکه مثال ما کار کرد، آن را اصلاح خواهیم کرد تا از وضعیت Deadlock بازیابی شود و ادامه دهد.</p>
+<p>ابتدا یک برنامه جدید <strong>.NET Framework Console</strong> ایجاد کنید و نام آن را <strong>CH08_Deadlocks</strong> بگذارید. نیاز به دو شیء به عنوان متغیرهای عضو داریم:</p>
+<pre class="hljs"><code><span class="hljs-keyword">static</span> <span class="hljs-built_in">object</span> _object1 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">object</span>();
+<span class="hljs-keyword">static</span> <span class="hljs-built_in">object</span> _object2 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">object</span>();
+</code></pre>
+<p>این اشیاء به عنوان <strong>Lock Objects</strong> استفاده خواهند شد. ما دو رشته خواهیم داشت و هر رشته متد مخصوص به خود را اجرا می‌کند.</p>
+<hr>
+<h3>متد Thread1Method()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Thread1Method</span>()</span>
+{
+    Console.WriteLine(<span class="hljs-string">&quot;Thread1Method: Thread1Method Entered.&quot;</span>);
+    <span class="hljs-keyword">lock</span> (_object1)
+    {
+        Console.WriteLine(<span class="hljs-string">&quot;Thread1Method: Entered _object1 lock. Sleeping...&quot;</span>);
+        Thread.Sleep(<span class="hljs-number">1000</span>);
+        Console.WriteLine(<span class="hljs-string">&quot;Thread1Method: Woke from sleep&quot;</span>);
+        <span class="hljs-keyword">lock</span> (_object2)
+        {
+            Console.WriteLine(<span class="hljs-string">&quot;Thread1Method: Entered _object2 lock.&quot;</span>);
+        }
+        Console.WriteLine(<span class="hljs-string">&quot;Thread1Method: Exited _object2 lock.&quot;</span>);
+    }
+    Console.WriteLine(<span class="hljs-string">&quot;Thread1Method: Exited _object1 lock.&quot;</span>);
+}
+</code></pre>
+<ul>
+<li>این متد ابتدا یک <strong>Lock</strong> روی <strong>_object1</strong> می‌گیرد.</li>
+<li>سپس به مدت ۱ ثانیه <strong>Sleep</strong> می‌کند.</li>
+<li>بعد از بیدار شدن، <strong>Lock</strong> روی <strong>_object2</strong> می‌گیرد.</li>
+<li>در نهایت هر دو Lock را آزاد کرده و متد خاتمه می‌یابد.</li>
+</ul>
+<hr>
+<h3>متد Thread2Method()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Thread2Method</span>()</span>
+{
+    Console.WriteLine(<span class="hljs-string">&quot;Thread2Method: Thread1Method Entered.&quot;</span>);
+    <span class="hljs-keyword">lock</span> (_object2)
+    {
+        Console.WriteLine(<span class="hljs-string">&quot;Thread2Method: Entered _object2 lock. Sleeping...&quot;</span>);
+        Thread.Sleep(<span class="hljs-number">1000</span>);
+        Console.WriteLine(<span class="hljs-string">&quot;Thread2Method: Woke from sleep.&quot;</span>);
+        <span class="hljs-keyword">lock</span> (_object1)
+        {
+            Console.WriteLine(<span class="hljs-string">&quot;Thread2Method: Entered _object1 lock.&quot;</span>);
+        }
+        Console.WriteLine(<span class="hljs-string">&quot;Thread2Method: Exited _object1 lock.&quot;</span>);
+    }
+    Console.WriteLine(<span class="hljs-string">&quot;Thread2Method: Exited _object2 lock.&quot;</span>);
+}
+</code></pre>
+<ul>
+<li>این متد ابتدا یک <strong>Lock</strong> روی <strong>_object2</strong> می‌گیرد.</li>
+<li>سپس به مدت ۱ ثانیه <strong>Sleep</strong> می‌کند.</li>
+<li>بعد از بیدار شدن، <strong>Lock</strong> روی <strong>_object1</strong> می‌گیرد.</li>
+<li>در نهایت هر دو Lock را آزاد کرده و متد خاتمه می‌یابد.</li>
+</ul>
+<hr>
+<h3>متد DeadlockNoRecovery()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">DeadlockNoRecovery</span>()</span>
+{
+    Thread thread1 = <span class="hljs-keyword">new</span> Thread((ThreadStart)Thread1Method);
+    Thread thread2 = <span class="hljs-keyword">new</span> Thread((ThreadStart)Thread2Method);
+    thread1.Start();
+    thread2.Start();
+    Console.WriteLine(<span class="hljs-string">&quot;Press any key to exit.&quot;</span>);
+    Console.ReadKey();
+}
+</code></pre>
+<p>در این متد:</p>
+<ul>
+<li>دو رشته ایجاد می‌کنیم.</li>
+<li>هر رشته متد متفاوتی را اجرا می‌کند.</li>
+<li>هر دو رشته شروع می‌شوند.</li>
+<li>برنامه تا زمانی که کاربر کلیدی را فشار دهد، متوقف می‌شود.</li>
+</ul>
+<hr>
+<h3>متد Main()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Main</span>()</span>
+{
+    DeadlockNoRecovery();
+}
+</code></pre>
+<hr>
+<p>هنگام اجرای برنامه، باید خروجی مشابه تصویر زیر را مشاهده کنید: 👇</p>
+<div align="center">
+<p><img src="../../../assets/image/08/Table%208-8.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>همان‌طور که می‌بینید، چون <strong>Thread1</strong> روی <strong>_object1</strong> قفل دارد، <strong>Thread2</strong> نمی‌تواند آن را قفل کند. همچنین، چون <strong>Thread2</strong> روی <strong>_object2</strong> قفل دارد، <strong>Thread1</strong> نمی‌تواند آن را قفل کند. بنابراین هر دو رشته وارد <strong>Deadlock</strong> می‌شوند و برنامه گیر می‌کند.</p>
+<p>حالا کدی می‌نویسیم که نشان دهد چگونه می‌توان از وقوع این <strong>Deadlock</strong> جلوگیری کرد. ما از متد <strong>Monitor.TryEnter()</strong> استفاده می‌کنیم تا تلاش کنیم در مدت زمان مشخصی <strong>Lock</strong> بگیریم. سپس در صورت موفقیت، با <strong>Monitor.Exit()</strong> قفل را آزاد می‌کنیم.</p>
+<hr>
+<h3>متد DeadlockWithRecovery()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">DeadlockWithRecovery</span>()</span>
+{
+    Thread thread4 = <span class="hljs-keyword">new</span> Thread((ThreadStart)Thread4Method);
+    Thread thread5 = <span class="hljs-keyword">new</span> Thread((ThreadStart)Thread5Method);
+    thread4.Start();
+    thread5.Start();
+    Console.WriteLine(<span class="hljs-string">&quot;Press any key to exit.&quot;</span>);
+    Console.ReadKey();
+}
+</code></pre>
+<ul>
+<li>این متد دو <strong>Foreground Thread</strong> ایجاد می‌کند.</li>
+<li>سپس رشته‌ها را شروع کرده، پیامی روی کنسول چاپ می‌کند و منتظر می‌ماند تا کاربر کلیدی را فشار دهد.</li>
+</ul>
+<hr>
+<h3>متد Thread4Method()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Thread4Method</span>()</span>
+{
+    Console.WriteLine(<span class="hljs-string">&quot;Thread4Method: Entered _object1 lock. Sleeping...&quot;</span>);
+    Thread.Sleep(<span class="hljs-number">1000</span>);
+    Console.WriteLine(<span class="hljs-string">&quot;Thread4Method: Woke from sleep&quot;</span>);
+    
+    <span class="hljs-keyword">if</span> (!Monitor.TryEnter(_object1))
+    {
+        Console.WriteLine(<span class="hljs-string">&quot;Thread4Method: Failed to lock _object1.&quot;</span>);
+        <span class="hljs-keyword">return</span>;
+    }
+    <span class="hljs-keyword">try</span>
+    {
+        <span class="hljs-keyword">if</span> (!Monitor.TryEnter(_object2))
+        {
+            Console.WriteLine(<span class="hljs-string">&quot;Thread4Method: Failed to lock _object2.&quot;</span>);
+            <span class="hljs-keyword">return</span>;
+        }
+        <span class="hljs-keyword">try</span>
+        {
+            Console.WriteLine(<span class="hljs-string">&quot;Thread4Method: Doing work with _object2.&quot;</span>);
+        }
+        <span class="hljs-keyword">finally</span>
+        {
+            Monitor.Exit(_object2);
+            Console.WriteLine(<span class="hljs-string">&quot;Thread4Method: Released _object2 lock.&quot;</span>);
+        }
+    }
+    <span class="hljs-keyword">finally</span>
+    {
+        Monitor.Exit(_object1);
+        Console.WriteLine(<span class="hljs-string">&quot;Thread4Method: Released _object1 lock.&quot;</span>);
+    }
+}
+</code></pre>
+<ul>
+<li>این متد ۱ ثانیه <strong>Sleep</strong> می‌کند.</li>
+<li>سپس تلاش می‌کند <strong>Lock</strong> روی <strong>_object1</strong> بگیرد. اگر موفق نشود، متد باز می‌گردد.</li>
+<li>اگر <strong>_object1</strong> قفل شود، تلاش می‌کند <strong>Lock</strong> روی <strong>_object2</strong> بگیرد.</li>
+<li>اگر موفق نشود، متد باز می‌گردد.</li>
+<li>اگر قفل شد، کار لازم روی <strong>_object2</strong> انجام می‌شود.</li>
+<li>سپس <strong>_object2</strong> آزاد می‌شود و در نهایت <strong>_object1</strong> نیز آزاد می‌شود.</li>
+</ul>
+<hr>
+<h3>متد Thread5Method()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Thread5Method</span>()</span>
+{
+    Console.WriteLine(<span class="hljs-string">&quot;Thread5Method: Entered _object2 lock. Sleeping...&quot;</span>);
+    Thread.Sleep(<span class="hljs-number">1000</span>);
+    Console.WriteLine(<span class="hljs-string">&quot;Thread5Method: Woke from sleep&quot;</span>);
+    
+    <span class="hljs-keyword">if</span> (!Monitor.TryEnter(_object2))
+    {
+        Console.WriteLine(<span class="hljs-string">&quot;Thread5Method: Failed to lock _object2.&quot;</span>);
+        <span class="hljs-keyword">return</span>;
+    }
+    <span class="hljs-keyword">try</span>
+    {
+        <span class="hljs-keyword">if</span> (!Monitor.TryEnter(_object1))
+        {
+            Console.WriteLine(<span class="hljs-string">&quot;Thread5Method: Failed to lock _object1.&quot;</span>);
+            <span class="hljs-keyword">return</span>;
+        }
+        <span class="hljs-keyword">try</span>
+        {
+            Console.WriteLine(<span class="hljs-string">&quot;Thread5Method: Doing work with _object1.&quot;</span>);
+        }
+        <span class="hljs-keyword">finally</span>
+        {
+            Monitor.Exit(_object1);
+            Console.WriteLine(<span class="hljs-string">&quot;Thread5Method: Released _object1 lock.&quot;</span>);
+        }
+    }
+    <span class="hljs-keyword">finally</span>
+    {
+        Monitor.Exit(_object2);
+        Console.WriteLine(<span class="hljs-string">&quot;Thread5Method: Released _object2 lock.&quot;</span>);
+    }
+}
+</code></pre>
+<ul>
+<li>عملکرد این متد همان Thread4Method است، اما ترتیب قفل گرفتن <strong>_object1</strong> و <strong>_object2</strong> برعکس است.</li>
+</ul>
+<hr>
+<h3>فراخوانی در Main()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Main</span>()</span>
+{
+    DeadlockWithRecovery();
+}
+</code></pre>
+<p>کد را چند بار اجرا کنید. در اکثر موارد، خروجی مشابه تصویر زیر خواهد بود، جایی که همه <strong>Lockها</strong> با موفقیت گرفته شده‌اند. ✅</p>
+<div align="center">
+<p><img src="../../../assets/image/08/Table%208-9.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>سپس، هر کلیدی را فشار دهید تا برنامه خارج شود. اگر برنامه را چند بار اجرا کنید، در نهایت خواهید دید که یک <strong>Lock</strong> شکست می‌خورد. برنامه نتوانست در <strong>Thread5Method()</strong> روی <strong>_object2</strong> قفل بگیرد. با این حال، اگر کلیدی را فشار دهید، برنامه خارج می‌شود.</p>
+<p>همان‌طور که می‌بینید، با استفاده از <strong>Monitor.TryEnter()</strong> می‌توانید تلاش کنید یک شیء را قفل کنید. اما اگر قفل گرفته نشد، می‌توانید اقدام دیگری انجام دهید بدون اینکه برنامه شما گیر کند یا <strong>Hang</strong> شود. ✅</p>
+<hr>
+<h2>⚡ پیشگیری از <strong>Race Conditions</strong></h2>
+<p>زمانی که چندین رشته از یک منبع مشترک استفاده می‌کنند و خروجی‌های متفاوتی به دلیل زمان‌بندی هر رشته تولید می‌شود، این وضعیت را <strong>Race Condition</strong> می‌نامند.<br>
+در این بخش، ما این وضعیت را با یک مثال عملی نشان خواهیم داد.</p>
+<p>در مثال ما:</p>
+<ul>
+<li>دو رشته وجود خواهد داشت.</li>
+<li>هر رشته یک متد را فراخوانی می‌کند تا حروف الفبا را چاپ کند.</li>
+<li>یک متد حروف بزرگ (<strong>Uppercase</strong>) و متد دیگر حروف کوچک (<strong>Lowercase</strong>) را چاپ می‌کند.</li>
+<li>از این مثال، خواهید دید که خروجی اشتباه است و هر بار اجرای برنامه خروجی متفاوت خواهد بود.</li>
+</ul>
+<hr>
+<h3>متد ThreadingRaceCondition()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ThreadingRaceCondition</span>()</span>
+{
+    Thread T1 = <span class="hljs-keyword">new</span> Thread(Method1);
+    T1.Start();
+    Thread T2 = <span class="hljs-keyword">new</span> Thread(Method2);
+    T2.Start();
+}
+</code></pre>
+<ul>
+<li>
+<p>این متد دو رشته تولید می‌کند و آنها را شروع می‌کند.</p>
+</li>
+<li>
+<p>هر رشته به یک متد اشاره دارد:</p>
+<ul>
+<li><strong>Method1()</strong> حروف الفبا را با حروف بزرگ چاپ می‌کند.</li>
+<li><strong>Method2()</strong> حروف الفبا را با حروف کوچک چاپ می‌کند.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3>متد Method1()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Method1</span>()</span>
+{
+    <span class="hljs-keyword">for</span> (_alphabetCharacter = <span class="hljs-string">&#x27;A&#x27;</span>; _alphabetCharacter &lt;= <span class="hljs-string">&#x27;Z&#x27;</span>; _alphabetCharacter++)
+    {
+        Console.Write(_alphabetCharacter + <span class="hljs-string">&quot; &quot;</span>);
+    }
+}
+</code></pre>
+<h3>متد Method2()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Method2</span>()</span>
+{
+    <span class="hljs-keyword">for</span> (_alphabetCharacter = <span class="hljs-string">&#x27;a&#x27;</span>; _alphabetCharacter &lt;= <span class="hljs-string">&#x27;z&#x27;</span>; _alphabetCharacter++)
+    {
+        Console.Write(_alphabetCharacter + <span class="hljs-string">&quot; &quot;</span>);
+    }
+}
+</code></pre>
+<ul>
+<li>هر دو متد به متغیر <strong>_alphabetCharacter</strong> ارجاع می‌دهند.</li>
+<li>بنابراین، باید این عضو را در بالای کلاس اضافه کنیم:</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">char</span> _alphabetCharacter;
+</code></pre>
+<hr>
+<h3>به‌روزرسانی متد Main()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Main</span>(<span class="hljs-params"><span class="hljs-built_in">string</span>[] <span class="hljs-keyword">args</span></span>)</span>
+{
+    Console.WriteLine(<span class="hljs-string">&quot;\n\nRace Condition:&quot;</span>);
+    ThreadingRaceCondition();
+    Console.WriteLine(<span class="hljs-string">&quot;\n\nPress any key to exit.&quot;</span>);
+    Console.ReadKey();
+}
+</code></pre>
+<p>حالا کد ما آماده است تا <strong>Race Condition</strong> را نشان دهد. اگر برنامه را چندین بار اجرا کنید، خواهید دید که نتایج همان چیزی نیست که انتظار داریم و حتی ممکن است کاراکترهایی خارج از حروف الفبا نیز چاپ شوند. ⚠️</p>
+<div align="center">
+<p><img src="../../../assets/image/08/Table%208-10.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>دقیقاً همان چیزی نبود که انتظار داشتیم، درست است؟ 😅</p>
+<p>ما می‌خواهیم این مشکل را با استفاده از <strong>TPL</strong> حل کنیم. هدف <strong>Task Parallel Library (TPL)</strong> ساده‌سازی <strong>Parallelism</strong> و <strong>Concurrency</strong> است. با توجه به اینکه اکثر کامپیوترهای امروزی دارای دو یا چند پردازنده هستند، <strong>TPL</strong> به صورت پویا میزان <strong>Concurrency</strong> را مقیاس‌بندی می‌کند تا از تمامی پردازنده‌های موجود به بهینه‌ترین شکل استفاده شود. ⚡</p>
+<ul>
+<li>تقسیم‌بندی کار (<strong>Partitioning of work</strong>)</li>
+<li>زمان‌بندی رشته‌ها در <strong>Thread Pool</strong></li>
+<li>پشتیبانی از لغو (<strong>Cancellation</strong>)</li>
+<li>مدیریت وضعیت (<strong>State Management</strong>)<br>
+و موارد دیگر نیز توسط <strong>TPL</strong> انجام می‌شوند.<br>
+لینک مستندات رسمی مایکروسافت درباره <strong>TPL</strong> در بخش <strong>Further Reading</strong> این فصل موجود است. 📚</li>
+</ul>
+<hr>
+<p>راه حل این مشکل ساده است. ما یک <strong>Task</strong> داریم که ابتدا <strong>Method1()</strong> را اجرا می‌کند. سپس این <strong>Task</strong> ادامه می‌دهد و <strong>Method2()</strong> را اجرا می‌کند. در نهایت با فراخوانی <strong>Wait()</strong> منتظر می‌مانیم تا <strong>Task</strong> کامل شود.</p>
+<hr>
+<h3>متد ThreadingRaceConditionFixed()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ThreadingRaceConditionFixed</span>()</span>
+{
+    Task
+        .Run(() =&gt; Method1())
+        .ContinueWith(task =&gt; Method2())
+        .Wait();
+}
+</code></pre>
+<ul>
+<li>ابتدا <strong>Method1()</strong> اجرا می‌شود.</li>
+<li>پس از اتمام آن، <strong>Method2()</strong> اجرا می‌شود.</li>
+<li><strong>Wait()</strong> اطمینان می‌دهد که برنامه تا پایان اجرای <strong>Task</strong> صبر کند. ✅</li>
+</ul>
+<hr>
+<h3>به‌روزرسانی متد Main()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Main</span>(<span class="hljs-params"><span class="hljs-built_in">string</span>[] <span class="hljs-keyword">args</span></span>)</span>
+{
+    <span class="hljs-comment">//Console.WriteLine(&quot;\n\nRace Condition:&quot;);</span>
+    <span class="hljs-comment">//ThreadingRaceCondition();</span>
+    Console.WriteLine(<span class="hljs-string">&quot;\n\nRace Condition Fixed:&quot;</span>);
+    ThreadingRaceConditionFixed();
+    Console.WriteLine(<span class="hljs-string">&quot;\n\nPress any key to exit.&quot;</span>);
+    Console.ReadKey();
+}
+</code></pre>
+<p>کد را اجرا کنید. اگر برنامه را چندین بار اجرا کنید، خواهید دید که خروجی همیشه یکسان است، همان‌طور که در تصویر زیر نشان داده شده است. 🎯</p>
+<div align="center">
+<p><img src="../../../assets/image/08/Table%208-11.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>تا اینجا، ما دیدیم که <strong>Thread</strong> چیست و چگونه می‌توان از آن‌ها در <strong>Foreground</strong> و <strong>Background</strong> استفاده کرد. همچنین با <strong>Deadlocks</strong> و نحوه حل آن‌ها با <strong>Monitor.TryEnter()</strong> آشنا شدیم. در نهایت، با <strong>Race Conditions</strong> و نحوه حل آن‌ها با استفاده از <strong>TPL</strong> آشنا شدیم. ✅</p>
+<p>حالا، به سراغ <strong>Static Constructors</strong> و <strong>Static Methods</strong> می‌رویم.</p>
+<hr>
+<h2>🔹 درک <strong>Static Constructors</strong> و <strong>Methods</strong></h2>
+<p>اگر چندین کلاس همزمان به یک <strong>Property Instance</strong> دسترسی نیاز داشته باشند، یکی از <strong>Threadها</strong> درخواست اجرای <strong>Static Constructor</strong> (که به آن <strong>Type Initializer</strong> هم گفته می‌شود) می‌دهد.<br>
+در حالی که منتظر اجرای <strong>Type Initializer</strong> هستیم، تمام <strong>Threadهای دیگر</strong> قفل می‌شوند. وقتی <strong>Type Initializer</strong> اجرا شد، <strong>Threadهای قفل‌شده</strong> آزاد شده و قادر به دسترسی به <strong>Instance Property</strong> خواهند بود.</p>
+<ul>
+<li><strong>Static Constructors</strong> <strong>Thread-Safe</strong> هستند، زیرا تضمین می‌شود که فقط یک بار در هر <strong>Application Domain</strong> اجرا شوند.</li>
+<li>آن‌ها قبل از دسترسی به هر <strong>Static Member</strong> و قبل از هر <strong>Class Instantiation</strong> اجرا می‌شوند.</li>
+<li>اگر استثنایی در <strong>Static Constructor</strong> ایجاد و بیرون فرار کند، <strong>TypeInitializationException</strong> تولید می‌شود و باعث می‌شود <strong>CLR</strong> برنامه شما را متوقف کند.</li>
+</ul>
+<hr>
+<h3>نکات مهم درباره <strong>Static Methods</strong></h3>
+<ul>
+<li><strong>Static Methods</strong> تنها یک نسخه از متد و داده‌های آن را در سطح <strong>Type</strong> نگه می‌دارند.</li>
+<li>این بدان معناست که همان متد و داده‌های آن بین نمونه‌های مختلف به اشتراک گذاشته می‌شود.</li>
+<li>هر <strong>Thread</strong> در برنامه، <strong>Stack</strong> خود را دارد.</li>
+<li><strong>Value Types</strong> که به متدهای <strong>Static</strong> پاس داده می‌شوند روی <strong>Stack</strong> رشته فراخواننده ایجاد می‌شوند، بنابراین <strong>Thread-Safe</strong> هستند.</li>
+<li>اگر دو <strong>Thread</strong> همان کد را با همان مقدار فراخوانی کنند، دو نسخه از آن مقدار روی <strong>Stack</strong> هر <strong>Thread</strong> ایجاد می‌شود. بنابراین، <strong>Threads</strong> روی هم اثر نمی‌گذارند.</li>
+</ul>
+<p>⚠️ اما:</p>
+<ul>
+<li>اگر متد <strong>Static</strong> به <strong>Member Variable</strong> دسترسی داشته باشد، <strong>Thread-Safe</strong> نیست.</li>
+<li>دو <strong>Thread</strong> مختلف همان متد را فراخوانی کرده و به <strong>Member Variable</strong> دسترسی دارند. <strong>Context-Switching</strong> بین <strong>Threadها</strong> رخ می‌دهد و هر <strong>Thread</strong> متغیر را تغییر می‌دهد. این منجر به <strong>Race Conditions</strong> می‌شود.</li>
+<li>اگر <strong>Reference Types</strong> به متد <strong>Static</strong> پاس داده شوند، مشکلات مشابهی رخ می‌دهد و باعث <strong>Race Condition</strong> می‌شود.</li>
+</ul>
+<p>✅ نتیجه:</p>
+<ul>
+<li>هنگام استفاده از <strong>Static Methods</strong> در <strong>Threads</strong>، از دسترسی به <strong>Member Variable</strong> اجتناب کنید و <strong>Reference Types</strong> پاس ندهید.</li>
+<li><strong>Static Methods</strong> <strong>Thread-Safe</strong> هستند تا زمانی که تنها <strong>Primitive Types</strong> پاس داده شوند و وضعیت تغییر نکند.</li>
+</ul>
+<hr>
+<h2>💻 اضافه کردن <strong>Static Constructors</strong> به کد نمونه</h2>
+<p>یک برنامه جدید <strong>.NET Framework Console</strong> بسازید.<br>
+یک کلاس به نام <strong>StaticConstructorTestClass</strong> اضافه کنید و یک متغیر <strong>Read-Only Static String</strong> به نام <strong>_message</strong> تعریف کنید:</p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">StaticConstructorTestClass</span>
+{
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">string</span> _message;
+}
+</code></pre>
+<p>این متغیر توسط متد <strong>Message()</strong> به فراخواننده بازگردانده می‌شود.</p>
+<h3>متد Message()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">string</span> <span class="hljs-title">Message</span>()</span>
+{
+    <span class="hljs-keyword">return</span> <span class="hljs-string">$&quot;Message: <span class="hljs-subst">{_message}</span>&quot;</span>;
+}
+</code></pre>
+<ul>
+<li>این متد پیام ذخیره‌شده در <strong>_message</strong> را بازمی‌گرداند.</li>
+</ul>
+<h3>Constructor</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-title">StaticConstructorTestClass</span>()</span>
+{
+    Console.WriteLine(<span class="hljs-string">&quot;StaticConstructorTestClass static constructor started.&quot;</span>);
+    _message = <span class="hljs-string">&quot;Hello, World!&quot;</span>;
+    Thread.Sleep(<span class="hljs-number">1000</span>);
+    _message = <span class="hljs-string">&quot;Goodbye, World!&quot;</span>;
+    Console.WriteLine(<span class="hljs-string">&quot;StaticConstructorTestClass static constructor finished.&quot;</span>);
+}
+</code></pre>
+<ul>
+<li>در <strong>Constructor</strong> یک پیام به کنسول می‌نویسیم.</li>
+<li>سپس <strong>Member Variable</strong> تنظیم می‌شود و <strong>Thread</strong> به مدت ۱ ثانیه خوابیده و دوباره پیام تغییر داده می‌شود.</li>
+<li>در نهایت، پیام دیگری به کنسول چاپ می‌شود.</li>
+</ul>
+<hr>
+<h3>به‌روزرسانی متد Main()</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Main</span>(<span class="hljs-params"><span class="hljs-built_in">string</span>[] <span class="hljs-keyword">args</span></span>)</span>
+{
+    <span class="hljs-keyword">var</span> program = <span class="hljs-keyword">new</span> Program();
+    program.StaticConstructorExample();
+    Thread.CurrentThread.Join();
+}
+</code></pre>
+<ul>
+<li><strong>Main()</strong> کلاس <strong>Program</strong> را نمونه‌سازی می‌کند.</li>
+<li>سپس <strong>StaticConstructorExample()</strong> فراخوانی می‌شود.</li>
+<li>برنامه متوقف شده و نتیجه را مشاهده می‌کنیم، سپس <strong>Threadها</strong> به <strong>Join()</strong> می‌پیوندند.</li>
+</ul>
+<p>خروجی را می‌توانید در تصویر زیر مشاهده کنید. 📺</p>
+<div align="center">
+<p><img src="../../../assets/image/08/Table%208-12.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>حالا به سراغ مثال‌هایی از <strong>Static Methods</strong> می‌رویم.</p>
+<hr>
+<h2>💻 اضافه کردن <strong>Static Methods</strong> به کد نمونه</h2>
+<p>اکنون قصد داریم <strong>Static Methods</strong> ایمن برای <strong>Thread</strong> و غیر ایمن را عملی مشاهده کنیم.</p>
+<p>یک کلاس جدید به نام <strong>StaticExampleClass</strong> به یک برنامه <strong>.NET Framework Console</strong> اضافه کنید و کد زیر را بنویسید:</p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">class</span> <span class="hljs-title">StaticExampleClass</span>
+{
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">int</span> _x = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">int</span> _y = <span class="hljs-number">2</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">int</span> _z = <span class="hljs-number">3</span>;
+}
+</code></pre>
+<ul>
+<li>در بالای کلاس، سه عدد صحیح تعریف کرده‌ایم: <strong>_x، _y و _z</strong> با مقادیر ۱، ۲ و ۳.</li>
+<li>این متغیرها می‌توانند بین <strong>Threadها</strong> تغییر کنند.</li>
+</ul>
+<hr>
+<h3>Static Constructor</h3>
+<p>حالا یک <strong>Static Constructor</strong> اضافه می‌کنیم تا مقادیر این متغیرها را چاپ کند:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-title">StaticExampleClass</span>()</span>
+{
+    Console.WriteLine(<span class="hljs-string">$&quot;Constructor: _x=<span class="hljs-subst">{_x}</span>, _y=<span class="hljs-subst">{_y}</span>, _z=<span class="hljs-subst">{_z}</span>&quot;</span>);
+}
+</code></pre>
+<ul>
+<li>همان‌طور که مشاهده می‌کنید، <strong>Static Constructor</strong> فقط مقادیر متغیرها را در <strong>Console Window</strong> چاپ می‌کند.</li>
+</ul>
+<hr>
+<h3>Thread-Safe Method</h3>
+<p>متد اول ما یک متد <strong>Thread-Safe</strong> به نام <strong>ThreadSafeMethod()</strong> است:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">internal</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ThreadSafeMethod</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> x, <span class="hljs-built_in">int</span> y, <span class="hljs-built_in">int</span> z</span>)</span>
+{
+    Console.WriteLine(<span class="hljs-string">$&quot;ThreadSafeMethod: x=<span class="hljs-subst">{x}</span>, y=<span class="hljs-subst">{y}</span>, z=<span class="hljs-subst">{z}</span>&quot;</span>);
+    Console.WriteLine(<span class="hljs-string">$&quot;ThreadSafeMethod: <span class="hljs-subst">{x}</span>+<span class="hljs-subst">{y}</span>+<span class="hljs-subst">{z}</span>=<span class="hljs-subst">{x+y+z}</span>&quot;</span>);
+}
+</code></pre>
+<ul>
+<li>این متد <strong>Thread-Safe</strong> است زیرا فقط با پارامترهای <strong>by value</strong> کار می‌کند.</li>
+<li>با متغیرهای <strong>Member</strong> تعامل ندارد و هیچ <strong>by reference value</strong> ندارد.</li>
+<li>بنابراین، صرف نظر از مقادیر ورودی، همیشه نتیجه مورد انتظار را خواهید گرفت.</li>
+</ul>
+<p>✅ یعنی چه یک <strong>Thread</strong> واحد یا حتی میلیون‌ها <strong>Thread</strong> به این متد دسترسی داشته باشند، خروجی هر <strong>Thread</strong> همان چیزی خواهد بود که انتظار دارید، حتی با وجود <strong>Context Switching</strong>.</p>
+<p>خروجی این متد را در <strong>Screenshot</strong> بعدی مشاهده می‌کنیم. 📊</p>
+<div align="center">
+<p><img src="../../../assets/image/08/Table%208-13.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>حال که با <strong>Thread-Safe Methods</strong> آشنا شدیم، منطقی است که نگاهی هم به <strong>Non-Thread-Safe Methods</strong> بیندازیم.</p>
+<p>✅ تا اینجا می‌دانید که هر <strong>Static Method</strong> که روی <strong>by reference values</strong> یا <strong>Static Member Variables</strong> عمل کند، <strong>Thread-Safe</strong> نیست.</p>
+<hr>
+<h3>Non-Thread-Safe Method</h3>
+<p>در مثال بعدی، متدی با همان سه پارامتر <strong>ThreadSafeMethod()</strong> خواهیم داشت، اما این بار:</p>
+<ul>
+<li>متغیرهای عضو (<strong>Member Variables</strong>) را مقداردهی می‌کنیم،</li>
+<li>پیامی چاپ می‌کنیم،</li>
+<li>برای مدتی <strong>Sleep</strong> می‌کنیم،</li>
+<li>سپس بیدار شده و دوباره مقادیر را چاپ می‌کنیم.</li>
+</ul>
+<p>کد <strong>NotThreadSafeMethod()</strong> را به کلاس <strong>StaticExampleClass</strong> اضافه کنید:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">internal</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">NotThreadSafeMethod</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> x, <span class="hljs-built_in">int</span> y, <span class="hljs-built_in">int</span> z</span>)</span>
+{
+    _x = x;
+    _y = y;
+    _z = z;
+    Console.WriteLine(
+        <span class="hljs-string">$&quot;<span class="hljs-subst">{Thread.CurrentThread.ManagedThreadId}</span>-NotThreadSafeMethod: _x=<span class="hljs-subst">{_x}</span>, _y=<span class="hljs-subst">{_y}</span>, _z=<span class="hljs-subst">{_z}</span>&quot;</span>
+    );
+    Thread.Sleep(<span class="hljs-number">300</span>);
+    Console.WriteLine(
+        <span class="hljs-string">$&quot;<span class="hljs-subst">{Thread.CurrentThread.ManagedThreadId}</span>-ThreadSafeMethod: <span class="hljs-subst">{_x}</span>+<span class="hljs-subst">{_y}</span>+<span class="hljs-subst">{_z}</span>=<span class="hljs-subst">{_x + _y + _z}</span>&quot;</span>
+    );
+}
+</code></pre>
+<ul>
+<li>در این متد، ابتدا <strong>Member Variables</strong> را با مقادیر ورودی مقداردهی می‌کنیم.</li>
+<li>سپس آن مقادیر را در <strong>Console</strong> چاپ می‌کنیم و <strong>300 میلی‌ثانیه</strong> به <strong>Sleep</strong> می‌رویم.</li>
+<li>پس از بیدار شدن، دوباره مقادیر را چاپ می‌کنیم.</li>
+</ul>
+<hr>
+<h3>بروزرسانی Main Method</h3>
+<p>در کلاس <strong>Program</strong>، <strong>Main()</strong> را به شکل زیر بروزرسانی کنید:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Main</span>(<span class="hljs-params"><span class="hljs-built_in">string</span>[] <span class="hljs-keyword">args</span></span>)</span>
+{
+    <span class="hljs-keyword">var</span> program = <span class="hljs-keyword">new</span> Program();
+    program.ThreadUnsafeMethodCall();
+    Console.ReadKey();
+}
+</code></pre>
+<ul>
+<li>در <strong>Main()</strong>، ابتدا کلاس <strong>Program</strong> نمونه‌سازی می‌شود.</li>
+<li>سپس متد <strong>ThreadUnsafeMethodCall()</strong> فراخوانی می‌شود.</li>
+<li>برنامه تا زمانی که کاربر کلیدی فشار دهد، صبر می‌کند.</li>
+</ul>
+<hr>
+<h3>ThreadUnsafeMethodCall</h3>
+<p>حالا <strong>ThreadUnsafeMethodCall()</strong> را به کلاس <strong>Program</strong> اضافه کنید:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ThreadUnsafeMethodCall</span>()</span>
+{
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> index = <span class="hljs-number">0</span>; index &lt; <span class="hljs-number">10</span>; index++)
+    {
+        <span class="hljs-keyword">var</span> thread = <span class="hljs-keyword">new</span> Thread(() =&gt;
+        {
+            StaticExampleClass.NotThreadSafeMethod(index + <span class="hljs-number">1</span>, index + <span class="hljs-number">2</span>, index + <span class="hljs-number">3</span>);
+        });
+        thread.Start();
+    }
+}
+</code></pre>
+<ul>
+<li>این متد <strong>10 Thread</strong> ایجاد می‌کند که هرکدام <strong>NotThreadSafeMethod()</strong> از کلاس <strong>StaticExampleClass</strong> را فراخوانی می‌کنند.</li>
+<li>اگر کد را اجرا کنید، خروجی مشابه <strong>Screenshot</strong> بعدی مشاهده خواهد شد. ⚡</li>
+</ul>
+<p>خروجی نشان می‌دهد که مقادیر بین <strong>Threadها</strong> تداخل دارند و به دلیل عدم ایمنی <strong>Thread</strong>، نتایج غیرقابل پیش‌بینی است.</p>
+<div align="center">
+<p><img src="../../../assets/image/08/Table%208-14.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>همان‌طور که می‌بینید، خروجی برنامه آن چیزی نیست که انتظار داشتیم. این به دلیل <strong>آلودگی داده‌ها توسط Threadهای مختلف</strong> رخ می‌دهد. این موضوع ما را به بخش بعدی یعنی <strong>قابلیت تغییر (Mutability)، عدم تغییر (Immutability) و ایمنی Thread</strong> می‌رساند. 🔒</p>
+<hr>
+<h2>قابلیت تغییر، عدم تغییر و ایمنی Thread</h2>
+<p><strong>Mutability</strong> منبع بروز خطا در برنامه‌های چند Threadه است. یک خطای قابل تغییر معمولاً ناشی از اشتراک‌گذاری و به‌روزرسانی مقادیر بین Threadهاست.</p>
+<p>برای حذف خطر این نوع خطاها، بهتر است از <strong>Immutable Types</strong> استفاده کنیم.</p>
+<p><strong>Thread Safety</strong> یعنی اجرای امن یک بخش کد توسط چند Thread به‌طور همزمان. وقتی برنامه‌های چند Threadه می‌نویسید، مهم است که کد شما <strong>Thread-Safe</strong> باشد. کد شما Thread-Safe است اگر شرایطی مانند <strong>Race Conditions</strong> و <strong>Deadlocks</strong> و مشکلات ناشی از <strong>Mutability</strong> را حذف کند.</p>
+<ul>
+<li><strong>Immutable Object</strong>: شیئی که پس از ایجاد قابل تغییر نیست. اگر چنین شیئی بین Threadها به‌درستی همگام‌سازی شود، همه Threadها همان وضعیت معتبر شیء را خواهند دید.</li>
+<li><strong>Mutable Object</strong>: شیئی که پس از ایجاد قابل تغییر است و داده‌های آن می‌تواند بین Threadها تغییر کند. این می‌تواند باعث <strong>Corruption داده‌ها</strong> شود، حتی اگر برنامه کرش نکند، داده‌ها ممکن است در وضعیت نامعتبر باقی بمانند.</li>
+</ul>
+<p>بنابراین، وقتی با چند Thread کار می‌کنید، مهم است که <strong>اشیاء شما Immutable باشند</strong>. در فصل ۳ (Classes, Objects, and Data Structures) روش ایجاد و استفاده از ساختارهای داده غیرقابل تغییر را یاد گرفتیم.</p>
+<p>✅ برای اطمینان از Thread Safety:</p>
+<ul>
+<li>از <strong>Mutable Objects</strong> استفاده نکنید.</li>
+<li>پارامترها را <strong>By Reference</strong> ارسال نکنید.</li>
+<li><strong>Member Variables</strong> را تغییر ندهید.</li>
+<li>فقط پارامترها را <strong>By Value</strong> ارسال کنید و روی همان‌ها عملیات انجام دهید.</li>
+</ul>
+<p><strong>Immutable Structures</strong> روش ایمن و مناسب برای انتقال داده‌ها بین اشیاء هستند.</p>
+<hr>
+<h2>نمونه کد برای Mutable و غیر Thread-Safe</h2>
+<p>برای نمایش <strong>Mutability</strong> در یک برنامه چند Threadه، یک <strong>Console Application</strong> جدید ایجاد کنید. یک کلاس به نام <strong>MutableClass</strong> اضافه کنید:</p>
+<pre class="hljs"><code><span class="hljs-keyword">internal</span> <span class="hljs-keyword">class</span> <span class="hljs-title">MutableClass</span>
+{
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">readonly</span> <span class="hljs-built_in">int</span>[] _intArray;
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">MutableClass</span>(<span class="hljs-params"><span class="hljs-built_in">int</span>[] intArray</span>)</span>
+    {
+        _intArray = intArray;
+    }
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span>[] <span class="hljs-title">GetIntArray</span>()</span>
+    {
+        <span class="hljs-keyword">return</span> _intArray;
+    }
+}
+</code></pre>
+<ul>
+<li>این کلاس یک <strong>Constructor</strong> دارد که یک آرایه عدد صحیح می‌گیرد و به عضو کلاس اختصاص می‌دهد.</li>
+<li>متد <strong>GetIntArray()</strong> همان آرایه را برمی‌گرداند.</li>
+<li>اگرچه کلاس به نظر غیرقابل تغییر می‌آید، اما <strong>آرایه عدد صحیح ورودی mutable است</strong> و GetIntArray() یک <strong>Reference</strong> از آن برمی‌گرداند.</li>
+</ul>
+<hr>
+<h3>MutableExample Method</h3>
+<p>در کلاس <strong>Program</strong>، متد <strong>MutableExample()</strong> را اضافه کنید تا نشان دهد آرایه mutable است:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">MutableExample</span>()</span>
+{
+    <span class="hljs-built_in">int</span>[] iar = { <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span> };
+    <span class="hljs-keyword">var</span> mutableClass = <span class="hljs-keyword">new</span> MutableClass(iar);
+    Console.WriteLine(<span class="hljs-string">$&quot;Initial Array: <span class="hljs-subst">{iar[<span class="hljs-number">0</span>]}</span>, <span class="hljs-subst">{iar[<span class="hljs-number">1</span>]}</span>, <span class="hljs-subst">{iar[<span class="hljs-number">2</span>]}</span>, <span class="hljs-subst">{iar[<span class="hljs-number">3</span>]}</span>, <span class="hljs-subst">{iar[<span class="hljs-number">4</span>]}</span>, <span class="hljs-subst">{iar[<span class="hljs-number">5</span>]}</span>, <span class="hljs-subst">{iar[<span class="hljs-number">6</span>]}</span>, <span class="hljs-subst">{iar[<span class="hljs-number">7</span>]}</span>, <span class="hljs-subst">{iar[<span class="hljs-number">8</span>]}</span>, <span class="hljs-subst">{iar[<span class="hljs-number">9</span>]}</span>&quot;</span>);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> x = <span class="hljs-number">0</span>; x &lt; <span class="hljs-number">9</span>; x++)
+    {
+        <span class="hljs-keyword">var</span> thread = <span class="hljs-keyword">new</span> Thread(() =&gt;
+        {
+            iar[x] = x + <span class="hljs-number">1</span>;
+            <span class="hljs-keyword">var</span> ia = mutableClass.GetIntArray();
+            Console.WriteLine(<span class="hljs-string">$&quot;Array [<span class="hljs-subst">{x}</span>]: <span class="hljs-subst">{ia[<span class="hljs-number">0</span>]}</span>, <span class="hljs-subst">{ia[<span class="hljs-number">1</span>]}</span>, <span class="hljs-subst">{ia[<span class="hljs-number">2</span>]}</span>, <span class="hljs-subst">{ia[<span class="hljs-number">3</span>]}</span>, <span class="hljs-subst">{ia[<span class="hljs-number">4</span>]}</span>, <span class="hljs-subst">{ia[<span class="hljs-number">5</span>]}</span>, <span class="hljs-subst">{ia[<span class="hljs-number">6</span>]}</span>, <span class="hljs-subst">{ia[<span class="hljs-number">7</span>]}</span>, <span class="hljs-subst">{ia[<span class="hljs-number">8</span>]}</span>, <span class="hljs-subst">{ia[<span class="hljs-number">9</span>]}</span>&quot;</span>);
+        });
+        thread.Start();
+    }
+}
+</code></pre>
+<ul>
+<li>در این متد، ابتدا یک آرایه عدد صحیح از ۰ تا ۹ ایجاد می‌کنیم.</li>
+<li>سپس یک نمونه از <strong>MutableClass</strong> می‌سازیم و آرایه را به آن پاس می‌دهیم.</li>
+<li>ابتدا محتویات آرایه را چاپ می‌کنیم.</li>
+<li>سپس در یک حلقه ۹ بار، مقدار هر ایندکس را به <code>x + 1</code> تغییر می‌دهیم و یک Thread برای چاپ آرایه ایجاد می‌کنیم.</li>
+</ul>
+<hr>
+<h3>بروزرسانی Main Method</h3>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Main</span>(<span class="hljs-params"><span class="hljs-built_in">string</span>[] <span class="hljs-keyword">args</span></span>)</span>
+{
+    MutableExample();
+    Console.ReadKey();
+}
+</code></pre>
+<ul>
+<li>Main() تنها متد <strong>MutableExample()</strong> را فراخوانی می‌کند و سپس منتظر فشردن یک کلید می‌ماند.</li>
+</ul>
+<p>با اجرای این برنامه، خروجی مشابه <strong>Screenshot</strong> بعدی نمایش داده خواهد شد و نشان می‌دهد که <strong>چند Thread مقادیر آرایه را همزمان تغییر می‌دهند</strong> و باعث <strong>عدم پیش‌بینی وضعیت نهایی آرایه</strong> می‌شوند. ⚡</p>
+<div align="center">
+<p><img src="../../../assets/image/08/Table%208-15.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>همان‌طور که می‌بینید، حتی با اینکه تنها یک نمونه از <strong>MutableClass</strong> ایجاد کردیم قبل از ساخت و اجرای Threadها، تغییر آرایه محلی باعث تغییر آرایه در نمونه MutableClass می‌شود. این ثابت می‌کند که آرایه‌ها <strong>قابل تغییر (Mutable)</strong> هستند و بنابراین <strong>Thread-Safe</strong> نیستند. ⚠️</p>
+<hr>
+<h2>نوشتن کد Immutable و Thread-Safe</h2>
+<p>در مثال <strong>Immutable</strong>، دوباره یک برنامه <strong>.NET Framework Console Application</strong> ایجاد می‌کنیم و از همان آرایه استفاده می‌کنیم.</p>
+<p>یک کلاس به نام <strong>ImmutableStruct</strong> اضافه کنید و کد را به شکل زیر اصلاح کنید:</p>
+<pre class="hljs"><code><span class="hljs-keyword">internal</span> <span class="hljs-keyword">struct</span> ImmutableStruct
+{
+    <span class="hljs-keyword">private</span> ImmutableArray&lt;<span class="hljs-built_in">int</span>&gt; _immutableArray;
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">ImmutableStruct</span>(<span class="hljs-params">ImmutableArray&lt;<span class="hljs-built_in">int</span>&gt; immutableArray</span>)</span>
+    {
+        _immutableArray = immutableArray;
+    }
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span>[] <span class="hljs-title">GetIntArray</span>()</span>
+    {
+        <span class="hljs-keyword">return</span> _immutableArray.ToArray&lt;<span class="hljs-built_in">int</span>&gt;();
+    }
+}
+</code></pre>
+<ul>
+<li>به جای آرایه عدد صحیح معمولی، از <strong>ImmutableArray</strong> استفاده می‌کنیم.</li>
+<li>یک آرایه Immutable به <strong>Constructor</strong> پاس داده شده و به متغیر عضو <code>_immutableArray</code> اختصاص می‌یابد.</li>
+<li>متد <strong>GetIntArray()</strong> آرایه Immutable را به صورت آرایه عدد صحیح معمولی برمی‌گرداند.</li>
+</ul>
+<hr>
+<h3>ImmutableExample Method</h3>
+<p>در کلاس <strong>Program</strong>، متد <strong>ImmutableExample()</strong> را اضافه کنید:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ImmutableExample</span>()</span>
+{
+    <span class="hljs-built_in">int</span>[] iar = { <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span> };
+    <span class="hljs-keyword">var</span> immutableStruct = <span class="hljs-keyword">new</span> ImmutableStruct(iar.ToImmutableArray&lt;<span class="hljs-built_in">int</span>&gt;());
+    Console.WriteLine(<span class="hljs-string">$&quot;Initial Array: <span class="hljs-subst">{iar[<span class="hljs-number">0</span>]}</span>, <span class="hljs-subst">{iar[<span class="hljs-number">1</span>]}</span>, <span class="hljs-subst">{iar[<span class="hljs-number">2</span>]}</span>, <span class="hljs-subst">{iar[<span class="hljs-number">3</span>]}</span>, <span class="hljs-subst">{iar[<span class="hljs-number">4</span>]}</span>, <span class="hljs-subst">{iar[<span class="hljs-number">5</span>]}</span>, <span class="hljs-subst">{iar[<span class="hljs-number">6</span>]}</span>, <span class="hljs-subst">{iar[<span class="hljs-number">7</span>]}</span>, <span class="hljs-subst">{iar[<span class="hljs-number">8</span>]}</span>, <span class="hljs-subst">{iar[<span class="hljs-number">9</span>]}</span>&quot;</span>);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> x = <span class="hljs-number">0</span>; x &lt; <span class="hljs-number">9</span>; x++)
+    {
+        <span class="hljs-keyword">var</span> thread = <span class="hljs-keyword">new</span> Thread(() =&gt;
+        {
+            iar[x] = x + <span class="hljs-number">1</span>;
+            <span class="hljs-keyword">var</span> ia = immutableStruct.GetIntArray();
+            Console.WriteLine(<span class="hljs-string">$&quot;Array [<span class="hljs-subst">{x}</span>]: <span class="hljs-subst">{ia[<span class="hljs-number">0</span>]}</span>, <span class="hljs-subst">{ia[<span class="hljs-number">1</span>]}</span>, <span class="hljs-subst">{ia[<span class="hljs-number">2</span>]}</span>, <span class="hljs-subst">{ia[<span class="hljs-number">3</span>]}</span>, <span class="hljs-subst">{ia[<span class="hljs-number">4</span>]}</span>, <span class="hljs-subst">{ia[<span class="hljs-number">5</span>]}</span>, <span class="hljs-subst">{ia[<span class="hljs-number">6</span>]}</span>, <span class="hljs-subst">{ia[<span class="hljs-number">7</span>]}</span>, <span class="hljs-subst">{ia[<span class="hljs-number">8</span>]}</span>, <span class="hljs-subst">{ia[<span class="hljs-number">9</span>]}</span>&quot;</span>);
+        });
+        thread.Start();
+    }
+}
+</code></pre>
+<ul>
+<li>در این متد، ابتدا یک آرایه عدد صحیح ایجاد می‌کنیم و آن را به Constructor <strong>ImmutableStruct</strong> به صورت یک <strong>ImmutableArray</strong> پاس می‌دهیم.</li>
+<li>سپس محتوای آرایه محلی قبل از تغییر چاپ می‌شود.</li>
+<li>بعد از آن، یک حلقه ۹ بار اجرا می‌کنیم و در هر تکرار مقدار ایندکس جاری + ۱ به آرایه محلی اضافه می‌کنیم.</li>
+<li>سپس از طریق متد <strong>GetIntArray()</strong>، یک کپی از آرایه Immutable دریافت کرده و مقادیر آن را چاپ می‌کنیم.</li>
+<li>در نهایت، Thread را اجرا می‌کنیم.</li>
+</ul>
+<p>متد <strong>ImmutableExample()</strong> را از <strong>Main()</strong> فراخوانی کرده و برنامه را اجرا کنید. خروجی نشان می‌دهد که <strong>آرایه Immutable هیچ تغییری توسط Threadها نمی‌بیند</strong> و برنامه <strong>Thread-Safe</strong> است. ✅</p>
+<div align="center">
+<p><img src="../../../assets/image/08/Table%208-16.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>همان‌طور که می‌بینید، محتوای آرایه با تغییر آرایه محلی تغییر نمی‌کند. این نسخه از برنامه نشان می‌دهد که برنامه ما <strong>Thread-Safe</strong> است. ✅</p>
+<hr>
+<h2>درک مفهوم Thread-Safety 🛡️</h2>
+<p>همان‌طور که در دو بخش قبلی دیدید، هنگام نوشتن کدهای چند نخی باید بسیار مراقب بود. نوشتن کد <strong>Thread-Safe</strong> می‌تواند به‌ویژه در پروژه‌های بزرگ بسیار دشوار باشد. شما باید به‌طور ویژه مراقب موارد زیر باشید:</p>
+<ul>
+<li>کار با <strong>Collections</strong></li>
+<li><strong>پاس دادن پارامترها به‌صورت مرجع (by reference)</strong></li>
+<li>دسترسی به <strong>متغیرهای عضو در کلاس‌های static</strong></li>
+</ul>
+<p>بهترین شیوه‌ها برای برنامه‌های چند نخی:</p>
+<ol>
+<li>تنها از <strong>Immutable Types</strong> استفاده کنید.</li>
+<li>به متغیرهای عضو <strong>static</strong> دسترسی پیدا نکنید.</li>
+<li>اگر کدی وجود دارد که <strong>Thread-Safe نیست</strong>، آن را با <strong>lock، mutex یا semaphore</strong> محافظت کنید.</li>
+</ol>
+<p>گرچه شما قبلاً نمونه‌هایی از این کدها را در این فصل دیده‌اید، بیایید یک مرور کوتاه با نمونه کد داشته باشیم.</p>
+<hr>
+<h3>نمونه نوشتن یک نوع Immutable با <code>readonly struct</code></h3>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">readonly</span> <span class="hljs-keyword">struct</span> ImmutablePerson
+{
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">ImmutablePerson</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> id, <span class="hljs-built_in">string</span> firstName, <span class="hljs-built_in">string</span> lastName</span>)</span>
+    {
+        _id = id;
+        _firstName = firstName;
+        _lastName = lastName;
+    }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> Id { <span class="hljs-keyword">get</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> FirstName { <span class="hljs-keyword">get</span> { <span class="hljs-keyword">return</span> _firstName; } }
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">string</span> LastName { <span class="hljs-keyword">get</span> { <span class="hljs-keyword">return</span> _lastName; } }
+}
+</code></pre>
+<ul>
+<li>در ساختار <strong>ImmutablePerson</strong>، یک <strong>Constructor عمومی</strong> داریم که یک عدد صحیح برای <strong>ID</strong> و دو رشته برای نام و نام خانوادگی می‌گیرد.</li>
+<li>پارامترهای <strong>id، firstName و lastName</strong> به متغیرهای عضو <strong>Read-Only</strong> اختصاص داده می‌شوند.</li>
+<li>تنها دسترسی به داده‌ها از طریق <strong>Properties فقط خواندنی</strong> انجام می‌شود، بنابراین <strong>امکان تغییر داده‌ها وجود ندارد</strong>.</li>
+</ul>
+<p>از آنجایی که داده‌ها پس از ایجاد قابل تغییر نیستند، این ساختار <strong>Thread-Safe</strong> است. یعنی نمی‌توان آن را از طریق Threadهای مختلف تغییر داد. تنها راه تغییر داده‌ها، ایجاد یک <strong>Struct جدید با داده‌های جدید</strong> است.</p>
+<hr>
+<h3>نکات تکمیلی</h3>
+<ul>
+<li>Structها می‌توانند <strong>Mutable</strong> باشند، درست مانند کلاس‌ها.</li>
+<li>اما اگر می‌خواهید داده‌ها تغییر ناپذیر باشند، <strong>Read-Only Structs</strong> گزینه‌ای سبک و مناسب هستند.</li>
+<li>ایجاد و از بین بردن این Structها سریع‌تر از کلاس‌ها است، زیرا روی <strong>Stack</strong> قرار می‌گیرند (مگر اینکه بخشی از کلاسی باشند که روی <strong>Heap</strong> قرار دارد).</li>
+</ul>
+<hr>
+<h3>Collections Immutable</h3>
+<p>پیش‌تر دیدیم که <strong>Collections Mutable</strong> هستند. اما یک <strong>Namespace</strong> برای <strong>Immutable Collections</strong> وجود دارد به نام:</p>
+<p><strong><code>System.Collections.Immutable</code></strong></p>
+<p>جدول زیر برخی از عناصر مهم این Namespace را نشان می‌دهد:</p>
+<div align="center">
+<p><img src="../../../assets/image/08/Table%208-17.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>Namespace <strong><code>System.Collections.Immutable</code></strong> شامل مجموعه‌ای از <strong>Immutable Collections</strong> است که می‌توانید به‌طور ایمن بین Threadها استفاده کنید. برای جزئیات بیشتر، به لینک زیر مراجعه کنید:<br>
+<a href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.immutable?view=netcore-3.1">https://docs.microsoft.com/en-us/dotnet/api/system.collections.immutable?view=netcore-3.1</a> 🌐</p>
+<hr>
+<h3>استفاده از Lock در C# 🔒</h3>
+<p>استفاده از <strong>lock object</strong> در C# بسیار ساده است، همان‌طور که در نمونه کد زیر می‌بینید:</p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title">LockExample</span>
+{
+    <span class="hljs-keyword">public</span> <span class="hljs-built_in">object</span> _lock = <span class="hljs-keyword">new</span> <span class="hljs-built_in">object</span>();
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">UnsafeMethod</span>()</span>
+    {
+        <span class="hljs-keyword">lock</span>(_lock)
+        {
+            <span class="hljs-comment">// اجرای کد غیر ایمن</span>
+        }
+    }
+}
+</code></pre>
+<ul>
+<li>ابتدا متغیر عضو <code>_lock</code> را ایجاد و نمونه‌سازی می‌کنیم.</li>
+<li>زمانی که می‌خواهیم کدی که <strong>Thread-Safe نیست</strong> را اجرا کنیم، آن را داخل <strong>lock</strong> قرار می‌دهیم و <code>_lock</code> را به عنوان <strong>lock object</strong> استفاده می‌کنیم.</li>
+<li>وقتی یک Thread وارد lock می‌شود، تمام Threadهای دیگر تا خروج Thread فعلی از lock، اجازه اجرا ندارند.</li>
+</ul>
+<p>یک مشکل احتمالی: <strong>Deadlock</strong>. برای جلوگیری از آن می‌توان از <strong>Mutex</strong> استفاده کرد.</p>
+<hr>
+<h3>استفاده از Mutex 🛡️</h3>
+<p>ابتدا متغیر Mutex را تعریف کنید:</p>
+<pre class="hljs"><code><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">readonly</span> Mutex _mutex = <span class="hljs-keyword">new</span> Mutex();
+</code></pre>
+<p>سپس کد محافظت‌شده را به این صورت اجرا کنید:</p>
+<pre class="hljs"><code><span class="hljs-keyword">try</span>
+{
+    _mutex.WaitOne();
+    <span class="hljs-comment">// ... انجام کار ...</span>
+}
+<span class="hljs-keyword">finally</span>
+{
+    _mutex.ReleaseMutex();
+}
+</code></pre>
+<ul>
+<li><strong>WaitOne()</strong> Thread فعلی را تا زمان دریافت سیگنال متوقف می‌کند.</li>
+<li>پس از دریافت سیگنال، Thread مالک <strong>mutex</strong> می‌شود و می‌تواند به منابع محافظت‌شده دسترسی پیدا کند.</li>
+<li>پس از اتمام کار، با <strong>ReleaseMutex()</strong> Mutex آزاد می‌شود.</li>
+<li>مهم: همیشه ReleaseMutex() را در بلوک <strong>finally</strong> قرار دهید تا در صورت رخ دادن Exception، منابع همچنان آزاد شوند. ✅</li>
+</ul>
+<hr>
+<h3>استفاده از Semaphore 🟢</h3>
+<p><strong>Semaphore</strong> نیز شبیه Mutex عمل می‌کند، اما تفاوت اصلی این است که <strong>Mutex مکانیزم قفل است</strong> و <strong>Semaphore مکانیزم سیگنال‌دهی</strong>.</p>
+<p>مثال تعریف Semaphore:</p>
+<pre class="hljs"><code><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">readonly</span> Semaphore _semaphore = <span class="hljs-keyword">new</span> Semaphore(<span class="hljs-number">2</span>, <span class="hljs-number">4</span>);
+</code></pre>
+<ul>
+<li>پارامتر اول: تعداد درخواست‌های همزمان اولیه که می‌توانند اجازه دسترسی بگیرند.</li>
+<li>پارامتر دوم: حداکثر تعداد درخواست‌های همزمانی که می‌توانند اجازه دسترسی بگیرند.</li>
+</ul>
+<p>استفاده در متدها:</p>
+<pre class="hljs"><code><span class="hljs-keyword">try</span>
+{
+    _semaphore.WaitOne();
+    <span class="hljs-comment">// ... انجام کار ...</span>
+}
+<span class="hljs-keyword">finally</span>
+{
+    _semaphore.Release();
+}
+</code></pre>
+<ul>
+<li>Thread فعلی تا دریافت سیگنال منتظر می‌ماند، سپس کار خود را انجام می‌دهد و در نهایت <strong>Semaphore</strong> آزاد می‌شود.</li>
+</ul>
+<hr>
+<h3>نکات مهم 🔹</h3>
+<ul>
+<li>در این فصل یاد گرفتیم که چگونه با <strong>locks، mutexes و semaphores</strong> از کدهای غیر Thread-Safe محافظت کنیم.</li>
+<li><strong>Threadهای پس‌زمینه</strong> پس از اتمام پروسه خاتمه می‌یابند، در حالی که <strong>Threadهای پیش‌زمینه</strong> تا پایان اجرا ادامه می‌دهند.</li>
+<li>اگر نیاز دارید کدی <strong>تا پایان اجرا بدون قطع شدن Thread</strong> ادامه پیدا کند، بهتر است از <strong>Foreground Threads</strong> استفاده کنید.</li>
+</ul>
+<hr>
+<h3>وابستگی‌های متد همزمان (Synchronized Method Dependencies) ⚡</h3>
+<p>برای همزمان‌سازی کدها:</p>
+<ul>
+<li>از <strong>lock statement</strong> استفاده کنید.</li>
+<li>یا <strong>Namespace</strong> <code>System.Runtime.CompilerServices</code> را اضافه کرده و از annotation زیر استفاده کنید:</li>
+</ul>
+<pre class="hljs"><code>[<span class="hljs-meta">MethodImpl(MethodImplOptions.Synchronized)</span>]
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">ThisIsASynchronisedMethod</span>()</span>
+{
+    Console.WriteLine(<span class="hljs-string">&quot;Synchronised method called.&quot;</span>);
+}
+</code></pre>
+<p>با property نیز می‌توان همزمان‌سازی انجام داد:</p>
+<pre class="hljs"><code><span class="hljs-keyword">private</span> <span class="hljs-built_in">int</span> i;
+<span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> SomeProperty
+{
+    [<span class="hljs-meta">MethodImpl(MethodImplOptions.Synchronized)</span>]
+    <span class="hljs-keyword">get</span> { <span class="hljs-keyword">return</span> i; }
+    [<span class="hljs-meta">MethodImpl(MethodImplOptions.Synchronized)</span>]
+    <span class="hljs-keyword">set</span> { i = <span class="hljs-keyword">value</span>; }
+}
+</code></pre>
+<hr>
+<h3>استفاده از کلاس Interlocked ⚡</h3>
+<p>در برنامه‌های چند نخی، <strong>خطاها هنگام Context Switching Threadها</strong> رخ می‌دهند، مثلاً وقتی چند Thread متغیر یکسانی را به‌روزرسانی می‌کنند.</p>
+<p>کلاس <strong><code>System.Threading.Interlocked</code></strong> در <strong>mscorlib</strong> برای محافظت در برابر این خطاها استفاده می‌شود.</p>
+<p>ویژگی‌ها:</p>
+<ul>
+<li>روش‌ها <strong>Exception</strong> نمی‌اندازند و عملکرد بهتری نسبت به lock دارند.</li>
+<li>برای اعمال تغییرات ساده در وضعیت متغیرها ایده‌آل هستند.</li>
+</ul>
+<hr>
+<h3>متدهای موجود در Interlocked 🔧</h3>
+<ul>
+<li><strong>CompareExchange</strong>: مقایسه دو متغیر و ذخیره نتیجه در متغیر دیگر</li>
+<li><strong>Add</strong>: جمع دو متغیر Int32 یا Int64 و ذخیره نتیجه در متغیر اول</li>
+<li><strong>Decrement</strong>: کاهش مقدار Int32 و Int64 و ذخیره نتیجه</li>
+<li><strong>Increment</strong>: افزایش مقدار Int32 و Int64 و ذخیره نتیجه</li>
+<li><strong>Read</strong>: خواندن متغیرهای Int64</li>
+<li><strong>Exchange</strong>: تبادل مقادیر بین متغیرها<br>
+ما اکنون قصد داریم یک برنامه‌ی ساده‌ی کنسول بنویسیم که این روش‌ها را نمایش دهد. 💻</li>
+</ul>
+<p>ابتدا یک برنامه‌ی جدید <strong>.NET Framework Console Application</strong> ایجاد کنید و خطوط زیر را در بالای کلاس <strong>Program</strong> اضافه کنید:</p>
+<pre class="hljs"><code><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">long</span> _value = <span class="hljs-built_in">long</span>.MaxValue;
+<span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">int</span> _resourceInUse = <span class="hljs-number">0</span>;
+</code></pre>
+<p>متغیر <code>_value</code> برای نشان دادن به‌روزرسانی متغیرها با استفاده از روش‌های <strong>interlocking</strong> استفاده می‌شود. متغیر <code>_resourceInUse</code> برای نشان دادن این است که آیا یک منبع در حال استفاده است یا خیر.</p>
+<p>سپس متد <strong>CompareExchangeVariables()</strong> را اضافه کنید:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">CompareExchangeVariables</span>()</span>
+{
+    Interlocked.CompareExchange(<span class="hljs-keyword">ref</span> _value, <span class="hljs-number">123</span>, <span class="hljs-built_in">long</span>.MaxValue);
+}
+</code></pre>
+<p>در متد <strong>CompareExchangeVariables()</strong>، ما متد <strong>CompareExchange()</strong> را فراخوانی می‌کنیم تا <code>_value</code> را با <code>long.MaxValue</code> مقایسه کند. اگر دو مقدار برابر باشند، <code>_value</code> با مقدار <code>123</code> جایگزین می‌شود.</p>
+<p>حالا متد <strong>AddVariables()</strong> را اضافه می‌کنیم:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">AddVariables</span>()</span>
+{
+    Interlocked.Add(<span class="hljs-keyword">ref</span> _value, <span class="hljs-number">321</span>);
+}
+</code></pre>
+<p>متد <strong>AddVariables()</strong> متد <strong>Add()</strong> را فراخوانی می‌کند تا به متغیر عضو <code>_value</code> دسترسی داشته باشد و آن را با مقدار <code>_value + 321</code> به‌روزرسانی کند.</p>
+<p>سپس متد <strong>DecrementVariable()</strong> را اضافه می‌کنیم:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">DecrementVariable</span>()</span>
+{
+    Interlocked.Decrement(<span class="hljs-keyword">ref</span> _value);
+}
+</code></pre>
+<p>این متد، متد <strong>Decrement()</strong> را فراخوانی می‌کند که مقدار متغیر عضو <code>_value</code> را ۱ واحد کاهش می‌دهد.</p>
+<p>متد بعدی <strong>IncrementVariable()</strong> است:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">IncrementVariable</span>()</span>
+{
+    Interlocked.Increment(<span class="hljs-keyword">ref</span> _value);
+}
+</code></pre>
+<p>در <strong>IncrementVariable()</strong>، مقدار متغیر عضو <code>_value</code> با فراخوانی متد <strong>Increment()</strong> افزایش می‌یابد.</p>
+<p>حالا متد <strong>ReadVariable()</strong> را می‌نویسیم:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">long</span> <span class="hljs-title">ReadVariable</span>()</span>
+{
+    <span class="hljs-comment">// متد Read در سیستم‌های 64 بیتی لازم نیست،</span>
+    <span class="hljs-comment">// چون عملیات خواندن 64 بیتی به‌صورت atomic انجام می‌شود.</span>
+    <span class="hljs-comment">// در سیستم‌های 32 بیتی، عملیات خواندن 64 بیتی atomic نیست</span>
+    <span class="hljs-comment">// مگر اینکه با Read انجام شود.</span>
+    <span class="hljs-keyword">return</span> Interlocked.Read(<span class="hljs-keyword">ref</span> _value);
+}
+</code></pre>
+<p>از آنجایی که عملیات خواندن ۶۴ بیتی atomic است، فراخوانی متد <strong>Interlocked.Read()</strong> در سیستم‌های ۶۴ بیتی ضروری نیست. اما در سیستم‌های ۳۲ بیتی، برای اینکه خواندن ۶۴ بیتی atomic باشد، باید از <strong>Interlocked.Read()</strong> استفاده کنید.</p>
+<p>سپس متد <strong>PerformUnsafeCodeSafely()</strong> را اضافه می‌کنیم:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">PerformUnsafeCodeSafely</span>()</span>
+{
+    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++)
+    {
+        UseResource();
+        Thread.Sleep(<span class="hljs-number">1000</span>);
+    }
+}
+</code></pre>
+<p>متد <strong>PerformUnsafeCodeSafely()</strong> پنج بار حلقه می‌زند. در هر بار حلقه، متد <strong>UseResource()</strong> فراخوانی می‌شود و سپس نخ برای یک ثانیه به خواب می‌رود.</p>
+<p>حالا متد <strong>UseResource()</strong> را اضافه می‌کنیم:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">UseResource</span>()</span>
+{
+    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == Interlocked.Exchange(<span class="hljs-keyword">ref</span> _resourceInUse, <span class="hljs-number">1</span>))
+    {
+        Console.WriteLine(<span class="hljs-string">$&quot;<span class="hljs-subst">{Thread.CurrentThread.Name}</span> acquired the lock&quot;</span>);
+        NonThreadSafeResourceAccess();
+        Thread.Sleep(<span class="hljs-number">500</span>);
+        Console.WriteLine(<span class="hljs-string">$&quot;<span class="hljs-subst">{Thread.CurrentThread.Name}</span> exiting lock&quot;</span>);
+        Interlocked.Exchange(<span class="hljs-keyword">ref</span> _resourceInUse, <span class="hljs-number">0</span>);
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    }
+    <span class="hljs-keyword">else</span>
+    {
+        Console.WriteLine(<span class="hljs-string">$&quot;<span class="hljs-subst">{Thread.CurrentThread.Name}</span> was denied the lock&quot;</span>);
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+}
+</code></pre>
+<p>متد <strong>UseResource()</strong> جلوگیری می‌کند از اینکه اگر منبع در حال استفاده است، <strong>lock</strong> گرفته شود، همانطور که توسط متغیر <code>_resourceInUse</code> مشخص شده است. ابتدا مقدار <code>_resourceInUse</code> را با فراخوانی متد <strong>Exchange()</strong> روی ۱ تنظیم می‌کنیم. متد <strong>Exchange()</strong> یک عدد بازمی‌گرداند که با ۰ مقایسه می‌شود. اگر مقدار بازگشتی ۰ باشد، متد در حال استفاده نیست.</p>
+<p>اگر متد در حال استفاده باشد، پیامی به کاربر نمایش داده می‌شود که نخ فعلی اجازه‌ی lock ندارد.<br>
+اگر متد آزاد باشد، پیامی به کاربر نمایش داده می‌شود که نخ فعلی lock را گرفته است. سپس متد <strong>NonThreadSafeResourceAccess()</strong> فراخوانی می‌شود و نخ برای نیم ثانیه به خواب می‌رود تا شبیه‌سازی کار انجام شود.</p>
+<p>پس از بیدار شدن نخ، پیامی نشان می‌دهد که نخ فعلی از lock خارج شده است و سپس lock با فراخوانی <strong>Exchange()</strong> آزاد می‌شود و مقدار <code>_resourceInUse</code> به ۰ بازگردانده می‌شود.</p>
+<p>متد <strong>NonThreadSafeResourceAccess()</strong> را اضافه کنید:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">NonThreadSafeResourceAccess</span>()</span>
+{
+    Console.WriteLine(<span class="hljs-string">&quot;Non-thread-safe code executed.&quot;</span>);
+}
+</code></pre>
+<p>در <strong>NonThreadSafeResourceAccess()</strong> کد غیر thread-safe در امنیت lock اجرا می‌شود. در مثال ما، فقط پیامی به کاربر نمایش داده می‌شود.</p>
+<p>در نهایت، متد <strong>Main()</strong> را به شکل زیر به‌روزرسانی کنید:</p>
+<pre class="hljs"><code><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Main</span>(<span class="hljs-params"><span class="hljs-built_in">string</span>[] <span class="hljs-keyword">args</span></span>)</span>
+{
+    CompareExchangeVariables();
+    AddVariables();
+    DecrementVariable();
+    IncrementVariable();
+    ReadVariable();
+    PerformUnsafeCodeSafely();
+}
+</code></pre>
+<p>متد <strong>Main()</strong> متدهایی که روش‌های <strong>Interlocked</strong> را تست می‌کنند، فراخوانی می‌کند. ✅</p>
+<p>اگر کد را اجرا کنید، خروجی مشابه چیزی خواهد بود که انتظار داریم.</p>
+<div align="center">
+<p><img src="../../../assets/image/08/Table%208-18.jpeg" alt="Conventions-UsedThis-Book"></p>
+</div>
+<p>حال بیایید به برخی توصیه‌های عمومی بپردازیم. 📌</p>
+<h3>توصیه‌های عمومی ⚙️</h3>
+<p>در این بخش نهایی، برخی از توصیه‌های مایکروسافت برای کار با برنامه‌های <strong>multi-threaded</strong> را بررسی می‌کنیم. این توصیه‌ها شامل موارد زیر هستند:</p>
+<ul>
+<li>از <strong>Thread.Abort</strong> برای خاتمه دادن به سایر threadها اجتناب کنید.</li>
+<li>از <strong>mutex</strong>، <strong>ManualResetEvent</strong>، <strong>AutoResetEvent</strong> و <strong>Monitor</strong> برای همگام‌سازی فعالیت‌ها بین چند thread استفاده کنید.</li>
+<li>هر جا که ممکن است، از <strong>thread pool</strong> برای threadهای کاری استفاده کنید.</li>
+<li>اگر threadهای کاری شما مسدود شدند، از <strong>Monitor.PulseAll</strong> برای اطلاع دادن به همه threadها از تغییر وضعیت thread کاری استفاده کنید.</li>
+<li>از استفاده از <strong>this</strong>، نمونه‌های نوع‌ها (<strong>type instances</strong>) و نمونه‌های رشته‌ای (<strong>string instances</strong>) از جمله رشته‌های literal به‌عنوان <strong>lock objects</strong> اجتناب کنید. استفاده از نوع lockها می‌تواند خطر deadlock ایجاد کند، پس مراقب باشید.</li>
+<li>از بلوک <strong>try/finally</strong> با threadهایی که وارد <strong>monitor</strong> می‌شوند استفاده کنید، تا در بلوک <strong>finally</strong> اطمینان حاصل شود که thread با فراخوانی <strong>Monitor.Exit()</strong> از monitor خارج می‌شود.</li>
+<li>برای منابع مختلف، از threadهای جداگانه استفاده کنید و از اختصاص چند thread به یک منبع اجتناب کنید.</li>
+<li>وظایف <strong>I/O</strong> باید thread مخصوص خود را داشته باشند، زیرا هنگام انجام عملیات I/O مسدود می‌شوند و این اجازه می‌دهد سایر threadها اجرا شوند.</li>
+<li>ورودی کاربر باید thread مخصوص به خود را داشته باشد.</li>
+<li>برای بهبود عملکرد در تغییرات ساده وضعیت، از متدهای کلاس <strong>System.Threading.Interlocked</strong> به جای دستور <strong>lock</strong> استفاده کنید.</li>
+<li>برای کدهایی که استفاده زیادی دارند، از همگام‌سازی اجتناب کنید، زیرا می‌تواند منجر به deadlock و race condition شود.</li>
+<li>داده‌های <strong>static</strong> باید به‌صورت پیش‌فرض <strong>thread-safe</strong> باشند.</li>
+<li>داده‌های <strong>instance</strong> نباید به‌صورت پیش‌فرض <strong>thread-safe</strong> باشند، در غیر این صورت عملکرد کاهش می‌یابد، رقابت بر سر lock افزایش می‌یابد و امکان وقوع race condition و deadlock افزایش می‌یابد.</li>
+<li>از متدهای <strong>static</strong> که state را تغییر می‌دهند اجتناب کنید، زیرا منجر به باگ‌های threading می‌شوند.</li>
+</ul>
+<hr>
+<h3>جمع‌بندی 📝</h3>
+<p>در این فصل، ما بررسی کردیم که <strong>threading</strong> چیست و چگونه از آن استفاده کنیم. ما مشکلات <strong>deadlock</strong> و <strong>race condition</strong> را مشاهده کردیم و دیدیم چگونه می‌توان با استفاده از <strong>lock statement</strong> و کتابخانه <strong>TPL</strong> از این شرایط استثنایی جلوگیری کرد. همچنین به بررسی <strong>thread safety</strong> در <strong>static constructors</strong>، <strong>static methods</strong>، <strong>immutable objects</strong> و <strong>mutable objects</strong> پرداختیم. مشاهده کردیم که استفاده از <strong>immutable objects</strong> راهی امن برای انتقال داده بین threadها است و برخی توصیه‌های عمومی برای کار با threadها مرور شد.</p>
+<p>همچنین دیدیم که چگونه امن کردن کد برای threadها می‌تواند مزایای زیادی داشته باشد. ✅</p>
+<p>در فصل بعد، به طراحی <strong>APIs</strong> مؤثر خواهیم پرداخت. اما در حال حاضر می‌توانید دانش خود را با پاسخ دادن به سوالات زیر امتحان کنید و مطالعه خود را با مراجعه به لینک‌های ارائه شده ادامه دهید.</p>
+<hr>
+<h3>سوالات ❓</h3>
+<ol>
+<li><strong>Thread چیست؟</strong></li>
+<li>در یک برنامه <strong>single-threaded</strong> چند thread وجود دارد؟</li>
+<li>چه انواعی از thread وجود دارد؟</li>
+<li>کدام thread بلافاصله پس از خروج برنامه خاتمه می‌یابد؟</li>
+<li>کدام thread حتی پس از خروج برنامه تا تکمیل ادامه می‌یابد؟</li>
+<li>چه کدی باعث می‌شود یک thread به مدت نیم میلی‌ثانیه بخوابد؟</li>
+<li>چگونه یک thread ایجاد می‌کنید که متدی به نام <strong>Method1</strong> را فراخوانی کند؟</li>
+<li>چگونه یک thread را به <strong>background thread</strong> تبدیل می‌کنید؟</li>
+<li><strong>Deadlock</strong> چیست؟</li>
+<li>چگونه از یک lock که با <strong>Monitor.TryEnter(objectName)</strong> گرفته شده خارج می‌شوید؟</li>
+<li>چگونه می‌توان از <strong>deadlock</strong> بازیابی کرد؟</li>
+<li><strong>Race condition</strong> چیست؟</li>
+<li>یک روش برای جلوگیری از <strong>race condition</strong> چیست؟</li>
+<li>چه چیزی متدهای <strong>static</strong> را ناامن می‌کند؟</li>
+<li>آیا <strong>static constructors</strong> thread-safe هستند؟</li>
+<li>چه چیزی مسئول مدیریت گروه‌های thread است؟</li>
+<li><strong>Immutable object</strong> چیست؟</li>
+<li>چرا در برنامه‌های multi-threaded، <strong>immutable objects</strong> نسبت به <strong>mutable objects</strong> ترجیح داده می‌شوند؟</li>
+</ol>
+<hr>
+<h3>مطالعه‌ی بیشتر 📚</h3>
+<ul>
+<li><a href="https://www.c-sharpcorner.com/blogs/mutex-and-semaphore-inthread">Examples of using mutex and semaphore</a></li>
+<li><a href="https://www.guru99.com/mutex-vs-semaphore.html">Differences between mutex and semaphore</a></li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/static-constructors">Official Microsoft documentation on static constructors</a></li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/standard/threading/managedthreading-best-practices">Microsoft guidance on managed threading best practices</a></li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/task-parallel-library-tpl">Official Microsoft API documentation for the TPL</a></li>
+<li><a href="https://www.c-sharpcorner.com/UploadFile/1d42da/interlocked-class-inC-Sharp-threading/">Interlocked class in C# threading</a></li>
+<li><a href="http://geekswithblogs.net/BlackRabbitCoder/archive/2012/08/23/c.net-little-wonders-interlocked-read-and-exchange.aspx">Discussion on System.Threading.Interlocked</a></li>
+<li><a href="http://www.albahari.com/threading/">Free eBook about threading in C#</a></li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.immutable?view=netcore-3.1">Immutable collections in System.Collections.Immutable</a></li>
+</ul>
+
+</main>
+
+
+ 
+
+  <!-- فوتر مشترک -->
+  <footer class="footer">
+    <div class="container">
+      <p>
+        <img src="/icone/copyright.svg" alt="کپی‌رایت" width="14" height="14"
+             style="vertical-align:middle;margin-inline:4px">
+        <span id="y"></span> Gitab — برای توسعه‌دهندگان
+      </p>
+    </div>
+  </footer>
+
+  <!-- سال + اسکریپت تم -->
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    (() => {
+      const root = document.documentElement;
+      const btn = document.getElementById('themeToggle');
+      const KEY = 'gitab-theme';
+      const media = window.matchMedia('(prefers-color-scheme: dark)');
+      const getEffective = s => s === 'auto' ? (media.matches ? 'dark' : 'light') : s;
+      function updateTheme(s) {
+        root.setAttribute('data-theme', s);
+        const mode = getEffective(s);
+        root.dataset.colorMode = mode;
+        btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
+      }
+      const saved = localStorage.getItem(KEY) || 'auto';
+      updateTheme(saved);
+      btn.addEventListener('click', () => {
+        const curr = localStorage.getItem(KEY) || 'auto';
+        const next = curr === 'auto' ? 'dark' : curr === 'dark' ? 'light' : 'auto';
+        localStorage.setItem(KEY, next);
+        updateTheme(next);
+      });
+      media.addEventListener('change', () => {
+        if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
+      });
+      window.addEventListener('DOMContentLoaded', () => updateTheme(saved));
+    })();
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
+<script>
+  document.body.dataset.page = window.location.pathname;
+</script>
+
+</body>
+
+</html>
