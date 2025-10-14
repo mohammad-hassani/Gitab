@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل شانزدهم: شبکه‌سازی</h1>
+
+<main class="site-main book-page ">
+  <h1>فصل شانزدهم: شبکه‌سازی</h1>
 <p>.NET مجموعه‌ای از کلاس‌ها را در فضای نام <strong><a href="http://System.Net">System.Net</a>.*</strong> برای برقراری ارتباط از طریق پروتکل‌های استاندارد شبکه مثل <strong>HTTP</strong> و <strong>TCP/IP</strong> ارائه می‌دهد. در اینجا خلاصه‌ای از اجزای کلیدی آورده شده است:</p>
 <ul>
 <li><strong>HttpClient</strong> برای مصرف APIهای وب مبتنی بر HTTP و سرویس‌های <strong>RESTful</strong></li>
@@ -909,7 +909,9 @@ Client();
 </ul>
 <p>را در اختیار شما قرار می‌دهند. ✅</p>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -955,6 +957,26 @@ Client();
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

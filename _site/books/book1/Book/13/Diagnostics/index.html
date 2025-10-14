@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل سیزدهم: تشخیص (Diagnostics)</h1>
+
+<main class="site-main book-page ">
+  <h1>فصل سیزدهم: تشخیص (Diagnostics)</h1>
 <p>وقتی چیزی اشتباه پیش می‌رود، خیلی مهم است که اطلاعات لازم برای کمک به <strong>تشخیص (diagnosing) مشکل</strong> در دسترس باشد. یک <strong>محیط توسعه یکپارچه (Integrated Development Environment – IDE)</strong> یا یک <strong>دیباگر (debugger)</strong> می‌تواند در این زمینه بسیار کمک‌کننده باشد—اما معمولاً فقط در طول توسعه موجود است.<br>
 پس از انتشار (ship) یک برنامه، خودِ برنامه باید اطلاعات تشخیصی را جمع‌آوری و ثبت کند. برای برآورده کردن این نیاز، <strong>.NET</strong> مجموعه‌ای از امکانات را فراهم می‌کند تا بتوان اطلاعات تشخیصی را لاگ‌گیری کرد، رفتار برنامه را مانیتور کرد، خطاهای زمان اجرا را شناسایی کرد و در صورت موجود بودن، با ابزارهای دیباگ یکپارچه شد.</p>
 <p>برخی ابزارها و APIهای تشخیصی، مخصوص <strong>Windows</strong> هستند زیرا به قابلیت‌های سیستم‌عامل ویندوز وابسته‌اند. برای جلوگیری از شلوغ شدن <strong>BCL (.NET Base Class Library)</strong> با APIهای مختص پلتفرم، مایکروسافت آن‌ها را در پکیج‌های جداگانه‌ی <strong>NuGet</strong> عرضه کرده است که می‌توانید به صورت اختیاری به آن‌ها ارجاع دهید. بیش از دوازده پکیج مخصوص ویندوز وجود دارد که می‌توانید همه‌ی آن‌ها را یکجا با پکیج اصلی <strong>Microsoft.Windows.Compatibility</strong> استفاده کنید.</p>
@@ -1051,7 +1051,9 @@ Console.WriteLine(s.Elapsed);    <span class="hljs-comment">// 00:00:01.4322661<
 <p>اگر یک Exception باعث کرش برنامه شده باشد، می‌توانید از دستور <strong>printexceptions</strong> (یا کوتاه شده آن <strong>pe</strong>) برای نمایش جزئیات Exception استفاده کنید.<br>
 Shell ابزار <strong>dotnet-dump</strong> دستورات متعددی دارد که می‌توانید با دستور <strong>help</strong> لیست کامل آن‌ها را مشاهده کنید.</p>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -1097,6 +1099,26 @@ Shell ابزار <strong>dotnet-dump</strong> دستورات متعددی دار
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

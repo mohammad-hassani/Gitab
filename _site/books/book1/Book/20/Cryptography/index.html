@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل بیستم:  رمزنگاری</h1>
+
+<main class="site-main book-page ">
+  <h1>فصل بیستم:  رمزنگاری</h1>
 <p>در این فصل، ما به بررسی APIهای اصلی <strong>Cryptography</strong> در .NET می‌پردازیم:</p>
 <ul>
 <li><strong>Windows Data Protection API (DPAPI)</strong></li>
@@ -558,7 +558,9 @@ cryptoRng.GetBytes(iv);
 <p>🔐 یک گواهی دیجیتال رکورد الکترونیکی کلید عمومی و نام فرستنده است که خودش توسط یک مرجع معتبر مستقل امضا شده است.</p>
 <p>📦 فضای نام <code>System.Security.Cryptography.X509Certificates</code> انواع لازم برای کار با گواهی‌ها را فراهم می‌کند.</p>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -604,6 +606,26 @@ cryptoRng.GetBytes(iv);
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل پانزدهم:  استریم‌ها و ورودی/خروجی (Streams and I/O)</h1>
+
+<main class="site-main book-page ">
+  <h1>فصل پانزدهم:  استریم‌ها و ورودی/خروجی (Streams and I/O)</h1>
 <p>این فصل، انواع بنیادی برای <strong>ورودی (Input)</strong> و <strong>خروجی (Output)</strong> در .NET را توضیح می‌دهد، با تمرکز ویژه روی موضوعات زیر:</p>
 <ul>
 <li>معماری <strong>Stream</strong> در .NET و این‌که چطور یک رابط برنامه‌نویسی (Programming Interface) یکپارچه برای <strong>خواندن</strong> و <strong>نوشتن</strong> روی انواع مختلف I/O فراهم می‌کند.</li>
@@ -1667,7 +1667,9 @@ Console.WriteLine(data.X + <span class="hljs-string">&quot; &quot;</span> + data
 <p>دلیل اصلی برتری عملکرد استفاده از <strong>اشاره‌گرها (pointers)</strong> وقتی با ساختارهای بزرگ کار می‌کنیم این است که اشاره‌گرها اجازه می‌دهند مستقیماً با داده‌های خام (raw data) کار کنیم، بدون اینکه مجبور باشیم از متدهای <code>Read</code> و <code>Write</code> برای کپی کردن داده‌ها بین حافظه <strong>مدیریت‌شده (managed)</strong> و <strong>مدیریت‌نشده (unmanaged)</strong> استفاده کنیم.</p>
 <p>این کار باعث صرفه‌جویی قابل‌توجهی در زمان و منابع می‌شود، به‌ویژه وقتی حجم داده‌ها زیاد باشد. این موضوع در <strong>فصل ۲۴</strong> کتاب به‌طور کامل بررسی شده است.</p>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -1713,6 +1715,26 @@ Console.WriteLine(data.X + <span class="hljs-string">&quot; &quot;</span> + data
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

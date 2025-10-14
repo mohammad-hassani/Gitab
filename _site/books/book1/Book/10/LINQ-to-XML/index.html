@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل دهم:  LINQ to XML</h1>
+
+<main class="site-main book-page ">
+  <h1>فصل دهم:  LINQ to XML</h1>
 <p>.NET تعداد زیادی API برای کار با داده‌های XML فراهم می‌کند. انتخاب اصلی برای پردازش عمومی اسناد XML، <strong>LINQ to XML</strong> است.<br>
 LINQ to XML شامل یک مدل شیء سند XML (<strong>DOM</strong>) سبک و سازگار با LINQ است، به‌علاوه مجموعه‌ای از عملگرهای پرس‌وجوی تکمیلی.</p>
 <p>در این فصل، ما به‌طور کامل روی LINQ to XML تمرکز می‌کنیم. در فصل ۱۱، به <strong>خواننده/نویسنده XML</strong> یک‌طرفه (forward-only) می‌پردازیم و در ضمیمه‌ی آنلاین، نوع‌هایی برای کار با <strong>schemaها</strong> و <strong>stylesheetها</strong> را پوشش می‌دهیم. .NET همچنین شامل DOM قدیمی مبتنی بر <strong>XmlDocument</strong> است که ما آن را پوشش نمی‌دهیم.</p>
@@ -1340,7 +1340,9 @@ customers.Save(<span class="hljs-string">&quot;data.xml&quot;</span>);
 <li>توجه: XStreamingElement قابلیت پیمایش ندارد و فقط برای <strong>تولید خروجی XML</strong> مناسب است.</li>
 </ul>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -1386,6 +1388,26 @@ customers.Save(<span class="hljs-string">&quot;data.xml&quot;</span>);
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

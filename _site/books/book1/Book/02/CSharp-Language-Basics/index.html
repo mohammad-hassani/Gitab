@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل دوم: مبانی زبان سی شارپ</h1>
+
+<main class="site-main book-page ">
+  <h1>فصل دوم: مبانی زبان سی شارپ</h1>
 <p>در این فصل، با مبانی زبان سی شارپ آشنا می‌شویم.</p>
 <p>تقریباً تمام مثال‌های کدی که در این کتاب آمده‌اند، به صورت نمونه‌های تعاملی (Interactive Samples) در LINQPad در دسترس هستند. کار کردن با این نمونه‌ها در کنار مطالعه کتاب، باعث می‌شود یادگیری شما بسیار سریع‌تر شود، چون می‌توانید کدها را ویرایش کرده و نتیجه را فوراً ببینید، بدون اینکه نیازی به ساخت پروژه‌ها و راه‌حل‌ها (Solutions) در Visual Studio داشته باشید.</p>
 <p>برای دانلود نمونه‌ها، در LINQPad روی تب Samples کلیک کنید و سپس گزینه Download more samples را انتخاب نمایید.</p>
@@ -3154,7 +3154,9 @@ W2::Widgets.Widget w2 = <span class="hljs-keyword">new</span> W2::Widgets.Widget
 </code></pre>
 <p>⚠️ استفاده از نام مستعار و :: کمک می‌کند ابهام بین انواع مشابه در فضاهای نام مختلف برطرف شود.</p>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -3200,6 +3202,26 @@ W2::Widgets.Widget w2 = <span class="hljs-keyword">new</span> W2::Widgets.Widget
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

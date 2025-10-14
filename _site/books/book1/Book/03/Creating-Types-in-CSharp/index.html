@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل سوم : ایجاد Typeها در سی شارپ</h1>
+
+<main class="site-main book-page ">
+  <h1>فصل سوم : ایجاد Typeها در سی شارپ</h1>
 <p>در این فصل، ما وارد مبحث <strong>typeها</strong> و <strong>type memberها</strong> می‌شویم.</p>
 <hr>
 <h3>📌 کلاس‌ها (Classes)</h3>
@@ -2722,7 +2722,9 @@ IComparer&lt;<span class="hljs-built_in">string</span>&gt; stringComparer = obje
 </code></pre>
 <p>این کد <strong>برای هر مقدار T جداگانه کامپایل می‌شود</strong> و معنای <code>&gt;</code> را برای نوع خاص خود می‌گیرد، و اگر نوعی از <code>&gt;</code> پشتیبانی نکند، کامپایل خطا می‌دهد.</p>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -2768,6 +2770,26 @@ IComparer&lt;<span class="hljs-built_in">string</span>&gt; stringComparer = obje
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>درس هفدهم:  اسمبلی‌ها (Assemblies)</h1>
+
+<main class="site-main book-page ">
+  <h1>درس هفدهم:  اسمبلی‌ها (Assemblies)</h1>
 <p>یک <strong>assembly</strong> واحد پایه‌ای برای استقرار (deployment) در .NET است و همچنین محفظه‌ای برای تمام <strong>type</strong>ها به شمار می‌آید. یک اسمبلی شامل <strong>type</strong>های کامپایل‌شده به همراه کد <strong>Intermediate Language (IL)</strong>، منابع اجرایی (<strong>runtime resources</strong>) و اطلاعاتی برای مدیریت نسخه‌ها و ارجاع به سایر اسمبلی‌ها است. همچنین اسمبلی یک مرز برای <strong>type resolution</strong> تعریف می‌کند. در .NET، یک اسمبلی معمولاً شامل یک فایل با پسوند <code>.dll</code> است.</p>
 <p>زمانی که یک برنامه اجرایی در .NET می‌سازید، دو فایل ایجاد می‌شود:</p>
 <ul>
@@ -1487,7 +1487,9 @@ Context: DefaultAssemblyLoadContext Default
 </code></pre>
 <p>حتی اگر هر دو پلاگین نسخه یکسان Humanizer را استفاده کنند، <strong>ایزوله‌سازی ALCها</strong> مزیت دارد، زیرا <strong>متغیرهای static هر پلاگین جدا خواهند بود</strong>.</p>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -1533,6 +1535,26 @@ Context: DefaultAssemblyLoadContext Default
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

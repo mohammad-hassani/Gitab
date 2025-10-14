@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل بیست و پنجم: Regular Expressions</h1>
+
+<main class="site-main book-page ">
+  <h1>فصل بیست و پنجم: Regular Expressions</h1>
 <p>زبان <strong>Regular Expressions</strong> الگوهای کاراکتری را شناسایی می‌کند. تایپ‌های .NET که از Regular Expressions پشتیبانی می‌کنند، بر اساس <strong>Perl 5 Regular Expressions</strong> ساخته شده‌اند و هم قابلیت جستجو (<strong>search</strong>) و هم جستجو/جایگزینی (<strong>search/replace</strong>) را پشتیبانی می‌کنند.</p>
 <p>Regular Expressions برای کارهایی مثل موارد زیر استفاده می‌شوند:</p>
 <ul>
@@ -729,7 +729,9 @@ Match m = Regex.Match (sample, <span class="hljs-string">@&quot;(?&lt;=google\..
 <p><img src="../../../assets/image/25/Table-25-14.jpeg" alt="Conventions-UsedThis-Book"></p>
 </div>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -775,6 +777,26 @@ Match m = Regex.Match (sample, <span class="hljs-string">@&quot;(?&lt;=google\..
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

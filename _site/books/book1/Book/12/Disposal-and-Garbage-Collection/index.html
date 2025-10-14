@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل دوازدهم: مدیریت Disposal و Garbage Collection</h1>
+
+<main class="site-main book-page ">
+  <h1>فصل دوازدهم: مدیریت Disposal و Garbage Collection</h1>
 <p>برخی از اشیاء نیازمند کدهای مخصوص برای <strong>جمع‌کردن (tear-down)</strong> هستند تا منابعی مثل فایل‌های باز، قفل‌ها (locks)، هندل‌های سیستم‌عامل و اشیاء <strong>unmanaged</strong> آزاد بشن. در اصطلاح دات‌نت، به این کار <strong>Disposal</strong> گفته می‌شه و از طریق اینترفیس <strong>IDisposable</strong> پشتیبانی می‌شه.</p>
 <p>همچنین حافظه مدیریت‌شده (Managed Memory) که توسط اشیاء استفاده‌نشده اشغال شده، باید در یک نقطه آزاد بشه. این کار <strong>Garbage Collection</strong> نام داره و توسط <strong>CLR</strong> انجام می‌شه.</p>
 <p>تفاوت Disposal و Garbage Collection در اینه که:</p>
@@ -984,7 +984,9 @@ Console.WriteLine(weak.Target); <span class="hljs-comment">// (nothing)</span>
 }
 </code></pre>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -1030,6 +1032,26 @@ Console.WriteLine(weak.Target); <span class="hljs-comment">// (nothing)</span>
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

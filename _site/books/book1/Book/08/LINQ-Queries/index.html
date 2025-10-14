@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل هشتم: پرس‌وجوهای LINQ</h1>
+
+<main class="site-main book-page ">
+  <h1>فصل هشتم: پرس‌وجوهای LINQ</h1>
 <p><strong>LINQ</strong> یا <strong>Language Integrated Query</strong> مجموعه‌ای از ویژگی‌های زبان و زمان اجراست که برای نوشتن پرس‌وجوهای ساختاریافته و نوع-ایمن (<strong>type-safe</strong>) روی مجموعه‌های محلی از اشیا و منابع داده راه دور استفاده می‌شود.</p>
 <p>LINQ به شما امکان می‌دهد روی هر مجموعه‌ای که <strong>IEnumerable<T></strong> را پیاده‌سازی کرده است پرس‌وجو کنید، چه یک آرایه، لیست، یا <strong>XML Document Object Model (DOM)</strong> باشد، و چه منابع داده راه دور مانند جدول‌های موجود در پایگاه داده <strong>SQL Server</strong>. LINQ مزایای بررسی نوع در زمان کامپایل (<strong>compile-time type checking</strong>) و ترکیب پرس‌وجوهای پویا (<strong>dynamic query composition</strong>) را ارائه می‌دهد.</p>
 <p>این فصل معماری LINQ و اصول نوشتن پرس‌وجوها را توضیح می‌دهد. همه‌ی نوع‌های اصلی در <strong>System.Linq</strong> و <strong>System.Linq.Expressions</strong> تعریف شده‌اند.</p>
@@ -1769,7 +1769,9 @@ Console.WriteLine(runnable(<span class="hljs-string">&quot;dog&quot;</span>));  
 <p>ساده‌ترین روش برای تعیین اینکه کدام نوع <strong>expression</strong> را باید استفاده کرد، این است که یک <strong>lambda expression</strong> موجود را در <strong>Visual Studio debugger</strong> بررسی کنید.</p>
 <p>ما ادامه این بحث را آنلاین ارائه داده‌ایم در: <a href="http://www.albahari.com/expressions">http://www.albahari.com/expressions</a> ✅</p>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -1815,6 +1817,26 @@ Console.WriteLine(runnable(<span class="hljs-string">&quot;dog&quot;</span>));  
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

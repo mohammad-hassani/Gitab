@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل یازدهم: سایر تکنولوژی‌های XML و JSON</h1>
+
+<main class="site-main book-page ">
+  <h1>فصل یازدهم: سایر تکنولوژی‌های XML و JSON</h1>
 <p>در <strong>فصل ۱۰</strong>، ما API مربوط به <strong>LINQ-to-XML</strong> و به‌طور کلی XML را بررسی کردیم.<br>
 در این فصل، به سراغ <strong>کلاس‌های سطح پایین XmlReader/XmlWriter</strong> و همچنین <strong>انواع داده‌هایی برای کار با JSON (JavaScript Object Notation)</strong> می‌رویم، که به‌عنوان یک جایگزین محبوب برای XML شناخته می‌شود.</p>
 <p>در ضمیمه‌ی آنلاین 📎، ابزارهایی برای کار با <strong>XML Schema</strong> و <strong>Stylesheet</strong>‌ها توضیح داده شده‌اند.</p>
@@ -1253,7 +1253,9 @@ color.ReplaceWith(<span class="hljs-string">&quot;Blue&quot;</span>);
 <span class="hljs-punctuation">]</span>
 </code></pre>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -1299,6 +1301,26 @@ color.ReplaceWith(<span class="hljs-string">&quot;Blue&quot;</span>);
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

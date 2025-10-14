@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <p align="center">
+
+<main class="site-main book-page ">
+  <p align="center">
   <a href="https://github.com/hheydarian/clean-code-in-csharp-persian">
     <img src="../../images/clean-code-csharp/Cover.webp" alt="Clean Code in C# - Persian Translation" width="250" />
   </a>
@@ -101,7 +101,9 @@ body {
 <hr>
 <p align="center">ساخته شده با ❤️ توسط برنامه‌نویسان برای برنامه‌نویسان</p>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -147,6 +149,26 @@ body {
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

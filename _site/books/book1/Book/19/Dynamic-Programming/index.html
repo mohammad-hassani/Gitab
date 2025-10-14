@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل نوزدهم:  برنامه‌نویسی پویا (Dynamic Programming)</h1>
+
+<main class="site-main book-page ">
+  <h1>فصل نوزدهم:  برنامه‌نویسی پویا (Dynamic Programming)</h1>
 <p>فصل ۴ توضیح داد که <strong>dynamic binding</strong> در زبان C# چگونه کار می‌کند.<br>
 در این فصل، ابتدا به‌طور مختصر به <strong>Dynamic Language Runtime (DLR)</strong> می‌پردازیم و سپس الگوهای زیر در برنامه‌نویسی پویا را بررسی می‌کنیم:</p>
 <ul>
@@ -619,7 +619,9 @@ source.Execute (scope);
 Console.WriteLine (sb.ToString());   <span class="hljs-comment">// HelloWorld</span>
 </code></pre>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -665,6 +667,26 @@ Console.WriteLine (sb.ToString());   <span class="hljs-comment">// HelloWorld</s
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

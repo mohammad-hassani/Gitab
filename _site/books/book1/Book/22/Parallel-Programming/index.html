@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل بیست و دوم:  برنامه‌نویسی موازی (Parallel Programming)</h1>
+
+<main class="site-main book-page ">
+  <h1>فصل بیست و دوم:  برنامه‌نویسی موازی (Parallel Programming)</h1>
 <p>در این فصل، ما به <strong>APIها</strong> و ساختارهای چندنخی (multithreading) می‌پردازیم که با هدف بهره‌برداری از پردازنده‌های چند‌هسته‌ای طراحی شده‌اند:</p>
 <ul>
 <li><strong>Parallel LINQ (PLINQ)</strong></li>
@@ -1619,7 +1619,9 @@ Parallel.ForEach(wordsToTest, (word, state, i) =&gt;
 </code></pre>
 <p>با این روش، <strong>تمام مزایای Task</strong> از جمله <strong>انتشار استثناها، بازگشت مقادیر و لغو</strong> را داریم، در حالی که <strong>کنترل کامل روی زمان‌بندی اجرای کارها</strong> نیز در اختیارمان است.</p>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -1665,6 +1667,26 @@ Parallel.ForEach(wordsToTest, (word, state, i) =&gt;
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

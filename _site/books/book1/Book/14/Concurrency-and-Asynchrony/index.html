@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل چهاردهم: هم‌زمانی و ناهم‌زمانی</h1>
+
+<main class="site-main book-page ">
+  <h1>فصل چهاردهم: هم‌زمانی و ناهم‌زمانی</h1>
 <p>بیشتر برنامه‌ها نیاز دارند با بیش از یک رویداد که به‌طور هم‌زمان رخ می‌دهد سروکار داشته باشند (هم‌زمانی یا <strong>Concurrency</strong>).<br>
 در این فصل، ما با پیش‌نیازهای ضروری شروع می‌کنیم، یعنی مبانی <strong>Threading</strong> (ایجاد و مدیریت رشته‌ها) و <strong>Tasks</strong> (وظایف)، و سپس اصول <strong>Asynchrony</strong> (ناهم‌زمانی) و توابع ناهم‌زمان در #C را با جزئیات توضیح می‌دهیم.</p>
 <p>در <strong>فصل ۲۱</strong> دوباره به موضوع <strong>Multithreading</strong> (چند‌رشته‌ای) با جزئیات بیشتر برمی‌گردیم و در <strong>فصل ۲۲</strong> موضوع مرتبط یعنی <strong>Parallel Programming</strong> (برنامه‌نویسی موازی) را پوشش می‌دهیم.</p>
@@ -2033,7 +2033,9 @@ worker.RunWorkerAsync();   <span class="hljs-comment">// شروع عملیات �
 <li><strong>TAP (Task + async/await)</strong> جایگزین مدرن، ساده و انعطاف‌پذیر است و تقریبا همه متدهای جدید .NET از آن استفاده می‌کنند.</li>
 </ul>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -2079,6 +2081,26 @@ worker.RunWorkerAsync();   <span class="hljs-comment">// شروع عملیات �
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

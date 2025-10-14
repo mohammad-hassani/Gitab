@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <div class="chapter-grid">
+
+<main class="site-main book-page ">
+  <div class="chapter-grid">
   <div class="chapter-card">
     <h3> مقدمه</h3>
     <a href="/books/book2/Book/00/Preface/">مطالعه</a>
@@ -86,7 +86,9 @@ body {
   </div>
 </div>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -132,6 +134,26 @@ body {
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل هفتم: <strong>مجموعه‌ها (Collections) 📚</strong></h1>
+
+<main class="site-main book-page ">
+  <h1>فصل هفتم: <strong>مجموعه‌ها (Collections) 📚</strong></h1>
 <p>.NET یک مجموعه استاندارد از نوع‌ها را برای ذخیره‌سازی و مدیریت مجموعه‌ای از اشیاء ارائه می‌دهد. این نوع‌ها شامل لیست‌های قابل تغییر اندازه (resizable lists)، لیست‌های پیوندی (linked lists)، دیکشنری‌های مرتب و نامرتب (sorted و unsorted dictionaries) و همچنین آرایه‌ها (arrays) هستند. از بین این‌ها، تنها آرایه‌ها بخشی از زبان C# را تشکیل می‌دهند؛ بقیه مجموعه‌ها فقط کلاس‌هایی هستند که می‌توانید مانند هر کلاس دیگری نمونه‌سازی (instantiate) کنید.</p>
 <p>می‌توانیم نوع‌ها در BCL دات‌نت برای مجموعه‌ها را به دسته‌های زیر تقسیم کنیم:</p>
 <p>• اینترفیس‌هایی که پروتکل‌های استاندارد مجموعه را تعریف می‌کنند</p>
@@ -1857,7 +1857,9 @@ IStructuralEquatable se1 = a1;
 <span class="hljs-built_in">bool</span> isTrue = se1.Equals(a2, StringComparer.InvariantCultureIgnoreCase);
 </code></pre>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -1903,6 +1905,26 @@ IStructuralEquatable se1 = a1;
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

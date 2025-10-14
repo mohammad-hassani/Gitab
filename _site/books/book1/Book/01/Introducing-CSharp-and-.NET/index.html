@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل اول: آشنایی با سی‌شارپ و دات‌نت</h1>
+
+<main class="site-main book-page ">
+  <h1>فصل اول: آشنایی با سی‌شارپ و دات‌نت</h1>
 <p>سی شارپ یک زبان برنامه‌نویسی همه‌منظوره (general-purpose)، ایمن از نظر نوع داده (type-safe)، و شی‌گرا (object-oriented) است.</p>
 <p>هدف اصلی این زبان، افزایش بهره‌وری برنامه‌نویس است.<br>
 برای رسیدن به این هدف، #C تلاش می‌کند میان سادگی، قدرت بیان (expressiveness)، و کارایی (performance) تعادل برقرار کند.</p>
@@ -1871,7 +1871,9 @@ WriteLine(<span class="hljs-string">&quot;Hello, world&quot;</span>); <span clas
 </ul>
 <p>را نیز اضافه کرد.</p>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -1917,6 +1919,26 @@ WriteLine(<span class="hljs-string">&quot;Hello, world&quot;</span>); <span clas
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

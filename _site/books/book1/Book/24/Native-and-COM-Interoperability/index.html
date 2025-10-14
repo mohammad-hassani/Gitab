@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل بیست و چهارم: یکپارچه‌سازی با Native و COM</h1>
+
+<main class="site-main book-page ">
+  <h1>فصل بیست و چهارم: یکپارچه‌سازی با Native و COM</h1>
 <p>این فصل توضیح می‌دهد چگونه با کتابخانه‌های Native (غیرمدیریت‌شده) Dynamic-Link (DLL) و کامپوننت‌های Component Object Model (COM) یکپارچه شوید. مگر اینکه خلاف آن ذکر شده باشد، انواع داده‌ای که در این فصل آمده‌اند در فضای نام <strong>System</strong> یا <strong>System.Runtime.InteropServices</strong> وجود دارند.</p>
 <hr>
 <h4>فراخوانی DLLهای Native 📦</h4>
@@ -922,7 +922,9 @@ Wscript.Echo result
 <p>در .NET 5+ امکان تولید <strong>COM type library (*.tlb)</strong> به صورت خودکار وجود ندارد. باید دستی IDL یا header C++ ایجاد کنید.</p>
 </blockquote>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -968,6 +970,26 @@ Wscript.Echo result
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

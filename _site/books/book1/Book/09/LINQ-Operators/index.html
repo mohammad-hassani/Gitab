@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل نهم:  LINQ Operators</h1>
+
+<main class="site-main book-page ">
+  <h1>فصل نهم:  LINQ Operators</h1>
 <p>این فصل به بررسی تک‌تک <strong>عملگرهای LINQ</strong> می‌پردازد. علاوه بر اینکه به‌عنوان یک مرجع عمل می‌کند، دو بخش <strong>«Projecting»</strong> (در صفحه ۴۷۳) و <strong>«Joining»</strong> (در صفحه ۴۷۳) مفاهیم مهمی را پوشش می‌دهند:</p>
 <ul>
 <li>📌 <strong>Projecting object hierarchies</strong> (ایجاد و نمایش سلسله‌مراتب اشیاء)</li>
@@ -2355,7 +2355,9 @@ IEnumerable&lt;<span class="hljs-built_in">int</span>&gt; flat = numbers.SelectM
     Console.Write(x + <span class="hljs-string">&quot; &quot;</span>);    <span class="hljs-comment">// True True True</span>
 </code></pre>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -2401,6 +2403,26 @@ IEnumerable&lt;<span class="hljs-built_in">int</span>&gt; flat = numbers.SelectM
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

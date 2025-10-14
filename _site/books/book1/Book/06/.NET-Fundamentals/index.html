@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل ششم: مبانی .NET</h1>
+
+<main class="site-main book-page ">
+  <h1>فصل ششم: مبانی .NET</h1>
 <p>بسیاری از امکانات اصلی که هنگام برنامه‌نویسی به آن‌ها نیاز دارید، توسط خود زبان <strong>C#</strong> فراهم نمی‌شوند، بلکه توسط <strong>انواع (Types)</strong> موجود در <strong>BCL</strong> یا همان <strong>.NET Base Class Library</strong> ارائه می‌شوند.</p>
 <p>در این فصل، با انواعی آشنا می‌شوید که در انجام کارهای پایه‌ای برنامه‌نویسی به شما کمک می‌کنند، مانند:</p>
 <ul>
@@ -2474,7 +2474,9 @@ isDefined = AppContext.TryGetSwitch(<span class="hljs-string">&quot;MyLibrary.So
 <pre class="hljs"><code><span class="hljs-built_in">bool</span> switchValue = AppContext.GetSwitch(<span class="hljs-string">&quot;...&quot;</span>) ?? <span class="hljs-literal">false</span>;
 </code></pre>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -2520,6 +2522,26 @@ isDefined = AppContext.TryGetSwitch(<span class="hljs-string">&quot;MyLibrary.So
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

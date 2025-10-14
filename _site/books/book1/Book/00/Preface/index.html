@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h2>معرفی کتاب</h2>
+
+<main class="site-main book-page ">
+  <h2>معرفی کتاب</h2>
 <p>نسخه دوازدهم زبان برنامه‌نویسی #C، نهمین به‌روزرسانی بزرگ این زبان قدرتمند از مایکروسافت محسوب می‌شود. C# حالا به زبانی با انعطاف‌پذیری و گستردگی فوق‌العاده تبدیل شده.<br>
 از یک طرف، امکاناتی در سطح بالا مثل عبارات پرس‌وجو (query expressions) و ادامه‌های ناهمگام (asynchronous continuations) را ارائه می‌دهد، و از طرف دیگر، با ویژگی‌هایی مثل انواع مقدار سفارشی (custom value types) و اشاره‌گرهای اختیاری (optional pointers)، امکان برنامه‌نویسی سطح پایین و بهینه را هم فراهم می‌کند.</p>
 <p>اما هزینه این رشد و پیشرفت، این است که حالا مطالب بیشتری برای یاد گرفتن وجود دارد. البته ابزارهایی مثل IntelliSense مایکروسافت یا منابع آنلاین بسیار خوب‌اند و هنگام کدنویسی کمک بزرگی هستند، اما این ابزارها پیش‌فرض‌شان این است که شما یک درک اولیه و نقشه ذهنی از مفاهیم اصلی دارید.</p>
@@ -179,7 +179,9 @@ Sebastopol, CA 95472</p>
 <p>همچنین از بن آلباهاری و اریک یوهانسن که در نسخه‌های قبلی همکاری داشتند، و نیز از تیم انتشارات O’Reilly — به‌ویژه ویراستار دقیق و پاسخ‌گوی من، کُربین کالینز — تشکر می‌کنم.</p>
 <p>و در پایان، عمیق‌ترین قدردانی‌ام را نثار همسر فوق‌العاده‌ام، لی آلباهاری، می‌کنم که حضورش در کنارم، در تمام طول این پروژه، منبع شادی و آرامش من بود.</p>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -225,6 +227,26 @@ Sebastopol, CA 95472</p>
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل چهارم: سی شارپ پیشرفته</h1>
+
+<main class="site-main book-page ">
+  <h1>فصل چهارم: سی شارپ پیشرفته</h1>
 <p>در این فصل، به سراغ مباحث پیشرفته زبان C# می‌رویم که بر پایه مفاهیمی بنا شده‌اند که در فصل‌های 2 و 3 بررسی کردیم.<br>
 چهار بخش اول را باید به صورت پیوسته و پشت سر هم مطالعه کنید؛ اما بخش‌های باقی‌مانده را می‌توانید به هر ترتیبی بخوانید.</p>
 <h3>Delegates (نمایندگان) 📨</h3>
@@ -3971,7 +3971,9 @@ Console.WriteLine(pointer2(<span class="hljs-string">&quot;Hello, unsafe world&q
 <p>IDها شامل <strong>فضای نام، نام کلاس، و نام عضو</strong> هستند و برای متدها، پارامترها و نوع بازگشتی نیز دقیقاً مشخص می‌شوند.</p>
 <p>این سیستم به <strong>کامپایلر و ابزارهای مستندسازی</strong> اجازه می‌دهد تا ارجاعات داخلی و خارجی را به‌درستی پیگیری کنند و خطاهای احتمالی را تشخیص دهند.</p>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -4017,6 +4019,26 @@ Console.WriteLine(pointer2(<span class="hljs-string">&quot;Hello, unsafe world&q
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 

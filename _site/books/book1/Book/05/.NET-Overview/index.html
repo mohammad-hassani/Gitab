@@ -49,9 +49,9 @@ body {
 
   </header>
 
-  <!-- محتوای صفحه -->
-  <main class="site-main">
-    <h1>فصل پنجم: مرور کلی .NET 🌐</h1>
+
+<main class="site-main book-page ">
+  <h1>فصل پنجم: مرور کلی .NET 🌐</h1>
 <p>تقریباً تمام قابلیت‌های <strong>رَتایم .NET 8</strong> از طریق یک مجموعه گسترده از <strong>نوع‌های مدیریت‌شده (managed types)</strong> در دسترس هستند. این نوع‌ها در <strong>namespace</strong>های سلسله‌مراتبی سازمان‌دهی شده و در مجموعه‌ای از <strong>assembly</strong>ها بسته‌بندی شده‌اند.</p>
 <p>برخی از نوع‌های .NET مستقیماً توسط <strong>CLR</strong> استفاده می‌شوند و برای محیط میزبانی مدیریت‌شده حیاتی هستند. این نوع‌ها در <strong>assembly</strong>ای به نام <code>System.Private.CoreLib.dll</code> (در .NET Framework با نام <code>mscorlib.dll</code>) قرار دارند و شامل موارد زیر هستند:</p>
 <ul>
@@ -412,7 +412,9 @@ Roslyn در <strong>مکمل آنلاین</strong> در <a href="http://www.alba
 <p>Runtime/BCL که روی iOS و Android اجرا می‌شود <strong>Mono</strong> نام دارد (نسخه‌ای مشتق‌شده از Mono Runtime متن‌باز). تاریخی، Mono با .NET کاملاً سازگار نبود و کتابخانه‌هایی که روی هر دو اجرا می‌شدند، معمولاً <strong>.NET Standard</strong> هدف قرار می‌گرفتند. از .NET 6 به بعد، Interface عمومی Mono با .NET ادغام شد و Mono در واقع به‌عنوان یک <strong>پیاده‌سازی از .NET</strong> درآمد.</p>
 <p>MAUI شامل <strong>رابط پروژه یکپارچه، Hot Reloading، و پشتیبانی از Blazor Desktop و Hybrid Apps</strong> است. جزئیات بیشتر در <a href="https://github.com/dotnet/maui">صفحه رسمی MAUI</a> موجود است.</p>
 
-  </main>
+</main>
+
+
  
 
   <!-- فوتر مشترک -->
@@ -458,6 +460,26 @@ Roslyn در <strong>مکمل آنلاین</strong> در <a href="http://www.alba
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
 
 </body>
 
