@@ -1,0 +1,935 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>کامنت‌ها</title>
+  <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
+  <link rel="stylesheet" href="/styles/main.css">
+<link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<style>
+@font-face {
+  font-family: 'Vazir';
+  src: url('/fonts/Vazir-FD-WOL.ttf') format('truetype');
+  font-display: swap;
+}
+body {
+  font-family: 'Vazir', sans-serif;
+}
+</style>
+
+</head>
+<body>
+  <!-- هدر مشترک -->
+  <header class="header">
+    <div class="container nav-wrap">
+      <a class="brand" href="/">
+        <img src="/icone/logo.svg" alt="Gitab" width="28" height="28">
+        <span>Gitab</span>
+      </a>
+
+      <nav class="nav">
+        <a href="/">خانه</a>
+        <a href="/books/list-books">کتاب‌ها</a>
+        <a href="#">مترجم ها</a>
+        <a href="#">همکاری</a>
+        <a href="#">درباره‌ما</a>
+      </nav>
+
+     <div class="nav-actions">
+  <button id="themeToggle" class="icon-btn theme-btn" aria-label="تغییر حالت">
+    <img class="icon-sun" src="/icone/sun.svg" alt="روشن">
+    <img class="icon-moon" src="/icone/moon.svg" alt="تاریک">
+  </button>
+
+  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
+    <img src="/icone/github.svg" alt="GitHub">
+  </a>
+</div>
+
+  </header>
+
+
+<main class="site-main book-page ">
+  <p><img src="../../../assets/image/04/img-4.1.png" alt=""></p>
+<h1>کامنت‌ها ۴</h1>
+<div dir="rtl">
+« کد بد را کامنت نکنید – دوباره بنویسید.»
+—Brian W. Kernighan and P. J. Plaugher
+<p>هیچ چیز نمی‌تواند به اندازه ی یک کامنت که در جای مناسب قرار گرفته مفید باشد. هیچ چیز نمی‌تواند یک ماژول را به اندازه ی کامنت‌های بیهوده به هم بریزد. هیچ چیز نمیتواند مضر تراز یک کامنت ضعیف قدیمی که اطلاعات غلط میدهد باشد.</p>
+<p>کامنت‌ها شبیه شیندلرلیست (نام یک فیلم) نیستند . آنها کاملا خوب نیستند. در حقیقت کامنت‌ها جنایت های لازمی هستند .اگر زبان های برنامه نویسی ما به اندازه ی کافی رسا بودند یا ما تونایی استفاده ی ماهرانه از ان زبان ها برای بیان منظور را داشتیم خیلی به کامنت‌ها نیاز نداشتیم . شاید هم اصلا!</p>
+<p>کاربرد مناسب کامنت برای جبران شکست رساندن مفهوم با کد است . توجه داشته باشید از واژه شکست استفاده می‌کنم.منظورم این است که کامنت‌ها همیشه نشانه شکست هستند . ما باید از آنها استفاده کنیم چون همیشه راهی برای توضیح دادن منظورمان بدون آنها پیدا نمی کنیم ولی استفاده از آنها دلیلی برای خوشحالی نیست.</p>
+<p>وقتی خودتان را در موقعیتی میبینید که کامنت بگذارید، در موردش فکر کنید و ببینید راهی برای عوض کد و توضیح منظورتان در کد وجود ندارد؟ هر بار که میتوانید منظورتان را درخود کد برسانید باید خودتان را تشویق کنید . هر بار که منظورتان را در کامنت توضیح می‌دهید، باید به خودتان دهن کجی کنید واز توانایی بیانتان احساس شکست کنید .</p>
+<p>چرا من انقدر با کامنت مخالفم؟چون آنها دروغ میگویند. نه همیشه ونه عمدا،ولی خیلی زیاد.<br>
+هر چه کامنت قدیمی تر باشد و از کدی که توصیف میکند دورتر باشد ، بیشتر احتمال دارد که اشتباه باشد.دلیلش ساده است، برنامه نویس ها نمی‌توانند واقع بینانه از انها استفاده کنند.</p>
+<p>کد تغییر میکند و تکامل پیدا میکند. تکه های آن جابه جا میشود.آن تکه ها دوشاخه 1 و باز نویسی میشوند و دوباره گرد هم می آیند تا یک چیز خارق العاده را خلق کنند.</p>
+<p>متاسفانه کامنت‌ها همیشه آنها را دنبال نمی‌کنند-در واقع نمی‌توانند دنبال کنند.اغلب اوقات از کدی که توصیف می‌کنند فاصله می‌گیرند وتکه های بریده ای میشوند که باعث کاهش مداوم دقت هستند. به طور مثال ، ببینید چه اتفاقی برای این کامنت و کدی که قصد داشت توضیح بدهد افتاد:</p>
+</div>
+<pre class="hljs"><code>MockRequest request;
+<span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-variable">HTTP_DATE_REGEXP</span> <span class="hljs-operator">=</span>
+  <span class="hljs-string">&quot;[SMTWF][a-z]{2}\\,\\s[0-9]{2}\\s[JFMASOND][a-z]{2}\\s&quot;</span>+
+  <span class="hljs-string">&quot;[0-9]{4}\\s[0-9]{2}\\:[0-9]{2}\\:[0-9]{2}\\sGMT&quot;</span>;
+<span class="hljs-keyword">private</span> Response response;
+<span class="hljs-keyword">private</span> FitNesseContext context;
+<span class="hljs-keyword">private</span> FileResponder responder;
+<span class="hljs-keyword">private</span> Locale saveLocale;
+</code></pre>
+<div dir="rtl">
+بقیه ی متغیر های نمونه احتمالا بعدا بین ثابت HTTP_DATE_REGEXP وکامنت توضیحی آن اضافه شده اند.
+<p>می توان این نکته را بیان کرد که برنامه نویسان باید به اندازه کافی نظم و انضباط داشته باشند که کامنت را به روز،مرتبط و دقیق نگه دارند.</p>
+<p>من موافق این کار هستم اما ترجیح می‌دهم آنها این انرژی را صرف واضح کردن کد کنند که در وهله اول نیاز به کامنت نداشته باشد.<br>
+کامنت‌های نادرست به مراتب بدتر از نبود هیچ کامنتی هستند. آنها خواننده را گمراه می‌کنند. آنها انتظاراتی به وجود می اورند که هیچ وقت براورده نمی‌کنند و قوانینی را مشخص می‌کنند که لازم نیست یا نباید بعد از این دنبال شوند.</p>
+<p>حقیقت را در یک جا میتوان یافت:کد. فقط کد میتواند به درستی به شما بگوید چه کاری انجام میدهد.این تنها منبع درست اطلاعات است.بنابراین، با اینکه کامنت‌ها بعضی اوقات لازم اند ، ما انرژی زیادی صرف می‌کنیم تا آنها را به کمترین حد برسانیم.</p>
+<h2>کامنت‌ها برای کد بد نوشته نشده اند</h2>
+<p>یکی از انگیزه های رایج نوشتن کامنت کد بد است. ما یک ماژول می‌نویسیم و می‌دانیم که گیج‌کننده و بی نظم است. می‌دانیم که کثیف است. ما خودمان می‌دانیم و به خود میگوییم:,<br>
+«اوه ،بهتراست کامنتش کنم»، نه! بهتراست پاکش کنی.<br>
+کامنت‌های زیاد بهتر است. به جای اینکه وقتتان را صرف نوشتن کامنت روی کد کثیف کنید که آن را توضیح دهد، صرف تمیز کردنش کنید</p>
+<h2>منظورتان را با کد برسانید</h2>
+<p>مطمئناً مواردی وجود دارد که کد وسیله ی ضعیفی برای توصیف است. متاسفانه بسیاری از برنامه نویسان این را اینطور برداشت کرده اند که کد بندرت میتواند راه خوبی برای توصیف باشد. این به وضوح اشتباه است. شما ترجیح می‌دهید کدام را ببینید؟ این:</p>
+</div>
+<pre class="hljs"><code><span class="hljs-comment">// Check to see if the employee is eligible for full benefits</span>
+<span class="hljs-keyword">if</span> ((employee.flags &amp; HOURLY_FLAG) &amp;&amp;
+ (employee.age &gt; <span class="hljs-number">65</span>))
+</code></pre>
+<div dir="rtl">
+یا این؟
+</div>
+<pre class="hljs"><code><span class="hljs-keyword">if</span> (employee.isEligibleForFullBenefits())
+</code></pre>
+<div dir="rtl">
+فقط چند ثانیه زمان میبرد که بیشتر منظورتان را در کد توضیح دهید . در بیشتر موارد این به سادگی ایجاد یک تابع است که همان چیزی را می گوید که با کامنت می خواهید بگویید.
+<h2>کامنت‌های خوب</h2>
+<p>بعضی از کامنت‌ها لازم یا مفید هستند. ما چند مورد را بررسی می‌کنیم که من آنها را لایق بیت هایی که مصرف می‌کنند میدانم. به خاطر داشته باشید، در هر حال، تنها کامنتی که واقعا خوب است کامنتی است که راهی برای ننوشتنش پیدا کنیم.</p>
+<h2>کامنت‌های قانونی</h2>
+<p>گاهی اوقات استاندارد های برنامه نویسی شرکتی ما را مجبور میکند به دلایل قانونی کامنت‌های مشخصی بنویسیم. برای مثال کپی رایت و حق تالیف چیز های منطقی و لازمی هستند برای اینکه اول هر سورس کدی قرار بگیرند.</p>
+<p>در اینجا، مثلا، این یک کامنت استاندارد است که درا ول همه سورس ها در FitNesse قرار می‌دهیم. خوشحالم که بگویم IDE ما با از بین بردن این کامنت به طور اتوماتیک، از عمل کردن آن به عنوان یک اخلال گر جلوگیری میکند.</p>
+</div>
+<pre class="hljs"><code><span class="hljs-comment">// Copyright (C) 2003,2004,2005 by Object Mentor, Inc. All rights reserved.</span>
+<span class="hljs-comment">// Released under the terms of the GNU General Public License version 2 or later.</span>
+</code></pre>
+<div dir="rtl">
+کامنت‌هایی مانند این نباید نوشته شوند. تا جایی که ممکن است، به مجوز های استاندارد یا بقیه ی مدارک خارجی مراجعه شود ، به جای اینکه همه ی آن شرایط و ضوابط را در کامنت قرار دهیم.
+<h2>کامنت‌های آموزنده</h2>
+<p>ارائه ی اطلاعات پایه ای در کامنت مفید است. برای مثال ، به نظر می آید که این کامنت مقدار بازگشتی یک متد abstractرا برمیگرداند .</p>
+</div>
+<pre class="hljs"><code><span class="hljs-comment">// Returns an instance of the Responder being tested.</span>
+<span class="hljs-keyword">protected</span> <span class="hljs-keyword">abstract</span> Responder <span class="hljs-title function_">responderInstance</span><span class="hljs-params">()</span>;
+</code></pre>
+<div dir="rtl">
+یک کامنت مثل این گاهی میتواند مفید باشد، اما بهتر است تاجای ممکن برای انتقال اطلاعات از نام تابع استفاده کنیم . مثلا، دراین مورد کامنت می تواند با عوض کردن نام تابع حذف شود. responderBeingTested .
+در این مورد کمی بهتر است:
+</div>
+<pre class="hljs"><code><span class="hljs-comment">// format matched kk:mm:ss EEE, MMM dd, yyyy</span>
+<span class="hljs-type">Pattern</span> <span class="hljs-variable">timeMatcher</span> <span class="hljs-operator">=</span> Pattern.compile(
+ <span class="hljs-string">&quot;\\d*:\\d*:\\d* \\w*, \\w* \\d*, \\d*&quot;</span>);
+</code></pre>
+<div dir="rtl">
+در این مورد کامنت به ما اجازه میدهد بدانیم که این عبارت منظم برای مطابقت زمان و تاریخ در نظر گرفته شده است که با SimpleDateFormat.format  قالب بندی(فرمت) شده است.
+تابعی که از فرمت استرینگ معینی استفاده میکند.باز هم میتوانست بهتر باشد ، و واضح تر،اگر این کد به کلاس خاصی که فرمت های تاریخ و زمان را تغییر می دهدمنتقل شده بود ،سپس کامنت احتمالا زیادی میشد.
+<h2>شرح نیت</h2>
+<p>بعضی اوقات یک کامنت فقط از دادن اطلاعات مفید در مورد اجرا فراتر می رود و هدف تصمیم گیری را فراهم می کند. در مورد زیر ، یک تصمیم جالب را می بینیم که توسط یک کامنت مستند شده است. هنگام مقایسه دو شی، ، نویسنده به این نتیجه رسید که می خواهد اشیا کلاس خود را بالاتر از اشیا دیگر مرتب کند.</p>
+</div>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">compareTo</span><span class="hljs-params">(Object o)</span>
+{
+ <span class="hljs-keyword">if</span>(o <span class="hljs-keyword">instanceof</span> WikiPagePath)
+ {
+  <span class="hljs-type">WikiPagePath</span> <span class="hljs-variable">p</span> <span class="hljs-operator">=</span> (WikiPagePath) o;
+  <span class="hljs-type">String</span> <span class="hljs-variable">compressedName</span> <span class="hljs-operator">=</span> StringUtil.join(names, <span class="hljs-string">&quot;&quot;</span>);
+  <span class="hljs-type">String</span> <span class="hljs-variable">compressedArgumentName</span> <span class="hljs-operator">=</span> StringUtil.join(p.names, <span class="hljs-string">&quot;&quot;</span>);
+  <span class="hljs-keyword">return</span> compressedName.compareTo(compressedArgumentName);
+  }
+ <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>; <span class="hljs-comment">// we are greater because we are the right type.</span>
+}
+</code></pre>
+<div dir="rtl">
+<p>در اینجا یک مثال حتی بهتر است. شما ممکن است با راه حل برنامه نویس برای مشکل موافق نباشید ، اما حداقل می دانید که او می خواست چه کاری انجام دهد.</p>
+</div>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testConcurrentAddWidgets</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception {
+ <span class="hljs-type">WidgetBuilder</span> <span class="hljs-variable">widgetBuilder</span> <span class="hljs-operator">=</span>
+ <span class="hljs-keyword">new</span> <span class="hljs-title class_">WidgetBuilder</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Class</span>[]{BoldWidget.class});
+ <span class="hljs-type">String</span> <span class="hljs-variable">text</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;&#x27;&#x27;&#x27;bold text&#x27;&#x27;&#x27;&quot;</span>;
+ <span class="hljs-type">ParentWidget</span> <span class="hljs-variable">parent</span> <span class="hljs-operator">=</span>
+ <span class="hljs-keyword">new</span> <span class="hljs-title class_">BoldWidget</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">MockWidgetRoot</span>(), <span class="hljs-string">&quot;&#x27;&#x27;&#x27;bold text&#x27;&#x27;&#x27;&quot;</span>);
+ <span class="hljs-type">AtomicBoolean</span> <span class="hljs-variable">failFlag</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AtomicBoolean</span>();
+ failFlag.set(<span class="hljs-literal">false</span>);
+ <span class="hljs-comment">//This is our best attempt to get a race condition</span>
+ <span class="hljs-comment">//by creating large number of threads.</span>
+ <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">25000</span>; i++) {
+  <span class="hljs-type">WidgetBuilderThread</span> <span class="hljs-variable">widgetBuilderThread</span> <span class="hljs-operator">=</span>
+  <span class="hljs-keyword">new</span> <span class="hljs-title class_">WidgetBuilderThread</span>(widgetBuilder, text, parent, failFlag);
+  <span class="hljs-type">Thread</span> <span class="hljs-variable">thread</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(widgetBuilderThread);
+  thread.start();
+ }
+ assertEquals(<span class="hljs-literal">false</span>, failFlag.get());
+}
+</code></pre>
+<div dir="rtl">
+<h2>شفاف سازی</h2>
+<p>گاهی اوقات فقط ترجمه معنای برخی از آرگومان‌های مبهم یا بازگردان مقدار به چیزی که قابل فهمیدن بوده، مفید است. به طور کلی ، بهتر است راهی پیدا کنید که آن آرگومان یا مقدار بازگشتی را به خودی خود روشن کند. اما اگر بخشی از آن در کتابخانه استاندارد باشد یا در کدی باشد که نمی توانید تغییر دهید ، یک توضیح روشن و خوب می تواند مفید باشد.</p>
+</div>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testCompareTo</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception
+{
+ <span class="hljs-type">WikiPagePath</span> <span class="hljs-variable">a</span> <span class="hljs-operator">=</span> PathParser.parse(<span class="hljs-string">&quot;PageA&quot;</span>);
+ <span class="hljs-type">WikiPagePath</span> <span class="hljs-variable">ab</span> <span class="hljs-operator">=</span> PathParser.parse(<span class="hljs-string">&quot;PageA.PageB&quot;</span>);
+ <span class="hljs-type">WikiPagePath</span> <span class="hljs-variable">b</span> <span class="hljs-operator">=</span> PathParser.parse(<span class="hljs-string">&quot;PageB&quot;</span>);
+ <span class="hljs-type">WikiPagePath</span> <span class="hljs-variable">aa</span> <span class="hljs-operator">=</span> PathParser.parse(<span class="hljs-string">&quot;PageA.PageA&quot;</span>);
+ <span class="hljs-type">WikiPagePath</span> <span class="hljs-variable">bb</span> <span class="hljs-operator">=</span> PathParser.parse(<span class="hljs-string">&quot;PageB.PageB&quot;</span>);
+ <span class="hljs-type">WikiPagePath</span> <span class="hljs-variable">ba</span> <span class="hljs-operator">=</span> PathParser.parse(<span class="hljs-string">&quot;PageB.PageA&quot;</span>);
+ assertTrue(a.compareTo(a) == <span class="hljs-number">0</span>);       <span class="hljs-comment">// a == a</span>
+ assertTrue(a.compareTo(b) != <span class="hljs-number">0</span>);       <span class="hljs-comment">// a != b</span>
+ assertTrue(ab.compareTo(ab) == <span class="hljs-number">0</span>);     <span class="hljs-comment">// ab == ab</span>
+ assertTrue(a.compareTo(b) == -<span class="hljs-number">1</span>);      <span class="hljs-comment">// a &lt; b</span>
+ assertTrue(aa.compareTo(ab) == -<span class="hljs-number">1</span>);    <span class="hljs-comment">// aa &lt; ab</span>
+ assertTrue(ba.compareTo(bb) == -<span class="hljs-number">1</span>);    <span class="hljs-comment">// ba &lt; bb</span>
+ assertTrue(b.compareTo(a) == <span class="hljs-number">1</span>);       <span class="hljs-comment">// b &gt; a</span>
+ assertTrue(ab.compareTo(aa) == <span class="hljs-number">1</span>);     <span class="hljs-comment">// ab &gt; aa</span>
+ assertTrue(bb.compareTo(ba) == <span class="hljs-number">1</span>);     <span class="hljs-comment">// bb &gt; ba</span>
+}
+</code></pre>
+<div dir="rtl">
+<p>البته یک خطر اساسی وجود دارد که یک کامنت روشن نادرست باشد. مثال قبلی را مرور کنید و ببینید تایید صحت آنها چقدر دشوار است. هم شفاف‌سازی لازم است و هم اینکه چرا خطرناک است. بنابراین قبل از نوشتن کامنت‌هایی از این دست ، مراقب باشید که راهی بهتر وجود نداشته باشد و حتی بیشتر دقت کنید که درست باشند.</p>
+<p align="center">
+  <img src=../../../assets/image/04/img-4.2.png/>
+</p>
+<h2>هشدار پیامدها</h2>
+<p>گاهی اوقات مفید است که به سایر برنامه نویسان در مورد عواقب خاص هشدار دهید. به عنوان مثال ، در اینجا یک کامنت وجود دارد که توضیح می دهد چرا یک مورد آزمایشی خاص خاموش است:</p>
+</div>
+<pre class="hljs"><code><span class="hljs-comment">// Don&#x27;t run unless you</span>
+<span class="hljs-comment">// have some time to kill.</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">_testWithReallyBigFile</span><span class="hljs-params">()</span>
+{
+ writeLinesToFile(<span class="hljs-number">10000000</span>);
+ response.setBody(testFile);
+ response.readyToSend(<span class="hljs-built_in">this</span>);
+ <span class="hljs-type">String</span> <span class="hljs-variable">responseString</span> <span class="hljs-operator">=</span> output.toString();
+ assertSubString(<span class="hljs-string">&quot;Content-Length: 1000000000&quot;</span>, responseString);
+ assertTrue(bytesSent &gt; <span class="hljs-number">1000000000</span>);
+}
+</code></pre>
+<div dir="rtl">
+<p>البته امروزه ، ما می توانیم با استفاده از ویژگی @Ignore با یک رشته توضیحی مناسب ، مورد آزمایشی را خاموش کنیم. @Ignore (&quot;برای اجرای خیلی طولانی می شود&quot;). اما در روزهای قبل از JUnit4 ، قرار دادن underscore در مقابل نام متد یک امر عادی بود. این کامنت هر چند گنگ است ، اما نکته را به خوبی بیان می کند.در اینجا مثال مهیج تر دیگری وجود دارد:</p>
+</div>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> SimpleDateFormat <span class="hljs-title function_">makeStandardHttpDateFormat</span><span class="hljs-params">()</span>
+{
+ <span class="hljs-comment">//SimpleDateFormat is not thread safe,</span>
+ <span class="hljs-comment">//so we need to create each instance independently.</span>
+ <span class="hljs-type">SimpleDateFormat</span> <span class="hljs-variable">df</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SimpleDateFormat</span>(<span class="hljs-string">&quot;EEE, dd MMM yyyy HH:mm:ss z&quot;</span>);
+ df.setTimeZone(TimeZone.getTimeZone(<span class="hljs-string">&quot;GMT&quot;</span>));
+ <span class="hljs-keyword">return</span> df;
+}
+</code></pre>
+<div dir="rtl">
+<p>ممکن است شکایت کنید که روش های بهتری برای حل این مشکل وجود دارد. ممکن است با شما موافق باشم اما کامنت ، همانطور که در اینجا ارائه شد ، کاملاً منطقی است. این باعث می شود که برخی از برنامه نویسان بیش از حد مشتاق از یک مقداردهنده اولیه ثابت برای کارایی استفاده نکنند.</p>
+<h2>TODO کامنت‌های</h2>
+<p>گاهی اوقات منطقی است که یادداشت های &quot;TODO&quot; را در قالب کامنت‌های TODO // انجام دهید. در مورد زیر ، کامنت‌های TODO توضیح می دهد که چرا این تابع یک اجرای منحط دارد و آینده آن تابع چگونه است.</p>
+</div>
+<pre class="hljs"><code><span class="hljs-comment">//TODO-MdM these are not needed</span>
+<span class="hljs-comment">// We expect this to go away when we do the checkout model</span>
+<span class="hljs-keyword">protected</span> VersionInfo <span class="hljs-title function_">makeVersion</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception
+{
+ <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+}
+</code></pre>
+<div dir="rtl">
+<p>TODO کارهایی است که به نظر برنامه نویس باید انجام شود ، اما به دلایلی فعلاً نمی تواند انجام دهد. این ممکن است یک یادآوری برای حذف یک ویژگی منسوخ شده یا یک درخواست برای شخص دیگری برای بررسی یک مشکل باشد. این ممکن است درخواستی باشد که شخص دیگری به نام بهتر فکر کند یا یادآوری باشد برای ایجاد تغییری وابسته به یک برنامه ریزی. TODO هرچه باشد ، بهانه ای برای گذاشتن کد بد در سیستم نیست.</p>
+<p>امروزه ، اکثر IDE های خوب ویژگی های خاصی را برای یافتن همه کامنت‌های TODO ارائه می دهند ، بنابراین احتمالاً گم نمی شوند. اگر هم نمی خواهید کد شما با TODO پر شود، مرتباً از طریق آنها اسکن کرده و مواردی را که می توانید حذف کنید.</p>
+<h2>تقویت</h2>
+<p>ممکن است کامنت برای تقویت اهمیت چیزی استفاده شود که در غیر این صورت بی اهمیت به نظر می رسد.</p>
+</div>
+<pre class="hljs"><code><span class="hljs-type">String</span> <span class="hljs-variable">listItemContent</span> <span class="hljs-operator">=</span> match.group(<span class="hljs-number">3</span>).trim();
+<span class="hljs-comment">// the trim is real important. It removes the starting</span>
+<span class="hljs-comment">// spaces that could cause the item to be recognized</span>
+<span class="hljs-comment">// as another list.</span>
+<span class="hljs-keyword">new</span> <span class="hljs-title class_">ListItemWidget</span>(<span class="hljs-built_in">this</span>, listItemContent, <span class="hljs-built_in">this</span>.level + <span class="hljs-number">1</span>);
+<span class="hljs-keyword">return</span> buildList(text.substring(match.end()));
+</code></pre>
+<div dir="rtl">
+<h2>اسناد java در API های عمومی</h2>
+<p>هیچ چیز به اندازه یک API عمومی خوش‌توضیح، مفید و رضایت بخش وجود ندارد. javadocs برای کتابخانه استاندارد جاوا نمونه ای از این موارد است. در بهترین حالت نوشتن برنامه های جاوا بدون آنها دشوار خواهد بود.</p>
+<p>اگر در حال نوشتن یک API عمومی هستید ، مطمئناً باید javadocs خوبی برای آن بنویسید. اما بقیه توصیه های این فصل را به خاطر بسپارید. Javadocs می تواند مانند هر نوع نظر دیگر گمراه کننده ، غیرمحلی و غیر صادق باشد.</p>
+<h1>کامنت‌های بد</h1>
+<p>بیشتر کامنت‌ها در این گروه قرار می گیرند. معمولاً آنها بهانه‌ای برای کد ضعیف یا توجیهی برای تصمیمات ناکافی هستند، کمی بیشتر از صحبت های برنامه نویس با خودش.</p>
+<h2>غرزدن</h2>
+<p>یهویی کامنتی نوشتن فقط به این دلیل که احساس می کنید باید این کار را انجام دهید یا این که روند کار به آن نیاز دارد، جالب نیست. اگر تصمیم دارید یک کامنت بنویسید ، وقت لازم را صرف کنید تا مطمئن شوید بهترین کامنتی است که می توانید بنویسید.</p>
+<p>به عنوان مثال ، این مورد موردی است که من در FitNesse پیدا کردم ، جایی که یک کامنت واقعاً مفید بوده است. اما نویسنده عجله داشت یا فقط توجه زیادی نمی‌کرد. غر زدن او یک معما را پشت سر گذاشت:</p>
+</div>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">loadProperties</span><span class="hljs-params">()</span>
+{
+ <span class="hljs-keyword">try</span>
+ {
+  <span class="hljs-type">String</span> <span class="hljs-variable">propertiesPath</span> <span class="hljs-operator">=</span> propertiesLocation + <span class="hljs-string">&quot;/&quot;</span> + PROPERTIES_FILE;
+  <span class="hljs-type">FileInputStream</span> <span class="hljs-variable">propertiesStream</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">FileInputStream</span>(propertiesPath);
+  loadedProperties.load(propertiesStream);
+ }
+ <span class="hljs-keyword">catch</span>(IOException e)
+ {
+  <span class="hljs-comment">// No properties files means all defaults are loaded</span>
+ }
+}
+</code></pre>
+<div dir="rtl">
+<p>این کامنت در بلوک catch به چه معناست؟ واضح است که این برای نویسنده معنی داشته است ، اما معنی آن واضح نیست. ظاهراً ، اگر IOException دریافت کنیم ، به این معنی است که هیچ فایلی وجود نداشته است. و در این حالت تمام پیش فرض ها بارگیری می شوند. اما چه کسی تمام پیش فرض ها را بارگیری می کند؟ آیا آنها قبل از صدازدن loadProperties.load بارگیری شده اند؟ یا آیا loadProperties.load استثنا را گرفت ، پیش فرض ها را بارگذاری کرد و سپس استثنا را به ما منتقل کرد تا نادیده بگیریم؟ یا آیا loadProperties.load قبل از بارگیری فایل ، همه پیش فرض ها را بارگیری کرده است؟ آیا نویسنده سعی در دلجویی از این واقعیت داشت که بلوک catch را خالی می گذارد؟ یا - و این احتمال ترسناک است - آیا نویسنده سعی داشته به خودش بگوید بعداً به اینجا برگردد و کدی را بنویسد که پیش فرض ها را بارگیری کند؟</p>
+<p>تنها راه حل ما این است که کد را در قسمت های دیگر سیستم بررسی کنیم تا بفهمیم چه خبر است. هر کامنتی که شما را مجبور کند به دنبال معنای آن کامنت در یک ماژول دیگر بگردید ، در برقراری ارتباط با شما ناموفق بوده و ارزش بیت های مصرفی آن را ندارد.</p>
+<h2>کامنت‌های اضافی</h2>
+<p>لیست 4-1 تابع ساده ای را با یک عنوان هدر کاملاً زائد نشان می دهد.<br>
+خواندن این کامنت احتمالاً طولانی تر از خود کد است.</p>
+</div>
+<p>Listing 4-1</p>
+<p>waitForClose</p>
+<pre class="hljs"><code><span class="hljs-comment">// Utility method that returns when this.closed is true. Throws an exception</span>
+<span class="hljs-comment">// if the timeout is reached.</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">waitForClose</span><span class="hljs-params">(<span class="hljs-keyword">final</span> <span class="hljs-type">long</span> timeoutMillis)</span>
+<span class="hljs-keyword">throws</span> Exception
+{
+ <span class="hljs-keyword">if</span>(!closed)
+ {
+  wait(timeoutMillis);
+  <span class="hljs-keyword">if</span>(!closed)
+  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Exception</span>(<span class="hljs-string">&quot;MockResponseSender could not be closed&quot;</span>);
+ }
+}
+</code></pre>
+<div dir="rtl">
+<p>این کامنت چه هدفی را دنبال می کند؟ مطمئناً از کد بیشتر آموزنده نیست. این کد را توجیه نمی کند ، یا قصد یا منطقی را ارائه نمی دهد. خواندن آن از کد آسان نیست. در حقیقت ، دقت آن کمتر از کد است و خواننده را فریب می دهد که به جای درک درست ، عدم دقت را بپذیرد. این کار دقیقاً مانند این است که یک فروشنده ماشین دست دوم خوشحال به شما اطمینان دهد که نیازی به دیدن زیر کاپوت نیست.</p>
+<p>اکنون javadocs بی فایده و زائد را در لیست 4-2 برگرفته از تامکت در نظر بگیرید. این کامنت‌ها فقط برای بهم ریختن و پنهان کردن کد کار می کنند. اصلاً هدف مستندی ندارند. برای بدتر کردن ، من فقط چند مورد اول را به شما نشان دادم. تعداد بیشتری در این ماژول وجود دارد.</p>
+</div>
+<p>Listing 4-2</p>
+<p>ContainerBase.java (Tomcat)</p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ContainerBase</span>
+ <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Container</span>, Lifecycle, Pipeline,
+ MBeanRegistration, Serializable {
+ <span class="hljs-comment">/**
+ * The processor delay for this component.
+ */</span>
+ <span class="hljs-keyword">protected</span> <span class="hljs-type">int</span> <span class="hljs-variable">backgroundProcessorDelay</span> <span class="hljs-operator">=</span> -<span class="hljs-number">1</span>;
+ <span class="hljs-comment">/**
+ * The lifecycle event support for this component.
+ */</span>
+ <span class="hljs-keyword">protected</span> <span class="hljs-type">LifecycleSupport</span> <span class="hljs-variable">lifecycle</span> <span class="hljs-operator">=</span>
+ <span class="hljs-keyword">new</span> <span class="hljs-title class_">LifecycleSupport</span>(<span class="hljs-built_in">this</span>);
+ <span class="hljs-comment">/**
+ * The container event listeners for this Container.
+ */</span>
+ <span class="hljs-keyword">protected</span> <span class="hljs-type">ArrayList</span> <span class="hljs-variable">listeners</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>();
+ <span class="hljs-comment">/**
+ * The Loader implementation with which this Container is
+ * associated.
+ */</span>
+ <span class="hljs-keyword">protected</span> <span class="hljs-type">Loader</span> <span class="hljs-variable">loader</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;
+ <span class="hljs-comment">/**
+ * The Logger implementation with which this Container is
+ * associated.
+ */</span>
+ <span class="hljs-keyword">protected</span> <span class="hljs-type">Log</span> <span class="hljs-variable">logger</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;
+ <span class="hljs-comment">/**
+ * Associated logger name.
+ */</span>
+ <span class="hljs-keyword">protected</span> <span class="hljs-type">String</span> <span class="hljs-variable">logName</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;
+ <span class="hljs-comment">/**
+ * The Manager implementation with which this Container is
+ * associated.
+ */</span>
+ <span class="hljs-keyword">protected</span> <span class="hljs-type">Manager</span> <span class="hljs-variable">manager</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;
+ <span class="hljs-comment">/**
+ * The cluster with which this Container is associated.
+ */</span>
+ <span class="hljs-keyword">protected</span> <span class="hljs-type">Cluster</span> <span class="hljs-variable">cluster</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;
+ <span class="hljs-comment">/**
+ * The human-readable name of this Container.
+ */</span>
+ <span class="hljs-keyword">protected</span> <span class="hljs-type">String</span> <span class="hljs-variable">name</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;
+ <span class="hljs-comment">/**
+ * The parent Container to which this Container is a child.
+ */</span>
+ <span class="hljs-keyword">protected</span> <span class="hljs-type">Container</span> <span class="hljs-variable">parent</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;
+ <span class="hljs-comment">/**
+ * The parent class loader to be configured when we install a
+ * Loader.
+ */</span>
+ <span class="hljs-keyword">protected</span> <span class="hljs-type">ClassLoader</span> <span class="hljs-variable">parentClassLoader</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;
+ <span class="hljs-comment">/**
+ * The Pipeline object with which this Container is
+ * associated.
+ */</span>
+ <span class="hljs-keyword">protected</span> <span class="hljs-type">Pipeline</span> <span class="hljs-variable">pipeline</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StandardPipeline</span>(<span class="hljs-built_in">this</span>);
+ <span class="hljs-comment">/**
+ * The Realm with which this Container is associated.
+ */</span>
+ <span class="hljs-keyword">protected</span> <span class="hljs-type">Realm</span> <span class="hljs-variable">realm</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;
+ <span class="hljs-comment">/**
+ * The resources DirContext object with which this Container
+ * is associated.
+ */</span>
+ <span class="hljs-keyword">protected</span> <span class="hljs-type">DirContext</span> <span class="hljs-variable">resources</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;
+}
+</code></pre>
+<div dir="rtl">
+<h2>کامنت‌های گمراه کننده</h2>
+<p>گاهی اوقات ، با بهترین آرزوها ، یک برنامه نویس بیانیه ای را در کامنت‌های خود ارائه می دهد که دقیق نیست. لیست ۴-۲ را درنظر بگیرید.</p>
+<p>آیا کشف کردید که چگونه این کامنت گمراه کننده است؟ وقتی this.closed درست است، این متد چیزی برنمی گرداند. اگر this.closed درست باشد ، بر می گردد. در غیر این صورت ، منتظر تایم اوت است و اگر this.closed همچنان درست نباشد، exception پرتاب می‌شود.</p>
+<p>این اطلاعات نادرست ، که در کامنتی ارائه می شود که خواندن آن دشوارتر از متن کد است ، می تواند باعث شود تا برنامه نویس دیگری با خیال راحت این تابع را  صدا زند. آن برنامه نویس ضعیف سپس خود را درحال رفع اشکال پیدا می کند و می خواهد بفهمد چرا کد او به این کندی اجرا شده است.</p>
+<h2>کامنت‌های مجاز</h2>
+<p>این یک قانون احمقانه‌ای است که هر تابع باید یک javadoc، یا هر متغیر باید یک کامنت داشته باشد. کامنت‌هایی از این دست فقط کد را بهم می ریزند ، دروغ ها را تبلیغ می کنند ، و باعث سردرگمی و بی نظمی می شوند.</p>
+<p>به عنوان مثال ، javadocs مورد نیاز برای هر تابع منجر به مکروهاتی مانند لیست 4-3 می شود. این بی نظمی چیزی اضافه نمی کند و فقط باعث کدرشدن کد و ایجاد پتانسیل دروغ وسوتفاهم می‌شود.</p>
+</div>
+<p>Listing 4-3</p>
+<pre class="hljs"><code><span class="hljs-comment">/**
+*
+* <span class="hljs-doctag">@param</span> title The title of the CD
+* <span class="hljs-doctag">@param</span> author The author of the CD
+* <span class="hljs-doctag">@param</span> tracks The number of tracks on the CD
+* <span class="hljs-doctag">@param</span> durationInMinutes The duration of the CD in minutes
+*/</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">addCD</span><span class="hljs-params">(String title, String author,
+  <span class="hljs-type">int</span> tracks, <span class="hljs-type">int</span> durationInMinutes)</span> {
+ <span class="hljs-type">CD</span> <span class="hljs-variable">cd</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CD</span>();
+ cd.title = title;
+ cd.author = author;
+ cd.tracks = tracks;
+ cd.duration = duration;
+ cdList.add(cd);
+}
+</code></pre>
+<div dir="rtl">
+<h2>کامنت‌های گزارشی</h2>
+<p>گاهی اوقات افراد هر بار که ویرایش می کنند یک کامنت به شروع ماژول اضافه می کنند. این کامنت‌ها به عنوان نوعی ژورنال ، یا گزارش ، از هر تغییری که ایجاد شده است جمع می شود. من چند ماژول با ده ها صفحه از این ورودی های ژورنال دیده ام.</p>
+</div>
+<pre class="hljs"><code>Changes (from 11-Oct-2001)
+--------------------------
+* 11-Oct-2001 : Re-organised the class and moved it to new package
+* com.jrefinery.date (DG);
+* 05-Nov-2001 : Added a getDescription() method, and eliminated NotableDate
+* class (DG);
+* 12-Nov-2001 : IBD requires setDescription() method, now that NotableDate
+* class is gone (DG); Changed getPreviousDayOfWeek(),
+* getFollowingDayOfWeek() and getNearestDayOfWeek() to correct
+* bugs (DG);
+* 05-Dec-2001 : Fixed bug in SpreadsheetDate class (DG);
+* 29-May-2002 : Moved the month constants into a separate interface
+* (MonthConstants) (DG);
+* 27-Aug-2002 : Fixed bug in addMonths() method, thanks to N???levka Petr (DG);
+* 03-Oct-2002 : Fixed errors reported by Checkstyle (DG);
+* 13-Mar-2003 : Implemented Serializable (DG);
+* 29-May-2003 : Fixed bug in addMonths method (DG);
+* 04-Sep-2003 : Implemented Comparable. Updated the isInRange javadocs (DG);
+* 05-Jan-2005 : Fixed bug in addYears() method (1096282) (DG);
+</code></pre>
+<div dir="rtl">
+<p>مدت ها پیش دلیل خوبی برای ایجاد و نگهداری این ورودی های log در ابتدای هر ماژول وجود داشت. ما سیستم های کنترل کد منبع نداشتیم که این کار را برای ما انجام دهند. امروزه ، این ژورنال‌های طولانی فقط به ماژول آشفتگی اضافه می‌کنند. باید کاملاً برداشته شوند.</p>
+<h2>کامنت‌های شلوغ</h2>
+<p>بعضی اوقات کامنت‌هایی را می بینید که چیزی جز سر و صدا نیست. موارد واضحی را بیان می کنند و هیچ اطلاعات جدیدی ارائه نمی دهند.</p>
+</div>
+<pre class="hljs"><code> <span class="hljs-comment">/**
+ * Default constructor.
+ */</span>
+ <span class="hljs-keyword">protected</span> <span class="hljs-title function_">AnnualDateRule</span><span class="hljs-params">()</span> {
+ }
+</code></pre>
+<div dir="rtl">
+<p>نه، واقعا؟ یا چگونه در مورد این:</p>
+</div>
+<pre class="hljs"><code> <span class="hljs-comment">/** The day of the month. */</span>
+ <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> dayOfMonth;
+</code></pre>
+<div dir="rtl">
+<p>و سپس این مثال اضافی وجود دارد:</p>
+</div>
+<pre class="hljs"><code> <span class="hljs-comment">/**
+ * Returns the day of the month.
+ *
+ * <span class="hljs-doctag">@return</span> the day of the month.
+ */</span>
+ <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getDayOfMonth</span><span class="hljs-params">()</span> {
+  <span class="hljs-keyword">return</span> dayOfMonth;
+ }
+</code></pre>
+<div dir="rtl">
+<p>این کامنت‌ها آنقدر پر سر و صدا هستند که یاد می گیریم آنها را نادیده بگیریم. وقتی کد را می خوانیم ، چشمانمان به راحتی از روی آنها عبور می کنند. سرانجام با تغییر کد پیرامون ، کامنت‌ها شروع به دروغ گفتن می کنند.</p>
+<p>اولین کامنت در لیست 4-4 مناسب به نظر می رسد. دلیل نادیده گرفته شدن بلوک catch را توضیح می دهد. اما کامنت دوم کاملا سر و صدا است. ظاهراً برنامه نویس از نوشتن بلوک های try / catch در این تابع آنقدر ناامید شده بود که نیاز به تخلیه داشت.</p>
+</div>
+<p>Listing 4-4</p>
+<p>startSending</p>
+<pre class="hljs"><code><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">startSending</span><span class="hljs-params">()</span>
+{
+ <span class="hljs-keyword">try</span>
+ {
+  doSending();
+ }
+ <span class="hljs-keyword">catch</span>(SocketException e)
+ {
+  <span class="hljs-comment">// normal. someone stopped the request.</span>
+ }
+ <span class="hljs-keyword">catch</span>(Exception e)
+ {
+  <span class="hljs-keyword">try</span>
+  {
+   response.add(ErrorResponder.makeExceptionString(e));
+   response.closeAll();
+  }
+  <span class="hljs-keyword">catch</span>(Exception e1)
+  {
+   <span class="hljs-comment">//Give me a break!</span>
+  }
+ }
+}
+</code></pre>
+<div dir="rtl">
+<p>به جای تخلیه کامنت‌های بی ارزش و پر سر و صدا ، برنامه نویس باید تشخیص می داد که با بهبود ساختار کد خود می تواند ناامیدی او را برطرف کند. باید انرژی خود را به استخراج آخرین بلوک try / catch به یک تابع جداگانه هدایت کند ، همانطور که در لیست 4-5 نشان داده شده است.</p>
+</div>
+<p>Listing 4-5</p>
+<pre class="hljs"><code>startSending (refactored)
+<span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">startSending</span><span class="hljs-params">()</span>
+{
+ <span class="hljs-keyword">try</span>
+ {
+  doSending();
+ }
+ <span class="hljs-keyword">catch</span>(SocketException e)
+ {
+  <span class="hljs-comment">// normal. someone stopped the request.</span>
+ }
+ <span class="hljs-keyword">catch</span>(Exception e)
+ {
+  addExceptionAndCloseResponse(e);
+ }
+}
+<span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">addExceptionAndCloseResponse</span><span class="hljs-params">(Exception e)</span>
+{
+ <span class="hljs-keyword">try</span>
+ {
+  response.add(ErrorResponder.makeExceptionString(e));
+  response.closeAll();
+ }
+ <span class="hljs-keyword">catch</span>(Exception e1)
+ {
+ }
+}
+</code></pre>
+<div dir="rtl">
+<p>وسوسه ایجاد نویز را با تصمیم برای پاک کردن کد خود جایگزین کنید. خواهید فهمید که این باعث می شود شما یک برنامه نویس بهتر و شاد باشید.</p>
+<h2>شلوغی هولناک</h2>
+<p>Javadocs همچنین می تواند پر سر و صدا باشد. Javadocs زیر (از یک کتابخانه منبع باز مشهور) چه هدفی را دنبال می کند؟ جواب: هیچی. فقط کامنت‌های پر سر و صداي زائدي هستند كه به دليل تمايل بي جا به ارائه مستندات نوشته شده اند.</p>
+</div>
+<pre class="hljs"><code><span class="hljs-comment">/** The name. */</span>
+<span class="hljs-keyword">private</span> String name;
+<span class="hljs-comment">/** The version. */</span>
+<span class="hljs-keyword">private</span> String version;
+<span class="hljs-comment">/** The licenceName. */</span>
+<span class="hljs-keyword">private</span> String licenceName;
+<span class="hljs-comment">/** The version. */</span>
+
+<span class="hljs-keyword">private</span> String info;
+</code></pre>
+<div dir="rtl">
+<p>این کامنت‌ها را با دقت بیشتری دوباره بخوانید. خطای cut-paste را مشاهده می کنید؟ اگر نویسندگان هنگام نوشتن کامنت‌ها (یا چسباندن) توجه نمی کنند ، چرا از خوانندگان انتظار می رود که از آنها سود ببرند؟</p>
+<h2>زمانی که میتوانید از یک تابع یا متغییر استفاده کنید از کامنت‌ها استفاده نکنید</h2>
+<p>بخش زیر کد را در نظر بگیرید:</p>
+</div>
+<pre class="hljs"><code><span class="hljs-comment">// does the module from the global list &lt;mod&gt; depend on the</span>
+<span class="hljs-comment">// subsystem we are part of?</span>
+<span class="hljs-keyword">if</span> (smodule.getDependSubsystems().contains(subSysMod.getSubSystem()))
+</code></pre>
+<div dir="rtl">
+<p>بدون تفسیر می توان این را دوباره بیان کرد</p>
+</div>
+<pre class="hljs"><code><span class="hljs-type">ArrayList</span> <span class="hljs-variable">moduleDependees</span> <span class="hljs-operator">=</span> smodule.getDependSubsystems();
+<span class="hljs-type">String</span> <span class="hljs-variable">ourSubSystem</span> <span class="hljs-operator">=</span> subSysMod.getSubSystem();
+<span class="hljs-keyword">if</span> (moduleDependees.contains(ourSubSystem))
+</code></pre>
+<div dir="rtl">
+<p>نویسنده کد اصلی ممکن است ابتدا کامنت را نوشته باشد (بعید است) و سپس کد را برای تحقق کامنت نوشته باشد. با این حال ، نویسنده باید همانند من کدها را مجدداً ویرایش می‌کرد تا بتواند کامنت را حذف کند.</p>
+<h2>نشانگرهای موقعیت</h2>
+<p>گاهی اوقات برنامه نویسان دوست دارند موقعیت خاصی را در یک فایل منبع علامت گذاری کنند. به عنوان مثال ، من اخیراً این را در برنامه ای یافتم که در جستجوی آن بودم:</p>
+</div>
+<pre class="hljs"><code><span class="hljs-comment">// Actions //////////////////////////////////</span>
+</code></pre>
+<div dir="rtl">
+<p>موارد نادری وجود دارد که جمع آوری برخی کارها در زیر یک بنر مانند این منطقی باشد. اما به طور کلی، بی نظمی هستند که باید از بین بروند - به ویژه قطار پر سر و صدا اسلش در انتها.</p>
+<p>اینجوری فکر کن اگر شما اغلب بنرها را مشاهده نکنید ، یک بنر حیرت انگیز و واضح است. بنابراین خیلی کم و فقط در صورت سودمند بودن از آنها استفاده کنید. اگر بیش از اندازه از بنرها استفاده نکنید ، در سر و صدای پس زمینه قرار می گیرند و نادیده گرفته می شوند.</p>
+<h2>کامنت‌های بستن آکولاد</h2>
+<p>بعضی اوقات ، برنامه نویسان نظیر لیست 4-6 ، کامنت‌های ویژه ای در مورد آکولاد‌های بسته می‌نهند. اگرچه این ممکن است برای توابع طولانی با ساختارهای کاملاً تو در تو منطقی باشد ، اما در انواع توابع کوچک و محصور شده فقط منجر به  بهم ریختن می‌شود. بنابراین اگر متوجه شدید که می خواهید آکولادهای بسته خود را مشخص کنید ، سعی کنید در عوض توابع خود را کوتاه کنید.</p>
+</div>
+<p>Listing 4-6</p>
+<p>wc.java</p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">wc</span> {
+ <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> {
+  <span class="hljs-type">BufferedReader</span> <span class="hljs-variable">in</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BufferedReader</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">InputStreamReader</span>(System.in));
+  String line;
+  <span class="hljs-type">int</span> <span class="hljs-variable">lineCount</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;
+  <span class="hljs-type">int</span> <span class="hljs-variable">charCount</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;
+  <span class="hljs-type">int</span> <span class="hljs-variable">wordCount</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">try</span> {
+   <span class="hljs-keyword">while</span> ((line = in.readLine()) != <span class="hljs-literal">null</span>) {
+    lineCount++;
+    charCount += line.length();
+    String words[] = line.split(<span class="hljs-string">&quot;\\W&quot;</span>);
+    wordCount += words.length;
+   } <span class="hljs-comment">//while</span>
+   System.out.println(<span class="hljs-string">&quot;wordCount = &quot;</span> + wordCount);
+   System.out.println(<span class="hljs-string">&quot;lineCount = &quot;</span> + lineCount);
+   System.out.println(<span class="hljs-string">&quot;charCount = &quot;</span> + charCount);
+  } <span class="hljs-comment">// try</span>
+  <span class="hljs-keyword">catch</span> (IOException e) {
+   System.err.println(<span class="hljs-string">&quot;Error:&quot;</span> + e.getMessage());
+  } <span class="hljs-comment">//catch</span>
+ } <span class="hljs-comment">//main</span>
+}
+</code></pre>
+<div dir="rtl">
+<h2>خصیصه‌ها و خطوط معرف نویسنده کد</h2>
+</div>
+<pre class="hljs"><code><span class="hljs-comment">/* Added by Rick */</span>
+</code></pre>
+<div dir="rtl">
+<p>سیستم های کنترل کد منبع در به خاطر سپردن اینکه چه کسی چه چیزی را اضافه کرده است ، بسیار خوب است. نیازی به آلوده سازی کد با کمترین bylines نیست. ممکن است فکر کنید چنین کامنت‌هایی برای کمک به دیگران در دانستن اینکه با چه کسی در مورد کد صحبت می کنند مفید باشد. اما واقعیت این است که سالها و سالها در اطراف بمانند ، هرچه دقیق تر و کم اهمیت تر می شوند.</p>
+<p>باز هم ، سیستم کنترل کد منبع مکان بهتری برای این نوع اطلاعات است.</p>
+<h2>کامنت کردن کد</h2>
+<p>تعداد کمی از اعمال به اندازه کد توضیح دادن کراهت دارند. این کار را نکنید!</p>
+</div>
+<pre class="hljs"><code><span class="hljs-comment">// InputStreamResponse response = new InputStreamResponse();</span>
+<span class="hljs-comment">// response.setBody(formatter.getResultStream(), formatter.getByteCount());</span>
+<span class="hljs-comment">// InputStream resultsStream = formatter.getResultStream();</span>
+<span class="hljs-comment">// StreamReader reader = new StreamReader(resultsStream);</span>
+<span class="hljs-comment">// response.setContent(reader.read(formatter.getByteCount()));</span>
+</code></pre>
+<div dir="rtl">
+<p>دیگران که این کد کامنت شده را می بینند ، جرات حذف آن را ندارند. آنها فکر می کنند آنجا به دلایلی وجود دارد و حذف آنها بسیار خطرناک است. بنابراین کد کامنت شده مانند خاکه ته یک بطری بد شراب جمع می شود.</p>
+<p>این را از apache commons در نظر بگیرید:</p>
+</div>
+<pre class="hljs"><code><span class="hljs-built_in">this</span>.bytePos = writeBytes(pngIdBytes, <span class="hljs-number">0</span>);
+<span class="hljs-comment">//hdrPos = bytePos;</span>
+writeHeader();
+writeResolution();
+<span class="hljs-comment">//dataPos = bytePos;</span>
+<span class="hljs-keyword">if</span> (writeImageData()) {
+ writeEnd();
+ <span class="hljs-built_in">this</span>.pngBytes = resizeByteArray(<span class="hljs-built_in">this</span>.pngBytes, <span class="hljs-built_in">this</span>.maxPos);
+}
+<span class="hljs-keyword">else</span> {
+ <span class="hljs-built_in">this</span>.pngBytes = <span class="hljs-literal">null</span>;
+}
+<span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.pngBytes;
+</code></pre>
+<div dir="rtl">
+<p>چرا آن دو خط کد کامنت داده شده است؟ آیا آنها مهم هستند؟ آیا آنها به عنوان یادآوری برای برخی تغییرات قریب الوقوع باقی مانده بودند؟ یا اینها فقط ظلم هایی هستند که کسی سالها پیش در مورد آنها کامنت داده و زحمت تمیز کردنش را نکشیده است.</p>
+<p>زمانی در دهه شصت بود که ممکن است کد کامنت شده مفید باشد. اما مدت زمان زیادی است که سیستم های کنترل کد منبع خوبی داریم. آن سیستم ها کد را برای ما به خاطر می آورند. دیگر لازم نیست درباره آن توضیح دهیم. فقط کد را حذف کنید. ما آن را از دست نخواهیم داد. قول می‌دهم.</p>
+<h2>HTML کامنت‌های</h2>
+<p>همانطور که می توانید با خواندن کد زیر متوجه شوید HTML در کامنت‌های کد منبع مکروه است. خواندن کامنت‌ها در مکانی که خواندن آنها آسان است - ادیتور / IDE - را دشوار می کند. اگر قرار است کامنت‌ها توسط برخی از ابزارها (مانند Javadoc) برای نمایش در یک صفحه وب استخراج شود ، تزیین کامنت‌ها با HTML مناسب باید به عهده آن ابزار باشد و نه برنامه نویس.</p>
+</div>
+<pre class="hljs"><code><span class="hljs-comment">/**
+* Task to run fit tests.
+* This task runs fitnesse tests and publishes the results.
+* &lt;p/&gt;
+* &lt;pre&gt;
+* Usage:
+* &amp;lt;taskdef name=&amp;quot;execute-fitnesse-tests&amp;quot;
+*
+classname=&amp;quot;fitnesse.ant.ExecuteFitnesseTestsTask&amp;quot;
+*
+classpathref=&amp;quot;classpath&amp;quot; /&amp;gt;
+* OR
+* &amp;lt;taskdef classpathref=&amp;quot;classpath&amp;quot;
+*
+resource=&amp;quot;tasks.properties&amp;quot; /&amp;gt;
+* &lt;p/&gt;
+* &amp;lt;execute-fitnesse-tests
+*
+suitepage=&amp;quot;FitNesse.SuiteAcceptanceTests&amp;quot;
+*
+fitnesseport=&amp;quot;8082&amp;quot;
+*
+resultsdir=&amp;quot;${results.dir}&amp;quot;
+*
+resultshtmlpage=&amp;quot;fit-results.html&amp;quot;
+*
+classpathref=&amp;quot;classpath&amp;quot; /&amp;gt;
+* &lt;/pre&gt;
+*/</span>
+</code></pre>
+<div dir="rtl">
+<h2>اطلاعات غیرمحلی</h2>
+<p>اگر لازم است یک کامنت بنویسید، پس مطمئن شوید که کامنت شما کد اطراف خودش را توضیح میدهد. در یک کامنت محلی نیازی نیست اطلاعات بین المللی به خواننده بدهید، همانقدر که آن قسمت از کد را توضیح دهید کفایت میکند. فرضا این کامنت در مثال جاوایی زیر را درنظر بگیرید. با اینکه به طور ترسناکی زائد به نظر میرسد، اما اطلاعات خوبی درباره پورت پیشفرض برنامه به استفاده کننده میدهد. تابع مطلقا کنترلی روی اینکه پیشفرضش چه باشد ندارد. این کامنت ، تابع را توضیح نمیدهد و در حقیقت چیزی که این کامنت توضیح میدهد در نقطه ای دورتر از این قسمت قرار دارد. مطمئنا هیچ تضمینی نیست که اگر پورت پیشفرض برنامه عوض شد، این کامنت هم تغییر کند.</p>
+</div>
+<pre class="hljs"><code><span class="hljs-comment">/**
+* Port on which fitnesse would run. Defaults to &lt;b&gt;8082&lt;/b&gt;.
+*
+* <span class="hljs-doctag">@param</span> fitnessePort
+*/</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setFitnessePort</span><span class="hljs-params">(<span class="hljs-type">int</span> fitnessePort)</span>
+{
+ <span class="hljs-built_in">this</span>.fitnessePort = fitnessePort;
+}
+</code></pre>
+<div dir="rtl">
+<h2>اطلاعات بیش از اندازه</h2>
+<p>بحث های جذاب تاریخی و توصیف های بی ربطتان را در جایی غیر از کامنت‌هایتان قرار دهید. کامنت زیر را در یک ماژول پیدا کردیم که طراحی شده بود برای تست یک تابع که کارش انکد و دیکد کردن base64 است. به جز کد RFC، بقیه نوشته ها اضافی هستند و کسی که این کد را میخواند نیازی به داشتن این اطلاعات مسخره ندارد.</p>
+</div>
+<pre class="hljs"><code><span class="hljs-comment">/*
+ RFC 2045 - Multipurpose Internet Mail Extensions (MIME)
+ Part One: Format of Internet Message Bodies
+ section 6.8. Base64 Content-Transfer-Encoding
+ The encoding process represents 24-bit groups of input bits as output
+ strings of 4 encoded characters. Proceeding from left to right, a
+ 24-bit input group is formed by concatenating 3 8-bit input groups.
+ These 24 bits are then treated as 4 concatenated 6-bit groups, each
+ of which is translated into a single digit in the base64 alphabet.
+ When encoding a bit stream via the base64 encoding, the bit stream
+ must be presumed to be ordered with the most-significant-bit first.
+ That is, the first bit in the stream will be the high-order bit in
+ the first 8-bit byte, and the eighth bit will be the low-order bit in
+ the first 8-bit byte, and so on.
+*/</span>
+</code></pre>
+<div dir="rtl">
+<h2>ارتباط نامشخص</h2>
+<p>ارتباط بین کامنت و کدی که در حال توضیح آن است باید واضح باشد. اگر قصد کامنت نوشتن دارید به این نکته توجه کنید که خواننده کد باید بتواند با نگاه کردن به کد بفهمد که شما دقیقا دارید درباره کدام قسمت توضیح می‌دهید.<br>
+مثلا این کامنت از apache commons بیرون کشیده شده:</p>
+</div>
+<pre class="hljs"><code><span class="hljs-comment">/*
+* start with an array that is big enough to hold all the pixels
+* (plus filter bytes), and an extra 200 bytes for header info
+*/</span>
+<span class="hljs-built_in">this</span>.pngBytes = <span class="hljs-keyword">new</span> <span class="hljs-title class_">byte</span>[((<span class="hljs-built_in">this</span>.width + <span class="hljs-number">1</span>) * <span class="hljs-built_in">this</span>.height * <span class="hljs-number">3</span>) + <span class="hljs-number">200</span>];
+</code></pre>
+<div dir="rtl">
+<p>اینجا filter byte چیست؟ آیا مربوط میشود به +1 یا به *3؟ یا اصلا به هر دو؟ آیا هر پیکسل یک بایت است؟ چرا 200؟ کامنت برای کدی استفاده میشود که خودش، خودش را توضیح نمیدهد، اینجا باید کامنت دیگری بنویسیم که این کامنت را توضیح دهد!</p>
+<h2>عناوین تابع</h2>
+<p>توابع کوچک نیاز به توضیحات زیادی ندارند. یک اسم که خوب اتخاب شود برای یک تابع کوچک بسیار مفید تر از یک کامنت طولانی است.</p>
+<h2>اسناد java در کد غیرعمومی</h2>
+<p>همانقدر که jovadoc ها برای api های عمومی مناسب هستند، برای کد هایی که عمومی نیستند غیر مفیدند. تولید کردن javadoc برای کلاس ها و تابع ها در یک سیستم آنقدر ها هم مفید نیست، و زیاد بودن javadoc ها هم چیزی جز حواس پرتی به ارمغان نمیاورد.</p>
+<h2>مثال</h2>
+<p>من ماژولی که در Listing 4-7 هست را نوشته ام برای اولین تجربه شما. قصد این ماژول، بودن مثالی برای کدنویسی بد و سبک کامنت نویسی است. سپس Kent Beck این کد را جلوی چندین دانشجوی مشتاق به شکل بسیار پسندیده تری ریفکتور کرده. بعدتر من از این مثال برای کتاب خودم یعنی Agile Software Development, Principles, Patterns, and Practices استفاده کردم.<br>
+چیزی که درمورد این کد جالب است این است که ما در ابتدا آن را کاملا مستند فرض میکردیم، در حالی که الان آن را یک آشفتگی کوچک می‌دانیم. ببینید چند مشکل مختلف در کامنت گذاری این کد میتوانید پیدا کنید.</p>
+</div>
+<p>Listing 4-7</p>
+<p>GeneratePrimes.java</p>
+<pre class="hljs"><code><span class="hljs-comment">/**
+* This class Generates prime numbers up to a user specified
+* maximum. The algorithm used is the Sieve of Eratosthenes.
+* &lt;p&gt;
+* Eratosthenes of Cyrene, b. c. 276 BC, Cyrene, Libya --
+* d. c. 194, Alexandria. The first man to calculate the
+* circumference of the Earth. Also known for working on
+* calendars with leap years and ran the library at Alexandria.
+* &lt;p&gt;
+* The algorithm is quite simple. Given an array of integers
+* starting at 2. Cross out all multiples of 2. Find the next
+* uncrossed integer, and cross out all of its multiples.
+* Repeat untilyou have passed the square root of the maximum
+* value.
+*
+* <span class="hljs-doctag">@author</span> Alphonse
+* <span class="hljs-doctag">@version</span> 13 Feb 2002 atp
+*/</span>
+<span class="hljs-keyword">import</span> java.util.*;
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">GeneratePrimes</span>
+{
+ <span class="hljs-comment">/**
+ * <span class="hljs-doctag">@param</span> maxValue is the generation limit.
+ */</span>
+ <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">int</span>[] generatePrimes(<span class="hljs-type">int</span> maxValue)
+ {
+  <span class="hljs-keyword">if</span> (maxValue &gt;= <span class="hljs-number">2</span>) <span class="hljs-comment">// the only valid case</span>
+  {
+   <span class="hljs-comment">// declarations</span>
+   <span class="hljs-type">int</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> maxValue + <span class="hljs-number">1</span>; <span class="hljs-comment">// size of array</span>
+   <span class="hljs-type">boolean</span>[] f = <span class="hljs-keyword">new</span> <span class="hljs-title class_">boolean</span>[s];
+   <span class="hljs-type">int</span> i;
+   <span class="hljs-comment">// initialize array to true.</span>
+   <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; s; i++)
+   f[i] = <span class="hljs-literal">true</span>;
+   <span class="hljs-comment">// get rid of known non-primes</span>
+   f[<span class="hljs-number">0</span>] = f[<span class="hljs-number">1</span>] = <span class="hljs-literal">false</span>;
+   <span class="hljs-comment">// sieve</span>
+   <span class="hljs-type">int</span> j;
+   <span class="hljs-keyword">for</span> (i = <span class="hljs-number">2</span>; i &lt; Math.sqrt(s) + <span class="hljs-number">1</span>; i++)
+   {
+    <span class="hljs-keyword">if</span> (f[i]) <span class="hljs-comment">// if i is uncrossed, cross its multiples.</span>
+    {
+     <span class="hljs-keyword">for</span> (j = <span class="hljs-number">2</span> * i; j &lt; s; j += i)
+     f[j] = <span class="hljs-literal">false</span>; <span class="hljs-comment">// multiple is not prime</span>
+    }
+   }
+   <span class="hljs-comment">// how many primes are there?</span>
+   <span class="hljs-type">int</span> <span class="hljs-variable">count</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;
+   <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; s; i++)
+   {
+    <span class="hljs-keyword">if</span> (f[i])
+    count++; <span class="hljs-comment">// bump count.</span>
+   }
+   <span class="hljs-type">int</span>[] primes = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[count];
+   <span class="hljs-comment">// move the primes into the result</span>
+   <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>, j = <span class="hljs-number">0</span>; i &lt; s; i++)
+   {
+    <span class="hljs-keyword">if</span> (f[i])
+    <span class="hljs-comment">// if prime</span>
+    primes[j++] = i;
+   }
+   <span class="hljs-keyword">return</span> primes; <span class="hljs-comment">// return the primes</span>
+  }
+  <span class="hljs-keyword">else</span> <span class="hljs-comment">// maxValue &lt; 2</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[<span class="hljs-number">0</span>]; <span class="hljs-comment">// return null array if bad input.</span>
+ }
+}
+</code></pre>
+<div dir="rtl">
+<p>در Listing 4-8 میتوانید یک نسخه بازنویسی شده از همان ماژول قبلی را ببینید. دقت کنید که استفاده از کامنت به طور قابل توجهی مهار شده و فقط دو کامنت در این کد دیده میشود. هر دو کامنت ماهیت توضیح دادن دارند.</p>
+</div>
+<p>Listing 4-8</p>
+<p>PrimeGenerator.java (refactored)</p>
+<pre class="hljs"><code><span class="hljs-comment">/**
+* This class Generates prime numbers up to a user specified
+* maximum. The algorithm used is the Sieve of Eratosthenes.
+* Given an array of integers starting at 2:
+* Find the first uncrossed integer, and cross out all its
+* multiples. Repeat until there are no more multiples
+* in the array.
+*/</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PrimeGenerator</span>
+{
+ <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">boolean</span>[] crossedOut;
+ <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">int</span>[] result;
+ <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">int</span>[] generatePrimes(<span class="hljs-type">int</span> maxValue)
+ {
+  <span class="hljs-keyword">if</span> (maxValue &lt; <span class="hljs-number">2</span>)
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[<span class="hljs-number">0</span>];
+  <span class="hljs-keyword">else</span>
+  {
+   uncrossIntegersUpTo(maxValue);
+   crossOutMultiples();
+   putUncrossedIntegersIntoResult();
+   <span class="hljs-keyword">return</span> result;
+  }
+ }
+ <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">uncrossIntegersUpTo</span><span class="hljs-params">(<span class="hljs-type">int</span> maxValue)</span>
+ {
+  crossedOut = <span class="hljs-keyword">new</span> <span class="hljs-title class_">boolean</span>[maxValue + <span class="hljs-number">1</span>];
+  <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">2</span>; i &lt; crossedOut.length; i++)
+  crossedOut[i] = <span class="hljs-literal">false</span>;
+ }
+ <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">crossOutMultiples</span><span class="hljs-params">()</span>
+ {
+  <span class="hljs-type">int</span> <span class="hljs-variable">limit</span> <span class="hljs-operator">=</span> determineIterationLimit();
+  <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">2</span>; i &lt;= limit; i++)
+  <span class="hljs-keyword">if</span> (notCrossed(i))
+  crossOutMultiplesOf(i);
+ }
+ <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">int</span> <span class="hljs-title function_">determineIterationLimit</span><span class="hljs-params">()</span>
+ {
+  <span class="hljs-comment">// Every multiple in the array has a prime factor that</span>
+  <span class="hljs-comment">// is less than or equal to the root of the array size,</span>
+  <span class="hljs-comment">// so we don&#x27;t have to cross out multiples of numbers</span>
+  <span class="hljs-comment">// larger than that root.</span>
+  <span class="hljs-type">double</span> <span class="hljs-variable">iterationLimit</span> <span class="hljs-operator">=</span> Math.sqrt(crossedOut.length);
+  <span class="hljs-keyword">return</span> (<span class="hljs-type">int</span>) iterationLimit;
+ }
+ <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">crossOutMultiplesOf</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span>
+ {
+  <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">multiple</span> <span class="hljs-operator">=</span> <span class="hljs-number">2</span>*i;
+  multiple &lt; crossedOut.length;
+  multiple += i)
+  crossedOut[multiple] = <span class="hljs-literal">true</span>;
+ }
+ <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">notCrossed</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span>
+ {
+  <span class="hljs-keyword">return</span> crossedOut[i] == <span class="hljs-literal">false</span>;
+ }
+ <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">putUncrossedIntegersIntoResult</span><span class="hljs-params">()</span>
+ {
+  result = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[numberOfUncrossedIntegers()];
+  <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>, i = <span class="hljs-number">2</span>; i &lt; crossedOut.length; i++)
+  <span class="hljs-keyword">if</span> (notCrossed(i))
+  result[j++] = i;
+ }
+ <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">int</span> <span class="hljs-title function_">numberOfUncrossedIntegers</span><span class="hljs-params">()</span>
+ {
+  <span class="hljs-type">int</span> <span class="hljs-variable">count</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">2</span>; i &lt; crossedOut.length; i++)
+  <span class="hljs-keyword">if</span> (notCrossed(i))
+  count++;
+  <span class="hljs-keyword">return</span> count;
+ }
+}
+</code></pre>
+<div dir="rtl">
+<p>فهمیدنش راحت است که کامنت اول بیخودی انجا نوشته شده، چرا که خود اسم generatePrimes را توضیح داده. این اسم به اندازه کافی کاربرد تابع را بیان میکند. من فکر می‌کنم کامنت‌ها برای راحت تر کردن کار خواننده نوشته میشوند، پس ترجیح می‌دهم این کامنت اضافی را آنجا قرار ندهم.<br>
+بحث دوم قطعا ضروری است. این منطق پشت استفاده از ریشه دوم به عنوان حد حلقه را توضیح میدهد.البته استفاده از ریشه دوم عدد ممکن است فقط از نظر تئوری جالب به نظر برسد، آیا واقعا با محاسبه ریشه دوم و محدود کردن حلقه به آن، زمان بیشتری ذخیره می‌کنیم؟<br>
+ارزش فکر کردن را دارد. استفاده از ریشه دوم برای محدود کردن تکرار حلقه، هکر قدیمی c و اسمبلی نویس درونم را راضی میکند، ولی فکر نمی‌کنم ارزش وقت و تلاشی که بقیه برای فهمیدن آن صرف می‌کنند را داشته باشد.</p>
+</div>
+
+</main>
+
+
+ 
+
+  <!-- فوتر مشترک -->
+  <footer class="footer">
+    <div class="container">
+      <p>
+        <img src="/icone/copyright.svg" alt="کپی‌رایت" width="14" height="14"
+             style="vertical-align:middle;margin-inline:4px">
+        <span id="y"></span> Gitab — برای توسعه‌دهندگان
+      </p>
+    </div>
+  </footer>
+
+  <!-- سال + اسکریپت تم -->
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    (() => {
+      const root = document.documentElement;
+      const btn = document.getElementById('themeToggle');
+      const KEY = 'gitab-theme';
+      const media = window.matchMedia('(prefers-color-scheme: dark)');
+      const getEffective = s => s === 'auto' ? (media.matches ? 'dark' : 'light') : s;
+      function updateTheme(s) {
+        root.setAttribute('data-theme', s);
+        const mode = getEffective(s);
+        root.dataset.colorMode = mode;
+        btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
+      }
+      const saved = localStorage.getItem(KEY) || 'auto';
+      updateTheme(saved);
+      btn.addEventListener('click', () => {
+        const curr = localStorage.getItem(KEY) || 'auto';
+        const next = curr === 'auto' ? 'dark' : curr === 'dark' ? 'light' : 'auto';
+        localStorage.setItem(KEY, next);
+        updateTheme(next);
+      });
+      media.addEventListener('change', () => {
+        if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
+      });
+      window.addEventListener('DOMContentLoaded', () => updateTheme(saved));
+    })();
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
+<script>
+  document.body.dataset.page = window.location.pathname;
+</script>
+
+</body>
+
+</html>

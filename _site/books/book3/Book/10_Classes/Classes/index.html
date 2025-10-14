@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>کلاس ها</title>
+  <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
+  <link rel="stylesheet" href="/styles/main.css">
+<link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<style>
+@font-face {
+  font-family: 'Vazir';
+  src: url('/fonts/Vazir-FD-WOL.ttf') format('truetype');
+  font-display: swap;
+}
+body {
+  font-family: 'Vazir', sans-serif;
+}
+</style>
+
+</head>
+<body>
+  <!-- هدر مشترک -->
+  <header class="header">
+    <div class="container nav-wrap">
+      <a class="brand" href="/">
+        <img src="/icone/logo.svg" alt="Gitab" width="28" height="28">
+        <span>Gitab</span>
+      </a>
+
+      <nav class="nav">
+        <a href="/">خانه</a>
+        <a href="/books/list-books">کتاب‌ها</a>
+        <a href="#">مترجم ها</a>
+        <a href="#">همکاری</a>
+        <a href="#">درباره‌ما</a>
+      </nav>
+
+     <div class="nav-actions">
+  <button id="themeToggle" class="icon-btn theme-btn" aria-label="تغییر حالت">
+    <img class="icon-sun" src="/icone/sun.svg" alt="روشن">
+    <img class="icon-moon" src="/icone/moon.svg" alt="تاریک">
+  </button>
+
+  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
+    <img src="/icone/github.svg" alt="GitHub">
+  </a>
+</div>
+
+  </header>
+
+
+<main class="site-main book-page ">
+  <h1>کلاس ها</h1>
+<p><img src="../../../assets/image/10/img-10.1.png" alt="classes image"></p>
+<div dir="rtl">
+تا اینجا در این کتاب بر روی نحوه‌ی نوشتن خطوط و بلوک‌های کد به‌خوبی تمرکز کرده‌ایم. به ترکیب مناسب توابع و نحوه‌ی ارتباط آن‌ها با یکدیگر پرداخته‌ایم. اما با وجود تمام توجهی که به بیان‌گری جملات کد و توابعی که تشکیل می‌دهند کرده‌ایم، هنوز به کد تمیز نرسیده‌ایم تا زمانی که به سطوح بالاتر سازماندهی کد توجه نکنیم. بیایید درباره کلاس‌های تمیز صحبت کنیم.
+<h2>سازماندهی کلاس</h2>
+<p>طبق شیوه استاندارد جاوا، یک کلاس باید با لیستی از متغیرها آغاز شود. ثابت‌های عمومی و استاتیک، در صورت وجود، باید اول بیایند. سپس متغیرهای استاتیک خصوصی و بعد از آن متغیرهای نمونه خصوصی قرار می‌گیرند. به‌ندرت دلیل خوبی برای داشتن یک متغیر عمومی وجود دارد.</p>
+<p>توابع عمومی باید پس از لیست متغیرها قرار بگیرند. ما ترجیح می‌دهیم توابع کمکی خصوصی که توسط یک تابع عمومی فراخوانی می‌شوند، بلافاصله بعد از خود آن تابع عمومی قرار بگیرند. این کار به پیروی از قانون کاهش مرحله کمک می‌کند و باعث می‌شود برنامه مانند یک مقاله روزنامه خوانده شود.</p>
+<h3>کپسوله‌سازی</h3>
+<p>ما دوست داریم متغیرها و توابع کمکی‌مان خصوصی باشند، اما به شدت روی آن پافشاری نمی‌کنیم. گاهی اوقات نیاز داریم که یک متغیر یا تابع کمکی را محافظت‌شده (protected) کنیم تا از طریق یک تست قابل دسترسی باشد. برای ما، تست‌ها اهمیت بالایی دارند. اگر یک تست در همان بسته نیاز به فراخوانی یک تابع یا دسترسی به یک متغیر داشته باشد، آن را محافظت‌شده یا با دامنه بسته (package scope) قرار می‌دهیم. با این حال، ابتدا به دنبال راهی برای حفظ حریم خصوصی خواهیم بود. کاهش کپسوله‌سازی همیشه آخرین گزینه است.</p>
+<h2>کلاس‌ها باید کوچک باشند</h2>
+<p>اولین قانون درباره کلاس‌ها این است که باید کوچک باشند. دومین قانون این است که باید از آن هم کوچکتر باشند. نه، ما قصد نداریم متن دقیقی را که در فصل توابع گفتیم، تکرار کنیم. اما همانند توابع، کوچک بودن، قانون اصلی در طراحی کلاس‌ها است. سوال فوری ما همیشه این است: &quot;چقدر کوچک؟&quot;</p>
+<p>برای توابع، اندازه را با شمردن خطوط فیزیکی اندازه‌گیری می‌کردیم. برای کلاس‌ها از معیار متفاوتی استفاده می‌کنیم: ما مسئولیت‌ها را شمارش می‌کنیم.</p>
+<p>در فهرست ۱۰-۱، کلاسی به نام SuperDashboard معرفی شده است که حدود ۷۰ متد عمومی را در معرض دید قرار می‌دهد. بیشتر توسعه‌دهندگان با این نظر موافقند که این کلاس از نظر اندازه کمی بیش از حد بزرگ است. برخی توسعه‌دهندگان ممکن است SuperDashboard را به عنوان یک &quot;کلاس خدا&quot; (God class) خطاب کنند.</p>
+</div>
+<p>Listing 10-1 -- Too Many Responsibilities</p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SuperDashboard</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">JFrame</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">MetaDataUser</span>
+<span class="hljs-keyword">public</span> String <span class="hljs-title function_">getCustomizerLanguagePath</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setSystemConfigPath</span><span class="hljs-params">(String systemConfigPath)</span>
+<span class="hljs-keyword">public</span> String <span class="hljs-title function_">getSystemConfigDocument</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setSystemConfigDocument</span><span class="hljs-params">(String systemConfigDocument)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">getGuruState</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">getNoviceState</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">getOpenSourceState</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">showObject</span><span class="hljs-params">(MetaObject object)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">showProgress</span><span class="hljs-params">(String s)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">isMetadataDirty</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setIsMetadataDirty</span><span class="hljs-params">(<span class="hljs-type">boolean</span> isMetadataDirty)</span>
+<span class="hljs-keyword">public</span> Component <span class="hljs-title function_">getLastFocusedComponent</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setLastFocused</span><span class="hljs-params">(Component lastFocused)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setMouseSelectState</span><span class="hljs-params">(<span class="hljs-type">boolean</span> isMouseSelected)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">isMouseSelected</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> LanguageManager <span class="hljs-title function_">getLanguageManager</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> Project <span class="hljs-title function_">getProject</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> Project <span class="hljs-title function_">getFirstProject</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> Project <span class="hljs-title function_">getLastProject</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> String <span class="hljs-title function_">getNewProjectName</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setComponentSizes</span><span class="hljs-params">(Dimension dim)</span>
+<span class="hljs-keyword">public</span> String <span class="hljs-title function_">getCurrentDir</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setCurrentDir</span><span class="hljs-params">(String newDir)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">updateStatus</span><span class="hljs-params">(<span class="hljs-type">int</span> dotPos, <span class="hljs-type">int</span> markPos)</span>
+<span class="hljs-keyword">public</span> Class[] getDataBaseClasses()
+<span class="hljs-keyword">public</span> MetadataFeeder <span class="hljs-title function_">getMetadataFeeder</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">addProject</span><span class="hljs-params">(Project project)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">setCurrentProject</span><span class="hljs-params">(Project project)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">removeProject</span><span class="hljs-params">(Project project)</span>
+<span class="hljs-keyword">public</span> MetaProjectHeader <span class="hljs-title function_">getProgramMetadata</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">resetDashboard</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> Project <span class="hljs-title function_">loadProject</span><span class="hljs-params">(String fileName, String projectName)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setCanSaveMetadata</span><span class="hljs-params">(<span class="hljs-type">boolean</span> canSave)</span>
+<span class="hljs-keyword">public</span> MetaObject <span class="hljs-title function_">getSelectedObject</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">deselectObjects</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setProject</span><span class="hljs-params">(Project project)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">editorAction</span><span class="hljs-params">(String actionName, ActionEvent event)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setMode</span><span class="hljs-params">(<span class="hljs-type">int</span> mode)</span>
+<span class="hljs-keyword">public</span> FileManager <span class="hljs-title function_">getFileManager</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setFileManager</span><span class="hljs-params">(FileManager fileManager)</span>
+<span class="hljs-keyword">public</span> ConfigManager <span class="hljs-title function_">getConfigManager</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setConfigManager</span><span class="hljs-params">(ConfigManager configManager)</span>
+<span class="hljs-keyword">public</span> ClassLoader <span class="hljs-title function_">getClassLoader</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setClassLoader</span><span class="hljs-params">(ClassLoader classLoader)</span>
+<span class="hljs-keyword">public</span> Properties <span class="hljs-title function_">getProps</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> String <span class="hljs-title function_">getUserHome</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> String <span class="hljs-title function_">getBaseDir</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getMajorVersionNumber</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getMinorVersionNumber</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getBuildNumber</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> MetaObject <span class="hljs-title function_">pasting</span><span class="hljs-params">(
+  MetaObject target, MetaObject pasted, MetaProject project)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">processMenuItems</span><span class="hljs-params">(MetaObject metaObject)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">processMenuSeparators</span><span class="hljs-params">(MetaObject metaObject)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">processTabPages</span><span class="hljs-params">(MetaObject metaObject)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">processPlacement</span><span class="hljs-params">(MetaObject object)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">processCreateLayout</span><span class="hljs-params">(MetaObject object)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">updateDisplayLayer</span><span class="hljs-params">(MetaObject object, <span class="hljs-type">int</span> layerIndex)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">propertyEditedRepaint</span><span class="hljs-params">(MetaObject object)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">processDeleteObject</span><span class="hljs-params">(MetaObject object)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">getAttachedToDesigner</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">processProjectChangedState</span><span class="hljs-params">(<span class="hljs-type">boolean</span> hasProjectChanged)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">processObjectNameChanged</span><span class="hljs-params">(MetaObject object)</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">runProject</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> setAçowDragging(<span class="hljs-type">boolean</span> allowDragging)
+<span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">allowDragging</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">isCustomizing</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setTitle</span><span class="hljs-params">(String title)</span>
+<span class="hljs-keyword">public</span> IdeMenuBar <span class="hljs-title function_">getIdeMenuBar</span><span class="hljs-params">()</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">showHelper</span><span class="hljs-params">(MetaObject metaObject, String propertyName)</span>
+<span class="hljs-comment">// ... many non-public methods follow ...</span>
+}
+</code></pre>
+<div dir="rtl">
+اما اگر SuperDashboard فقط شامل متدهایی باشد که در فهرست ۱۰-۲ نشان داده شده‌اند، چه؟
+</div>
+<p>Listing 10-2 -- Small Enough?</p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SuperDashboard</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">JFrame</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">MetaDataUser</span>
+ <span class="hljs-keyword">public</span> Component <span class="hljs-title function_">getLastFocusedComponent</span><span class="hljs-params">()</span> 
+ <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setLastFocused</span><span class="hljs-params">(Component lastFocused)</span> 
+ <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getMajorVersionNumber</span><span class="hljs-params">()</span> 
+ <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getMinorVersionNumber</span><span class="hljs-params">()</span> 
+ <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getBuildNumber</span><span class="hljs-params">()</span> 
+}
+</code></pre>
+<div dir="rtl">
+پنج متد زیاد نیست، درست است؟
+در این حالت، با وجود تعداد کم متدها، SuperDashboard دارای مسئولیت‌های زیادی است. نام یک کلاس باید توصیف‌کننده‌ی مسئولیت‌هایی باشد که آن کلاس بر عهده دارد. در واقع، نام‌گذاری احتمالاً اولین راهی است که به ما کمک می‌کند اندازه‌ی کلاس را تعیین کنیم. اگر نتوانیم نامی مختصر برای یک کلاس پیدا کنیم، احتمالاً آن کلاس بیش از حد بزرگ است. هر چه نام کلاس مبهم‌تر باشد، احتمالاً مسئولیت‌های بیشتری دارد. برای مثال، نام کلاس‌هایی که شامل واژه‌های مبهمی مثل Processor، Manager یا Super هستند، معمولاً به تجمع نامطلوب مسئولیت‌ها اشاره دارد.
+<p>ما همچنین باید بتوانیم توصیف کوتاهی از کلاس را در حدود ۲۵ کلمه بنویسیم، بدون اینکه از واژه‌های “if”، “and”، “or” یا “but” استفاده کنیم. چگونه می‌توانیم SuperDashboard را توصیف کنیم؟ SuperDashboard به مؤلفه‌ای که آخرین بار بر روی آن فوکوس شده دسترسی می‌دهد و همچنین به ما اجازه می‌دهد نسخه و Build Number را پیگیری کنیم.&quot; اولین &quot;and&quot; نشانه‌ای است که SuperDashboard مسئولیت‌های زیادی دارد.</p>
+<h2>اصل مسئولیت واحد</h2>
+<p>اصل مسئولیت واحد (Single Responsibility Principle - SRP) بیان می‌کند که یک کلاس یا ماژول باید یک، و فقط یک، دلیل برای تغییر داشته باشد. این اصل هم تعریفی از مسئولیت به ما می‌دهد و هم راهنمایی برای اندازه کلاس. کلاس‌ها باید یک مسئولیت داشته باشند—یک دلیل برای تغییر.</p>
+<p>کلاس به‌ظاهر کوچک SuperDashboard در فهرست ۱۰-۲ دو دلیل برای تغییر دارد.</p>
+<p>اول، این کلاس اطلاعات نسخه را پیگیری می‌کند که به نظر می‌رسد هر بار که نرم‌افزار منتشر می‌شود، نیاز به به‌روزرسانی دارد. دوم، این کلاس مؤلفه‌های جاوا سوئینگ را مدیریت می‌کند (که خود یک زیرکلاس از JFrame است، نمای سوئینگ از یک پنجره GUI سطح بالا). بدون شک، اگر کدی از سوئینگ را تغییر دهیم، می‌خواهیم شماره نسخه را به‌روزرسانی کنیم، اما برعکس این موضوع الزامی نیست: ممکن است بر اساس تغییرات دیگر کد در سیستم، اطلاعات نسخه را تغییر دهیم.</p>
+<p>تلاش برای شناسایی مسئولیت‌ها (دلایل تغییر) معمولاً به ما کمک می‌کند تا انتزاعات بهتری در کد خود شناسایی و ایجاد کنیم. ما می‌توانیم به راحتی تمام سه متدی که در SuperDashboard به اطلاعات نسخه مربوط می‌شوند را استخراج کرده و در یک کلاس جداگانه به نام Version قرار دهیم (به فهرست ۱۰-۳ مراجعه کنید). کلاس Version ساختاری است که پتانسیل بالایی برای استفاده مجدد در سایر برنامه‌ها دارد!</p>
+</div>
+<p>Listing 10-3 -- A single-responsibility class</p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Version</span> {
+ <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getMajorVersionNumber</span><span class="hljs-params">()</span> 
+ <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getMinorVersionNumber</span><span class="hljs-params">()</span> 
+ <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getBuildNumber</span><span class="hljs-params">()</span> 
+}
+</code></pre>
+<div dir="rtl">
+SRP یکی از مفاهیم مهم در طراحی شی‌گرا است. همچنین یکی از ساده‌ترین مفاهیم برای درک و پیروی از آن به شمار می‌آید. با این حال، به طرز عجیبی، SRP اغلب به بدترین شکل در طراحی کلاس‌ها مورد سوءاستفاده قرار می‌گیرد. ما به‌طور منظم با کلاس‌هایی مواجه می‌شویم که کارهای بسیار زیادی انجام می‌دهند. چرا؟
+<p>به کار انداختن نرم‌افزار و تمیز نگه‌داشتن آن دو فعالیت بسیار متفاوت هستند. بیشتر ما ظرفیت محدودی برای پردازش اطلاعات داریم، بنابراین بیشتر بر روی کار کردن کد تمرکز می‌کنیم تا سازماندهی و پاکیزگی آن. این موضوع کاملاً قابل درک است. حفظ جدایی بین نگرانی‌ها در فعالیت‌های برنامه‌نویسی ما به همان اندازه در برنامه‌های ما اهمیت دارد.</p>
+<p>مشکل این است که بسیاری از ما فکر می‌کنیم که وقتی برنامه کار می‌کند، کار تمام شده است. ما از تغییر به سمت نگرانی‌های دیگر، مانند سازماندهی و پاکیزگی، غافل می‌شویم. به جای اینکه به سراغ مشکلات بعدی برویم، باید به عقب برگردیم و کلاس‌های بیش از حد شلوغ را به واحدهای جداگانه با مسئولیت‌های واحد تقسیم کنیم.</p>
+<p>در عین حال، بسیاری از توسعه‌دهندگان نگران این هستند که تعداد زیادی کلاس کوچک و تک‌منظوره، درک تصویر کلی را دشوارتر کند. آن‌ها نگران هستند که باید از کلاسی به کلاس دیگر بروند تا بفهمند یک بخش بزرگ‌تر چگونه انجام می‌شود.</p>
+<p>با این حال، یک سیستم با کلاس‌های کوچک بیشتر از یک سیستم با چند کلاس بزرگ اجزای متحرک ندارد. همان اندازه که باید در سیستم با کلاس‌های بزرگ بیاموزیم، در سیستم با کلاس‌های کوچک نیز به یادگیری نیاز داریم. بنابراین سوال این است: آیا می‌خواهید ابزارهای شما در جعبه‌ابزارهایی با کشوهای کوچک و مشخصی که شامل اجزای خوب تعریف شده و با برچسب هستند، سازمان‌دهی شوند؟ یا اینکه چند کشو داشته باشید که همه چیز را در آن‌ها ریخته‌اید؟</p>
+<p>هر سیستم بزرگ شامل مقدار زیادی منطق و پیچیدگی خواهد بود. هدف اصلی در مدیریت چنین پیچیدگی‌ای این است که آن را به گونه‌ای سازمان‌دهی کنیم که یک توسعه‌دهنده بداند کجا باید به دنبال موارد بگردد و فقط نیاز داشته باشد که در هر لحظه پیچیدگی مستقیماً مرتبط را درک کند. در مقابل، سیستم‌هایی با کلاس‌های بزرگ و چندمنظوره همیشه ما را با این واقعیت مواجه می‌کنند که باید از میان چیزهای زیادی که در حال حاضر نیازی به دانستن آن‌ها نداریم، عبور کنیم.</p>
+<p>برای تأکید بر نکات قبلی: ما می‌خواهیم سیستم‌های ما شامل بسیاری کلاس‌های کوچک باشد، نه چند کلاس بزرگ. هر کلاس کوچک یک مسئولیت واحد را در بر می‌گیرد، یک دلیل برای تغییر دارد و با چند کلاس دیگر همکاری می‌کند تا رفتارهای مورد نظر سیستم را به دست آورد.</p>
+<h2>همبستگی (Cohesion)</h2>
+<p>کلاس‌ها باید تعداد کمی متغیر نمونه داشته باشند. هر یک از متدهای یک کلاس باید یکی یا چندتا از این متغیرها را دستکاری کند. به‌طور کلی، هر چه تعداد متغیرهایی که یک متد دستکاری می‌کند بیشتر باشد، آن متد همبستگی بیشتری با کلاس خود خواهد داشت. یک کلاس که در آن هر متغیر توسط هر متد استفاده می‌شود، حداکثر همبستگی را دارد.</p>
+<p>به‌طور کلی، ایجاد چنین کلاس‌های حداکثری همبسته نه تنها توصیه نمی‌شود بلکه غیرممکن است؛ با این حال، ما می‌خواهیم همبستگی بالا باشد. وقتی همبستگی بالا است، به این معناست که متدها و متغیرهای کلاس وابستگی متقابل دارند و به‌عنوان یک کل منطقی با هم پیوند دارند.</p>
+<p>به پیاده‌سازی یک پشته (Stack) در فهرست ۱۰-۴ توجه کنید. این یک کلاس بسیار همبسته است. از میان سه متد، تنها متد size() است که از هر دو متغیر استفاده نمی‌کند.</p>
+</div>
+<p>Listing 10-4  -- Stack.java A cohesive class.</p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Stack</span> {
+  <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-variable">topOfStack</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;
+  List &lt;Integer&gt; elements = <span class="hljs-keyword">new</span> <span class="hljs-title class_">LinkedList</span> &lt;Integer&gt; ();
+  <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">size</span><span class="hljs-params">()</span> {
+    <span class="hljs-keyword">return</span> topOfStack;
+  }
+  <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">push</span><span class="hljs-params">(<span class="hljs-type">int</span> element)</span> {
+    topOfStack++;
+    elements.add(element);
+  }
+  <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">pop</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> PoppedWhenEmpty {
+    <span class="hljs-keyword">if</span> (topOfStack == <span class="hljs-number">0</span>)
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">PoppedWhenEmpty</span>();
+    <span class="hljs-type">int</span> <span class="hljs-variable">element</span> <span class="hljs-operator">=</span> elements.get(--topOfStack);
+    elements.remove(topOfStack);
+    <span class="hljs-keyword">return</span> element;
+  }
+}
+</code></pre>
+<div dir="rtl">
+حفظ همبستگی و نتایج آن در ایجاد کلاس‌های کوچک
+استراتژی نگه‌داشتن توابع کوچک و کوتاه کردن لیست پارامترها می‌تواند گاهی منجر به افزایش تعداد متغیرهای نمونه‌ای شود که توسط یک زیرمجموعه از متدها استفاده می‌شوند. وقتی این اتفاق می‌افتد، تقریباً همیشه به این معناست که حداقل یک کلاس دیگر در تلاش است تا از کلاس بزرگ‌تر خارج شود. شما باید سعی کنید متغیرها و متدها را به دو یا چند کلاس جداگانه تقسیم کنید به‌طوری‌که کلاس‌های جدید همبستگی بیشتری داشته باشند.
+<h2>حفظ همبستگی باعث ایجاد کلاس‌های کوچک‌تر می‌شود</h2>
+<p>فقط عمل تقسیم توابع بزرگ به توابع کوچک‌تر، باعث افزایش تعداد کلاس‌ها می‌شود. فرض کنید یک تابع بزرگ با تعداد زیادی متغیر در آن اعلام شده است. اگر بخواهید یک بخش کوچک از آن تابع را به یک تابع جداگانه استخراج کنید، آیا باید همه چهار متغیر اعلام شده در تابع را به عنوان آرگومان به تابع جدید منتقل کنید؟</p>
+<p>خیر! اگر آن چهار متغیر را به متغیرهای نمونه کلاس ارتقا دهید، می‌توانید کد را بدون انتقال هیچ متغیری استخراج کنید. این کار باعث می‌شود که تابع را به قطعات کوچک‌تر تقسیم کنید.</p>
+<p>متأسفانه، این همچنین به این معناست که کلاس‌های ما همبستگی خود را از دست می‌دهند، زیرا متغیرهای نمونه بیشتری را جمع‌آوری می‌کنند که فقط برای اجازه دادن به اشتراک‌گذاری چند تابع وجود دارند. اما صبر کنید! اگر چند تابع وجود داشته باشند که بخواهند برخی از متغیرها را به اشتراک بگذارند، آیا این به معنای آن نیست که آن‌ها به خودی خود یک کلاس هستند؟ قطعاً همین‌طور است. وقتی کلاس‌ها همبستگی خود را از دست می‌دهند، آن‌ها را تقسیم کنید!</p>
+<p>بنابراین، شکستن یک تابع بزرگ به توابع کوچک‌تر اغلب به ما این فرصت را می‌دهد که چند کلاس کوچک‌تر را نیز جدا کنیم. این به برنامه ما سازماندهی بهتری می‌دهد و ساختاری شفاف‌تر فراهم می‌آورد.</p>
+<p>به عنوان نمونه‌ای از آنچه که منظورم است، بیایید از یک مثال قدیمی استفاده کنیم که از کتاب فوق‌العاده Knuth با عنوان Literate Programming گرفته شده است. فهرست ۱۰-۵ یک ترجمه به زبان جاوا از برنامه PrintPrimes نوشته Knuth را نشان می‌دهد. برای اینکه به Knuth انصاف بدهیم، این برنامه همان‌طور که او نوشته است نیست، بلکه به‌عنوان خروجی ابزار WEB او ارائه شده است. من از آن استفاده می‌کنم زیرا نقطه شروع خوبی برای شکستن یک تابع بزرگ به توابع و کلاس‌های کوچک‌تر است.</p>
+</div>
+<p>Listing 10-5 -- PrintPrimes.java</p>
+<pre class="hljs"><code><span class="hljs-keyword">package</span> literatePrimes;
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PrintPrimes</span> {
+  <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> {
+    <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">M</span> <span class="hljs-operator">=</span> <span class="hljs-number">1000</span>;
+    <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">RR</span> <span class="hljs-operator">=</span> <span class="hljs-number">50</span>;
+    <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">CC</span> <span class="hljs-operator">=</span> <span class="hljs-number">4</span>;
+    <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">WW</span> <span class="hljs-operator">=</span> <span class="hljs-number">10</span>;
+    <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">ORDMAX</span> <span class="hljs-operator">=</span> <span class="hljs-number">30</span>;
+    <span class="hljs-type">int</span> P[] = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[M + <span class="hljs-number">1</span>];
+    <span class="hljs-type">int</span> PAGENUMBER;
+    <span class="hljs-type">int</span> PAGEOFFSET;
+    <span class="hljs-type">int</span> ROWOFFSET;
+    <span class="hljs-type">int</span> C;
+    <span class="hljs-type">int</span> J;
+    <span class="hljs-type">int</span> K;
+    <span class="hljs-type">boolean</span> JPRIME;
+    <span class="hljs-type">int</span> ORD;
+    <span class="hljs-type">int</span> SQUARE;
+    <span class="hljs-type">int</span> N;
+    <span class="hljs-type">int</span> MULT[] = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[ORDMAX + <span class="hljs-number">1</span>];
+    J = <span class="hljs-number">1</span>;
+    K = <span class="hljs-number">1</span>;
+    P[<span class="hljs-number">1</span>] = <span class="hljs-number">2</span>;
+    ORD = <span class="hljs-number">2</span>;
+    SQUARE = <span class="hljs-number">9</span>;
+    <span class="hljs-keyword">while</span> (K &lt; M) {
+      <span class="hljs-keyword">do</span> {
+        J = J + <span class="hljs-number">2</span>;
+        <span class="hljs-keyword">if</span> (J == SQUARE) {
+          ORD = ORD + <span class="hljs-number">1</span>;
+          SQUARE = P[ORD] * P[ORD];
+          MULT[ORD - <span class="hljs-number">1</span>] = J;
+        }
+        N = <span class="hljs-number">2</span>;
+        JPRIME = <span class="hljs-literal">true</span>;
+        <span class="hljs-keyword">while</span> (N &lt; ORD &amp;&amp; JPRIME) {
+          <span class="hljs-keyword">while</span> (MULT[N] &lt; J)
+            MULT[N] = MULT[N] + P[N] + P[N];
+          <span class="hljs-keyword">if</span> (MULT[N] == J)
+            JPRIME = <span class="hljs-literal">false</span>;
+          N = N + <span class="hljs-number">1</span>;
+        }
+      } <span class="hljs-keyword">while</span> (!JPRIME);
+      K = K + <span class="hljs-number">1</span>;
+      P[K] = J;
+    } {
+      PAGENUMBER = <span class="hljs-number">1</span>;
+      PAGEOFFSET = <span class="hljs-number">1</span>;
+      <span class="hljs-keyword">while</span> (PAGEOFFSET &lt;= M) {
+        System.out.println(<span class="hljs-string">&quot;The First &quot;</span> + M +
+          <span class="hljs-string">&quot; Prime Numbers --- Page &quot;</span> + PAGENUMBER);
+        System.out.println(<span class="hljs-string">&quot;&quot;</span>);
+        <span class="hljs-keyword">for</span> (ROWOFFSET = PAGEOFFSET; ROWOFFSET &lt; PAGEOFFSET + RR; ROWOFFSET++) {
+          <span class="hljs-keyword">for</span> (C = <span class="hljs-number">0</span>; C &lt; CC; C++)
+            <span class="hljs-keyword">if</span> (ROWOFFSET + C * RR &lt;= M)
+              System.out.format(<span class="hljs-string">&quot;%10d&quot;</span>, P[ROWOFFSET + C * RR]);
+          System.out.println(<span class="hljs-string">&quot;&quot;</span>);
+        }
+        System.out.println(<span class="hljs-string">&quot;\f&quot;</span>);
+        PAGENUMBER = PAGENUMBER + <span class="hljs-number">1</span>;
+        PAGEOFFSET = PAGEOFFSET + RR * CC;
+      }
+    }
+  }
+}
+</code></pre>
+<div dir="rtl">
+این برنامه که به‌صورت یک تابع واحد نوشته شده، بسیار نامنظم است. ساختار آن به شدت تو در تو است، شامل تعداد زیادی متغیر نامناسب می‌باشد و ساختاری به شدت وابسته دارد. حداقل باید این تابع بزرگ به چند تابع کوچک‌تر تقسیم شود.
+<p>فهرست‌های ۱۰-۶ تا ۱۰-۸ نتایج تقسیم کد موجود در فهرست ۱۰-۵ به کلاس‌ها و توابع کوچک‌تر را نشان می‌دهند و همچنین نام‌های معناداری برای آن کلاس‌ها، توابع و متغیرها انتخاب شده است.</p>
+</div>
+<p>Listing 10-6 -- PrimePrinter.java (refactored)</p>
+<pre class="hljs"><code><span class="hljs-keyword">package</span> literatePrimes;
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PrimePrinter</span> {
+  <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> {
+    <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">NUMBER_OF_PRIMES</span> <span class="hljs-operator">=</span> <span class="hljs-number">1000</span>;
+    <span class="hljs-type">int</span>[] primes = PrimeGenerator.generate(NUMBER_OF_PRIMES);
+    <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">ROWS_PER_PAGE</span> <span class="hljs-operator">=</span> <span class="hljs-number">50</span>;
+    <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> <span class="hljs-variable">COLUMNS_PER_PAGE</span> <span class="hljs-operator">=</span> <span class="hljs-number">4</span>;
+    <span class="hljs-type">RowColumnPagePrinter</span> <span class="hljs-variable">tablePrinter</span> <span class="hljs-operator">=</span>
+      <span class="hljs-keyword">new</span> <span class="hljs-title class_">RowColumnPagePrinter</span>(ROWS_PER_PAGE,
+        COLUMNS_PER_PAGE,
+        <span class="hljs-string">&quot;The First &quot;</span> + NUMBER_OF_PRIMES +
+        <span class="hljs-string">&quot; Prime Numbers&quot;</span>);
+    tablePrinter.print(primes);
+  }
+}
+</code></pre>
+<p>Listing 10-7 -- RowColumnPagePrinter.java</p>
+<pre class="hljs"><code><span class="hljs-keyword">package</span> literatePrimes;
+<span class="hljs-keyword">import</span> java.io.PrintStream;
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">RowColumnPagePrinter</span> {
+  <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> rowsPerPage;
+  <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> columnsPerPage;
+  <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> numbersPerPage;
+  <span class="hljs-keyword">private</span> String pageHeader;
+  <span class="hljs-keyword">private</span> PrintStream printStream;
+  <span class="hljs-keyword">public</span> <span class="hljs-title function_">RowColumnPagePrinter</span><span class="hljs-params">(<span class="hljs-type">int</span> rowsPerPage,
+    <span class="hljs-type">int</span> columnsPerPage,
+    String pageHeader)</span> {
+    <span class="hljs-built_in">this</span>.rowsPerPage = rowsPerPage;
+    <span class="hljs-built_in">this</span>.columnsPerPage = columnsPerPage;
+    <span class="hljs-built_in">this</span>.pageHeader = pageHeader;
+    numbersPerPage = rowsPerPage * columnsPerPage;
+    printStream = System.out;
+  }
+  <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">print</span><span class="hljs-params">(<span class="hljs-type">int</span> data[])</span> {
+    <span class="hljs-type">int</span> <span class="hljs-variable">pageNumber</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">firstIndexOnPage</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; firstIndexOnPage &lt; data.length; firstIndexOnPage += numbersPerPage) {
+      <span class="hljs-type">int</span> <span class="hljs-variable">lastIndexOnPage</span> <span class="hljs-operator">=</span>
+        Math.min(firstIndexOnPage + numbersPerPage - <span class="hljs-number">1</span>,
+          data.length - <span class="hljs-number">1</span>);
+      printPageHeader(pageHeader, pageNumber);
+      printPage(firstIndexOnPage, lastIndexOnPage, data);
+      printStream.println(<span class="hljs-string">&quot;\f&quot;</span>);
+      pageNumber++;
+    }
+  }
+  <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">printPage</span><span class="hljs-params">(<span class="hljs-type">int</span> firstIndexOnPage,
+    <span class="hljs-type">int</span> lastIndexOnPage,
+    <span class="hljs-type">int</span>[] data)</span> {
+    <span class="hljs-type">int</span> <span class="hljs-variable">firstIndexOfLastRowOnPage</span> <span class="hljs-operator">=</span>
+      firstIndexOnPage + rowsPerPage - <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">firstIndexInRow</span> <span class="hljs-operator">=</span> firstIndexOnPage; firstIndexInRow &lt;= firstIndexOfLastRowOnPage; firstIndexInRow++) {
+      printRow(firstIndexInRow, lastIndexOnPage, data);
+      printStream.println(<span class="hljs-string">&quot;&quot;</span>);
+    }
+  }
+  <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">printRow</span><span class="hljs-params">(<span class="hljs-type">int</span> firstIndexInRow,
+    <span class="hljs-type">int</span> lastIndexOnPage,
+    <span class="hljs-type">int</span>[] data)</span> {
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">column</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; column &lt; columnsPerPage; column++) {
+      <span class="hljs-type">int</span> <span class="hljs-variable">index</span> <span class="hljs-operator">=</span> firstIndexInRow + column * rowsPerPage;
+      <span class="hljs-keyword">if</span> (index &lt;= lastIndexOnPage)
+        printStream.format(<span class="hljs-string">&quot;%10d&quot;</span>, data[index]);
+    }
+  }
+  <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">printPageHeader</span><span class="hljs-params">(String pageHeader,
+    <span class="hljs-type">int</span> pageNumber)</span> {
+    printStream.println(pageHeader + <span class="hljs-string">&quot; --- Page &quot;</span> + pageNumber);
+    printStream.println(<span class="hljs-string">&quot;&quot;</span>);
+  }
+  <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setOutput</span><span class="hljs-params">(PrintStream printStream)</span> {
+    <span class="hljs-built_in">this</span>.printStream = printStream;
+  }
+}
+</code></pre>
+<p>Listing 10-8 -- PrimeGenerator.java</p>
+<pre class="hljs"><code><span class="hljs-keyword">package</span> literatePrimes;
+<span class="hljs-keyword">import</span> java.util.ArrayList;
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PrimeGenerator</span> {
+  <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">int</span>[] primes;
+  <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> ArrayList &lt; Integer &gt; multiplesOfPrimeFactors;
+  <span class="hljs-keyword">protected</span> <span class="hljs-keyword">static</span> <span class="hljs-type">int</span>[] generate(<span class="hljs-type">int</span> n) {
+    primes = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[n];
+    multiplesOfPrimeFactors = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span> &lt; Integer &gt; ();
+    set2AsFirstPrime();
+    checkOddNumbersForSubsequentPrimes();
+    <span class="hljs-keyword">return</span> primes;
+  }
+  <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">set2AsFirstPrime</span><span class="hljs-params">()</span> {
+    primes[<span class="hljs-number">0</span>] = <span class="hljs-number">2</span>;
+    multiplesOfPrimeFactors.add(<span class="hljs-number">2</span>);
+  }
+  <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">checkOddNumbersForSubsequentPrimes</span><span class="hljs-params">()</span> {
+    <span class="hljs-type">int</span> <span class="hljs-variable">primeIndex</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">candidate</span> <span class="hljs-operator">=</span> <span class="hljs-number">3</span>; primeIndex &lt; primes.length; candidate += <span class="hljs-number">2</span>) {
+      <span class="hljs-keyword">if</span> (isPrime(candidate))
+        primes[primeIndex++] = candidate;
+    }
+  }
+  <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">isPrime</span><span class="hljs-params">(<span class="hljs-type">int</span> candidate)</span> {
+    <span class="hljs-keyword">if</span> (isLeastRelevantMultipleOfNextLargerPrimeFactor(candidate)) {
+      multiplesOfPrimeFactors.add(candidate);
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+    <span class="hljs-keyword">return</span> isNotMultipleOfAnyPreviousPrimeFactor(candidate);
+  }
+  <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">boolean</span>
+  <span class="hljs-title function_">isLeastRelevantMultipleOfNextLargerPrimeFactor</span><span class="hljs-params">(<span class="hljs-type">int</span> candidate)</span> {
+    <span class="hljs-type">int</span> <span class="hljs-variable">nextLargerPrimeFactor</span> <span class="hljs-operator">=</span> primes[multiplesOfPrimeFactors.size()];
+    <span class="hljs-type">int</span> <span class="hljs-variable">leastRelevantMultiple</span> <span class="hljs-operator">=</span> nextLargerPrimeFactor * nextLargerPrimeFactor;
+    <span class="hljs-keyword">return</span> candidate == leastRelevantMultiple;
+  }
+  <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">boolean</span>
+  <span class="hljs-title function_">isNotMultipleOfAnyPreviousPrimeFactor</span><span class="hljs-params">(<span class="hljs-type">int</span> candidate)</span> {
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">n</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>; n &lt; multiplesOfPrimeFactors.size(); n++) {
+      <span class="hljs-keyword">if</span> (isMultipleOfNthPrimeFactor(candidate, n))
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+  }
+  <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">boolean</span>
+  <span class="hljs-title function_">isMultipleOfNthPrimeFactor</span><span class="hljs-params">(<span class="hljs-type">int</span> candidate, <span class="hljs-type">int</span> n)</span> {
+    <span class="hljs-keyword">return</span>
+    candidate == smallestOddNthMultipleNotLessThanCandidate(candidate, n);
+  }
+  <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">int</span>
+  <span class="hljs-title function_">smallestOddNthMultipleNotLessThanCandidate</span><span class="hljs-params">(<span class="hljs-type">int</span> candidate, <span class="hljs-type">int</span> n)</span> {
+    <span class="hljs-type">int</span> <span class="hljs-variable">multiple</span> <span class="hljs-operator">=</span> multiplesOfPrimeFactors.get(n);
+    <span class="hljs-keyword">while</span> (multiple &lt; candidate)
+      multiple += <span class="hljs-number">2</span> * primes[n];
+    multiplesOfPrimeFactors.set(n, multiple);
+    <span class="hljs-keyword">return</span> multiple;
+  }
+}
+</code></pre>
+<div dir="rtl">
+اولین چیزی که ممکن است متوجه شوید این است که برنامه به طور قابل توجهی طولانی‌تر شده است. این برنامه از کمی بیش از یک صفحه به نزدیک به سه صفحه طول کشیده است. دلایل متعددی برای این رشد وجود دارد. اول، برنامه بازنویسی‌شده از نام‌های متغیر طولانی‌تر و توصیفی‌تری استفاده می‌کند. دوم، برنامه بازنویسی‌شده از اعلان‌های تابع و کلاس به‌عنوان راهی برای افزودن توضیحات به کد استفاده می‌کند. سوم، از فضا و تکنیک‌های فرمت‌بندی برای حفظ خوانایی برنامه استفاده شده است.
+<p>توجه کنید که برنامه به سه مسئولیت اصلی تقسیم شده است. برنامه اصلی در کلاس PrimePrinter به‌طور مستقل قرار دارد. مسئولیت این کلاس مدیریت محیط اجرای برنامه است. این کلاس در صورت تغییر روش فراخوانی تغییر خواهد کرد. به‌عنوان مثال، اگر این برنامه به یک سرویس SOAP تبدیل شود، این کلاس است که تحت تأثیر قرار می‌گیرد.</p>
+<p>کلاس RowColumnPagePrinter همه چیز را در مورد نحوه فرمت کردن یک لیست از اعداد به صفحات با تعداد مشخصی از ردیف‌ها و ستون‌ها می‌داند. اگر نیاز به تغییر فرمت خروجی باشد، این کلاس است که تحت تأثیر قرار می‌گیرد.</p>
+<p>کلاس PrimeGenerator می‌داند که چگونه یک لیست از اعداد اول تولید کند. توجه کنید که این کلاس برای نمونه‌سازی به‌عنوان یک شیء طراحی نشده است. این کلاس تنها یک فضای مفید است که می‌توان در آن متغیرها را اعلام و پنهان کرد. اگر الگوریتم محاسبه اعداد اول تغییر کند، این کلاس تغییر خواهد کرد.</p>
+<p>این یک بازنویسی نبود! ما از ابتدا شروع نکردیم و برنامه را دوباره نوشتیم. در واقع، اگر به‌دقت به دو برنامه مختلف نگاه کنید، متوجه می‌شوید که آنها از همان الگوریتم و مکانیسم‌ها برای انجام کار خود استفاده می‌کنند.</p>
+<p>این تغییر با نوشتن یک مجموعه آزمایشی که رفتار دقیق برنامه اول را تأیید می‌کرد، انجام شد. سپس تغییرات کوچک و متعددی یکی پس از دیگری انجام شد. پس از هر تغییر، برنامه اجرا شد تا اطمینان حاصل شود که رفتار آن تغییر نکرده است. یک قدم کوچک پس از دیگری، برنامه اول تمیز و به برنامه دوم تبدیل شد.</p>
+<h2>سازماندهی برای تغییر</h2>
+<p>برای اکثر سیستم‌ها، تغییر مداوم است. هر تغییری ما را در معرض این خطر قرار می‌دهد که بخش‌های دیگر سیستم دیگر به درستی کار نکنند. در یک سیستم تمیز، ما کلاس‌های خود را به‌گونه‌ای سازمان‌دهی می‌کنیم که خطر تغییر را کاهش دهیم.</p>
+<p>کلاس Sql در فهرست 10-9 برای تولید رشته‌های SQL به‌طور صحیح با توجه به متادیتای مناسب استفاده می‌شود. این کلاس در حال توسعه است و هنوز از قابلیت‌هایی مانند عبارات به‌روزرسانی SQL پشتیبانی نمی‌کند. هنگامی که زمان آن فرا برسد که کلاس Sql از یک عبارت به‌روزرسانی پشتیبانی کند، باید این کلاس را &quot;باز کنیم&quot; تا تغییرات لازم را اعمال کنیم. مشکل با باز کردن یک کلاس این است که خطر را افزایش می‌دهد. هرگونه تغییر در کلاس می‌تواند به شکستن سایر کدهای موجود در آن کلاس منجر شود. بنابراین، باید آن را به‌طور کامل دوباره آزمایش کرد.</p>
+</div>
+<p>Listing 10-9 -- A class that must be opened for change</p>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Sql</span> {
+  <span class="hljs-keyword">public</span> <span class="hljs-title function_">Sql</span><span class="hljs-params">(String table, Column[] columns)</span>
+  <span class="hljs-keyword">public</span> String <span class="hljs-title function_">create</span><span class="hljs-params">()</span>
+  <span class="hljs-keyword">public</span> String <span class="hljs-title function_">insert</span><span class="hljs-params">(Object[] fields)</span>
+  <span class="hljs-keyword">public</span> String <span class="hljs-title function_">selectAll</span><span class="hljs-params">()</span>
+  <span class="hljs-keyword">public</span> String <span class="hljs-title function_">findByKey</span><span class="hljs-params">(String keyColumn, String keyValue)</span>
+  <span class="hljs-keyword">public</span> String <span class="hljs-title function_">select</span><span class="hljs-params">(Column column, String pattern)</span>
+  <span class="hljs-keyword">public</span> String <span class="hljs-title function_">select</span><span class="hljs-params">(Criteria criteria)</span>
+  <span class="hljs-keyword">public</span> String <span class="hljs-title function_">preparedInsert</span><span class="hljs-params">()</span>
+  <span class="hljs-keyword">private</span> String <span class="hljs-title function_">columnList</span><span class="hljs-params">(Column[] columns)</span>
+  <span class="hljs-keyword">private</span> String <span class="hljs-title function_">valuesList</span><span class="hljs-params">(Object[] fields, <span class="hljs-keyword">final</span> Column[] columns)</span>
+  <span class="hljs-keyword">private</span> String <span class="hljs-title function_">selectWithCriteria</span><span class="hljs-params">(String criteria)</span>
+  <span class="hljs-keyword">private</span> String <span class="hljs-title function_">placeholderList</span><span class="hljs-params">(Column[] columns)</span>
+}
+</code></pre>
+<div dir="rtl">
+کلاس Sql باید تغییر کند زمانی که نوع جدیدی از عبارت را اضافه می‌کنیم. همچنین باید تغییر کند زمانی که جزئیات یک نوع عبارت خاص را تغییر می‌دهیم به عنوان مثال، اگر بخواهیم عملکرد select را برای پشتیبانی از subselect‌ها اصلاح کنیم. این دو دلیل برای تغییر به این معناست که کلاس Sql اصل مسئولیت واحد (SRP) را نقض می‌کند.
+<p>می‌توانیم این نقض SRP را از یک منظر سازمانی ساده شناسایی کنیم. طرح متدهای کلاس Sql نشان می‌دهد که متدهای خصوصی، مانند selectWithCriteria، به نظر می‌رسد که تنها به عبارات select مربوط باشند. رفتار متدهای خصوصی که تنها به یک زیرمجموعه کوچک از کلاس مربوط می‌شوند، می‌تواند به‌عنوان یک قاعده مفید برای شناسایی مناطق بالقوه برای بهبود عمل کند. با این حال، محرک اصلی برای اقدام باید خود تغییر سیستم باشد. اگر کلاس Sql به‌طور منطقی کامل در نظر گرفته شود، نیازی به جداسازی مسئولیت‌ها نداریم. اگر برای آینده قابل پیش‌بینی به عملکرد update نیاز نداشته باشیم، باید کلاس Sql را به حال خود بگذاریم. اما به محض اینکه خود را در حال باز کردن یک کلاس یافتیم، باید در نظر داشته باشیم که طراحی‌مان را اصلاح کنیم.</p>
+<p>چه می‌شود اگر یک راه‌حل مشابه آنچه در فهرست 10-10 آمده است، در نظر بگیریم؟ هر متد عمومی که در کلاس Sql قبلی از فهرست 10-9 تعریف شده بود، به نسخه‌های فرعی خود از کلاس Sql جدا شده است. توجه کنید که متدهای خصوصی، مانند valuesList، مستقیماً به جایی که نیاز دارند منتقل می‌شوند. رفتار خصوصی مشترک به دو کلاس کاربردی، یعنی Where و ColumnList، جداسازی شده است.</p>
+</div>
+<p>Listing 10-10 -- A set of closed classes</p>
+<pre class="hljs"><code><span class="hljs-keyword">abstract</span> <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Sql</span> {
+  <span class="hljs-keyword">public</span> <span class="hljs-title function_">Sql</span><span class="hljs-params">(String table, Column[] columns)</span>
+  <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">public</span> String <span class="hljs-title function_">generate</span><span class="hljs-params">()</span>;
+}
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CreateSql</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Sql</span> {
+  <span class="hljs-keyword">public</span> <span class="hljs-title function_">CreateSql</span><span class="hljs-params">(String table, Column[] columns)</span>
+  <span class="hljs-meta">@Override</span> <span class="hljs-keyword">public</span> String <span class="hljs-title function_">generate</span><span class="hljs-params">()</span>
+}
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SelectSql</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Sql</span> {
+  <span class="hljs-keyword">public</span> <span class="hljs-title function_">SelectSql</span><span class="hljs-params">(String table, Column[] columns)</span>
+  <span class="hljs-meta">@Override</span> <span class="hljs-keyword">public</span> String <span class="hljs-title function_">generate</span><span class="hljs-params">()</span>
+}
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">InsertSql</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Sql</span> {
+  <span class="hljs-keyword">public</span> <span class="hljs-title function_">InsertSql</span><span class="hljs-params">(String table, Column[] columns, Object[] fields)</span>
+  <span class="hljs-meta">@Override</span> <span class="hljs-keyword">public</span> String <span class="hljs-title function_">generate</span><span class="hljs-params">()</span>
+  <span class="hljs-keyword">private</span> String <span class="hljs-title function_">valuesList</span><span class="hljs-params">(Object[] fields, <span class="hljs-keyword">final</span> Column[] columns)</span>
+}
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SelectWithCriteriaSql</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Sql</span> {
+  <span class="hljs-keyword">public</span> <span class="hljs-title function_">SelectWithCriteriaSql</span><span class="hljs-params">(
+    String table, Column[] columns, Criteria criteria)</span>
+  <span class="hljs-meta">@Override</span> <span class="hljs-keyword">public</span> String <span class="hljs-title function_">generate</span><span class="hljs-params">()</span>
+}
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SelectWithMatchSql</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Sql</span> {
+  <span class="hljs-keyword">public</span> <span class="hljs-title function_">SelectWithMatchSql</span><span class="hljs-params">(
+    String table, Column[] columns, Column column, String pattern)</span>
+  <span class="hljs-meta">@Override</span> <span class="hljs-keyword">public</span> String <span class="hljs-title function_">generate</span><span class="hljs-params">()</span>
+}
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">FindByKeySql</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Sql</span>
+<span class="hljs-keyword">public</span> <span class="hljs-title function_">FindByKeySql</span><span class="hljs-params">(
+  String table, Column[] columns, String keyColumn, String keyValue)</span>
+<span class="hljs-meta">@Override</span> <span class="hljs-keyword">public</span> String <span class="hljs-title function_">generate</span><span class="hljs-params">()</span>
+}
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PreparedInsertSql</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Sql</span> {
+  <span class="hljs-keyword">public</span> <span class="hljs-title function_">PreparedInsertSql</span><span class="hljs-params">(String table, Column[] columns)</span>
+  <span class="hljs-meta">@Override</span> <span class="hljs-keyword">public</span> String <span class="hljs-title function_">generate</span><span class="hljs-params">()</span> {
+    <span class="hljs-keyword">private</span> String <span class="hljs-title function_">placeholderList</span><span class="hljs-params">(Column[] columns)</span>
+  }
+  <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Where</span> {
+    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Where</span><span class="hljs-params">(String criteria)</span>
+    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">generate</span><span class="hljs-params">()</span>
+  }
+  <span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ColumnList</span> {
+    <span class="hljs-keyword">public</span> <span class="hljs-title function_">ColumnList</span><span class="hljs-params">(Column[] columns)</span>
+    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">generate</span><span class="hljs-params">()</span>
+  }
+</code></pre>
+<div dir="rtl">
+کد در هر کلاس به شدت ساده می‌شود. زمان لازم برای درک هر کلاس به حداقل می‌رسد و خطر اینکه یک تابع دیگری را خراب کند، به طرز چشمگیری کاهش می‌یابد. از نظر تست، اثبات تمام بخش‌های منطقی این راه‌حل آسان‌تر می‌شود، زیرا کلاس‌ها به طور مستقل از یکدیگر هستند.
+<p>به‌همین ترتیب، زمانی که زمان افزودن عبارات به‌روزرسانی فرا برسد، هیچ‌یک از کلاس‌های موجود نیازی به تغییر ندارند! ما منطق ساخت عبارات به‌روزرسانی را در یک زیرکلاس جدید از Sql به نام UpdateSql کدنویسی می‌کنیم. هیچ کد دیگری در سیستم به خاطر این تغییر خراب نخواهد شد.</p>
+<p>منطق بازسازی‌شده Sql ما بهترین وضعیت را نمایندگی می‌کند. این منطق از اصل مسئولیت واحد (SRP) پشتیبانی می‌کند. همچنین از یک اصل کلیدی دیگر در طراحی کلاس‌های شیءگرا به نام اصل باز-بسته (Open-Closed Principle یا OCP) نیز پشتیبانی می‌کند: کلاس‌ها باید برای گسترش باز باشند اما برای تغییر بسته. کلاس Sql بازسازی‌شده ما به‌گونه‌ای طراحی شده است که اجازه اضافه کردن عملکرد جدید از طریق زیرکلاس‌ها را می‌دهد، اما می‌توانیم این تغییر را در حالی انجام دهیم که سایر کلاس‌ها بدون تغییر باقی بمانند. به سادگی کلاس UpdateSql را در محل خود قرار می‌دهیم.</p>
+<p>ما می‌خواهیم سیستم‌های خود را به گونه‌ای ساختاربندی کنیم که در هنگام به‌روزرسانی با ویژگی‌های جدید یا تغییر یافته، به کمترین میزان ممکن دست بزنیم. در یک سیستم ایده‌آل، ویژگی‌های جدید را با گسترش سیستم ادغام می‌کنیم، نه با تغییر کدهای موجود.</p>
+<h2>جداسازی از تغییر</h2>
+<p>نیازها تغییر می‌کنند، بنابراین کد نیز تغییر خواهد کرد. ما در درس OO 101 یاد گرفتیم که کلاس‌های عینی وجود دارند که جزئیات پیاده‌سازی (کد) را شامل می‌شوند و کلاس‌های انتزاعی که تنها مفاهیم را نمایندگی می‌کنند. یک کلاس مشتری که به جزئیات عینی وابسته است، در خطر است زمانی که آن جزئیات تغییر می‌کنند. ما می‌توانیم واسط‌ها و کلاس‌های انتزاعی را معرفی کنیم تا به جداسازی تأثیر آن جزئیات کمک کنیم.</p>
+<p>وابستگی به جزئیات عینی چالش‌هایی برای تست سیستم ما ایجاد می‌کند. اگر ما یک کلاس Portfolio بسازیم و آن به یک API خارجی به نام TokyoStockExchange وابسته باشد تا ارزش Portfolio را تعیین کند، موارد آزمایشی ما تحت تأثیر نوسانات چنین جستجویی قرار می‌گیرد. نوشتن یک تست دشوار است زمانی که هر پنج دقیقه یک پاسخ متفاوت دریافت می‌کنیم!</p>
+<p>به‌جای طراحی Portfolio به گونه‌ای که به‌طور مستقیم به TokyoStockExchange وابسته باشد، یک واسط به نام StockExchange ایجاد می‌کنیم که یک متد واحد را اعلام می‌کند:</p>
+</div>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">StockExchange</span> {
+ Money <span class="hljs-title function_">currentPrice</span><span class="hljs-params">(String symbol)</span>;
+}
+</code></pre>
+<div dir="rtl">
+ما TokyoStockExchange را طوری طراحی می‌کنیم که این واسط را پیاده‌سازی کند. همچنین اطمینان حاصل می‌کنیم که سازنده کلاس Portfolio یک مرجع از StockExchange را به‌عنوان آرگومان دریافت می‌کند:
+</div>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> Portfolio {
+ <span class="hljs-keyword">private</span> StockExchange exchange;
+ <span class="hljs-keyword">public</span> <span class="hljs-title function_">Portfolio</span><span class="hljs-params">(StockExchange exchange)</span> {
+ <span class="hljs-built_in">this</span>.exchange = exchange;
+ }
+ <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<div dir="rtl">
+اکنون تست ما می‌تواند یک پیاده‌سازی قابل تست از واسط StockExchange ایجاد کند که رفتار TokyoStockExchange را شبیه‌سازی می‌کند. این پیاده‌سازی تست، مقدار فعلی را برای هر نماد مورد استفاده در تست ثابت می‌کند. اگر تست ما خرید پنج سهم از مایکروسافت را برای پرتفوی ما نشان دهد، پیاده‌سازی تست را طوری کدنویسی می‌کنیم که همیشه 100 دلار به‌ازای هر سهم مایکروسافت برگرداند. پیاده‌سازی تست ما از واسط StockExchange به یک جستجوی ساده در جدول کاهش می‌یابد. سپس می‌توانیم تستی بنویسیم که انتظار دارد ارزش کلی Portfolio ما 500 دلار باشد.
+</div>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PortfolioTest</span> {
+  <span class="hljs-keyword">private</span> FixedStockExchangeStub exchange;
+  <span class="hljs-keyword">private</span> Portfolio portfolio;
+  <span class="hljs-meta">@Before</span>
+  <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setUp</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception {
+    exchange = <span class="hljs-keyword">new</span> <span class="hljs-title class_">FixedStockExchangeStub</span>();
+    exchange.fix(<span class="hljs-string">&quot;MSFT&quot;</span>, <span class="hljs-number">100</span>);
+    portfolio = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Portfolio</span>(exchange);
+  }
+  <span class="hljs-meta">@Test</span>
+  <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">GivenFiveMSFTTotalShouldBe500</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception {
+    portfolio.add(<span class="hljs-number">5</span>, <span class="hljs-string">&quot;MSFT&quot;</span>);
+    Assert.assertEquals(<span class="hljs-number">500</span>, portfolio.value());
+  }
+}
+</code></pre>
+<div dir="rtl">
+اگر یک سیستم به اندازه کافی از هم جدا باشد که به این صورت تست شود، همچنین انعطاف‌پذیری بیشتری خواهد داشت و امکان استفاده مجدد بیشتری را فراهم می‌آورد. عدم وابستگی به این معناست که عناصر سیستم ما بهتر از یکدیگر و از تغییرات جدا هستند. این جداسازی فهم هر عنصر سیستم را آسان‌تر می‌کند.
+<p>با حداقل کردن وابستگی به این شکل، کلاس‌های ما به یک اصل طراحی کلاس دیگر به نام اصل وارونگی وابستگی (Dependency Inversion Principle یا DIP) پایبند می‌شوند. به‌طور اساسی، DIP می‌گوید که کلاس‌های ما باید به انتزاعات وابسته باشند، نه به جزئیات عینی.</p>
+<p>به‌جای اینکه به جزئیات پیاده‌سازی کلاس TokyoStockExchange وابسته باشد، اکنون کلاس Portfolio به واسط StockExchange وابسته است. واسط StockExchange مفهوم انتزاعی درخواست قیمت فعلی یک نماد را نمایندگی می‌کند. این انتزاع تمام جزئیات خاص به‌دست آوردن چنین قیمتی، از جمله منبع به‌دست آوردن آن قیمت را جدا می‌کند.</p>
+</div>
+
+</main>
+
+
+ 
+
+  <!-- فوتر مشترک -->
+  <footer class="footer">
+    <div class="container">
+      <p>
+        <img src="/icone/copyright.svg" alt="کپی‌رایت" width="14" height="14"
+             style="vertical-align:middle;margin-inline:4px">
+        <span id="y"></span> Gitab — برای توسعه‌دهندگان
+      </p>
+    </div>
+  </footer>
+
+  <!-- سال + اسکریپت تم -->
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    (() => {
+      const root = document.documentElement;
+      const btn = document.getElementById('themeToggle');
+      const KEY = 'gitab-theme';
+      const media = window.matchMedia('(prefers-color-scheme: dark)');
+      const getEffective = s => s === 'auto' ? (media.matches ? 'dark' : 'light') : s;
+      function updateTheme(s) {
+        root.setAttribute('data-theme', s);
+        const mode = getEffective(s);
+        root.dataset.colorMode = mode;
+        btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
+      }
+      const saved = localStorage.getItem(KEY) || 'auto';
+      updateTheme(saved);
+      btn.addEventListener('click', () => {
+        const curr = localStorage.getItem(KEY) || 'auto';
+        const next = curr === 'auto' ? 'dark' : curr === 'dark' ? 'light' : 'auto';
+        localStorage.setItem(KEY, next);
+        updateTheme(next);
+      });
+      media.addEventListener('change', () => {
+        if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
+      });
+      window.addEventListener('DOMContentLoaded', () => updateTheme(saved));
+    })();
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
+<script>
+  document.body.dataset.page = window.location.pathname;
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ساختار داخلی JUnit</title>
+  <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
+  <link rel="stylesheet" href="/styles/main.css">
+<link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<style>
+@font-face {
+  font-family: 'Vazir';
+  src: url('/fonts/Vazir-FD-WOL.ttf') format('truetype');
+  font-display: swap;
+}
+body {
+  font-family: 'Vazir', sans-serif;
+}
+</style>
+
+</head>
+<body>
+  <!-- هدر مشترک -->
+  <header class="header">
+    <div class="container nav-wrap">
+      <a class="brand" href="/">
+        <img src="/icone/logo.svg" alt="Gitab" width="28" height="28">
+        <span>Gitab</span>
+      </a>
+
+      <nav class="nav">
+        <a href="/">خانه</a>
+        <a href="/books/list-books">کتاب‌ها</a>
+        <a href="#">مترجم ها</a>
+        <a href="#">همکاری</a>
+        <a href="#">درباره‌ما</a>
+      </nav>
+
+     <div class="nav-actions">
+  <button id="themeToggle" class="icon-btn theme-btn" aria-label="تغییر حالت">
+    <img class="icon-sun" src="/icone/sun.svg" alt="روشن">
+    <img class="icon-moon" src="/icone/moon.svg" alt="تاریک">
+  </button>
+
+  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
+    <img src="/icone/github.svg" alt="GitHub">
+  </a>
+</div>
+
+  </header>
+
+
+<main class="site-main book-page ">
+  <h1>ساختار داخلی JUnit</h1>
+<p><img src="../../../assets/image/15/img-15.1.png" alt="image"></p>
+<div dir="rtl">
+JUnit یکی از مشهورترین فریم‌ورک‌های Java است. از نظر فریم‌ورک‌ها، این ابزار در طراحی ساده، در تعریف دقیق، و در پیاده‌سازی شیک است.
+اما کد آن چگونه به نظر می‌رسد؟ در این فصل، ما نمونه‌ای برگرفته از فریم‌ورک JUnit را نقد خواهیم کرد.
+<h2>فریم‌ورک JUnit</h2>
+<p>JUnit نویسندگان زیادی داشته است، اما آغاز آن با Kent Beck و Erich Gamma در یک پرواز به آتلانتا بوده است. Kent می‌خواست Java یاد بگیرد و Erich می‌خواست دربارهٔ فریم‌ورک تست‌نویسی Smalltalk متعلق به Kent بیشتر بداند.<br>
+«چه چیزی برای دو گیک در فضایی تنگ طبیعی‌تر است از این‌که لپ‌تاپ‌هایشان را بیرون بیاورند و شروع به کدنویسی کنند؟»<br>
+پس از سه ساعت کار در ارتفاع بالا، آن‌ها توانستند اصول پایهٔ JUnit را بنویسند.</p>
+<p>ماژولی که به آن خواهیم پرداخت، بخش هوشمندانه‌ای از کد است که به شناسایی خطاهای مقایسهٔ رشته‌ها کمک می‌کند.<br>
+این ماژول <code>ComparisonCompactor</code> نام دارد. وقتی دو رشته متفاوت به آن داده شود، مانند <code>ABCDE</code> و <code>ABXDE،</code> تفاوت را با تولید رشته‌ای مانند <code>&lt;...B[X]D...&gt;</code> نمایان می‌سازد.</p>
+<p>می‌توانم آن را بیشتر توضیح دهم، اما تست‌کیس‌ها این کار را بهتر انجام می‌دهند.<br>
+پس به لیستینگ 15-1 نگاهی بیندازید و نیازمندی‌های این ماژول را به‌خوبی درک خواهید کرد.<br>
+در حین بررسی، ساختار تست‌ها را نیز نقد کنید. آیا می‌توان آن‌ها را ساده‌تر یا واضح‌تر نوشت؟</p>
+</div>
+<p><strong>Listing 15-1 -- ComparisonCompactorTest.java</strong></p>
+<pre class="hljs"><code><span class="hljs-keyword">package</span> junit.tests.framework;
+<span class="hljs-keyword">import</span> junit.framework.ComparisonCompactor;
+<span class="hljs-keyword">import</span> junit.framework.TestCase;
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ComparisonCompactorTest</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">TestCase</span> {
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testMessage</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">failure</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ComparisonCompactor</span>(<span class="hljs-number">0</span>, <span class="hljs-string">&quot;b&quot;</span>, <span class="hljs-string">&quot;c&quot;</span>).compact(<span class="hljs-string">&quot;a&quot;</span>);
+        assertTrue(<span class="hljs-string">&quot;a expected:&lt;[b]&gt; but was:&lt;[c]&gt;&quot;</span>.equals(failure));
+    }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testStartSame</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">failure</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ComparisonCompactor</span>(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;ba&quot;</span>, <span class="hljs-string">&quot;bc&quot;</span>).compact(<span class="hljs-literal">null</span>);
+        assertEquals(<span class="hljs-string">&quot;expected:&lt;b[a]&gt; but was:&lt;b[c]&gt;&quot;</span>, failure);
+    }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testEndSame</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">failure</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ComparisonCompactor</span>(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;ab&quot;</span>, <span class="hljs-string">&quot;cb&quot;</span>).compact(<span class="hljs-literal">null</span>);
+        assertEquals(<span class="hljs-string">&quot;expected:&lt;[a]b&gt; but was:&lt;[c]b&gt;&quot;</span>, failure);
+    }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testSame</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">failure</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ComparisonCompactor</span>(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;ab&quot;</span>, <span class="hljs-string">&quot;ab&quot;</span>).compact(<span class="hljs-literal">null</span>);
+        assertEquals(<span class="hljs-string">&quot;expected:&lt;ab&gt; but was:&lt;ab&gt;&quot;</span>, failure);
+    }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testNoContextStartAndEndSame</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">failure</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ComparisonCompactor</span>(<span class="hljs-number">0</span>, <span class="hljs-string">&quot;abc&quot;</span>, <span class="hljs-string">&quot;adc&quot;</span>).compact(<span class="hljs-literal">null</span>);
+        assertEquals(<span class="hljs-string">&quot;expected:&lt;...[b]...&gt; but was:&lt;...[d]...&gt;&quot;</span>, failure);
+    }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testStartAndEndContext</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">failure</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ComparisonCompactor</span>(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;abc&quot;</span>, <span class="hljs-string">&quot;adc&quot;</span>).compact(<span class="hljs-literal">null</span>);
+        assertEquals(<span class="hljs-string">&quot;expected:&lt;a[b]c&gt; but was:&lt;a[d]c&gt;&quot;</span>, failure);
+    }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testStartAndEndContextWithEllipses</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">failure</span> <span class="hljs-operator">=</span>
+            <span class="hljs-keyword">new</span> <span class="hljs-title class_">ComparisonCompactor</span>(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;abcde&quot;</span>, <span class="hljs-string">&quot;abfde&quot;</span>).compact(<span class="hljs-literal">null</span>);
+        assertEquals(<span class="hljs-string">&quot;expected:&lt;...b[c]d...&gt; but was:&lt;...b[f]d...&gt;&quot;</span>, failure);
+    }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testComparisonErrorStartSameComplete</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">failure</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ComparisonCompactor</span>(<span class="hljs-number">2</span>, <span class="hljs-string">&quot;ab&quot;</span>, <span class="hljs-string">&quot;abc&quot;</span>).compact(<span class="hljs-literal">null</span>);
+        assertEquals(<span class="hljs-string">&quot;expected:&lt;ab[]&gt; but was:&lt;ab[c]&gt;&quot;</span>, failure);
+    }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testComparisonErrorEndSameComplete</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">failure</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ComparisonCompactor</span>(<span class="hljs-number">0</span>, <span class="hljs-string">&quot;bc&quot;</span>, <span class="hljs-string">&quot;abc&quot;</span>).compact(<span class="hljs-literal">null</span>);
+        assertEquals(<span class="hljs-string">&quot;expected:&lt;[]...&gt; but was:&lt;[a]...&gt;&quot;</span>, failure);
+    }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testComparisonErrorEndSameCompleteContext</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">failure</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ComparisonCompactor</span>(<span class="hljs-number">2</span>, <span class="hljs-string">&quot;bc&quot;</span>, <span class="hljs-string">&quot;abc&quot;</span>).compact(<span class="hljs-literal">null</span>);
+        assertEquals(<span class="hljs-string">&quot;expected:&lt;[]bc&gt; but was:&lt;[a]bc&gt;&quot;</span>, failure);
+    }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testComparisonErrorOverlapingMatches</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">failure</span> <span class="hljs-operator">=</span>
+            <span class="hljs-keyword">new</span> <span class="hljs-title class_">ComparisonCompactor</span>(<span class="hljs-number">0</span>, <span class="hljs-string">&quot;abc&quot;</span>, <span class="hljs-string">&quot;abbc&quot;</span>).compact(<span class="hljs-literal">null</span>);
+        assertEquals(<span class="hljs-string">&quot;expected:&lt;...[]...&gt; but was:&lt;...[b]...&gt;&quot;</span>, failure);
+    }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testComparisonErrorOverlapingMatchesContext</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">failure</span> <span class="hljs-operator">=</span>
+            <span class="hljs-keyword">new</span> <span class="hljs-title class_">ComparisonCompactor</span>(<span class="hljs-number">2</span>, <span class="hljs-string">&quot;abc&quot;</span>, <span class="hljs-string">&quot;abbc&quot;</span>).compact(<span class="hljs-literal">null</span>);
+        assertEquals(<span class="hljs-string">&quot;expected:&lt;ab[]c&gt; but was:&lt;ab[b]c&gt;&quot;</span>, failure);
+    }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testComparisonErrorOverlapingMatches2</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">failure</span> <span class="hljs-operator">=</span>
+            <span class="hljs-keyword">new</span> <span class="hljs-title class_">ComparisonCompactor</span>(<span class="hljs-number">0</span>, <span class="hljs-string">&quot;abcdde&quot;</span>, <span class="hljs-string">&quot;abcde&quot;</span>).compact(<span class="hljs-literal">null</span>);
+        assertEquals(<span class="hljs-string">&quot;expected:&lt;...[d]...&gt; but was:&lt;...[]...&gt;&quot;</span>, failure);
+    }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testComparisonErrorOverlapingMatches2Context</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">failure</span> <span class="hljs-operator">=</span>
+            <span class="hljs-keyword">new</span> <span class="hljs-title class_">ComparisonCompactor</span>(<span class="hljs-number">2</span>, <span class="hljs-string">&quot;abcdde&quot;</span>, <span class="hljs-string">&quot;abcde&quot;</span>).compact(<span class="hljs-literal">null</span>);
+        assertEquals(<span class="hljs-string">&quot;expected:&lt;...cd[d]e&gt; but was:&lt;...cd[]e&gt;&quot;</span>, failure);
+    }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testComparisonErrorWithActualNull</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">failure</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ComparisonCompactor</span>(<span class="hljs-number">0</span>, <span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-literal">null</span>).compact(<span class="hljs-literal">null</span>);
+        assertEquals(<span class="hljs-string">&quot;expected:&lt;a&gt; but was:&lt;null&gt;&quot;</span>, failure);
+    }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testComparisonErrorWithActualNullContext</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">failure</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ComparisonCompactor</span>(<span class="hljs-number">2</span>, <span class="hljs-string">&quot;a&quot;</span>, <span class="hljs-literal">null</span>).compact(<span class="hljs-literal">null</span>);
+        assertEquals(<span class="hljs-string">&quot;expected:&lt;a&gt; but was:&lt;null&gt;&quot;</span>, failure);
+    }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testComparisonErrorWithExpectedNull</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">failure</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ComparisonCompactor</span>(<span class="hljs-number">0</span>, <span class="hljs-literal">null</span>, <span class="hljs-string">&quot;a&quot;</span>).compact(<span class="hljs-literal">null</span>);
+        assertEquals(<span class="hljs-string">&quot;expected:&lt;null&gt; but was:&lt;a&gt;&quot;</span>, failure);
+    }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testComparisonErrorWithExpectedNullContext</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">failure</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ComparisonCompactor</span>(<span class="hljs-number">2</span>, <span class="hljs-literal">null</span>, <span class="hljs-string">&quot;a&quot;</span>).compact(<span class="hljs-literal">null</span>);
+        assertEquals(<span class="hljs-string">&quot;expected:&lt;null&gt; but was:&lt;a&gt;&quot;</span>, failure);
+    }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">testBug609972</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">failure</span> <span class="hljs-operator">=</span>
+            <span class="hljs-keyword">new</span> <span class="hljs-title class_">ComparisonCompactor</span>(<span class="hljs-number">10</span>, <span class="hljs-string">&quot;S&amp;P500&quot;</span>, <span class="hljs-string">&quot;0&quot;</span>).compact(<span class="hljs-literal">null</span>);
+        assertEquals(<span class="hljs-string">&quot;expected:&lt;[S&amp;P50]0&gt; but was:&lt;[]0&gt;&quot;</span>, failure);
+    }
+}
+</code></pre>
+<div dir="rtl">
+<p>من یک تحلیل پوشش کد (Code Coverage) روی ماژول <code>ComparisonCompactor</code> با استفاده از این تست‌ها انجام دادم.<br>
+کد به‌طور کامل پوشش داده شده است؛ هر خط کد، هر دستور <code>if</code> و هر حلقه <code>for</code> توسط تست‌ها اجرا می‌شود.<br>
+این موضوع به من اطمینان زیادی می‌دهد که کد به‌درستی کار می‌کند و احترام زیادی برای مهارت نویسندگان آن ایجاد می‌کند.</p>
+<p>کد مربوط به <code>ComparisonCompactor</code> در لیستینگ 15-2 قرار دارد.<br>
+کمی وقت بگذارید و این کد را مرور کنید. فکر می‌کنم آن را خوش‌ساخت، نسبتاً گویا، و از نظر ساختار ساده خواهید یافت.<br>
+وقتی مرور آن را تمام کردید، با هم وارد جزئیات دقیق‌تر خواهیم شد.</p>
+</div>
+<p><strong>Listing 15-2 -- ComparisonCompactor.java (Original)</strong></p>
+<pre class="hljs"><code><span class="hljs-keyword">package</span> junit.framework;
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ComparisonCompactor</span> {
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-variable">ELLIPSIS</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;...&quot;</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-variable">DELTA_END</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;]&quot;</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-variable">DELTA_START</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;[&quot;</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> fContextLength;
+    <span class="hljs-keyword">private</span> String fExpected;
+    <span class="hljs-keyword">private</span> String fActual;
+    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> fPrefix;
+    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> fSuffix;
+    <span class="hljs-keyword">public</span> <span class="hljs-title function_">ComparisonCompactor</span><span class="hljs-params">(
+        <span class="hljs-type">int</span> contextLength, String expected, String actual)</span> {
+        fContextLength = contextLength;
+        fExpected = expected;
+        fActual = actual;
+    }
+    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">compact</span><span class="hljs-params">(String message)</span> {
+        <span class="hljs-keyword">if</span> (fExpected == <span class="hljs-literal">null</span> || fActual == <span class="hljs-literal">null</span> || areStringsEqual())
+            <span class="hljs-keyword">return</span> Assert.format(message, fExpected, fActual);
+        findCommonPrefix();
+        findCommonSuffix();
+        <span class="hljs-type">String</span> <span class="hljs-variable">expected</span> <span class="hljs-operator">=</span> compactString(fExpected);
+        <span class="hljs-type">String</span> <span class="hljs-variable">actual</span> <span class="hljs-operator">=</span> compactString(fActual);
+        <span class="hljs-keyword">return</span> Assert.format(message, expected, actual);
+    }
+    <span class="hljs-keyword">private</span> String <span class="hljs-title function_">compactString</span><span class="hljs-params">(String source)</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> DELTA_START
+            + source.substring(fPrefix, source.length() - fSuffix + <span class="hljs-number">1</span>)
+            + DELTA_END;
+        <span class="hljs-keyword">if</span> (fPrefix &gt; <span class="hljs-number">0</span>)
+            result = computeCommonPrefix() + result;
+        <span class="hljs-keyword">if</span> (fSuffix &gt; <span class="hljs-number">0</span>)
+            result = result + computeCommonSuffix();
+        <span class="hljs-keyword">return</span> result;
+    }
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">findCommonPrefix</span><span class="hljs-params">()</span> {
+        fPrefix = <span class="hljs-number">0</span>;
+        <span class="hljs-type">int</span> <span class="hljs-variable">end</span> <span class="hljs-operator">=</span> Math.min(fExpected.length(), fActual.length());
+        <span class="hljs-keyword">for</span> (; fPrefix &lt; end; fPrefix++) {
+            <span class="hljs-keyword">if</span> (fExpected.charAt(fPrefix) != fActual.charAt(fPrefix))
+                <span class="hljs-keyword">break</span>;
+        }
+    }
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">findCommonSuffix</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">int</span> <span class="hljs-variable">expectedSuffix</span> <span class="hljs-operator">=</span> fExpected.length() - <span class="hljs-number">1</span>;
+        <span class="hljs-type">int</span> <span class="hljs-variable">actualSuffix</span> <span class="hljs-operator">=</span> fActual.length() - <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">for</span> (; actualSuffix &gt;= fPrefix &amp;&amp; expectedSuffix &gt;= fPrefix;
+             actualSuffix--, expectedSuffix--) {
+            <span class="hljs-keyword">if</span> (fExpected.charAt(expectedSuffix)
+                != fActual.charAt(actualSuffix))
+                <span class="hljs-keyword">break</span>;
+        }
+        fSuffix = fExpected.length() - expectedSuffix;
+    }
+    <span class="hljs-keyword">private</span> String <span class="hljs-title function_">computeCommonPrefix</span><span class="hljs-params">()</span> {
+        <span class="hljs-keyword">return</span> (fPrefix &gt; fContextLength ? ELLIPSIS : <span class="hljs-string">&quot;&quot;</span>)
+            + fExpected.substring(
+                Math.max(<span class="hljs-number">0</span>, fPrefix - fContextLength), fPrefix);
+    }
+    <span class="hljs-keyword">private</span> String <span class="hljs-title function_">computeCommonSuffix</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">int</span> <span class="hljs-variable">end</span> <span class="hljs-operator">=</span> Math.min(fExpected.length() - fSuffix + <span class="hljs-number">1</span> + fContextLength,
+            fExpected.length());
+        <span class="hljs-keyword">return</span> fExpected.substring(fExpected.length() - fSuffix + <span class="hljs-number">1</span>, end)
+            + (fExpected.length() - fSuffix + <span class="hljs-number">1</span>
+                        &lt; fExpected.length() - fContextLength
+                    ? ELLIPSIS
+                    : <span class="hljs-string">&quot;&quot;</span>);
+    }
+    <span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">areStringsEqual</span><span class="hljs-params">()</span> {
+        <span class="hljs-keyword">return</span> fExpected.equals(fActual);
+    }
+}
+</code></pre>
+<div dir="rtl">
+<p>ممکن است چند ایراد به این ماژول داشته باشید.<br>
+برخی عبارات طولانی هستند و تعدادی <code>+1</code> عجیب و چیزهایی از این دست وجود دارد.<br>
+اما در کل، این ماژول نسبتاً خوب است.<br>
+در هر صورت، ممکن بود شبیه لیستینگ 15-3 باشد.</p>
+</div>
+<p><strong>Listing 15-3 -- ComparisonCompator.java (defactored)</strong></p>
+<pre class="hljs"><code><span class="hljs-keyword">package</span> junit.framework;
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ComparisonCompactor</span> {
+    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> ctxt;
+    <span class="hljs-keyword">private</span> String s1;
+    <span class="hljs-keyword">private</span> String s2;
+    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> pfx;
+    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> sfx;
+    <span class="hljs-keyword">public</span> <span class="hljs-title function_">ComparisonCompactor</span><span class="hljs-params">(<span class="hljs-type">int</span> ctxt, String s1, String s2)</span> {
+        <span class="hljs-built_in">this</span>.ctxt = ctxt;
+        <span class="hljs-built_in">this</span>.s1 = s1;
+        <span class="hljs-built_in">this</span>.s2 = s2;
+    }
+    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">compact</span><span class="hljs-params">(String msg)</span> {
+        <span class="hljs-keyword">if</span> (s1 == <span class="hljs-literal">null</span> || s2 == <span class="hljs-literal">null</span> || s1.equals(s2))
+            <span class="hljs-keyword">return</span> Assert.format(msg, s1, s2);
+        pfx = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">for</span> (; pfx &lt; Math.min(s1.length(), s2.length()); pfx++) {
+            <span class="hljs-keyword">if</span> (s1.charAt(pfx) != s2.charAt(pfx))
+                <span class="hljs-keyword">break</span>;
+        }
+        <span class="hljs-type">int</span> <span class="hljs-variable">sfx1</span> <span class="hljs-operator">=</span> s1.length() - <span class="hljs-number">1</span>;
+        <span class="hljs-type">int</span> <span class="hljs-variable">sfx2</span> <span class="hljs-operator">=</span> s2.length() - <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">for</span> (; sfx2 &gt;= pfx &amp;&amp; sfx1 &gt;= pfx; sfx2--, sfx1--) {
+            <span class="hljs-keyword">if</span> (s1.charAt(sfx1) != s2.charAt(sfx2))
+                <span class="hljs-keyword">break</span>;
+        }
+        sfx = s1.length() - sfx1;
+        <span class="hljs-type">String</span> <span class="hljs-variable">cmp1</span> <span class="hljs-operator">=</span> compactString(s1);
+        <span class="hljs-type">String</span> <span class="hljs-variable">cmp2</span> <span class="hljs-operator">=</span> compactString(s2);
+        <span class="hljs-keyword">return</span> Assert.format(msg, cmp1, cmp2);
+    }
+    <span class="hljs-keyword">private</span> String <span class="hljs-title function_">compactString</span><span class="hljs-params">(String s)</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;[&quot;</span> + s.substring(pfx, s.length() - sfx + <span class="hljs-number">1</span>) + <span class="hljs-string">&quot;]&quot;</span>;
+        <span class="hljs-keyword">if</span> (pfx &gt; <span class="hljs-number">0</span>)
+            result = (pfx &gt; ctxt ? <span class="hljs-string">&quot;...&quot;</span> : <span class="hljs-string">&quot;&quot;</span>)
+                + s1.substring(Math.max(<span class="hljs-number">0</span>, pfx - ctxt), pfx) + result;
+        <span class="hljs-keyword">if</span> (sfx &gt; <span class="hljs-number">0</span>) {
+            <span class="hljs-type">int</span> <span class="hljs-variable">end</span> <span class="hljs-operator">=</span> Math.min(s1.length() - sfx + <span class="hljs-number">1</span> + ctxt, s1.length());
+            result = result
+                + (s1.substring(s1.length() - sfx + <span class="hljs-number">1</span>, end)
+                    + (s1.length() - sfx + <span class="hljs-number">1</span> &lt; s1.length() - ctxt ? <span class="hljs-string">&quot;...&quot;</span>
+                                                                  : <span class="hljs-string">&quot;&quot;</span>));
+        }
+        <span class="hljs-keyword">return</span> result;
+    }
+}
+</code></pre>
+<div dir="rtl">
+<p>با اینکه نویسندگان این ماژول را در وضعیت بسیار خوبی باقی گذاشته‌اند،<br>
+<strong>Boy Scout Rule</strong> به ما می‌گوید که باید آن را تمیزتر از زمانی که آن را یافتیم، ترک کنیم.<br>
+پس، چگونه می‌توانیم کد اصلی در لیستینگ 15-2 را بهبود دهیم؟</p>
+<p>اولین چیزی که برایم خوشایند نیست، پیشوند <code>f</code> برای متغیرهای عضو است <code>[N6]</code>.<br>
+امروزه محیط‌های توسعه این نوع کدگذاری دامنه را غیرضروری کرده‌اند.<br>
+بنابراین بیایید تمام <code>f</code> ها را حذف کنیم.</p>
+</div>
+<pre class="hljs"><code><span class="hljs-keyword">private</span> <span class="hljs-type">int</span> contextLength;
+<span class="hljs-keyword">private</span> String expected;
+<span class="hljs-keyword">private</span> String actual;
+<span class="hljs-keyword">private</span> <span class="hljs-type">int</span> prefix;
+<span class="hljs-keyword">private</span> <span class="hljs-type">int</span> suffix;
+</code></pre>
+<div dir="rtl">
+<p>مورد بعدی، یک شرط بدون انکپسوله‌شده در ابتدای تابع <code>compact</code> است <code>[G28]</code>.</p>
+</div>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> String <span class="hljs-title function_">compact</span><span class="hljs-params">(String message)</span> {
+    <span class="hljs-keyword">if</span> (expected == <span class="hljs-literal">null</span> || actual == <span class="hljs-literal">null</span> || areStringsEqual())
+        <span class="hljs-keyword">return</span> Assert.format(message, expected, actual);
+    findCommonPrefix();
+    findCommonSuffix();
+    <span class="hljs-type">String</span> <span class="hljs-variable">expected</span> <span class="hljs-operator">=</span> compactString(<span class="hljs-built_in">this</span>.expected);
+    <span class="hljs-type">String</span> <span class="hljs-variable">actual</span> <span class="hljs-operator">=</span> compactString(<span class="hljs-built_in">this</span>.actual);
+    <span class="hljs-keyword">return</span> Assert.format(message, expected, actual); 
+}
+</code></pre>
+<div dir="rtl">
+<p>این شرط باید انکپسوله شود تا هدف ما واضح‌تر گردد. پس بیایید یک متد استخراج کنیم که توضیح‌دهنده باشد.</p>
+</div>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> String <span class="hljs-title function_">compact</span><span class="hljs-params">(String message)</span> {
+    <span class="hljs-keyword">if</span> (shouldNotCompact())
+        <span class="hljs-keyword">return</span> Assert.format(message, expected, actual);
+    findCommonPrefix();
+    findCommonSuffix();
+    <span class="hljs-type">String</span> <span class="hljs-variable">expected</span> <span class="hljs-operator">=</span> compactString(<span class="hljs-built_in">this</span>.expected);
+    <span class="hljs-type">String</span> <span class="hljs-variable">actual</span> <span class="hljs-operator">=</span> compactString(<span class="hljs-built_in">this</span>.actual);
+    <span class="hljs-keyword">return</span> Assert.format(message, expected, actual);
+}
+
+<span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">shouldNotCompact</span><span class="hljs-params">()</span> {
+    <span class="hljs-keyword">return</span> expected == <span class="hljs-literal">null</span> || actual == <span class="hljs-literal">null</span> || areStringsEqual();
+}
+</code></pre>
+<div dir="rtl">
+<p>من زیاد از استفاده از <code>this.expected</code> و <code>this.actual</code> در تابع <code>compact</code> خوشم نمی‌آید.</p>
+<p>این مورد وقتی اتفاق افتاد که نام <code>fExpected</code> به <code>expected</code> تغییر یافت.<br>
+چرا در این تابع متغیرهایی با همان نام متغیرهای عضو وجود دارد؟<br>
+آیا آن‌ها نمایانگر چیز دیگری نیستند؟ <code>[N4]</code> باید نام‌ها را واضح‌تر کنیم.</p>
+</div>
+<pre class="hljs"><code><span class="hljs-type">String</span> <span class="hljs-variable">compactExpected</span> <span class="hljs-operator">=</span> compactString(expected);
+<span class="hljs-type">String</span> <span class="hljs-variable">compactActual</span> <span class="hljs-operator">=</span> compactString(actual);
+</code></pre>
+<div dir="rtl">
+<p>جملات منفی کمی سخت‌تر از جملات مثبت قابل‌درک‌اند <code>[G29]</code>.<br>
+پس بیایید شرط را برعکس کرده و معنای آن را تغییر دهیم.</p>
+</div>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> String <span class="hljs-title function_">compact</span><span class="hljs-params">(String message)</span> {
+    <span class="hljs-keyword">if</span> (canBeCompacted()) {
+        findCommonPrefix();
+        findCommonSuffix();
+        <span class="hljs-type">String</span> <span class="hljs-variable">compactExpected</span> <span class="hljs-operator">=</span> compactString(expected);
+        <span class="hljs-type">String</span> <span class="hljs-variable">compactActual</span> <span class="hljs-operator">=</span> compactString(actual);
+        <span class="hljs-keyword">return</span> Assert.format(message, compactExpected, compactActual);
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">return</span> Assert.format(message, expected, actual);
+    }
+}
+
+<span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">canBeCompacted</span><span class="hljs-params">()</span> {
+    <span class="hljs-keyword">return</span> expected != <span class="hljs-literal">null</span> &amp;&amp; actual != <span class="hljs-literal">null</span> &amp;&amp; !areStringsEqual();
+}
+
+</code></pre>
+<div dir="rtl">
+<p>نام این تابع کمی عجیب است <code>[N7]</code>.<br>
+اگرچه رشته‌ها را فشرده می‌کند، اما ممکن است اصلاً فشرده‌سازی انجام ندهد اگر <code>canBeCompacted</code> مقدار <code>false</code> بازگرداند.<br>
+پس نام تابع <code>compact</code> اثر جانبی بررسی خطا را پنهان می‌کند.<br>
+همچنین توجه کنید که این تابع یک پیام قالب‌بندی‌شده بازمی‌گرداند، نه فقط رشته‌های فشرده‌شده.</p>
+<p>پس نام تابع باید واقعاً <code>formatCompactedComparison</code> باشد.<br>
+این نام با توجه به آرگومان آن، خوانایی را بسیار بیشتر می‌کند:</p>
+</div>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> String <span class="hljs-title function_">formatCompactedComparison</span><span class="hljs-params">(String message)</span>
+</code></pre>
+<div dir="rtl">
+<p>بدنه‌ی if جایی است که فشرده‌سازی واقعی رشته‌های <code>expected</code> و <code>actual</code> انجام می‌شود.<br>
+باید آن را به متدی با نام <code>compactExpectedAndActual</code> استخراج کنیم.</p>
+<p>با این حال، می‌خواهیم تابع <code>formatCompactedComparison</code> تمام فرمت‌بندی را انجام دهد.<br>
+تابع <code>compact...</code> نباید کاری جز فشرده‌سازی انجام دهد <code>[G30]</code>.<br>
+پس بیایید آن را به این شکل تقسیم کنیم:</p>
+</div>
+<pre class="hljs"><code><span class="hljs-keyword">private</span> String compactExpected;
+<span class="hljs-keyword">private</span> String compactActual;
+
+<span class="hljs-keyword">public</span> String <span class="hljs-title function_">formatCompactedComparison</span><span class="hljs-params">(String message)</span> {
+    <span class="hljs-keyword">if</span> (canBeCompacted()) {
+        compactExpectedAndActual();
+        <span class="hljs-keyword">return</span> Assert.format(message, compactExpected, compactActual);
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">return</span> Assert.format(message, expected, actual);
+    }
+}
+
+<span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">compactExpectedAndActual</span><span class="hljs-params">()</span> {
+    findCommonPrefix();
+    findCommonSuffix();
+    compactExpected = compactString(expected);
+    compactActual = compactString(actual);
+}
+</code></pre>
+<div dir="rtl">
+<p>توجه کنید که مجبور شدیم متغیرهای <code>compactExpected</code> و <code>compactActual</code> را به متغیرهای عضو ارتقا دهیم.<br>
+از اینکه دو خط آخر تابع جدید مقدار بازمی‌گردانند ولی دو خط اول این‌گونه نیستند، خوشم نمی‌آید.<br>
+آن‌ها از قرارداد یکسانی استفاده نمی‌کنند <code>[G11]</code>.<br>
+پس باید <code>findCommonPrefix</code> و <code>findCommonSuffix</code> را تغییر دهیم تا مقدار <code>prefix</code> و <code>suffix</code> را بازگردانند.</p>
+</div>
+<pre class="hljs"><code><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">compactExpectedAndActual</span><span class="hljs-params">()</span> {
+    prefixIndex = findCommonPrefix();
+    suffixIndex = findCommonSuffix();
+    compactExpected = compactString(expected);
+    compactActual = compactString(actual);
+}
+
+<span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-title function_">findCommonPrefix</span><span class="hljs-params">()</span> {
+    <span class="hljs-type">int</span> <span class="hljs-variable">prefixIndex</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;
+    <span class="hljs-type">int</span> <span class="hljs-variable">end</span> <span class="hljs-operator">=</span> Math.min(expected.length(), actual.length());
+    <span class="hljs-keyword">for</span> (; prefixIndex &lt; end; prefixIndex++) {
+        <span class="hljs-keyword">if</span> (expected.charAt(prefixIndex) != actual.charAt(prefixIndex))
+            <span class="hljs-keyword">break</span>;
+    }
+    <span class="hljs-keyword">return</span> prefixIndex;
+}
+
+<span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-title function_">findCommonSuffix</span><span class="hljs-params">()</span> {
+    <span class="hljs-type">int</span> <span class="hljs-variable">expectedSuffix</span> <span class="hljs-operator">=</span> expected.length() - <span class="hljs-number">1</span>;
+    <span class="hljs-type">int</span> <span class="hljs-variable">actualSuffix</span> <span class="hljs-operator">=</span> actual.length() - <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span> (; actualSuffix &gt;= prefixIndex &amp;&amp; expectedSuffix &gt;= prefixIndex;
+         actualSuffix--, expectedSuffix--) {
+        <span class="hljs-keyword">if</span> (expected.charAt(expectedSuffix) != actual.charAt(actualSuffix))
+            <span class="hljs-keyword">break</span>;
+    }
+    <span class="hljs-keyword">return</span> expected.length() - expectedSuffix;
+}
+</code></pre>
+<div dir="rtl">
+<p>باید نام متغیرهای عضو را نیز کمی دقیق‌تر کنیم <code>[N1]</code>؛<br>
+در نهایت، هر دو متغیر، اندیس هستند.</p>
+<p>بررسی دقیق <code>findCommonSuffix</code> یک وابستگی زمانی پنهان را نشان می‌دهد <code>[G31]</code>؛<br>
+این تابع به این وابسته است که <code>prefixIndex</code> قبلاً توسط <code>findCommonPrefix</code> محاسبه شده باشد.<br>
+اگر این دو تابع به ترتیب اشتباهی فراخوانی شوند، دیباگ کردن بسیار دشوار خواهد شد.<br>
+پس برای نمایان کردن این وابستگی زمانی، بیایید <code>findCommonSuffix</code> را طوری تغییر دهیم که <code>prefixIndex</code> را به‌عنوان آرگومان دریافت کند.</p>
+</div>
+<pre class="hljs"><code><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">compactExpectedAndActual</span><span class="hljs-params">()</span> {
+    prefixIndex = findCommonPrefix();
+    suffixIndex = findCommonSuffix(prefixIndex);
+    compactExpected = compactString(expected);
+    compactActual = compactString(actual);
+}
+
+<span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-title function_">findCommonSuffix</span><span class="hljs-params">(<span class="hljs-type">int</span> prefixIndex)</span> {
+    <span class="hljs-type">int</span> <span class="hljs-variable">expectedSuffix</span> <span class="hljs-operator">=</span> expected.length() - <span class="hljs-number">1</span>;
+    <span class="hljs-type">int</span> <span class="hljs-variable">actualSuffix</span> <span class="hljs-operator">=</span> actual.length() - <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span> (; actualSuffix &gt;= prefixIndex &amp;&amp; expectedSuffix &gt;= prefixIndex; 
+         actualSuffix--, expectedSuffix--) {
+        <span class="hljs-keyword">if</span> (expected.charAt(expectedSuffix) != actual.charAt(actualSuffix))
+            <span class="hljs-keyword">break</span>;
+    }
+    <span class="hljs-keyword">return</span> expected.length() - expectedSuffix;
+}
+</code></pre>
+<div dir="rtl">
+<p>از این موضوع واقعاً خوشم نمی‌آید.<br>
+ارسال آرگومان <code>prefixIndex</code> کمی دلبخواهی است <code>[G32]</code>.<br>
+این کار ترتیب فراخوانی را تضمین می‌کند اما دلیلی برای نیاز به این ترتیب ارائه نمی‌دهد.<br>
+برنامه‌نویس دیگری ممکن است آنچه را انجام داده‌ایم، بازگرداند چون هیچ نشانه‌ای از ضروری بودن آن پارامتر وجود ندارد.<br>
+پس بیایید مسیر متفاوتی را انتخاب کنیم.</p>
+</div>
+<pre class="hljs"><code><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">compactExpectedAndActual</span><span class="hljs-params">()</span> {
+    findCommonPrefixAndSuffix();
+    compactExpected = compactString(expected);
+    compactActual = compactString(actual);
+}
+
+<span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">findCommonPrefixAndSuffix</span><span class="hljs-params">()</span> {
+    findCommonPrefix();
+    <span class="hljs-type">int</span> <span class="hljs-variable">expectedSuffix</span> <span class="hljs-operator">=</span> expected.length() - <span class="hljs-number">1</span>;
+    <span class="hljs-type">int</span> <span class="hljs-variable">actualSuffix</span> <span class="hljs-operator">=</span> actual.length() - <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span> (; actualSuffix &gt;= prefixIndex &amp;&amp; expectedSuffix &gt;= prefixIndex;
+         actualSuffix--, expectedSuffix--) {
+        <span class="hljs-keyword">if</span> (expected.charAt(expectedSuffix) != actual.charAt(actualSuffix))
+            <span class="hljs-keyword">break</span>;
+    }
+    suffixIndex = expected.length() - expectedSuffix;
+}
+
+<span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">findCommonPrefix</span><span class="hljs-params">()</span> {
+    prefixIndex = <span class="hljs-number">0</span>;
+    <span class="hljs-type">int</span> <span class="hljs-variable">end</span> <span class="hljs-operator">=</span> Math.min(expected.length(), actual.length());
+    <span class="hljs-keyword">for</span> (; prefixIndex &lt; end; prefixIndex++)
+        <span class="hljs-keyword">if</span> (expected.charAt(prefixIndex) != actual.charAt(prefixIndex))
+            <span class="hljs-keyword">break</span>;
+}
+</code></pre>
+<div dir="rtl">
+<p>ما <code>findCommonPrefix</code> و <code>findCommonSuffix</code> را به حالت قبلی بازگرداندیم،<br>
+نام <code>findCommonSuffix</code> را به <code>findCommonPrefixAndSuffix</code> تغییر دادیم و آن را طوری نوشتیم که قبل از انجام هر کار دیگری <code>findCommonPrefix</code> را فراخوانی کند.<br>
+این کار ماهیت زمانی بین این دو تابع را به‌شکل خیلی واضح‌تری نشان می‌دهد نسبت به راه‌حل قبلی.</p>
+<p>همچنین مشخص می‌کند که <code>findCommonPrefixAndSuffix</code> چقدر زشت است.<br>
+بیایید آن را تمیزتر کنیم.</p>
+</div>
+<pre class="hljs"><code><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">findCommonPrefixAndSuffix</span><span class="hljs-params">()</span> {
+    findCommonPrefix();
+    <span class="hljs-type">int</span> <span class="hljs-variable">suffixLength</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span> (; !suffixOverlapsPrefix(suffixLength); suffixLength++) {
+        <span class="hljs-keyword">if</span> (charFromEnd(expected, suffixLength) != 
+            charFromEnd(actual, suffixLength))
+            <span class="hljs-keyword">break</span>;
+    }
+    suffixIndex = suffixLength;
+}
+
+<span class="hljs-keyword">private</span> <span class="hljs-type">char</span> <span class="hljs-title function_">charFromEnd</span><span class="hljs-params">(String s, <span class="hljs-type">int</span> i)</span> {
+    <span class="hljs-keyword">return</span> s.charAt(s.length() - i);
+}
+
+<span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">suffixOverlapsPrefix</span><span class="hljs-params">(<span class="hljs-type">int</span> suffixLength)</span> {
+    <span class="hljs-keyword">return</span> actual.length() - suffixLength &lt; prefixIndex ||
+           expected.length() - suffixLength &lt; prefixIndex;
+}
+</code></pre>
+<div dir="rtl">
+<p>این بسیار بهتر است.<br>
+نشان می‌دهد که <code>suffixIndex</code> در واقع طول پسوند است و نام‌گذاری خوبی ندارد.<br>
+همین موضوع در مورد <code>prefixIndex</code> نیز صدق می‌کند، هرچند در آنجا «اندیس» و «طول» مترادف هستند.</p>
+<p>با این حال، استفاده از <code>length</code> از نظر مفهومی منسجم‌تر است.<br>
+مشکل این است که متغیر <code>suffixIndex</code> از صفر شروع نمی‌شود؛ مقدار آن از یک شروع می‌شود و بنابراین یک طول واقعی نیست.<br>
+این همان دلیلی است که باعث شده در تابع <code>computeCommonSuffix</code> از آن +1ها استفاده شود <code>[G33]</code>.<br>
+پس بیایید آن را اصلاح کنیم.</p>
+<p>نتیجه در لیستینگ 15-4 آمده است.</p>
+</div>
+<pre class="hljs"><code><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ComparisonCompactor</span> {
+    ... <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> suffixLength;
+    ... <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">findCommonPrefixAndSuffix</span><span class="hljs-params">()</span> {
+        findCommonPrefix();
+        suffixLength = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">for</span> (; !suffixOverlapsPrefix(suffixLength); suffixLength++) {
+            <span class="hljs-keyword">if</span> (charFromEnd(expected, suffixLength)
+                != charFromEnd(actual, suffixLength))
+                <span class="hljs-keyword">break</span>;
+        }
+    }
+    <span class="hljs-keyword">private</span> <span class="hljs-type">char</span> <span class="hljs-title function_">charFromEnd</span><span class="hljs-params">(String s, <span class="hljs-type">int</span> i)</span> {
+        <span class="hljs-keyword">return</span> s.charAt(s.length() - i - <span class="hljs-number">1</span>);
+    }
+    <span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">suffixOverlapsPrefix</span><span class="hljs-params">(<span class="hljs-type">int</span> suffixLength)</span> {
+        <span class="hljs-keyword">return</span> actual.length() - suffixLength &lt;= prefixLength
+            || expected.length() - suffixLength &lt;= prefixLength;
+    }
+    ...
+    
+    <span class="hljs-keyword">private</span> String <span class="hljs-title function_">compactString</span><span class="hljs-params">(String source)</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> DELTA_START
+            + source.substring(prefixLength, source.length() - suffixLength)
+            + DELTA_END;
+        <span class="hljs-keyword">if</span> (prefixLength &gt; <span class="hljs-number">0</span>)
+            result = computeCommonPrefix() + result;
+        <span class="hljs-keyword">if</span> (suffixLength &gt; <span class="hljs-number">0</span>)
+            result = result + computeCommonSuffix();
+        <span class="hljs-keyword">return</span> result;
+    }
+    ...
+    
+    <span class="hljs-keyword">private</span> String <span class="hljs-title function_">computeCommonSuffix</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">int</span> <span class="hljs-variable">end</span> <span class="hljs-operator">=</span> Math.min(expected.length() - suffixLength + contextLength,
+            expected.length());
+        <span class="hljs-keyword">return</span> expected.substring(expected.length() - suffixLength, end)
+            + (expected.length() - suffixLength
+                        &lt; expected.length() - contextLength
+                    ? ELLIPSIS
+                    : <span class="hljs-string">&quot;&quot;</span>);
+    }
+}
+</code></pre>
+<div dir="rtl">
+<p>ما علامت‌های <code>+1</code> را در تابع <code>computeCommonSuffix</code> با یک -1 در تابع <code>charFromEnd</code> جایگزین کردیم، جایی که کاملاً منطقی است، و همچنین از دو عملگر &lt;= در تابع <code>suffixOverlapsPrefix</code> استفاده کردیم، که در آنجا هم کاملاً منطقی هستند. این تغییر به ما اجازه داد تا نام متغیر <code>suffixIndex</code> را به <code>suffixLength</code> تغییر دهیم، که خوانایی کد را به طرز چشمگیری افزایش داد.</p>
+<p>با این حال، یک مشکل وجود دارد. هنگامی که داشتم علامت‌های <code>+1</code> را حذف می‌کردم، به خط زیر در تابع <code>compactString</code> برخورد کردم:</p>
+</div>
+<pre class="hljs"><code><span class="hljs-keyword">if</span> (suffixLength &gt; <span class="hljs-number">0</span>)
+</code></pre>
+<div dir="rtl">
+<p>نگاهی به آن در لیست 15-4 بیندازید. از نظر منطقی، حالا که مقدار <code>suffixLength</code> یک واحد کمتر از مقدار قبلی‌اش است، باید عملگر &gt; را به &gt;= تغییر دهم. اما این کار بی‌معناست. حالا منطقی است! این بدان معناست که قبلاً بی‌معنا بوده و احتمالاً یک باگ بوده است.</p>
+<p>البته نه دقیقاً یک باگ. با بررسی بیشتر می‌بینیم که این دستور شرطی اکنون از اضافه شدن یک پسوند با طول صفر جلوگیری می‌کند. قبل از اینکه این تغییر را ایجاد کنیم، آن دستور شرطی بی‌اثر بود، چون مقدار <code>suffixIndex</code> هیچ‌گاه کمتر از یک نمی‌توانست باشد!</p>
+<p>این مسئله هر دو دستور شرطی موجود در تابع <code>compactString</code> را زیر سؤال می‌برد! به نظر می‌رسد که هر دوی آن‌ها را می‌توان حذف کرد. پس بیایید آن‌ها را کامنت کنیم و تست‌ها را اجرا کنیم. همه‌ی تست‌ها پاس شدند! حالا بیایید تابع <code>compactString</code> را بازسازی کنیم تا دستورات شرطی اضافی را حذف کرده و تابع را بسیار ساده‌تر کنیم <code>[G9]</code>.</p>
+</div>
+<pre class="hljs"><code><span class="hljs-keyword">private</span> String <span class="hljs-title function_">compactString</span><span class="hljs-params">(String source)</span> {
+ <span class="hljs-keyword">return</span>
+ computeCommonPrefix() +
+ DELTA_START +
+ source.substring(prefixLength, source.length() - suffixLength) +
+ DELTA_END +
+ computeCommonSuffix();
+}
+</code></pre>
+<div dir="rtl">
+<p>این خیلی بهتر است! حالا می‌بینیم که تابع <code>compactString</code> به سادگی در حال کنار هم گذاشتن قطعه‌هاست. احتمالاً می‌توانیم این را حتی واضح‌تر کنیم. در واقع، پاکسازی‌های کوچکی زیادی هست که می‌توان انجام داد. اما به جای اینکه شما را درگیر بقیه تغییرات کنم، فقط نتیجه نهایی را در لیست 15-5 نشان می‌دهم.</p>
+</div>
+<p><strong>Listing 15-5 -- ComparisonCompactor.java (final)</strong></p>
+<pre class="hljs"><code><span class="hljs-keyword">package</span> junit.framework;
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ComparisonCompactor</span> {
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-variable">ELLIPSIS</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;...&quot;</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-variable">DELTA_END</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;]&quot;</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-variable">DELTA_START</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;[&quot;</span>;
+    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> contextLength;
+    <span class="hljs-keyword">private</span> String expected;
+    <span class="hljs-keyword">private</span> String actual;
+    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> prefixLength;
+    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> suffixLength;
+    <span class="hljs-keyword">public</span> <span class="hljs-title function_">ComparisonCompactor</span><span class="hljs-params">(
+        <span class="hljs-type">int</span> contextLength, String expected, String actual)</span> {
+        <span class="hljs-built_in">this</span>.contextLength = contextLength;
+        <span class="hljs-built_in">this</span>.expected = expected;
+        <span class="hljs-built_in">this</span>.actual = actual;
+    }
+    <span class="hljs-keyword">public</span> String <span class="hljs-title function_">formatCompactedComparison</span><span class="hljs-params">(String message)</span> {
+        <span class="hljs-type">String</span> <span class="hljs-variable">compactExpected</span> <span class="hljs-operator">=</span> expected;
+        <span class="hljs-type">String</span> <span class="hljs-variable">compactActual</span> <span class="hljs-operator">=</span> actual;
+        <span class="hljs-keyword">if</span> (shouldBeCompacted()) {
+            findCommonPrefixAndSuffix();
+            compactExpected = compact(expected);
+            compactActual = compact(actual);
+        }
+        <span class="hljs-keyword">return</span> Assert.format(message, compactExpected, compactActual);
+    }
+    <span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">shouldBeCompacted</span><span class="hljs-params">()</span> {
+        <span class="hljs-keyword">return</span> !shouldNotBeCompacted();
+    }
+    <span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">shouldNotBeCompacted</span><span class="hljs-params">()</span> {
+        <span class="hljs-keyword">return</span> expected == <span class="hljs-literal">null</span> || actual == <span class="hljs-literal">null</span> || expected.equals(actual);
+    }
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">findCommonPrefixAndSuffix</span><span class="hljs-params">()</span> {
+        findCommonPrefix();
+        suffixLength = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">for</span> (; !suffixOverlapsPrefix(); suffixLength++) {
+            <span class="hljs-keyword">if</span> (charFromEnd(expected, suffixLength)
+                != charFromEnd(actual, suffixLength))
+                <span class="hljs-keyword">break</span>;
+        }
+    }
+    <span class="hljs-keyword">private</span> <span class="hljs-type">char</span> <span class="hljs-title function_">charFromEnd</span><span class="hljs-params">(String s, <span class="hljs-type">int</span> i)</span> {
+        <span class="hljs-keyword">return</span> s.charAt(s.length() - i - <span class="hljs-number">1</span>);
+    }
+    <span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">suffixOverlapsPrefix</span><span class="hljs-params">()</span> {
+        <span class="hljs-keyword">return</span> actual.length() - suffixLength &lt;= prefixLength
+            || expected.length() - suffixLength &lt;= prefixLength;
+    }
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">findCommonPrefix</span><span class="hljs-params">()</span> {
+        prefixLength = <span class="hljs-number">0</span>;
+        <span class="hljs-type">int</span> <span class="hljs-variable">end</span> <span class="hljs-operator">=</span> Math.min(expected.length(), actual.length());
+        <span class="hljs-keyword">for</span> (; prefixLength &lt; end; prefixLength++)
+            <span class="hljs-keyword">if</span> (expected.charAt(prefixLength) != actual.charAt(prefixLength))
+                <span class="hljs-keyword">break</span>;
+    }
+    <span class="hljs-keyword">private</span> String <span class="hljs-title function_">compact</span><span class="hljs-params">(String s)</span> {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringBuilder</span>()
+            .append(startingEllipsis())
+            .append(startingContext())
+            .append(DELTA_START)
+            .append(delta(s))
+            .append(DELTA_END)
+            .append(endingContext())
+            .append(endingEllipsis())
+            .toString();
+    }
+    <span class="hljs-keyword">private</span> String <span class="hljs-title function_">startingEllipsis</span><span class="hljs-params">()</span> {
+        <span class="hljs-keyword">return</span> prefixLength &gt; contextLength ? ELLIPSIS : <span class="hljs-string">&quot;&quot;</span>;
+    }
+    <span class="hljs-keyword">private</span> String <span class="hljs-title function_">startingContext</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">int</span> <span class="hljs-variable">contextStart</span> <span class="hljs-operator">=</span> Math.max(<span class="hljs-number">0</span>, prefixLength - contextLength);
+        <span class="hljs-type">int</span> <span class="hljs-variable">contextEnd</span> <span class="hljs-operator">=</span> prefixLength;
+        <span class="hljs-keyword">return</span> expected.substring(contextStart, contextEnd);
+    }
+    <span class="hljs-keyword">private</span> String <span class="hljs-title function_">delta</span><span class="hljs-params">(String s)</span> {
+        <span class="hljs-type">int</span> <span class="hljs-variable">deltaStart</span> <span class="hljs-operator">=</span> prefixLength;
+        <span class="hljs-type">int</span> <span class="hljs-variable">deltaEnd</span> <span class="hljs-operator">=</span> s.length() - suffixLength;
+        <span class="hljs-keyword">return</span> s.substring(deltaStart, deltaEnd);
+    }
+    <span class="hljs-keyword">private</span> String <span class="hljs-title function_">endingContext</span><span class="hljs-params">()</span> {
+        <span class="hljs-type">int</span> <span class="hljs-variable">contextStart</span> <span class="hljs-operator">=</span> expected.length() - suffixLength;
+        <span class="hljs-type">int</span> <span class="hljs-variable">contextEnd</span> <span class="hljs-operator">=</span>
+            Math.min(contextStart + contextLength, expected.length());
+        <span class="hljs-keyword">return</span> expected.substring(contextStart, contextEnd);
+    }
+    <span class="hljs-keyword">private</span> String <span class="hljs-title function_">endingEllipsis</span><span class="hljs-params">()</span> {
+        <span class="hljs-keyword">return</span> (suffixLength &gt; contextLength ? ELLIPSIS : <span class="hljs-string">&quot;&quot;</span>);
+    }
+}
+</code></pre>
+<div dir="rtl">
+<p>این در واقع خیلی زیباست. ماژول به گروهی از توابع تحلیلی و گروه دیگری از توابع ترکیبی تقسیم شده است. این توابع به‌صورت توپولوژیکی مرتب شده‌اند به‌طوری که تعریف هر تابع درست بعد از استفاده آن قرار می‌گیرد. تمام توابع تحلیلی اول آمده‌اند و تمام توابع ترکیبی آخر.</p>
+<p>اگر با دقت نگاه کنید، متوجه خواهید شد که چند تصمیمی که قبلاً در این فصل گرفتم را معکوس کرده‌ام. به عنوان مثال، بعضی از متدهای استخراج‌شده را دوباره در تابع <code>formatCompactedComparison</code> گنجاندم و حس عبارت <code>shouldNotBeCompacted</code> را تغییر دادم. این کاملاً طبیعی است. اغلب یک بازسازی منجر به بازسازی دیگری می‌شود که منجر به برگرداندن تغییرات اول می‌شود. بازسازی یک فرایند تکراری است که پر از آزمایش و خطاست و به‌طور اجتناب‌ناپذیری به چیزی می‌رسد که احساس می‌کنیم شایسته یک حرفه‌ای است.</p>
+<h2>نتیجه‌گیری</h2>
+<p>و به این ترتیب ما قانون پیش‌خدمت اسکات را رعایت کرده‌ایم. این ماژول را کمی تمیزتر از آنچه که پیدا کردیم، رها کرده‌ایم. نه اینکه قبلاً تمیز نبوده باشد. نویسندگان کار فوق‌العاده‌ای با آن انجام داده بودند. اما هیچ ماژولی از بهبود مصون نیست و هرکدام از ما مسئولیت داریم که کد را کمی بهتر از آنچه که پیدا کرده‌ایم، ترک کنیم.</p>
+</div>
+
+</main>
+
+
+ 
+
+  <!-- فوتر مشترک -->
+  <footer class="footer">
+    <div class="container">
+      <p>
+        <img src="/icone/copyright.svg" alt="کپی‌رایت" width="14" height="14"
+             style="vertical-align:middle;margin-inline:4px">
+        <span id="y"></span> Gitab — برای توسعه‌دهندگان
+      </p>
+    </div>
+  </footer>
+
+  <!-- سال + اسکریپت تم -->
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    (() => {
+      const root = document.documentElement;
+      const btn = document.getElementById('themeToggle');
+      const KEY = 'gitab-theme';
+      const media = window.matchMedia('(prefers-color-scheme: dark)');
+      const getEffective = s => s === 'auto' ? (media.matches ? 'dark' : 'light') : s;
+      function updateTheme(s) {
+        root.setAttribute('data-theme', s);
+        const mode = getEffective(s);
+        root.dataset.colorMode = mode;
+        btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
+      }
+      const saved = localStorage.getItem(KEY) || 'auto';
+      updateTheme(saved);
+      btn.addEventListener('click', () => {
+        const curr = localStorage.getItem(KEY) || 'auto';
+        const next = curr === 'auto' ? 'dark' : curr === 'dark' ? 'light' : 'auto';
+        localStorage.setItem(KEY, next);
+        updateTheme(next);
+      });
+      media.addEventListener('change', () => {
+        if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
+      });
+      window.addEventListener('DOMContentLoaded', () => updateTheme(saved));
+    })();
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+<script>
+document.querySelectorAll('pre code').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+
+  const icon = document.createElement('img');
+  icon.src = '/icone/copy.svg';
+  icon.alt = 'Copy';
+  btn.appendChild(icon);
+
+  block.parentNode.insertBefore(btn, block);
+
+  btn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(block.textContent);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1500);
+  });
+});
+</script>
+<script>
+  document.body.dataset.page = window.location.pathname;
+</script>
+
+</body>
+
+</html>
