@@ -2,6 +2,7 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="utf-8">
+  <link rel="icon" type="image/png" href="/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>معرفی کتاب Task Programming in C#</title>
   <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
@@ -181,35 +182,45 @@ body {
   </footer>
 
   <!-- سال + اسکریپت تم -->
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
+<script>
+(() => {
+  const root = document.documentElement;
+  const btn = document.getElementById('themeToggle');
+  const KEY = 'gitab-theme';
+  const media = window.matchMedia('(prefers-color-scheme: dark)');
+  const getEffective = s => (s === 'auto' ? (media.matches ? 'dark' : 'light') : s);
 
-    (() => {
-      const root = document.documentElement;
-      const btn = document.getElementById('themeToggle');
-      const KEY = 'gitab-theme';
-      const media = window.matchMedia('(prefers-color-scheme: dark)');
-      const getEffective = s => s === 'auto' ? (media.matches ? 'dark' : 'light') : s;
-      function updateTheme(s) {
-        root.setAttribute('data-theme', s);
-        const mode = getEffective(s);
-        root.dataset.colorMode = mode;
-        btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
-      }
-      const saved = localStorage.getItem(KEY) || 'auto';
-      updateTheme(saved);
-      btn.addEventListener('click', () => {
-        const curr = localStorage.getItem(KEY) || 'auto';
-        const next = curr === 'auto' ? 'dark' : curr === 'dark' ? 'light' : 'auto';
-        localStorage.setItem(KEY, next);
-        updateTheme(next);
-      });
-      media.addEventListener('change', () => {
-        if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
-      });
-      window.addEventListener('DOMContentLoaded', () => updateTheme(saved));
-    })();
-  </script>
+  function updateTheme(s) {
+    root.setAttribute('data-theme', s);
+    const mode = getEffective(s);
+    root.dataset.colorMode = mode;
+    btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
+  }
+
+  // مقدار ذخیره‌شده یا پیش‌فرض
+  let saved = localStorage.getItem(KEY) || 'auto';
+  updateTheme(saved);
+
+  btn.addEventListener('click', () => {
+    // به‌روزرسانی فوری تم
+    const current = localStorage.getItem(KEY) || 'auto';
+    const next = current === 'auto' ? 'dark' : current === 'dark' ? 'light' : 'auto';
+    localStorage.setItem(KEY, next);
+    updateTheme(next);
+  });
+
+  // وقتی تم سیستم تغییر کنه و حالت auto فعاله، تم به‌روزرسانی میشه
+  media.addEventListener('change', () => {
+    if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
+  });
+
+  // اطمینان از هم‌زمانی بین DOM و localStorage
+  document.addEventListener('DOMContentLoaded', () => {
+    updateTheme(localStorage.getItem(KEY) || 'auto');
+  });
+})();
+</script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
 

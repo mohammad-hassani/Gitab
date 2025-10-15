@@ -221,7 +221,7 @@ html[data-theme="auto"][data-color-mode="light"] .footer img {
 
 /* ---------- هیرو ---------- */
 .hero {
-    padding: 80px 16px 54px;
+    padding: 70px 16px 54px;
 }
 .hero-inner {
     text-align: center;
@@ -500,7 +500,7 @@ html[data-theme="auto"][data-color-mode="light"] .footer img {
 .book-card.shift-down .cover img {
     object-position: center 20%; /* عدد کمتر = پایین‌تر */
 }
-.book-card.shift-down  .cover .two img {
+.book-card.shift-down .cover .two img {
     object-position: center 10%; /* عدد کمتر = پایین‌تر */
 }
 /* --- Hero Section --- */
@@ -1116,7 +1116,10 @@ body[data-page*="/Book/"] .site-main img {
         line-height: 1.6;
     }
 }
-
+.footer img {
+    width: 20px;
+    height: 20px;
+}
 /* --- خیلی کوچک (max-width: 400px) --- */
 @media (max-width: 400px) {
     .brand span {
@@ -1126,4 +1129,3 @@ body[data-page*="/Book/"] .site-main img {
         font-size: 0.8rem;
     }
 }
-
