@@ -1,3 +1,5 @@
+
+
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
@@ -6,60 +8,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>معرفی کتاب Clean Code in C#</title>
   <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
-  <link rel="stylesheet" href="/styles/main.css">
-<link rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
-<style>
-@font-face {
-  font-family: 'Vazir';
-  src: url('/fonts/Vazir-FD-WOL.ttf') format('truetype');
-  font-display: swap;
-}
-body {
-  font-family: 'Vazir', sans-serif;
-}
-</style>
 
+  <!-- استایل‌ها -->
+  <link rel="stylesheet" href="/styles/main.css">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+  <style>
+  @font-face {
+    font-family: 'Vazir';
+    src: url('/fonts/Vazir-FD-WOL.ttf') format('truetype');
+    font-display: swap;
+  }
+  body {
+    font-family: 'Vazir', sans-serif;
+  }
+  </style>
 </head>
+
 <body>
   <!-- هدر مشترک -->
- <header class="header">
-  <div class="container nav-wrap">
-    <a href="/" class="brand">
-      <img src="/icone/logo.svg" alt="Gitab logo" width="26" height="26">
-      <span>Gitab</span>
-    </a>
+  <header class="header">
+    <div class="container nav-wrap">
+      <a href="/" class="brand">
+        <img src="/icone/logo.svg" alt="Gitab logo" width="26" height="26">
+        <span>Gitab</span>
+      </a>
 
-    <nav class="nav">
-      <a href="/" aria-current="page">خانه</a>
-      <a href="/books/list-books">کتاب‌ها</a>
-      <a href="#">مترجمین</a>
-      <a href="#">همکاری</a>
-      <a href="#">درباره ما</a>
-    </nav>
+      <nav class="nav">
+        <a href="/" aria-current="page">خانه</a>
+        <a href="/books/list-books">کتاب‌ها</a>
+        <a href="#">مترجمین</a>
+        <a href="#">همکاری</a>
+        <a href="#">درباره ما</a>
+      </nav>
 
-    <div class="nav-actions">
-     <button id="themeToggle" class="icon-btn theme-btn" data-icon="moon" aria-label="تغییر تم">
-        <img src="/icone/sun.svg" class="icon-sun" alt="روشن">
-        <img src="/icone/moon.svg" class="icon-moon" alt="تاریک">
-      </button>
-  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
-    <img src="/icone/github.svg" alt="GitHub">
-  </a>
-      <!-- دکمه منو برای موبایل -->
-      <button class="menu-toggle" aria-label=" منو">
-        <img src="/icone/menu.svg" alt="menu">
-      </button>
+      <div class="nav-actions">
+        <button id="themeToggle" class="icon-btn theme-btn" data-icon="moon" aria-label="تغییر تم">
+          <img src="/icone/sun.svg" class="icon-sun" alt="روشن">
+          <img src="/icone/moon.svg" class="icon-moon" alt="تاریک">
+        </button>
+
+        <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
+          <img src="/icone/github.svg" alt="GitHub">
+        </a>
+
+        <!-- دکمه منو برای موبایل -->
+        <button class="menu-toggle" aria-label="منو">
+          <img src="/icone/menu.svg" alt="menu">
+        </button>
+      </div>
     </div>
-  </div> 
+  </header>
+
   
-
-</header>
-
- 
-
-<main class="site-main book-page ">
-  
+  <main class="site-main book-page">
+    
 <section class="book-header">
   <div class="book-cover">
     <img src="/images/clean-code-csharp/Cover.webp" alt="Clean Code in C#" />
@@ -206,10 +210,7 @@ body {
   </details>
 </section>
 
-</main>
-
-
- 
+  </main>
 
   <!-- فوتر مشترک -->
   <footer class="footer">
@@ -222,84 +223,77 @@ body {
     </div>
   </footer>
 
-  <!-- سال + اسکریپت تم -->
-<script>
-(() => {
-  const root = document.documentElement;
-  const btn = document.getElementById('themeToggle');
-  const KEY = 'gitab-theme';
-  const media = window.matchMedia('(prefers-color-scheme: dark)');
-  const getEffective = s => (s === 'auto' ? (media.matches ? 'dark' : 'light') : s);
+  <!-- سال و اسکریپت تغییر تم -->
+  <script>
+  (() => {
+    const root = document.documentElement;
+    const btn = document.getElementById('themeToggle');
+    const KEY = 'gitab-theme';
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const getEffective = s => (s === 'auto' ? (media.matches ? 'dark' : 'light') : s);
 
-  function updateTheme(s) {
-    root.setAttribute('data-theme', s);
-    const mode = getEffective(s);
-    root.dataset.colorMode = mode;
-    btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
-  }
+    function updateTheme(s) {
+      root.setAttribute('data-theme', s);
+      const mode = getEffective(s);
+      root.dataset.colorMode = mode;
+      btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
+    }
 
-  // مقدار ذخیره‌شده یا پیش‌فرض
-  let saved = localStorage.getItem(KEY) || 'auto';
-  updateTheme(saved);
+    let saved = localStorage.getItem(KEY) || 'auto';
+    updateTheme(saved);
 
-  btn.addEventListener('click', () => {
-    // به‌روزرسانی فوری تم
-    const current = localStorage.getItem(KEY) || 'auto';
-    const next = current === 'auto' ? 'dark' : current === 'dark' ? 'light' : 'auto';
-    localStorage.setItem(KEY, next);
-    updateTheme(next);
-  });
+    btn.addEventListener('click', () => {
+      const current = localStorage.getItem(KEY) || 'auto';
+      const next = current === 'auto' ? 'dark' : current === 'dark' ? 'light' : 'auto';
+      localStorage.setItem(KEY, next);
+      updateTheme(next);
+    });
 
-  // وقتی تم سیستم تغییر کنه و حالت auto فعاله، تم به‌روزرسانی میشه
-  media.addEventListener('change', () => {
-    if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
-  });
+    media.addEventListener('change', () => {
+      if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
+    });
 
-  // اطمینان از هم‌زمانی بین DOM و localStorage
-  document.addEventListener('DOMContentLoaded', () => {
-    updateTheme(localStorage.getItem(KEY) || 'auto');
-  });
-})();
-</script>
+    document.addEventListener('DOMContentLoaded', () => {
+      updateTheme(localStorage.getItem(KEY) || 'auto');
+    });
+  })();
+  </script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script>hljs.highlightAll();</script>
+  <script>hljs.highlightAll();</script>
 
-<script>
-document.querySelectorAll('pre code').forEach(block => {
-  const btn = document.createElement('button');
-  btn.className = 'copy-btn';
+  <script>
+  document.querySelectorAll('pre code').forEach(block => {
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
 
-  const icon = document.createElement('img');
-  icon.src = '/icone/copy.svg';
-  icon.alt = 'Copy';
-  btn.appendChild(icon);
+    const icon = document.createElement('img');
+    icon.src = "/icone/copy.svg";
+    icon.alt = 'Copy';
+    btn.appendChild(icon);
 
-  block.parentNode.insertBefore(btn, block);
+    block.parentNode.insertBefore(btn, block);
 
-  btn.addEventListener('click', async () => {
-    await navigator.clipboard.writeText(block.textContent);
-    btn.classList.add('copied');
-    setTimeout(() => btn.classList.remove('copied'), 1500);
+    btn.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(block.textContent);
+      btn.classList.add('copied');
+      setTimeout(() => btn.classList.remove('copied'), 1500);
+    });
   });
-});
-</script>
-<script>
+  </script>
+
+  <script>
   document.body.dataset.page = window.location.pathname;
-</script>
-<script>
-  // باز و بسته کردن منوی موبایل
+
   const menuBtn = document.querySelector(".menu-toggle");
   const nav = document.querySelector(".nav");
 
   if (menuBtn && nav) {
-    // باز و بسته شدن با دکمه
     menuBtn.addEventListener("click", (e) => {
-      e.stopPropagation(); // نذاره کلیک روی خود دکمه باعث بسته شدن بشه
+      e.stopPropagation();
       nav.classList.toggle("show");
     });
 
-    // بستن منو با کلیک بیرون
     document.addEventListener("click", (e) => {
       const clickedInsideNav = nav.contains(e.target);
       const clickedMenuButton = menuBtn.contains(e.target);
@@ -308,10 +302,10 @@ document.querySelectorAll('pre code').forEach(block => {
       }
     });
   }
-</script>
+  </script>
 
-
-
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
 </body>
-
 </html>

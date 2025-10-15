@@ -1,3 +1,5 @@
+
+
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
@@ -6,60 +8,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>بازنگری کد C# – پیاده‌سازی الگوهای طراحی</title>
   <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
-  <link rel="stylesheet" href="/styles/main.css">
-<link rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
-<style>
-@font-face {
-  font-family: 'Vazir';
-  src: url('/fonts/Vazir-FD-WOL.ttf') format('truetype');
-  font-display: swap;
-}
-body {
-  font-family: 'Vazir', sans-serif;
-}
-</style>
 
+  <!-- استایل‌ها -->
+  <link rel="stylesheet" href="/styles/main.css">
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
+  <style>
+  @font-face {
+    font-family: 'Vazir';
+    src: url('/fonts/Vazir-FD-WOL.ttf') format('truetype');
+    font-display: swap;
+  }
+  body {
+    font-family: 'Vazir', sans-serif;
+  }
+  </style>
 </head>
+
 <body>
   <!-- هدر مشترک -->
- <header class="header">
-  <div class="container nav-wrap">
-    <a href="/" class="brand">
-      <img src="/icone/logo.svg" alt="Gitab logo" width="26" height="26">
-      <span>Gitab</span>
-    </a>
+  <header class="header">
+    <div class="container nav-wrap">
+      <a href="/" class="brand">
+        <img src="/icone/logo.svg" alt="Gitab logo" width="26" height="26">
+        <span>Gitab</span>
+      </a>
 
-    <nav class="nav">
-      <a href="/" aria-current="page">خانه</a>
-      <a href="/books/list-books">کتاب‌ها</a>
-      <a href="#">مترجمین</a>
-      <a href="#">همکاری</a>
-      <a href="#">درباره ما</a>
-    </nav>
+      <nav class="nav">
+        <a href="/" aria-current="page">خانه</a>
+        <a href="/books/list-books">کتاب‌ها</a>
+        <a href="#">مترجمین</a>
+        <a href="#">همکاری</a>
+        <a href="#">درباره ما</a>
+      </nav>
 
-    <div class="nav-actions">
-     <button id="themeToggle" class="icon-btn theme-btn" data-icon="moon" aria-label="تغییر تم">
-        <img src="/icone/sun.svg" class="icon-sun" alt="روشن">
-        <img src="/icone/moon.svg" class="icon-moon" alt="تاریک">
-      </button>
-  <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
-    <img src="/icone/github.svg" alt="GitHub">
-  </a>
-      <!-- دکمه منو برای موبایل -->
-      <button class="menu-toggle" aria-label=" منو">
-        <img src="/icone/menu.svg" alt="menu">
-      </button>
+      <div class="nav-actions">
+        <button id="themeToggle" class="icon-btn theme-btn" data-icon="moon" aria-label="تغییر تم">
+          <img src="/icone/sun.svg" class="icon-sun" alt="روشن">
+          <img src="/icone/moon.svg" class="icon-moon" alt="تاریک">
+        </button>
+
+        <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
+          <img src="/icone/github.svg" alt="GitHub">
+        </a>
+
+        <!-- دکمه منو برای موبایل -->
+        <button class="menu-toggle" aria-label="منو">
+          <img src="/icone/menu.svg" alt="menu">
+        </button>
+      </div>
     </div>
-  </div> 
+  </header>
+
   
-
-</header>
-
- 
-
-<main class="site-main book-page ">
-  <h1>فصل چهاردهم:  بازنگری کد C# – پیاده‌سازی الگوهای طراحی 🛠️</h1>
+  <main class="site-main book-page">
+    <h1>فصل چهاردهم:  بازنگری کد C# – پیاده‌سازی الگوهای طراحی 🛠️</h1>
 <p>نیمی از نبرد در برنامه‌نویسی <strong>کد تمیز</strong> در پیاده‌سازی و استفاده صحیح از <strong>الگوهای طراحی</strong> نهفته است. خود <strong>الگوهای طراحی</strong> نیز می‌توانند به <strong>Code Smell</strong> تبدیل شوند. یک <strong>الگوی طراحی</strong> زمانی به <strong>Code Smell</strong> تبدیل می‌شود که برای چیزی که به‌سادگی قابل پیاده‌سازی است، بیش از حد مهندسی شود.</p>
 <p>شما پیش‌تر استفاده از <strong>الگوهای طراحی</strong> را در نوشتن کد تمیز و بازنگری <strong>Code Smell</strong>ها در فصل‌های قبلی این کتاب مشاهده کرده‌اید. به‌طور مشخص، ما <strong>الگوی Adapter</strong>، <strong>Decorator</strong> و <strong>Proxy</strong> را پیاده‌سازی کردیم. این الگوها به روشی درست پیاده‌سازی شدند تا وظیفه موردنظر را انجام دهند. آن‌ها ساده نگه داشته شدند و مطمئناً کد را پیچیده نکردند. بنابراین، وقتی برای هدف مناسب خود استفاده شوند، <strong>الگوهای طراحی</strong> واقعاً در حذف <strong>Code Smell</strong>ها مفید هستند و کد شما را تمیز، شفاف و قابل نگهداری می‌کنند. ✨</p>
 <p>در این فصل، به <strong>الگوهای طراحی Gang of Four (GoF)</strong> در سه دسته <strong>Creational (ایجادشی)</strong>، <strong>Structural (ساختاری)</strong> و <strong>Behavioral (رفتاری)</strong> می‌پردازیم. <strong>الگوهای طراحی</strong> قوانین سخت و ثابتی ندارند و لازم نیست پیاده‌سازی آن‌ها را بیش از حد سختگیرانه دنبال کنید. اما داشتن نمونه‌های کد می‌تواند به شما کمک کند تا از <strong>دانش نظری</strong> به <strong>مهارت عملی لازم برای پیاده‌سازی و استفاده صحیح از الگوها</strong> برسید. 🧩</p>
@@ -950,10 +954,7 @@ flyweightClient.ProcessFlyweights();
 <li>و دیگر منابع ذکر شده در متن</li>
 </ul>
 
-</main>
-
-
- 
+  </main>
 
   <!-- فوتر مشترک -->
   <footer class="footer">
@@ -966,84 +967,77 @@ flyweightClient.ProcessFlyweights();
     </div>
   </footer>
 
-  <!-- سال + اسکریپت تم -->
-<script>
-(() => {
-  const root = document.documentElement;
-  const btn = document.getElementById('themeToggle');
-  const KEY = 'gitab-theme';
-  const media = window.matchMedia('(prefers-color-scheme: dark)');
-  const getEffective = s => (s === 'auto' ? (media.matches ? 'dark' : 'light') : s);
+  <!-- سال و اسکریپت تغییر تم -->
+  <script>
+  (() => {
+    const root = document.documentElement;
+    const btn = document.getElementById('themeToggle');
+    const KEY = 'gitab-theme';
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const getEffective = s => (s === 'auto' ? (media.matches ? 'dark' : 'light') : s);
 
-  function updateTheme(s) {
-    root.setAttribute('data-theme', s);
-    const mode = getEffective(s);
-    root.dataset.colorMode = mode;
-    btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
-  }
+    function updateTheme(s) {
+      root.setAttribute('data-theme', s);
+      const mode = getEffective(s);
+      root.dataset.colorMode = mode;
+      btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
+    }
 
-  // مقدار ذخیره‌شده یا پیش‌فرض
-  let saved = localStorage.getItem(KEY) || 'auto';
-  updateTheme(saved);
+    let saved = localStorage.getItem(KEY) || 'auto';
+    updateTheme(saved);
 
-  btn.addEventListener('click', () => {
-    // به‌روزرسانی فوری تم
-    const current = localStorage.getItem(KEY) || 'auto';
-    const next = current === 'auto' ? 'dark' : current === 'dark' ? 'light' : 'auto';
-    localStorage.setItem(KEY, next);
-    updateTheme(next);
-  });
+    btn.addEventListener('click', () => {
+      const current = localStorage.getItem(KEY) || 'auto';
+      const next = current === 'auto' ? 'dark' : current === 'dark' ? 'light' : 'auto';
+      localStorage.setItem(KEY, next);
+      updateTheme(next);
+    });
 
-  // وقتی تم سیستم تغییر کنه و حالت auto فعاله، تم به‌روزرسانی میشه
-  media.addEventListener('change', () => {
-    if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
-  });
+    media.addEventListener('change', () => {
+      if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
+    });
 
-  // اطمینان از هم‌زمانی بین DOM و localStorage
-  document.addEventListener('DOMContentLoaded', () => {
-    updateTheme(localStorage.getItem(KEY) || 'auto');
-  });
-})();
-</script>
+    document.addEventListener('DOMContentLoaded', () => {
+      updateTheme(localStorage.getItem(KEY) || 'auto');
+    });
+  })();
+  </script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script>hljs.highlightAll();</script>
+  <script>hljs.highlightAll();</script>
 
-<script>
-document.querySelectorAll('pre code').forEach(block => {
-  const btn = document.createElement('button');
-  btn.className = 'copy-btn';
+  <script>
+  document.querySelectorAll('pre code').forEach(block => {
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
 
-  const icon = document.createElement('img');
-  icon.src = '/icone/copy.svg';
-  icon.alt = 'Copy';
-  btn.appendChild(icon);
+    const icon = document.createElement('img');
+    icon.src = "/icone/copy.svg";
+    icon.alt = 'Copy';
+    btn.appendChild(icon);
 
-  block.parentNode.insertBefore(btn, block);
+    block.parentNode.insertBefore(btn, block);
 
-  btn.addEventListener('click', async () => {
-    await navigator.clipboard.writeText(block.textContent);
-    btn.classList.add('copied');
-    setTimeout(() => btn.classList.remove('copied'), 1500);
+    btn.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(block.textContent);
+      btn.classList.add('copied');
+      setTimeout(() => btn.classList.remove('copied'), 1500);
+    });
   });
-});
-</script>
-<script>
+  </script>
+
+  <script>
   document.body.dataset.page = window.location.pathname;
-</script>
-<script>
-  // باز و بسته کردن منوی موبایل
+
   const menuBtn = document.querySelector(".menu-toggle");
   const nav = document.querySelector(".nav");
 
   if (menuBtn && nav) {
-    // باز و بسته شدن با دکمه
     menuBtn.addEventListener("click", (e) => {
-      e.stopPropagation(); // نذاره کلیک روی خود دکمه باعث بسته شدن بشه
+      e.stopPropagation();
       nav.classList.toggle("show");
     });
 
-    // بستن منو با کلیک بیرون
     document.addEventListener("click", (e) => {
       const clickedInsideNav = nav.contains(e.target);
       const clickedMenuButton = menuBtn.contains(e.target);
@@ -1052,10 +1046,10 @@ document.querySelectorAll('pre code').forEach(block => {
       }
     });
   }
-</script>
+  </script>
 
-
-
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
 </body>
-
 </html>
