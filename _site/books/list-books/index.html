@@ -22,34 +22,40 @@ body {
 </head>
 <body>
   <!-- هدر مشترک -->
-  <header class="header">
-    <div class="container nav-wrap">
-      <a class="brand" href="/">
-        <img src="/icone/logo.svg" alt="Gitab" width="28" height="28">
-        <span>Gitab</span>
-      </a>
+ <header class="header">
+  <div class="container nav-wrap">
+    <a href="/" class="brand">
+      <img src="/icone/logo.svg" alt="Gitab logo" width="26" height="26">
+      <span>Gitab</span>
+    </a>
 
-      <nav class="nav">
-        <a href="/">خانه</a>
-        <a href="/books/list-books">کتاب‌ها</a>
-        <a href="#">مترجم ها</a>
-        <a href="#">همکاری</a>
-        <a href="#">درباره‌ما</a>
-      </nav>
+    <nav class="nav">
+      <a href="/" aria-current="page">خانه</a>
+      <a href="/books/list-books">کتاب‌ها</a>
+      <a href="#">مترجمین</a>
+      <a href="#">همکاری</a>
+      <a href="#">درباره ما</a>
+    </nav>
 
-     <div class="nav-actions">
-  <button id="themeToggle" class="icon-btn theme-btn" aria-label="تغییر حالت">
-    <img class="icon-sun" src="/icone/sun.svg" alt="روشن">
-    <img class="icon-moon" src="/icone/moon.svg" alt="تاریک">
-  </button>
-
+    <div class="nav-actions">
+     <button id="themeToggle" class="icon-btn theme-btn" data-icon="moon" aria-label="تغییر تم">
+        <img src="/icone/sun.svg" class="icon-sun" alt="روشن">
+        <img src="/icone/moon.svg" class="icon-moon" alt="تاریک">
+      </button>
   <a class="icon-btn" href="https://github.com/hheydarian/Gitab" target="_blank" title="GitHub">
     <img src="/icone/github.svg" alt="GitHub">
   </a>
-</div>
+      <!-- دکمه منو برای موبایل -->
+      <button class="menu-toggle" aria-label=" منو">
+        <img src="/icone/menu.svg" alt="menu">
+      </button>
+    </div>
+  </div> 
+  
 
-  </header>
+</header>
 
+ 
 
 <main class="site-main book-page ">
   
@@ -109,7 +115,7 @@ body {
     <!-- کتاب 4 -->
     <article class="book-card">
       <div class="cover">
-        <img src="/images/task-programming/Cover.jpg" alt="ASP.NET Core 9.0 Essentials – کاور">
+        <img src="/images/task-programming/Cover.jpg" alt="task programming – کاور">
       </div>
       <div class="body">
         <h3>Task Programming in C# and .NET</h3>
@@ -122,6 +128,21 @@ body {
       </div>
     </article>
 
+ <!-- کتاب 5 -->
+    <article class="book-card shift-down">
+      <div class="cover  two">
+        <img src="/images/the-linux-command-line/Cover.jpg" alt="the linux command line – کاور">
+      </div>
+      <div class="body">
+        <h3>The Linux Command Line</h3>
+        <p>برای علاقه‌مندان به لینوکس و ابزارهای خط فرمان (CLI)</p>
+        <div class="actions">
+         <a class="btn small " href="#">در حال آماده سازی</a>
+          <a class="btn small ghost" href="https://github.com/hemansadeghi/TLCL-Persian" 
+          target="_blank">گیت‌هاب</a>
+        </div>
+      </div>
+    </article>
   </div>
 </section>
 </main>
@@ -195,6 +216,30 @@ document.querySelectorAll('pre code').forEach(block => {
 <script>
   document.body.dataset.page = window.location.pathname;
 </script>
+<script>
+  // باز و بسته کردن منوی موبایل
+  const menuBtn = document.querySelector(".menu-toggle");
+  const nav = document.querySelector(".nav");
+
+  if (menuBtn && nav) {
+    // باز و بسته شدن با دکمه
+    menuBtn.addEventListener("click", (e) => {
+      e.stopPropagation(); // نذاره کلیک روی خود دکمه باعث بسته شدن بشه
+      nav.classList.toggle("show");
+    });
+
+    // بستن منو با کلیک بیرون
+    document.addEventListener("click", (e) => {
+      const clickedInsideNav = nav.contains(e.target);
+      const clickedMenuButton = menuBtn.contains(e.target);
+      if (!clickedInsideNav && !clickedMenuButton) {
+        nav.classList.remove("show");
+      }
+    });
+  }
+</script>
+
+
 
 </body>
 

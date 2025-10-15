@@ -500,7 +500,9 @@ html[data-theme="auto"][data-color-mode="light"] .footer img {
 .book-card.shift-down .cover img {
     object-position: center 20%; /* عدد کمتر = پایین‌تر */
 }
-
+.book-card.shift-down  .cover .two img {
+    object-position: center 10%; /* عدد کمتر = پایین‌تر */
+}
 /* --- Hero Section --- */
 .book-hero {
     position: relative;
@@ -1032,3 +1034,96 @@ body[data-page*="/Book/"] .site-main img {
     border-radius: 0 !important;
     box-shadow: none !important;
 }
+
+/* منوی موبایل مخفی در دسکتاپ */
+.menu-toggle {
+    display: none;
+}
+
+/* --- تبلت (max-width: 900px) --- */
+@media (max-width: 900px) {
+    .nav-wrap {
+        grid-template-columns: 1fr auto auto;
+        gap: 8px;
+    }
+    .nav {
+        gap: 14px;
+    }
+    .nav a {
+        font-size: 0.9rem;
+    }
+    .nav-actions {
+        gap: 6px;
+    }
+}
+
+/* --- موبایل (max-width: 680px) --- */
+@media (max-width: 680px) {
+    .nav-wrap {
+        grid-template-columns: 1fr auto;
+        align-items: center;
+    }
+
+    .menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: color-mix(in oklab, var(--bg-2) 85%, var(--bg-1));
+        box-shadow: var(--shadow-1);
+    }
+    .menu-toggle img {
+        width: 20px;
+        height: 20px;
+        filter: invert(70%) sepia(5%) saturate(200%) hue-rotate(180deg);
+    }
+    html[data-theme="light"] .menu-toggle img,
+    html[data-theme="auto"][data-color-mode="light"] .menu-toggle img {
+        filter: invert(10%) brightness(0.4) contrast(1.4);
+    }
+
+    .nav {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 16px;
+        background: color-mix(in oklab, var(--bg-2) 95%, transparent);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px 22px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        z-index: 50;
+        min-width: 180px; /* عرض حداقلی */
+        width: max-content; /* با توجه به طول متن */
+    }
+    .nav.show {
+        display: flex;
+    }
+
+    /* برند کوچکتر */
+    .brand span {
+        font-size: 1rem;
+    }
+
+    /* فوتر */
+    .footer {
+        padding: 14px 10px;
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+}
+
+/* --- خیلی کوچک (max-width: 400px) --- */
+@media (max-width: 400px) {
+    .brand span {
+        display: none;
+    }
+    .footer {
+        font-size: 0.8rem;
+    }
+}
+
