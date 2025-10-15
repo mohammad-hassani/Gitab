@@ -49,6 +49,7 @@ module.exports = function (eleventyConfig) {
             includes: "_includes", // مسیر قالب‌ها (حتماً با آندرلاین)
             layouts: "_includes",
         },
+        pathPrefix: "/Gitab/",
         markdownTemplateEngine: "njk",
         htmlTemplateEngine: "njk",
     };
