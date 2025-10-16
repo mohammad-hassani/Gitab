@@ -5,7 +5,7 @@
 <h1 align="center">گیتاب</h1>
 <h1>
 <p align="center">
-   <a href="https://hheydarian.github.io/Gitab/" target="_blank"><strong>سایت آنلاین گیتاب — کلیک کن و ببین!</strong></a>
+   <a href="https://hheydarian.github.io/Gitab/" target="_blank"><strong>سایت آنلاین گیتاب — کلیک کن !</strong></a>
 </p>
 
 </h1>
