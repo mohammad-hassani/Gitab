@@ -1182,7 +1182,6 @@ body[data-page*="/Book/"] .site-main img {
 }
 /* Hover */
 .translator-card:hover {
-    transform: translateY(-2px);
     box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
 }
 
@@ -1270,4 +1269,73 @@ html[data-color-mode="light"] .social-links img {
             0 0 20px color-mix(in oklab, var(--brand) 40%, #000);
         transform: scale(1);
     }
+}
+/* Tooltip اختصاصی */
+.owner-badge {
+    position: relative;
+}
+
+/* ظاهر tooltip */
+.owner-badge::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(249, 203, 39, 0.95);
+    color: #222;
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    border-radius: 8px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* افکت ظاهر شدن */
+.owner-badge:hover::after {
+    opacity: 1;
+    transform: translate(-50%, -4px);
+}
+.owner-badge img {
+    width: 26px;
+    height: 26px;
+    filter: none !important; /* از فیلتر invert خلاص میشه */
+    opacity: 0.95;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.owner-badge img {
+    cursor: pointer;
+    filter: drop-shadow(0 0 2px #fbce2b);
+}
+/* رنگ و افکت مخصوص برچسب همکار */
+.owner-badge.work img {
+    filter: drop-shadow(0 0 2px #fc6c32);
+    cursor: pointer;
+}
+
+/* رنگ و استایل تول‌تیپ مخصوص همکار */
+.owner-badge.work::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 121, 59, 0.95); /* رنگ تول‌تیپ */
+    color: #222;
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    border-radius: 8px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* افکت ظاهر شدن */
+.owner-badge.work:hover::after {
+    opacity: 1;
+    transform: translate(-50%, -4px);
 }
