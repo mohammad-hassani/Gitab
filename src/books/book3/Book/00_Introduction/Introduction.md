@@ -8,9 +8,7 @@ title: مقدمه
 
 </div>
 
-<p align="center">
-  <img src="../../../assets/image/00/img-0.1.png"/>
-</p>
+![alt text](../../../assets/image/00/img-0.1.png "meaningful names")
 
 <div dir='rtl'>
 
