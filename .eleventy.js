@@ -13,7 +13,7 @@ module.exports = function (eleventyConfig) {
     eleventyConfig.addPassthroughCopy("src/books/book4/assets");
     eleventyConfig.addPassthroughCopy({ "src/favicon.png": "favicon.png" });
     eleventyConfig.addPassthroughCopy("src/icone");
-
+    eleventyConfig.addPassthroughCopy(".nojekyll");
     /* --- Markdown با Highlight.js --- */
     const markdownLib = markdownIt({
         html: true,
