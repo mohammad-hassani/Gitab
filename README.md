@@ -1,25 +1,52 @@
 <div align="center">
-
-<img src="src/readme/Gitab.png">
+  <img src="src/readme/Gitab.png" alt="Gitab Logo" width="150" />
 </div>
 
+<h1 align="center">گیتاب</h1>
+<p align="center">
+   <a href="https://hheydarian.github.io/Gitab/" target="_blank"><strong>سایت آنلاین گیتاب — کلیک کن و ببین!</strong></a>
+</p>
 
-# گیتاب: منابع ترجمه شده به پارسی
+---
 
-> [!IMPORTANT]
-> تمامی این ترجمه ها به زودی آنلاین می شوند. میتونید در طراحی ما رو کمک کنید.
+## 🎯 دربارهٔ گیتاب
 
-## 😺 مشارکت در ترجمه
- برای همراهی در ترجمه کتاب ها می تونید هر کتابی دوست داشتید، انتخاب کنید و ما رو همراهی کنید:
-  
-+ 
-  🔗  [csharp-12-in-a-nutshell-persian](https://github.com/hheydarian/csharp-12-in-a-nutshell-persian)
-+
-  🔗  [clean-code-in-csharp-persian](https://github.com/hheydarian/clean-code-in-csharp-persian)
-+
-  🔗  [task-programming-in-csharp-dotnet-persian](https://github.com/hheydarian/task-programming-in-csharp-dotnet-persian)
-+
-  🔗  [clean-code-persian](https://github.com/hheydarian/clean-code-persian)
+گیتاب یک پلتفرم متن‌باز است که هدفش فراهم کردن **ترجمه‌های باکیفیت** کتاب‌های فنی و برنامه‌نویسی به زبان فارسی است.  
+ما تلاش می‌کنیم تا این ترجمه‌ها را به شکل **سلیس، سبک و قابل توسعه** منتشر کنیم.
+
+- 📚 ترجمه‌ها به صورت **آنلاین و رایگان** منتشر می‌شوند  
+- ✍️ هدف ما ترویج دانش و دسترسی بدون مانع به مفاهیم فنی است  
+- 🤝 شما هم می‌توانید سهم خود را در این حرکت بزرگ داشته باشید  
+
+---
+
+## 🚀 شروع به همکاری
+
+اگر علاقه‌مند به ترجمه، ویرایش، تصحیح یا بررسی ترجمه‌ها هستید، همین حالا به جمع ما بپیوندید:
+
+<div align="center">
+ 
 
 
-  🔗 ادامه دارد...
+| کتاب | مخزن ترجمه |
+|------|-------------|
+| C# 12 in a Nutshell | [csharp-12-in-a-nutshell-persian](https://github.com/hheydarian/csharp-12-in-a-nutshell-persian) |
+| Clean Code in C# | [clean-code-in-csharp-persian](https://github.com/hheydarian/clean-code-in-csharp-persian) |
+| Task Programming in C# | [task-programming-in-csharp-dotnet-persian](https://github.com/hheydarian/task-programming-in-csharp-dotnet-persian) |
+| Clean Code (عمومی) | [clean-code-persian](https://github.com/hheydarian/clean-code-persian) |
+| ادامه دارد | ...|
+
+</div>
+
+🌱 علاقه‌مند به ترجمهٔ کتاب جدید؟ یک issue باز کنید یا PR ارسال کنید – ما راهنمایی می‌کنیم.
+
+---
+
+## 🛠️ ساختار پروژه
+
+پروژه از معماری Eleventy استفاده می‌کند و با GitHub Pages منتشر شده است.  
+برای توسعه محلی کافیست:
+
+```bash
+npm install
+npx eleventy --serve
