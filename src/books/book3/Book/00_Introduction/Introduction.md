@@ -8,7 +8,8 @@ title: مقدمه
 
 </div>
 
-![alt text](../../../assets/image/00/img-0.1.png "meaningful names")
+
+![clean code](../../../assets/image/00/img-0.1.png)
 
 <div dir='rtl'>
 
