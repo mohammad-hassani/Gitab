@@ -1339,3 +1339,33 @@ html[data-color-mode="light"] .social-links img {
     opacity: 1;
     transform: translate(-50%, -4px);
 }
+
+
+.owner-badge.manager img {
+    filter: drop-shadow(0 0 2px #7a01de);
+    cursor: pointer;
+}
+
+/* رنگ و استایل تول‌تیپ مخصوص همکار */
+.owner-badge.manager::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(129, 11, 248, 0.95); /* رنگ تول‌تیپ */
+    color: #ffffff;
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    border-radius: 8px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* افکت ظاهر شدن */
+.owner-badge.manager:hover::after {
+    opacity: 1;
+    transform: translate(-50%, -4px);
+}
