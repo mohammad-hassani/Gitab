@@ -1,169 +1,219 @@
 ---
 layout: layout.njk
-title: معرفی کتاب Clean Code in C#
+title: #Clean Code in C
 permalink: /books/book2/index.html
 ---
+<!DOCTYPE html>
+<html lang="en">
 
-<section class="book-header">
-  <div class="book-cover">
-    <img src="{{ '/images/clean-code-csharp/Cover.webp' | url }}" alt="Clean Code in C#" />
-  </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <div class="book-meta">
-    <h1> #Clean Code in C</h1>
-    <p class="subtitle">
-      راهنمای عملی برای نوشتن کدهای تمیز، مقیاس‌پذیر و قابل نگهداری در سی‌شارپ.
-    </p>
+</head>
 
-    <div class="book-tags">
-      <span>CleanCode#</span>
-      <span>Refactoring#</span>
-      <span>CSharp#</span>
-      <span>SoftwareDesign#</span>
-      <span>NET.#</span>
+<body>
+  <section class="book-header">
+    <div class="book-cover">
+      <img src="{{ '/images/clean-code-csharp/Cover.webp' | url }}" alt="Clean Code in C#" />
     </div>
-    <button class="donate-btn" id="openDonate">
-      💜 حمایت مالی از مترجم
-    </button>
-    <button class="donate-btn download" id="openDonate"> فایل اصلی </button>
-    <button class="donate-btn downloadfa" id="openDonate"> فایل فارسی </button>
 
-    <div id="donateModal" class="donate-modal">
-      <div class="donate-overlay"></div>
-      <div class="donate-content">
-        <!-- کارت بانکی -->
-        <div class="donate-section">
-          <div class="donate-row">
-            <img src="{{ '/icone/card.svg' | url }}" alt="card" class="icon">
-            <span class="label">کارت بانکی:</span>
-            <span class="value">6219 8619 3657 5579</span>
-            <button class="copy-btn donate-copy" data-copy="6219861936575579">کپی</button>
-          </div>
+    <div class="book-meta">
+      <h1> #Clean Code in C</h1>
+      <p class="subtitle">
+        راهنمای عملی برای نوشتن کدهای تمیز، مقیاس‌پذیر و قابل نگهداری در سی‌شارپ.
+      </p>
+
+      <div class="book-tags">
+        <span>CleanCode#</span>
+        <span>Refactoring#</span>
+        <span>CSharp#</span>
+        <span>SoftwareDesign#</span>
+        <span>NET.#</span>
+      </div>
+
+      <div class="donate-buttons">
+        <button class="donate-btn" id="openDonate">💜 حمایت مالی از مترجم</button>
+
+        <div class="download-wrapper">
+          <button class="donate-btn download" id="mainDownload"
+            data-link="https://drive.google.com/uc?export=download&id=13aMVJeeBxisyeau3VmNtaa88Byq5BmWy">
+            فایل اصلی
+          </button>
+          <span class="tooltip-download" id="tooltipDownload">در حال آماده سازی...</span>
         </div>
 
-        <!-- کیف پول -->
-        <div class="donate-section">
-          <div class="donate-row">
-            <img src="{{ '/icone/money.svg' | url }}" alt="crypto" class="icon">
-            <span class="label">آدرس کیف پول:</span>
-            <span class="value wallet">UQCWRF4kFYSmkx...bky8grq5Ri7</span>
-            <img src="{{ '/icone/ton.svg' | url }}" alt="TON" class="ton-icon">
-            <button class="copy-btn donate-copy"
-              data-copy="UQCWRF4kFYSmkx4dSX1ozNHAlx77j7xKZj7Nzbky8grq5Ri7">کپی</button>
+        <button class="donate-btn downloadfa">فایل فارسی</button>
+      </div>
+      <div id="donateModal" class="donate-modal">
+        <div class="donate-overlay"></div>
+        <div class="donate-content">
+          <!-- کارت بانکی -->
+          <div class="donate-section">
+            <div class="donate-row">
+              <img src="{{ '/icone/card.svg' | url }}" alt="card" class="icon">
+              <span class="label">کارت بانکی:</span>
+              <span class="value">6219 8619 3657 5579</span>
+              <button class="copy-btn donate-copy" data-copy="6219861936575579">کپی</button>
+            </div>
           </div>
-        </div>
 
-        <button class="close-btn" id="closeDonate">بستن</button>
+          <!-- کیف پول -->
+          <div class="donate-section">
+            <div class="donate-row">
+              <img src="{{ '/icone/money.svg' | url }}" alt="crypto" class="icon">
+              <span class="label">آدرس کیف پول:</span>
+              <span class="value wallet">UQCWRF4kFYSmkx...bky8grq5Ri7</span>
+              <img src="{{ '/icone/ton.svg' | url }}" alt="TON" class="ton-icon">
+              <button class="copy-btn donate-copy"
+                data-copy="UQCWRF4kFYSmkx4dSX1ozNHAlx77j7xKZj7Nzbky8grq5Ri7">کپی</button>
+            </div>
+          </div>
+
+          <button class="close-btn" id="closeDonate">بستن</button>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="book-intro">
-  <p>
-    کتاب <strong>#Clean Code in C</strong> نوشتهٔ <em>Jason Alls</em> به شکل گام‌به‌گام اصول
-    کدنویسی تمیز، ریفکتورینگ و بهبود کیفیت نرم‌افزار را در اکوسیستم #C و NET. آموزش می‌دهد.
-    تمرکز کتاب روی تکنیک‌های عملی، مثال‌های واقعی و الگوهای قابل اتکاست.
-  </p>
+  <section class="book-intro">
+    <p>
+      کتاب <strong>#Clean Code in C</strong> نوشتهٔ <em>Jason Alls</em> به شکل گام‌به‌گام اصول
+      کدنویسی تمیز، ریفکتورینگ و بهبود کیفیت نرم‌افزار را در اکوسیستم #C و NET. آموزش می‌دهد.
+      تمرکز کتاب روی تکنیک‌های عملی، مثال‌های واقعی و الگوهای قابل اتکاست.
+    </p>
 
-  <div class="key-points">
-    <div><strong>✅ نسخه:</strong> 2020</div>
-    <div><strong>📚 سطح:</strong> از مقدماتی تا پیشرفته</div>
-    <div><strong>🧩 تمرکز:</strong> خوانایی و تست‌پذیری بهتر کد </div>
-    <div><strong>✍️ وضعیت ترجمه:</strong> تکمیل شده </div>
-    <div><strong>📝 نویسنده:</strong> Jason Alls </div>
-    <div><strong>💬 مترجم:</strong>
-      <a href="{{ '/translator.html' | url }}">حامد حیدریان</a>
+    <div class="key-points">
+      <div><strong>✅ نسخه:</strong> 2020</div>
+      <div><strong>📚 سطح:</strong> از مقدماتی تا پیشرفته</div>
+      <div><strong>🧩 تمرکز:</strong> خوانایی و تست‌پذیری بهتر کد </div>
+      <div><strong>✍️ وضعیت ترجمه:</strong> تکمیل شده </div>
+      <div><strong>📝 نویسنده:</strong> Jason Alls </div>
+      <div><strong>💬 مترجم:</strong>
+        <a href="{{ '/translator.html' | url }}">حامد حیدریان</a>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="chapters" class="book-chapters">
-  <h2> فهرست سرفصل‌ها</h2>
+  <section id="chapters" class="book-chapters">
+    <h2> فهرست سرفصل‌ها</h2>
 
-  <details open>
-    <summary>بخش ۱ — مقدمات و اصول</summary>
-    <ul>
-      <li><a href="{{ '/books/book2/Book/00/Preface/' | url }}"><span class="chapter-box">0</span> مقدمه</a></li>
-      <li><a href="{{ '/books/book2/Book/01/Coding-Standards-and-Principles-in-CSharp/' | url }}"><span
-            class="chapter-box">1</span> استانداردها و اصول کدنویسی در سی‌شارپ</a></li>
-      <li><a href="{{ '/books/book2/Book/02/Code-Review-Process-and-Importance/' | url }}"><span
-            class="chapter-box">2</span> بازبینی کد — فرایند و اهمیت</a></li>
-      <li><a href="{{ '/books/book2/Book/03/Classes-Objects-and-Data/' | url }}"><span class="chapter-box">3</span>
-          کلاس‌ها، اشیاء و ساختار داده</a></li>
-      <li><a href="{{ '/books/book2/Book/04/Writing-Clean-Functions/' | url }}"><span class="chapter-box">4</span> نوشتن
-          توابع تمیز</a></li>
-    </ul>
-  </details>
+    <details open>
+      <summary>بخش ۱ — مقدمات و اصول</summary>
+      <ul>
+        <li><a href="{{ '/books/book2/Book/00/Preface/' | url }}"><span class="chapter-box">0</span> مقدمه</a></li>
+        <li><a href="{{ '/books/book2/Book/01/Coding-Standards-and-Principles-in-CSharp/' | url }}"><span
+              class="chapter-box">1</span> استانداردها و اصول کدنویسی در سی‌شارپ</a></li>
+        <li><a href="{{ '/books/book2/Book/02/Code-Review-Process-and-Importance/' | url }}"><span
+              class="chapter-box">2</span> بازبینی کد — فرایند و اهمیت</a></li>
+        <li><a href="{{ '/books/book2/Book/03/Classes-Objects-and-Data/' | url }}"><span class="chapter-box">3</span>
+            کلاس‌ها، اشیاء و ساختار داده</a></li>
+        <li><a href="{{ '/books/book2/Book/04/Writing-Clean-Functions/' | url }}"><span class="chapter-box">4</span>
+            نوشتن
+            توابع تمیز</a></li>
+      </ul>
+    </details>
 
-  <details>
-    <summary>بخش ۲ — کیفیت، تست و معماری</summary>
-    <ul>
-      <li><a href="{{ '/books/book2/Book/05/Exception-Handling/' | url }}"><span class="chapter-box">5</span> مدیریت
-          استثناءها</a></li>
-      <li><a href="{{ '/books/book2/Book/06/Unit-Testing/' | url }}"><span class="chapter-box">6</span> تست واحد</a>
-      </li>
-      <li><a href="{{ '/books/book2/Book/07/End-to-End-System-Testing/' | url }}"><span class="chapter-box">7</span> تست
-          انتها-به-انتهاِ سیستم</a></li>
-      <li><a href="{{ '/books/book2/Book/08/Threading-and-Concurrency/' | url }}"><span class="chapter-box">8</span>
-          رشته‌ها و همزمانی</a></li>
-    </ul>
-  </details>
+    <details>
+      <summary>بخش ۲ — کیفیت، تست و معماری</summary>
+      <ul>
+        <li><a href="{{ '/books/book2/Book/05/Exception-Handling/' | url }}"><span class="chapter-box">5</span> مدیریت
+            استثناءها</a></li>
+        <li><a href="{{ '/books/book2/Book/06/Unit-Testing/' | url }}"><span class="chapter-box">6</span> تست واحد</a>
+        </li>
+        <li><a href="{{ '/books/book2/Book/07/End-to-End-System-Testing/' | url }}"><span class="chapter-box">7</span>
+            تست
+            انتها-به-انتهاِ سیستم</a></li>
+        <li><a href="{{ '/books/book2/Book/08/Threading-and-Concurrency/' | url }}"><span class="chapter-box">8</span>
+            رشته‌ها و همزمانی</a></li>
+      </ul>
+    </details>
 
-  <details>
-    <summary>بخش ۳ — API و امنیت</summary>
-    <ul>
-      <li><a href="{{ '/books/book2/Book/09/Designing-and-Developing-APIs/' | url }}"><span class="chapter-box">9</span>
-          طراحی و توسعهٔ API</a></li>
-      <li><a href="{{ '/books/book2/Book/10/Securing-APIs-with-API-Keys-and-Azure-Key-Vault/' | url }}"><span
-            class="chapter-box">10</span> ایمن‌سازی APIها با API Keys و Azure Key Vault</a></li>
-      <li><a href="{{ '/books/book2/Book/11/Addressing-Cross-Cutting-Concerns/' | url }}"><span
-            class="chapter-box">11</span> رسیدگی به نگرانی‌های برش‌عرضی</a></li>
-    </ul>
-  </details>
+    <details>
+      <summary>بخش ۳ — API و امنیت</summary>
+      <ul>
+        <li><a href="{{ '/books/book2/Book/09/Designing-and-Developing-APIs/' | url }}"><span
+              class="chapter-box">9</span>
+            طراحی و توسعهٔ API</a></li>
+        <li><a href="{{ '/books/book2/Book/10/Securing-APIs-with-API-Keys-and-Azure-Key-Vault/' | url }}"><span
+              class="chapter-box">10</span> ایمن‌سازی APIها با API Keys و Azure Key Vault</a></li>
+        <li><a href="{{ '/books/book2/Book/11/Addressing-Cross-Cutting-Concerns/' | url }}"><span
+              class="chapter-box">11</span> رسیدگی به نگرانی‌های برش‌عرضی</a></li>
+      </ul>
+    </details>
 
-  <details>
-    <summary>بخش ۴ — ابزارها و ریفکتورینگ</summary>
-    <ul>
-      <li><a href="{{ '/books/book2/Book/12/Using-Tools-to-Improve-Code-Quality/' | url }}"><span
-            class="chapter-box">12</span> ابزارها برای بهبود کیفیت کد</a></li>
-      <li><a href="{{ '/books/book2/Book/13/Refactoring-CSharp-Code-Identifying-Code-Smells/' | url }}"><span
-            class="chapter-box">13</span> ریفکتورینگ کدهای سی‌شارپ — تشخیص Code Smellها</a></li>
-      <li><a href="{{ '/books/book2/Book/14/Refactoring-CSharp-Code-Implementing-Design-Patterns/' | url }}"><span
-            class="chapter-box">14</span> ریفکتورینگ کدهای سی‌شارپ — پیاده‌سازی الگوهای طراحی</a></li>
-      <li><a href="{{ '/books/book2/Book/Assessments/Assessment/' | url }}"><span class="chapter-box">15</span>
-          ارزیابی‌ها</a></li>
-    </ul>
-  </details>
-</section>
+    <details>
+      <summary>بخش ۴ — ابزارها و ریفکتورینگ</summary>
+      <ul>
+        <li><a href="{{ '/books/book2/Book/12/Using-Tools-to-Improve-Code-Quality/' | url }}"><span
+              class="chapter-box">12</span> ابزارها برای بهبود کیفیت کد</a></li>
+        <li><a href="{{ '/books/book2/Book/13/Refactoring-CSharp-Code-Identifying-Code-Smells/' | url }}"><span
+              class="chapter-box">13</span> ریفکتورینگ کدهای سی‌شارپ — تشخیص Code Smellها</a></li>
+        <li><a href="{{ '/books/book2/Book/14/Refactoring-CSharp-Code-Implementing-Design-Patterns/' | url }}"><span
+              class="chapter-box">14</span> ریفکتورینگ کدهای سی‌شارپ — پیاده‌سازی الگوهای طراحی</a></li>
+        <li><a href="{{ '/books/book2/Book/Assessments/Assessment/' | url }}"><span class="chapter-box">15</span>
+            ارزیابی‌ها</a></li>
+      </ul>
+    </details>
+  </section>
 
-<script>
-  // باز/بستن مودال
-  const modal = document.getElementById('donateModal');
-  document.getElementById('openDonate').addEventListener('click', () => modal.style.display = 'block');
-  document.getElementById('closeDonate').addEventListener('click', () => modal.style.display = 'none');
-  modal.querySelector('.donate-overlay').addEventListener('click', () => modal.style.display = 'none');
+  <script>
+    // باز/بستن مودال
+    const modal = document.getElementById('donateModal');
+    document.getElementById('openDonate').addEventListener('click', () => modal.style.display = 'block');
+    document.getElementById('closeDonate').addEventListener('click', () => modal.style.display = 'none');
+    modal.querySelector('.donate-overlay').addEventListener('click', () => modal.style.display = 'none');
 
-  // کپی با بازخورد
-  document.querySelectorAll('.copy-btn').forEach(btn =>
-  {
-    btn.addEventListener('click', async () =>
+    // کپی با بازخورد
+    document.querySelectorAll('.copy-btn').forEach(btn =>
     {
-      try
+      btn.addEventListener('click', async () =>
       {
-        await navigator.clipboard.writeText(btn.dataset.copy || '');
-        const old = btn.textContent;
-        btn.textContent = 'کپی شد ✓';
-        btn.disabled = true;
-        setTimeout(() =>
+        try
         {
-          btn.textContent = old;
-          btn.disabled = false;
-        }, 1600);
-      } catch (e)
-      {
-        alert('کپی نشد. دستی کپی کنید 🙏');
-      }
+          await navigator.clipboard.writeText(btn.dataset.copy || '');
+          const old = btn.textContent;
+          btn.textContent = 'کپی شد ✓';
+          btn.disabled = true;
+          setTimeout(() =>
+          {
+            btn.textContent = old;
+            btn.disabled = false;
+          }, 1600);
+        } catch (e)
+        {
+          alert('کپی نشد. دستی کپی کنید 🙏');
+        }
+      });
     });
-  });
-</script>
+  </script>
+  <script>
+    const downloadBtn = document.getElementById("mainDownload");
+    const tooltip = document.getElementById("tooltipDownload");
+
+    downloadBtn.addEventListener("click", (e) =>
+    {
+      e.preventDefault(); // جلوگیری از پرش یا تغییر صفحه
+      const link = downloadBtn.dataset.link;
+
+      // نمایش تول‌تیپ
+      tooltip.classList.add("show");
+
+      // بعد از ۳ ثانیه، دانلود شروع بشه و تول‌تیپ بسته شه
+      setTimeout(() =>
+      {
+        tooltip.classList.remove("show");
+
+        // ساخت لینک دانلود و کلیک مصنوعی
+        const a = document.createElement("a");
+        a.href = link;
+        a.download = "";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }, 2000);
+    });
+  </script>
+</body>
+
+</html>

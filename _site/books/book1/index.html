@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <link rel="icon" type="image/png" href="/Gitab/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>معرفی کتاب C# 12 in a Nutshell</title>
+  <title>Gitab | گیتاب</title>
   <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
 
   <!-- استایل‌ها -->
@@ -62,202 +62,261 @@
 
   
   <main class="site-main book-page">
-    
-<section class="book-header">
-  <div class="book-cover">
-    <img src="/Gitab/images/csharp-12/Cover.jpg" alt="C# 12 in a Nutshell" />
-  </div>
+    <!DOCTYPE html>
+<html lang="en">
 
-  <div class="book-meta">
-    <h1> C# 12 in a Nutshell</h1>
-    <p class="subtitle">
-      مرجع جامع و به‌روز برای یادگیری زبان سی‌شارپ ۱۲ و چارچوب دات‌نت.
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<body>
+  <section class="book-header">
+    <div class="book-cover">
+      <img src="/Gitab/images/csharp-12/Cover.jpg" alt="C# 12 in a Nutshell" />
+    </div>
+
+    <div class="book-meta">
+      <h1> C# 12 in a Nutshell</h1>
+      <p class="subtitle">
+        مرجع جامع و به‌روز برای یادگیری زبان سی‌شارپ ۱۲ و چارچوب دات‌نت.
+      </p>
+
+      <div class="book-tags">
+        <span>CSharp#</span>
+        <span>NET.#</span>
+        <span>AsyncProgramming#</span>
+        <span>CleanCode#</span>
+
+      </div>
+      <div class="donate-buttons">
+        <button class="donate-btn" id="openDonate">💜 حمایت مالی از مترجم</button>
+
+        <div class="download-wrapper">
+          <button class="donate-btn download" id="mainDownload"
+            data-link="https://drive.google.com/uc?export=download&id=1XLbZ3ZBtykude7jQkphAjSPRnmrNUVBb">
+            فایل اصلی
+          </button>
+          <span class="tooltip-download" id="tooltipDownload">در حال آماده سازی...</span>
+        </div>
+
+        <button class="donate-btn downloadfa">فایل فارسی</button>
+      </div>
+
+
+
+
+      <div id="donateModal" class="donate-modal">
+        <div class="donate-overlay"></div>
+        <div class="donate-content">
+          <!-- کارت بانکی -->
+          <div class="donate-section">
+            <div class="donate-row">
+              <img src="/Gitab/icone/card.svg" alt="card" class="icon">
+              <span class="label">کارت بانکی:</span>
+              <span class="value">6219 8619 3657 5579</span>
+              <span class="spacer"></span>
+              <button class="copy-btn donate-copy" data-copy="6219861936575579">کپی</button>
+            </div>
+          </div>
+
+          <!-- کیف پول -->
+          <div class="donate-section">
+            <div class="donate-row">
+              <img src="/Gitab/icone/money.svg" alt="crypto" class="icon">
+              <span class="label">آدرس کیف پول:</span>
+              <span class="value wallet">UQCWRF4kFYSmkx...bky8grq5Ri7</span>
+              <img src="/Gitab/icone/ton.svg" alt="TON" class="ton-icon">
+              <button class="copy-btn donate-copy"
+                data-copy="UQCWRF4kFYSmkx4dSX1ozNHAlx77j7xKZj7Nzbky8grq5Ri7">کپی</button>
+            </div>
+          </div>
+
+          <button class="close-btn" id="closeDonate">بستن</button>
+        </div>
+      </div>
+
+
+    </div>
+  </section>
+
+  <section class="book-intro">
+    <p>
+      کتاب <strong>C# 12 in a Nutshell</strong> نوشته‌ی <em>Joseph Albahari</em> یکی از جامع‌ترین منابع یادگیری
+      سی‌شارپ و NET. محسوب می‌شود. این کتاب از مفاهیم پایه تا ویژگی‌های پیشرفته مانند
+      async/await و طراحی ماژولار را با مثال‌های واقعی آموزش می‌دهد.
     </p>
 
-    <div class="book-tags">
-      <span>CSharp#</span>
-      <span>NET.#</span>
-      <span>AsyncProgramming#</span>
-      <span>CleanCode#</span>
-
-    </div>
-    <button class="donate-btn" id="openDonate">💜 حمایت مالی از مترجم</button>
-    <button class="donate-btn download" id="openDonate"> فایل اصلی </button>
-    <button class="donate-btn downloadfa" id="openDonate"> فایل فارسی </button>
-
-    <div id="donateModal" class="donate-modal">
-      <div class="donate-overlay"></div>
-      <div class="donate-content">
-        <!-- کارت بانکی -->
-        <div class="donate-section">
-          <div class="donate-row">
-            <img src="/Gitab/icone/card.svg" alt="card" class="icon">
-            <span class="label">کارت بانکی:</span>
-            <span class="value">6219 8619 3657 5579</span>
-            <span class="spacer"></span>
-            <button class="copy-btn donate-copy" data-copy="6219861936575579">کپی</button>
-          </div>
-        </div>
-
-        <!-- کیف پول -->
-        <div class="donate-section">
-          <div class="donate-row">
-            <img src="/Gitab/icone/money.svg" alt="crypto" class="icon">
-            <span class="label">آدرس کیف پول:</span>
-            <span class="value wallet">UQCWRF4kFYSmkx...bky8grq5Ri7</span>
-            <img src="/Gitab/icone/ton.svg" alt="TON" class="ton-icon">
-            <button class="copy-btn donate-copy" data-copy="UQCWRF4kFYSmkx4dSX1ozNHAlx77j7xKZj7Nzbky8grq5Ri7">کپی</button>
-          </div>
-        </div>
-
-        <button class="close-btn" id="closeDonate">بستن</button>
+    <div class="key-points">
+      <div><strong>✅ نسخه:</strong> ۲۰۲۴</div>
+      <div><strong>📚 سطح:</strong> از مقدماتی تا پیشرفته</div>
+      <div><strong>🧩 تمرکز:</strong> توسعه امن، سریع و مدرن </div>
+      <div><strong>✍️ وضعیت ترجمه:</strong> تکمیل شده </div>
+      <div><strong>📝 نویسنده:</strong> Joseph Albahari </div>
+      <div><strong>💬 مترجم:</strong>
+        <a href="/Gitab/translator.html">حامد حیدریان</a>
       </div>
     </div>
+  </section>
 
+  <section id="chapters" class="book-chapters">
+    <h2> فهرست سرفصل‌ها</h2>
 
-  </div>
-</section>
+    <details open>
+      <summary>بخش ۱ — مقدمات و مفاهیم پایه</summary>
+      <ul>
+        <li><a href="/Gitab/books/book1/Book/00/Preface/"><span class="chapter-box">0</span> مقدمه</a></li>
+        <li><a href="/Gitab/books/book1/Book/01/Introducing-CSharp-and-.NET/"><span class="chapter-box">1</span>
+            معرفی سی‌شارپ و دات‌نت</a></li>
+        <li><a href="/Gitab/books/book1/Book/02/CSharp-Language-Basics/"><span class="chapter-box">2</span>
+            مبانی
+            زبان سی‌شارپ</a></li>
+      </ul>
+    </details>
 
-<section class="book-intro">
-  <p>
-    کتاب <strong>C# 12 in a Nutshell</strong> نوشته‌ی <em>Joseph Albahari</em> یکی از جامع‌ترین منابع یادگیری
-    سی‌شارپ و NET. محسوب می‌شود. این کتاب از مفاهیم پایه تا ویژگی‌های پیشرفته مانند
-    async/await و طراحی ماژولار را با مثال‌های واقعی آموزش می‌دهد.
-  </p>
+    <details>
+      <summary>بخش ۲ — ساخت انواع و مباحث میانی</summary>
+      <ul>
+        <li><a href="/Gitab/books/book1/Book/03/Creating-Types-in-CSharp/"><span class="chapter-box">3</span>
+            ساخت
+            انواع در سی‌شارپ</a></li>
+        <li><a href="/Gitab/books/book1/Book/04/Advanced-CSharp/"><span class="chapter-box">4</span> سی‌شارپ
+            پیشرفته</a></li>
+        <li><a href="/Gitab/books/book1/Book/05/.NET-Overview/"><span class="chapter-box">5</span> نمای کلی
+            دات‌نت</a></li>
+      </ul>
+    </details>
 
-  <div class="key-points">
-    <div><strong>✅ نسخه:</strong> ۲۰۲۴</div>
-    <div><strong>📚 سطح:</strong> از مقدماتی تا پیشرفته</div>
-    <div><strong>🧩 تمرکز:</strong> توسعه امن، سریع و مدرن </div>
-    <div><strong>✍️ وضعیت ترجمه:</strong> تکمیل شده </div>
-    <div><strong>📝 نویسنده:</strong> Joseph Albahari </div>
-    <div><strong>💬 مترجم:</strong>
-      <a href="/Gitab/translator.html">حامد حیدریان</a>
-    </div>
-  </div>
-</section>
+    <details>
+      <summary>بخش ۳ — مفاهیم داده و LINQ</summary>
+      <ul>
+        <li><a href="/Gitab/books/book1/Book/06/.NET-Fundamentals/"><span class="chapter-box">6</span> مبانی
+            دات‌نت</a></li>
+        <li><a href="/Gitab/books/book1/Book/07/Collections/"><span class="chapter-box">7</span> مجموعه‌ها</a>
+        </li>
+        <li><a href="/Gitab/books/book1/Book/08/LINQ-Queries/"><span class="chapter-box">8</span> کوئری‌های
+            LINQ</a></li>
+        <li><a href="/Gitab/books/book1/Book/09/LINQ-Operators/"><span class="chapter-box">9</span> عملگرهای
+            LINQ</a></li>
+      </ul>
+    </details>
 
-<section id="chapters" class="book-chapters">
-  <h2> فهرست سرفصل‌ها</h2>
+    <details>
+      <summary>بخش ۴ — مباحث پیشرفته و ویژه</summary>
+      <ul>
+        <li><a href="/Gitab/books/book1/Book/10/LINQ-to-XML/"><span class="chapter-box">10</span> LINQ به
+            XML</a>
+        </li>
+        <li><a href="/Gitab/books/book1/Book/11/Other-XML-and-JSON/"><span class="chapter-box">11</span> دیگر
+            XML
+            و JSON</a></li>
+        <li><a href="/Gitab/books/book1/Book/12/Disposal-and-Garbage-Collection/"><span
+              class="chapter-box">12</span> حذف منابع و جمع‌آوری زباله</a></li>
+        <li><a href="/Gitab/books/book1/Book/13/Diagnostics/"><span class="chapter-box">13</span> عیب‌یابی</a>
+        </li>
+        <li><a href="/Gitab/books/book1/Book/14/Concurrency-and-Asynchrony/"><span class="chapter-box">14</span>
+            همزمانی و ناهمگامی</a></li>
+      </ul>
+    </details>
 
-  <details open>
-    <summary>بخش ۱ — مقدمات و مفاهیم پایه</summary>
-    <ul>
-      <li><a href="/Gitab/books/book1/Book/00/Preface/"><span class="chapter-box">0</span> مقدمه</a></li>
-      <li><a href="/Gitab/books/book1/Book/01/Introducing-CSharp-and-.NET/"><span class="chapter-box">1</span>
-          معرفی سی‌شارپ و دات‌نت</a></li>
-      <li><a href="/Gitab/books/book1/Book/02/CSharp-Language-Basics/"><span class="chapter-box">2</span> مبانی
-          زبان سی‌شارپ</a></li>
-    </ul>
-  </details>
+    <details>
+      <summary>بخش ۵ — عمیق‌تر در مفاهیم متنوع</summary>
+      <ul>
+        <li><a href="/Gitab/books/book1/Book/15/Streams-and-IO/"><span class="chapter-box">15</span> جریان‌ها و
+            I/O</a></li>
+        <li><a href="/Gitab/books/book1/Book/16/Networking/"><span class="chapter-box">16</span> شبکه‌سازی</a>
+        </li>
+        <li><a href="/Gitab/books/book1/Book/17/Assemblies/"><span class="chapter-box">17</span> اسمبلی‌ها</a>
+        </li>
+        <li><a href="/Gitab/books/book1/Book/18/Reflection-and-Metadata/"><span class="chapter-box">18</span>
+            بازتاب و متادیتا</a></li>
+      </ul>
+    </details>
 
-  <details>
-    <summary>بخش ۲ — ساخت انواع و مباحث میانی</summary>
-    <ul>
-      <li><a href="/Gitab/books/book1/Book/03/Creating-Types-in-CSharp/"><span class="chapter-box">3</span> ساخت
-          انواع در سی‌شارپ</a></li>
-      <li><a href="/Gitab/books/book1/Book/04/Advanced-CSharp/"><span class="chapter-box">4</span> سی‌شارپ
-          پیشرفته</a></li>
-      <li><a href="/Gitab/books/book1/Book/05/.NET-Overview/"><span class="chapter-box">5</span> نمای کلی
-          دات‌نت</a></li>
-    </ul>
-  </details>
+    <details>
+      <summary>بخش ۶ — پیشرفته‌تر و تخصصی</summary>
+      <ul>
+        <li><a href="/Gitab/books/book1/Book/19/Dynamic-Programming/"><span class="chapter-box">19</span>
+            برنامه‌نویسی داینامیک</a></li>
+        <li><a href="/Gitab/books/book1/Book/20/Cryptography/"><span class="chapter-box">20</span> رمزنگاری</a>
+        </li>
+        <li><a href="/Gitab/books/book1/Book/21/Advanced-Threading/"><span class="chapter-box">21</span>
+            رشته‌بندی
+            پیشرفته</a></li>
+        <li><a href="/Gitab/books/book1/Book/22/Parallel-Programming/"><span class="chapter-box">22</span>
+            برنامه‌نویسی موازی</a></li>
+        <li><a href="/Gitab/books/book1/Book/23/SpanT-and-MemoryT/"><span class="chapter-box">23</span>
+            Span&lt;T&gt; و Memory&lt;T&gt;</a></li>
+        <li><a href="/Gitab/books/book1/Book/24/Native-and-COM/"><span class="chapter-box">24</span> کد بومی و
+            COM</a></li>
+        <li><a href="/Gitab/books/book1/Book/25/Regular-Expressions/"><span class="chapter-box">25</span> عبارات
+            باقاعده</a></li>
+      </ul>
+    </details>
+  </section>
 
-  <details>
-    <summary>بخش ۳ — مفاهیم داده و LINQ</summary>
-    <ul>
-      <li><a href="/Gitab/books/book1/Book/06/.NET-Fundamentals/"><span class="chapter-box">6</span> مبانی
-          دات‌نت</a></li>
-      <li><a href="/Gitab/books/book1/Book/07/Collections/"><span class="chapter-box">7</span> مجموعه‌ها</a>
-      </li>
-      <li><a href="/Gitab/books/book1/Book/08/LINQ-Queries/"><span class="chapter-box">8</span> کوئری‌های
-          LINQ</a></li>
-      <li><a href="/Gitab/books/book1/Book/09/LINQ-Operators/"><span class="chapter-box">9</span> عملگرهای
-          LINQ</a></li>
-    </ul>
-  </details>
+  <script>
+    // باز/بستن مودال
+    const modal = document.getElementById('donateModal');
+    document.getElementById('openDonate').addEventListener('click', () => modal.style.display = 'block');
+    document.getElementById('closeDonate').addEventListener('click', () => modal.style.display = 'none');
+    modal.querySelector('.donate-overlay').addEventListener('click', () => modal.style.display = 'none');
 
-  <details>
-    <summary>بخش ۴ — مباحث پیشرفته و ویژه</summary>
-    <ul>
-      <li><a href="/Gitab/books/book1/Book/10/LINQ-to-XML/"><span class="chapter-box">10</span> LINQ به XML</a>
-      </li>
-      <li><a href="/Gitab/books/book1/Book/11/Other-XML-and-JSON/"><span class="chapter-box">11</span> دیگر XML
-          و JSON</a></li>
-      <li><a href="/Gitab/books/book1/Book/12/Disposal-and-Garbage-Collection/"><span
-            class="chapter-box">12</span> حذف منابع و جمع‌آوری زباله</a></li>
-      <li><a href="/Gitab/books/book1/Book/13/Diagnostics/"><span class="chapter-box">13</span> عیب‌یابی</a>
-      </li>
-      <li><a href="/Gitab/books/book1/Book/14/Concurrency-and-Asynchrony/"><span class="chapter-box">14</span>
-          همزمانی و ناهمگامی</a></li>
-    </ul>
-  </details>
-
-  <details>
-    <summary>بخش ۵ — عمیق‌تر در مفاهیم متنوع</summary>
-    <ul>
-      <li><a href="/Gitab/books/book1/Book/15/Streams-and-IO/"><span class="chapter-box">15</span> جریان‌ها و
-          I/O</a></li>
-      <li><a href="/Gitab/books/book1/Book/16/Networking/"><span class="chapter-box">16</span> شبکه‌سازی</a>
-      </li>
-      <li><a href="/Gitab/books/book1/Book/17/Assemblies/"><span class="chapter-box">17</span> اسمبلی‌ها</a>
-      </li>
-      <li><a href="/Gitab/books/book1/Book/18/Reflection-and-Metadata/"><span class="chapter-box">18</span>
-          بازتاب و متادیتا</a></li>
-    </ul>
-  </details>
-
-  <details>
-    <summary>بخش ۶ — پیشرفته‌تر و تخصصی</summary>
-    <ul>
-      <li><a href="/Gitab/books/book1/Book/19/Dynamic-Programming/"><span class="chapter-box">19</span>
-          برنامه‌نویسی داینامیک</a></li>
-      <li><a href="/Gitab/books/book1/Book/20/Cryptography/"><span class="chapter-box">20</span> رمزنگاری</a>
-      </li>
-      <li><a href="/Gitab/books/book1/Book/21/Advanced-Threading/"><span class="chapter-box">21</span> رشته‌بندی
-          پیشرفته</a></li>
-      <li><a href="/Gitab/books/book1/Book/22/Parallel-Programming/"><span class="chapter-box">22</span>
-          برنامه‌نویسی موازی</a></li>
-      <li><a href="/Gitab/books/book1/Book/23/SpanT-and-MemoryT/"><span class="chapter-box">23</span>
-          Span&lt;T&gt; و Memory&lt;T&gt;</a></li>
-      <li><a href="/Gitab/books/book1/Book/24/Native-and-COM/"><span class="chapter-box">24</span> کد بومی و
-          COM</a></li>
-      <li><a href="/Gitab/books/book1/Book/25/Regular-Expressions/"><span class="chapter-box">25</span> عبارات
-          باقاعده</a></li>
-    </ul>
-  </details>
-</section>
-
-<script>
-  // باز/بستن مودال
-  const modal = document.getElementById('donateModal');
-  document.getElementById('openDonate').addEventListener('click', () => modal.style.display = 'block');
-  document.getElementById('closeDonate').addEventListener('click', () => modal.style.display = 'none');
-  modal.querySelector('.donate-overlay').addEventListener('click', () => modal.style.display = 'none');
-
-  // کپی با بازخورد
-  document.querySelectorAll('.copy-btn').forEach(btn =>
-  {
-    btn.addEventListener('click', async () =>
+    // کپی با بازخورد
+    document.querySelectorAll('.copy-btn').forEach(btn =>
     {
-      try
+      btn.addEventListener('click', async () =>
       {
-        await navigator.clipboard.writeText(btn.dataset.copy || '');
-        const old = btn.textContent;
-        btn.textContent = 'کپی شد ✓';
-        btn.disabled = true;
-        setTimeout(() =>
+        try
         {
-          btn.textContent = old;
-          btn.disabled = false;
-        }, 1600);
-      } catch (e)
-      {
-        alert('کپی نشد. دستی کپی کنید 🙏');
-      }
+          await navigator.clipboard.writeText(btn.dataset.copy || '');
+          const old = btn.textContent;
+          btn.textContent = 'کپی شد ✓';
+          btn.disabled = true;
+          setTimeout(() =>
+          {
+            btn.textContent = old;
+            btn.disabled = false;
+          }, 1600);
+        } catch (e)
+        {
+          alert('کپی نشد. دستی کپی کنید 🙏');
+        }
+      });
     });
-  });
-</script>
+  </script>
+  <script>
+    const downloadBtn = document.getElementById("mainDownload");
+    const tooltip = document.getElementById("tooltipDownload");
+
+    downloadBtn.addEventListener("click", (e) =>
+    {
+      e.preventDefault(); // جلوگیری از پرش یا تغییر صفحه
+      const link = downloadBtn.dataset.link;
+
+      // نمایش تول‌تیپ
+      tooltip.classList.add("show");
+
+      // بعد از ۳ ثانیه، دانلود شروع بشه و تول‌تیپ بسته شه
+      setTimeout(() =>
+      {
+        tooltip.classList.remove("show");
+
+        // ساخت لینک دانلود و کلیک مصنوعی
+        const a = document.createElement("a");
+        a.href = link;
+        a.download = "";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }, 2000);
+    });
+  </script>
+
+</body>
+
+</html>
   </main>
 
   <!-- فوتر مشترک -->

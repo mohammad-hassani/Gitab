@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <link rel="icon" type="image/png" href="/Gitab/favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>معرفی کتاب Clean Code</title>
+  <title>Clean Code</title>
   <meta name="description" content="ترجمه‌های فارسی کتاب‌های فنی — سریع، مینیمال و قابل اتکا.">
 
   <!-- استایل‌ها -->
@@ -62,180 +62,233 @@
 
   
   <main class="site-main book-page">
-    
-<section class="book-header">
-  <div class="book-cover">
-    <img src="/Gitab/images/clean-code/Cover.webp" alt="Clean Code" />
-  </div>
+    <!DOCTYPE html>
+<html lang="en">
 
-  <div class="book-meta">
-    <h1> Clean Code</h1>
-    <p class="subtitle">
-      یادگیری اصول نوشتن کد تمیز، ساده و قابل نگهداری
-    </p>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <div class="book-tags">
-      <span>CleanCode#</span>
-      <span>Refactoring#</span>
-      <span>UncleBob#</span>
-      <span>SoftwareDesign#</span>
-      <span>CodeSmells#</span>
+</head>
+
+<body>
+  <section class="book-header">
+    <div class="book-cover">
+      <img src="/Gitab/images/clean-code/Cover.webp" alt="Clean Code" />
     </div>
-    <button class="donate-btn" id="openDonate">
-      💜 حمایت مالی از مترجم
-    </button>
-    <button class="donate-btn download" id="openDonate"> فایل اصلی </button>
-    <button class="donate-btn downloadfa" id="openDonate"> فایل فارسی </button>
-    <div id="donateModal" class="donate-modal">
-      <div class="donate-overlay"></div>
-      <div class="donate-content">
-        <!-- کارت بانکی -->
-        <div class="donate-section">
-          <div class="donate-row">
-            <img src="/Gitab/icone/card.svg" alt="card" class="icon">
-            <span class="label">کارت بانکی:</span>
-            <span class="value">6219 8619 3657 5579</span>
-            <button class="copy-btn donate-copy" data-copy="6219861936575579">کپی</button>
-          </div>
+
+    <div class="book-meta">
+      <h1> Clean Code</h1>
+      <p class="subtitle">
+        یادگیری اصول نوشتن کد تمیز، ساده و قابل نگهداری
+      </p>
+
+      <div class="book-tags">
+        <span>CleanCode#</span>
+        <span>Refactoring#</span>
+        <span>UncleBob#</span>
+        <span>SoftwareDesign#</span>
+        <span>CodeSmells#</span>
+      </div>
+
+      <div class="donate-buttons">
+        <button class="donate-btn" id="openDonate">💜 حمایت مالی از مترجم</button>
+
+        <div class="download-wrapper">
+          <button class="donate-btn download" id="mainDownload"
+            data-link="https://drive.google.com/uc?export=download&id=1VrZAlckJxCxugl7dzuSC8edvxHMDJGUB">
+            فایل اصلی
+          </button>
+          <span class="tooltip-download" id="tooltipDownload">در حال آماده سازی...</span>
         </div>
 
-        <!-- کیف پول -->
-        <div class="donate-section">
-          <div class="donate-row">
-            <img src="/Gitab/icone/money.svg" alt="crypto" class="icon">
-            <span class="label">آدرس کیف پول:</span>
-            <span class="value wallet">UQCWRF4kFYSmkx...bky8grq5Ri7</span>
-            <img src="/Gitab/icone/ton.svg" alt="TON" class="ton-icon">
-            <button class="copy-btn donate-copy"
-              data-copy="UQCWRF4kFYSmkx4dSX1ozNHAlx77j7xKZj7Nzbky8grq5Ri7">کپی</button>
+        <button class="donate-btn downloadfa">فایل فارسی</button>
+      </div>
+      <div id="donateModal" class="donate-modal">
+        <div class="donate-overlay"></div>
+        <div class="donate-content">
+          <!-- کارت بانکی -->
+          <div class="donate-section">
+            <div class="donate-row">
+              <img src="/Gitab/icone/card.svg" alt="card" class="icon">
+              <span class="label">کارت بانکی:</span>
+              <span class="value">6219 8619 3657 5579</span>
+              <button class="copy-btn donate-copy" data-copy="6219861936575579">کپی</button>
+            </div>
           </div>
-        </div>
 
-        <button class="close-btn" id="closeDonate">بستن</button>
+          <!-- کیف پول -->
+          <div class="donate-section">
+            <div class="donate-row">
+              <img src="/Gitab/icone/money.svg" alt="crypto" class="icon">
+              <span class="label">آدرس کیف پول:</span>
+              <span class="value wallet">UQCWRF4kFYSmkx...bky8grq5Ri7</span>
+              <img src="/Gitab/icone/ton.svg" alt="TON" class="ton-icon">
+              <button class="copy-btn donate-copy"
+                data-copy="UQCWRF4kFYSmkx4dSX1ozNHAlx77j7xKZj7Nzbky8grq5Ri7">کپی</button>
+            </div>
+          </div>
+
+          <button class="close-btn" id="closeDonate">بستن</button>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="book-intro">
-  <p>
-    کتاب <strong>Clean Code</strong> نوشتهٔ <em>Robert C.Martin (عمو باب)</em> یکی از
-    مراجع بنیادین در مهندسی نرم‌افزار است. این کتاب مفاهیم عمیق کدنویسی تمیز را به زبانی ساده و عملی
-    آموزش می‌دهد و تمرکز آن روی ایجاد کدی است که <em>خوانا، تست‌پذیر و نگهداشت‌پذیر</em> باشد.
-  </p>
+  <section class="book-intro">
+    <p>
+      کتاب <strong>Clean Code</strong> نوشتهٔ <em>Robert C.Martin (عمو باب)</em> یکی از
+      مراجع بنیادین در مهندسی نرم‌افزار است. این کتاب مفاهیم عمیق کدنویسی تمیز را به زبانی ساده و عملی
+      آموزش می‌دهد و تمرکز آن روی ایجاد کدی است که <em>خوانا، تست‌پذیر و نگهداشت‌پذیر</em> باشد.
+    </p>
 
-  <div class="key-points">
-    <div><strong>✅ نسخه:</strong> 2008 </div>
-    <div><strong>📚 سطح:</strong> از مبتدی تا حرفه‌ای</div>
-    <div><strong>🧩 تمرکز:</strong> کد تمیز، اصول سالید و ریفکتور</div>
-    <div><strong>✍️ وضعیت ترجمه:</strong> تکمیل شده</div>
-    <div><strong>📝 نویسنده:</strong> Robert C.Martin </div>
-    <div><strong>💬 مترجم:</strong>
-      <a href="/Gitab/translator.html">مجتبی افراز</a>
+    <div class="key-points">
+      <div><strong>✅ نسخه:</strong> 2008 </div>
+      <div><strong>📚 سطح:</strong> از مبتدی تا حرفه‌ای</div>
+      <div><strong>🧩 تمرکز:</strong> کد تمیز، اصول سالید و ریفکتور</div>
+      <div><strong>✍️ وضعیت ترجمه:</strong> تکمیل شده</div>
+      <div><strong>📝 نویسنده:</strong> Robert C.Martin </div>
+      <div><strong>💬 مترجم:</strong>
+        <a href="/Gitab/translator.html">مجتبی افراز</a>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="chapters" class="book-chapters">
-  <h2> فهرست سرفصل‌ها</h2>
+  <section id="chapters" class="book-chapters">
+    <h2> فهرست سرفصل‌ها</h2>
 
-  <details open>
-    <summary>بخش ۱ — مفاهیم پایه و معرفی</summary>
-    <ul>
-      <li><a href="/Gitab/books/book3/Book/00_Introduction/Introduction/"><span class="chapter-box">0</span>
-          مقدمه</a></li>
-      <li><a href="/Gitab/books/book3/Book/01_Clean_Code/Clean_Code/"><span class="chapter-box">1</span> کد
-          تمیز</a></li>
-      <li><a href="/Gitab/books/book3/Book/02_Meaningful_Names/Meaningful_Names/"><span
-            class="chapter-box">2</span> نام‌گذاری معنادار</a></li>
-      <li><a href="/Gitab/books/book3/Book/03_Functions/Functions/"><span class="chapter-box">3</span> توابع</a>
-      </li>
-      <li><a href="/Gitab/books/book3/Book/04_Comments/Comments/"><span class="chapter-box">4</span>
-          کامنت‌ها</a></li>
-    </ul>
-  </details>
+    <details open>
+      <summary>بخش ۱ — مفاهیم پایه و معرفی</summary>
+      <ul>
+        <li><a href="/Gitab/books/book3/Book/00_Introduction/Introduction/"><span class="chapter-box">0</span>
+            مقدمه</a></li>
+        <li><a href="/Gitab/books/book3/Book/01_Clean_Code/Clean_Code/"><span class="chapter-box">1</span> کد
+            تمیز</a></li>
+        <li><a href="/Gitab/books/book3/Book/02_Meaningful_Names/Meaningful_Names/"><span
+              class="chapter-box">2</span> نام‌گذاری معنادار</a></li>
+        <li><a href="/Gitab/books/book3/Book/03_Functions/Functions/"><span class="chapter-box">3</span>
+            توابع</a>
+        </li>
+        <li><a href="/Gitab/books/book3/Book/04_Comments/Comments/"><span class="chapter-box">4</span>
+            کامنت‌ها</a></li>
+      </ul>
+    </details>
 
-  <details>
-    <summary>بخش ۲ — ساختار و قالب کد</summary>
-    <ul>
-      <li><a href="/Gitab/books/book3/Book/05_Formatting/Formatting/"><span class="chapter-box">5</span>
-          قالب‌بندی</a></li>
-      <li><a href="/Gitab/books/book3/Book/06_Objects_and_Data_Structures/Objects_and_Data_Structures/"><span
-            class="chapter-box">6</span> اشیاء و ساختار داده</a></li>
-      <li><a href="/Gitab/books/book3/Book/07_Error_Handling/Error_Handling/"><span class="chapter-box">7</span>
-          مدیریت خطا</a></li>
-      <li><a href="/Gitab/books/book3/Book/08_Boundaries/Boundaries/"><span class="chapter-box">8</span>
-          مرزها</a></li>
-    </ul>
-  </details>
+    <details>
+      <summary>بخش ۲ — ساختار و قالب کد</summary>
+      <ul>
+        <li><a href="/Gitab/books/book3/Book/05_Formatting/Formatting/"><span class="chapter-box">5</span>
+            قالب‌بندی</a></li>
+        <li><a href="/Gitab/books/book3/Book/06_Objects_and_Data_Structures/Objects_and_Data_Structures/"><span
+              class="chapter-box">6</span> اشیاء و ساختار داده</a></li>
+        <li><a href="/Gitab/books/book3/Book/07_Error_Handling/Error_Handling/"><span
+              class="chapter-box">7</span>
+            مدیریت خطا</a></li>
+        <li><a href="/Gitab/books/book3/Book/08_Boundaries/Boundaries/"><span class="chapter-box">8</span>
+            مرزها</a></li>
+      </ul>
+    </details>
 
-  <details>
-    <summary>بخش ۳ — طراحی کلاس و سیستم</summary>
-    <ul>
-      <li><a href="/Gitab/books/book3/Book/09_Unit_Tests/Unit_Tests/"><span class="chapter-box">9</span> تست‌های
-          واحد</a></li>
-      <li><a href="/Gitab/books/book3/Book/10_Classes/Classes/"><span class="chapter-box">10</span> کلاس‌ها</a>
-      </li>
-      <li><a href="/Gitab/books/book3/Book/11_Systems/Systems/"><span class="chapter-box">11</span> سیستم‌ها</a>
-      </li>
-      <li><a href="/Gitab/books/book3/Book/12_Emergence/Emergence/"><span class="chapter-box">12</span> تکامل
-          طراحی</a></li>
-      <li><a href="/Gitab/books/book3/Book/13_Concurrency/Concurrency/"><span class="chapter-box">13</span>
-          همزمانی</a></li>
-    </ul>
-  </details>
+    <details>
+      <summary>بخش ۳ — طراحی کلاس و سیستم</summary>
+      <ul>
+        <li><a href="/Gitab/books/book3/Book/09_Unit_Tests/Unit_Tests/"><span class="chapter-box">9</span>
+            تست‌های
+            واحد</a></li>
+        <li><a href="/Gitab/books/book3/Book/10_Classes/Classes/"><span class="chapter-box">10</span>
+            کلاس‌ها</a>
+        </li>
+        <li><a href="/Gitab/books/book3/Book/11_Systems/Systems/"><span class="chapter-box">11</span>
+            سیستم‌ها</a>
+        </li>
+        <li><a href="/Gitab/books/book3/Book/12_Emergence/Emergence/"><span class="chapter-box">12</span> تکامل
+            طراحی</a></li>
+        <li><a href="/Gitab/books/book3/Book/13_Concurrency/Concurrency/"><span class="chapter-box">13</span>
+            همزمانی</a></li>
+      </ul>
+    </details>
 
-  <details>
-    <summary>بخش ۴ — اصول و الگوهای طراحی</summary>
-    <ul>
-      <li><a href="/Gitab/books/book3/Book/14_Successive_Refinement/Successive_Refinement/"><span
-            class="chapter-box">14</span> بهبود تدریجی</a></li>
-      <li><a href="/Gitab/books/book3/Book/15_JUnit_Internals/JUnit_Internals/"><span
-            class="chapter-box">15</span> ساختار JUnit</a></li>
-      <li><a href="/Gitab/books/book3/Book/16_Refactoring_SerialDate/Refactoring_SerialDate/"><span
-            class="chapter-box">16</span> بازسازی SerialDate</a></li>
-      <li><a href="/Gitab/books/book3/Book/17_Smells_And_Heuristics/Smells_And_Heuristics/"><span
-            class="chapter-box">17</span> بوها و اصول</a></li>
-      <li><a href="/Gitab/books/book3/Book/Appendix_A/Concurrency_II/"><span class="chapter-box">18</span>
-          هم‌روندی بخش دوم</a></li>
-      <li><a href="/Gitab/books/book3/Book/Appendix_B/org.jfree.date.SerialDate/"><span
-            class="chapter-box">19</span> کلاس org.jfree.date.SerialDate</a></li>
+    <details>
+      <summary>بخش ۴ — اصول و الگوهای طراحی</summary>
+      <ul>
+        <li><a href="/Gitab/books/book3/Book/14_Successive_Refinement/Successive_Refinement/"><span
+              class="chapter-box">14</span> بهبود تدریجی</a></li>
+        <li><a href="/Gitab/books/book3/Book/15_JUnit_Internals/JUnit_Internals/"><span
+              class="chapter-box">15</span> ساختار JUnit</a></li>
+        <li><a href="/Gitab/books/book3/Book/16_Refactoring_SerialDate/Refactoring_SerialDate/"><span
+              class="chapter-box">16</span> بازسازی SerialDate</a></li>
+        <li><a href="/Gitab/books/book3/Book/17_Smells_And_Heuristics/Smells_And_Heuristics/"><span
+              class="chapter-box">17</span> بوها و اصول</a></li>
+        <li><a href="/Gitab/books/book3/Book/Appendix_A/Concurrency_II/"><span class="chapter-box">18</span>
+            هم‌روندی بخش دوم</a></li>
+        <li><a href="/Gitab/books/book3/Book/Appendix_B/org.jfree.date.SerialDate/"><span
+              class="chapter-box">19</span> کلاس org.jfree.date.SerialDate</a></li>
 
-    </ul>
-  </details>
-</section>
+      </ul>
+    </details>
+  </section>
 
 
-<script>
-  // باز/بستن مودال
-  const modal = document.getElementById('donateModal');
-  document.getElementById('openDonate').addEventListener('click', () => modal.style.display = 'block');
-  document.getElementById('closeDonate').addEventListener('click', () => modal.style.display = 'none');
-  modal.querySelector('.donate-overlay').addEventListener('click', () => modal.style.display = 'none');
+  <script>
+    // باز/بستن مودال
+    const modal = document.getElementById('donateModal');
+    document.getElementById('openDonate').addEventListener('click', () => modal.style.display = 'block');
+    document.getElementById('closeDonate').addEventListener('click', () => modal.style.display = 'none');
+    modal.querySelector('.donate-overlay').addEventListener('click', () => modal.style.display = 'none');
 
-  // کپی با بازخورد
-  document.querySelectorAll('.copy-btn').forEach(btn =>
-  {
-    btn.addEventListener('click', async () =>
+    // کپی با بازخورد
+    document.querySelectorAll('.copy-btn').forEach(btn =>
     {
-      try
+      btn.addEventListener('click', async () =>
       {
-        await navigator.clipboard.writeText(btn.dataset.copy || '');
-        const old = btn.textContent;
-        btn.textContent = 'کپی شد ✓';
-        btn.disabled = true;
-        setTimeout(() =>
+        try
         {
-          btn.textContent = old;
-          btn.disabled = false;
-        }, 1600);
-      } catch (e)
-      {
-        alert('کپی نشد. دستی کپی کنید 🙏');
-      }
+          await navigator.clipboard.writeText(btn.dataset.copy || '');
+          const old = btn.textContent;
+          btn.textContent = 'کپی شد ✓';
+          btn.disabled = true;
+          setTimeout(() =>
+          {
+            btn.textContent = old;
+            btn.disabled = false;
+          }, 1600);
+        } catch (e)
+        {
+          alert('کپی نشد. دستی کپی کنید 🙏');
+        }
+      });
     });
-  });
-</script>
+  </script>
+  <script>
+    const downloadBtn = document.getElementById("mainDownload");
+    const tooltip = document.getElementById("tooltipDownload");
+
+    downloadBtn.addEventListener("click", (e) =>
+    {
+      e.preventDefault(); // جلوگیری از پرش یا تغییر صفحه
+      const link = downloadBtn.dataset.link;
+
+      // نمایش تول‌تیپ
+      tooltip.classList.add("show");
+
+      // بعد از ۳ ثانیه، دانلود شروع بشه و تول‌تیپ بسته شه
+      setTimeout(() =>
+      {
+        tooltip.classList.remove("show");
+
+        // ساخت لینک دانلود و کلیک مصنوعی
+        const a = document.createElement("a");
+        a.href = link;
+        a.download = "";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }, 2000);
+    });
+  </script>
+</body>
+
+</html>
   </main>
 
   <!-- فوتر مشترک -->

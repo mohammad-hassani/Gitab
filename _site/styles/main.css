@@ -1368,29 +1368,51 @@ html[data-color-mode="light"] .social-links img {
     opacity: 1;
     transform: translate(-50%, -4px);
 }
+/* دکمه فایل اصلی */
 .donate-btn.download {
-    background: linear-gradient(135deg, #13c74f, #51d36d);
+    background: linear-gradient(135deg, #13c74f, #5ee47b);
+    color: #0f172a;
 }
 .donate-btn.download:hover {
-    transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(92, 246, 110, 0.35);
 }
 
+/* دکمه فایل فارسی */
 .donate-btn.downloadfa {
-    background: linear-gradient(135deg, #e8a60b, #e2c20c);
+    background: linear-gradient(135deg, #d59603, #fade3f);
+    color: #0f172a;
 }
 .donate-btn.downloadfa:hover {
-    transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(245, 189, 23, 0.35);
 }
-/* دکمه اصلی */
+/* ریسپانسیو برای موبایل */
+@media (max-width: 600px) {
+    .donate-buttons {
+        flex-direction: column;
+        gap: 12px;
+    }
+    .donate-btn {
+        width: 80%;
+        max-width: 300px;
+    }
+}
+.donate-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap; /* تا در موبایل خودش بره زیر هم */
+    margin: 30px auto;
+    width: 100%;
+    text-align: center;
+} /* دکمه عمومی */
 .donate-btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    margin: 30px auto;
-    padding: 12px 22px;
-    background: linear-gradient(135deg, #8b5cf6, #7dd3fc);
+    padding: 12px 15px;
+    background: linear-gradient(135deg, #8152ed, #54abd4);
     color: #0f172a;
     border: none;
     border-radius: 12px;
@@ -1398,7 +1420,9 @@ html[data-color-mode="light"] .social-links img {
     cursor: pointer;
     transition: 0.25s;
     font-family: "VazirFD";
-    font-size: medium;
+    font-size: 14px;
+    min-width: 140px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 .donate-btn:hover {
     transform: translateY(-2px);
@@ -1556,4 +1580,32 @@ html[data-color-mode="light"] .social-links img {
 .donate-copy:hover {
     transform: scale(1.05);
     box-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
+}
+.download-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-download {
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%) scale(0.95);
+    background: linear-gradient(135deg, #13c74f, #51d36d);
+    color: #0f172a;
+    padding: 6px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-family: "VazirFD";
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.tooltip-download.show {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
 }
