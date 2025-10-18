@@ -1340,7 +1340,6 @@ html[data-color-mode="light"] .social-links img {
     transform: translate(-50%, -4px);
 }
 
-
 .owner-badge.manager img {
     filter: drop-shadow(0 0 2px #7a01de);
     cursor: pointer;
@@ -1368,4 +1367,193 @@ html[data-color-mode="light"] .social-links img {
 .owner-badge.manager:hover::after {
     opacity: 1;
     transform: translate(-50%, -4px);
+}
+.donate-btn.download {
+    background: linear-gradient(135deg, #13c74f, #51d36d);
+}
+.donate-btn.download:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(92, 246, 110, 0.35);
+}
+
+.donate-btn.downloadfa {
+    background: linear-gradient(135deg, #e8a60b, #e2c20c);
+}
+.donate-btn.downloadfa:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(245, 189, 23, 0.35);
+}
+/* دکمه اصلی */
+.donate-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 30px auto;
+    padding: 12px 22px;
+    background: linear-gradient(135deg, #8b5cf6, #7dd3fc);
+    color: #0f172a;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+    font-family: "VazirFD";
+    font-size: medium;
+}
+.donate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.35);
+}
+
+/* مودال */
+.donate-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+}
+.donate-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(10px);
+}
+.donate-content {
+    position: relative;
+    background: var(--bg-2);
+    color: var(--fg);
+    width: 90%;
+    max-width: 600px;
+    margin: 10% auto;
+    padding: 32px;
+    border-radius: 18px;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    animation: scaleIn 0.35s ease;
+}
+@keyframes scaleIn {
+    from {
+        transform: scale(0.85);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.donate-section {
+    margin: 22px 0;
+}
+
+/* ردیف پرداخت: Grid پنج‌ستونه (آیکون | برچسب | مقدار | TON(اختیاری) | دکمه) */
+/* ساختار ردیف پرداخت */
+.donate-row {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto auto;
+    align-items: center; /* تراز عمودی دقیق وسط */
+    gap: 10px;
+    background: color-mix(in oklab, var(--bg-1) 92%, transparent);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px 14px; /* ارتفاع کمی کمتر برای تراز ظریف‌تر */
+    border-radius: 10px;
+    font-size: 0.95rem;
+    direction: rtl;
+}
+
+/* آیکون‌ها (کارت و کیف پول) */
+.donate-row .icon {
+    width: 24px;
+    height: 24px;
+    filter: none !important;
+    flex-shrink: 0;
+}
+.donate-row .label {
+    color: var(--muted);
+    font-weight: 500;
+    white-space: nowrap;
+}
+.donate-row .value {
+    direction: ltr;
+    text-align: left;
+    color: var(--fg);
+    font-family: monospace;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.donate-row .wallet {
+    max-width: 260px;
+} /* جا برای دکمه و TON */
+/* آیکون تون */
+.ton-icon {
+    width: 24px; /* هم‌ارتفاع با بقیه */
+    height: 24px;
+    opacity: 0.9;
+    filter: none !important;
+    transition: transform 0.25s, opacity 0.25s;
+}
+.ton-icon:hover {
+    transform: scale(1.08);
+    opacity: 1;
+}
+
+/* اگر TON نداشتیم، فاصله را پر کند */
+.donate-row .spacer {
+    display: block;
+}
+
+/* دکمه کپی */
+.copy-btn {
+    background: linear-gradient(135deg, #8b5cf6, #7dd3fc);
+    border: none;
+    color: #0f172a;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.copy-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
+}
+
+/* دکمه بستن */
+.close-btn {
+    display: block;
+    margin: 30px auto 0;
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-family: "VazirFD";
+    font-size: medium;
+    transition: color 0.3s;
+}
+.close-btn:hover {
+    color: #8b5cf6;
+}
+
+/* دکمه کپی مخصوص مودال حمایت مالی */
+.donate-copy {
+    position: static !important;
+    opacity: 1 !important;
+    width: auto !important;
+    height: auto !important;
+    background: linear-gradient(135deg, #7f4bf7, #7d7dfc);
+    border: none;
+    color: #0f172a;
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    line-height: 1; /* هم‌ترازی دقیق با آیکون */
+    height: 26px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-family: "VazirFD";
+}
+.donate-copy:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
 }

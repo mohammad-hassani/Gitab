@@ -69,7 +69,7 @@
   </div>
 
   <div class="book-meta">
-    <h1>  #Clean Code in C</h1>
+    <h1> #Clean Code in C</h1>
     <p class="subtitle">
       راهنمای عملی برای نوشتن کدهای تمیز، مقیاس‌پذیر و قابل نگهداری در سی‌شارپ.
     </p>
@@ -80,6 +80,40 @@
       <span>CSharp#</span>
       <span>SoftwareDesign#</span>
       <span>NET.#</span>
+    </div>
+    <button class="donate-btn" id="openDonate">
+      💜 حمایت مالی از مترجم
+    </button>
+    <button class="donate-btn download" id="openDonate"> فایل اصلی </button>
+    <button class="donate-btn downloadfa" id="openDonate"> فایل فارسی </button>
+
+    <div id="donateModal" class="donate-modal">
+      <div class="donate-overlay"></div>
+      <div class="donate-content">
+        <!-- کارت بانکی -->
+        <div class="donate-section">
+          <div class="donate-row">
+            <img src="/Gitab/icone/card.svg" alt="card" class="icon">
+            <span class="label">کارت بانکی:</span>
+            <span class="value">6219 8619 3657 5579</span>
+            <button class="copy-btn donate-copy" data-copy="6219861936575579">کپی</button>
+          </div>
+        </div>
+
+        <!-- کیف پول -->
+        <div class="donate-section">
+          <div class="donate-row">
+            <img src="/Gitab/icone/money.svg" alt="crypto" class="icon">
+            <span class="label">آدرس کیف پول:</span>
+            <span class="value wallet">UQCWRF4kFYSmkx...bky8grq5Ri7</span>
+            <img src="/Gitab/icone/ton.svg" alt="TON" class="ton-icon">
+            <button class="copy-btn donate-copy"
+              data-copy="UQCWRF4kFYSmkx4dSX1ozNHAlx77j7xKZj7Nzbky8grq5Ri7">کپی</button>
+          </div>
+        </div>
+
+        <button class="close-btn" id="closeDonate">بستن</button>
+      </div>
     </div>
   </div>
 </section>
@@ -96,9 +130,9 @@
     <div><strong>📚 سطح:</strong> از مقدماتی تا پیشرفته</div>
     <div><strong>🧩 تمرکز:</strong> خوانایی و تست‌پذیری بهتر کد </div>
     <div><strong>✍️ وضعیت ترجمه:</strong> تکمیل شده </div>
-    <div><strong>📝  نویسنده:</strong> Jason Alls </div>
+    <div><strong>📝 نویسنده:</strong> Jason Alls </div>
     <div><strong>💬 مترجم:</strong>
-      <a href="https://github.com/hheydarian">حامد حیدریان</a>
+      <a href="/Gitab/translator.html">حامد حیدریان</a>
     </div>
   </div>
 </section>
@@ -161,6 +195,37 @@
     </ul>
   </details>
 </section>
+
+<script>
+  // باز/بستن مودال
+  const modal = document.getElementById('donateModal');
+  document.getElementById('openDonate').addEventListener('click', () => modal.style.display = 'block');
+  document.getElementById('closeDonate').addEventListener('click', () => modal.style.display = 'none');
+  modal.querySelector('.donate-overlay').addEventListener('click', () => modal.style.display = 'none');
+
+  // کپی با بازخورد
+  document.querySelectorAll('.copy-btn').forEach(btn =>
+  {
+    btn.addEventListener('click', async () =>
+    {
+      try
+      {
+        await navigator.clipboard.writeText(btn.dataset.copy || '');
+        const old = btn.textContent;
+        btn.textContent = 'کپی شد ✓';
+        btn.disabled = true;
+        setTimeout(() =>
+        {
+          btn.textContent = old;
+          btn.disabled = false;
+        }, 1600);
+      } catch (e)
+      {
+        alert('کپی نشد. دستی کپی کنید 🙏');
+      }
+    });
+  });
+</script>
   </main>
 
   <!-- فوتر مشترک -->
@@ -258,5 +323,21 @@
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
   </script>
+  <script>
+document.getElementById("openDonate").addEventListener("click", () => {
+  document.getElementById("donateModal").style.display = "block";
+});
+document.getElementById("closeDonate").addEventListener("click", () => {
+  document.getElementById("donateModal").style.display = "none";
+});
+document.querySelectorAll(".copy-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    navigator.clipboard.writeText(btn.dataset.copy);
+    btn.textContent = "✅ کپی شد!";
+    setTimeout(() => (btn.textContent = "کپی"), 2000);
+  });
+});
+</script>
+
 </body>
 </html>

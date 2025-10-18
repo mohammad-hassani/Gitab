@@ -803,5 +803,21 @@ JUnit یکی از مشهورترین فریم‌ورک‌های Java است. ا�
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
   </script>
+  <script>
+document.getElementById("openDonate").addEventListener("click", () => {
+  document.getElementById("donateModal").style.display = "block";
+});
+document.getElementById("closeDonate").addEventListener("click", () => {
+  document.getElementById("donateModal").style.display = "none";
+});
+document.querySelectorAll(".copy-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    navigator.clipboard.writeText(btn.dataset.copy);
+    btn.textContent = "✅ کپی شد!";
+    setTimeout(() => (btn.textContent = "کپی"), 2000);
+  });
+});
+</script>
+
 </body>
 </html>

@@ -132,7 +132,7 @@
 
     <!-- مترجم 4 -->
     <article class="translator-card">
-        <img src="/Gitab/images/translator/user6.png" alt="امیر محمد روزمه" class="translator-photo">
+        <img src="/Gitab/images/translator/user6.jpg" alt="امیر محمد روزمه" class="translator-photo">
         <h3>امیر محمد روزمه</h3>
         <p class="role">Web developer</p>
         <div class="social-links">
@@ -300,5 +300,21 @@
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
   </script>
+  <script>
+document.getElementById("openDonate").addEventListener("click", () => {
+  document.getElementById("donateModal").style.display = "block";
+});
+document.getElementById("closeDonate").addEventListener("click", () => {
+  document.getElementById("donateModal").style.display = "none";
+});
+document.querySelectorAll(".copy-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    navigator.clipboard.writeText(btn.dataset.copy);
+    btn.textContent = "✅ کپی شد!";
+    setTimeout(() => (btn.textContent = "کپی"), 2000);
+  });
+});
+</script>
+
 </body>
 </html>

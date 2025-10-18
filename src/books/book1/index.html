@@ -10,7 +10,7 @@ permalink: /books/book1/index.html
   </div>
 
   <div class="book-meta">
-    <h1>  C# 12 in a Nutshell</h1>
+    <h1> C# 12 in a Nutshell</h1>
     <p class="subtitle">
       مرجع جامع و به‌روز برای یادگیری زبان سی‌شارپ ۱۲ و چارچوب دات‌نت.
     </p>
@@ -20,7 +20,39 @@ permalink: /books/book1/index.html
       <span>NET.#</span>
       <span>AsyncProgramming#</span>
       <span>CleanCode#</span>
-      
+
+    </div>
+    <button class="donate-btn" id="openDonate">💜 حمایت مالی از مترجم</button>
+    <button class="donate-btn download" id="openDonate"> فایل اصلی </button>
+    <button class="donate-btn downloadfa" id="openDonate"> فایل فارسی </button>
+
+    <div id="donateModal" class="donate-modal">
+      <div class="donate-overlay"></div>
+      <div class="donate-content">
+        <!-- کارت بانکی -->
+        <div class="donate-section">
+          <div class="donate-row">
+            <img src="{{ '/icone/card.svg' | url }}" alt="card" class="icon">
+            <span class="label">کارت بانکی:</span>
+            <span class="value">6219 8619 3657 5579</span>
+            <span class="spacer"></span>
+            <button class="copy-btn donate-copy" data-copy="6219861936575579">کپی</button>
+          </div>
+        </div>
+
+        <!-- کیف پول -->
+        <div class="donate-section">
+          <div class="donate-row">
+            <img src="{{ '/icone/money.svg' | url }}" alt="crypto" class="icon">
+            <span class="label">آدرس کیف پول:</span>
+            <span class="value wallet">UQCWRF4kFYSmkx...bky8grq5Ri7</span>
+            <img src="{{ '/icone/ton.svg' | url }}" alt="TON" class="ton-icon">
+            <button class="copy-btn donate-copy" data-copy="UQCWRF4kFYSmkx4dSX1ozNHAlx77j7xKZj7Nzbky8grq5Ri7">کپی</button>
+          </div>
+        </div>
+
+        <button class="close-btn" id="closeDonate">بستن</button>
+      </div>
     </div>
 
 
@@ -35,13 +67,13 @@ permalink: /books/book1/index.html
   </p>
 
   <div class="key-points">
-    <div><strong>✅ نسخه:</strong>  ۲۰۲۴</div>
+    <div><strong>✅ نسخه:</strong> ۲۰۲۴</div>
     <div><strong>📚 سطح:</strong> از مقدماتی تا پیشرفته</div>
     <div><strong>🧩 تمرکز:</strong> توسعه امن، سریع و مدرن </div>
     <div><strong>✍️ وضعیت ترجمه:</strong> تکمیل شده </div>
-    <div><strong>📝  نویسنده:</strong> Joseph Albahari </div>
+    <div><strong>📝 نویسنده:</strong> Joseph Albahari </div>
     <div><strong>💬 مترجم:</strong>
-      <a href="https://github.com/hheydarian">حامد حیدریان</a>
+      <a href="{{ '/translator.html' | url }}">حامد حیدریان</a>
     </div>
   </div>
 </section>
@@ -136,3 +168,34 @@ permalink: /books/book1/index.html
     </ul>
   </details>
 </section>
+
+<script>
+  // باز/بستن مودال
+  const modal = document.getElementById('donateModal');
+  document.getElementById('openDonate').addEventListener('click', () => modal.style.display = 'block');
+  document.getElementById('closeDonate').addEventListener('click', () => modal.style.display = 'none');
+  modal.querySelector('.donate-overlay').addEventListener('click', () => modal.style.display = 'none');
+
+  // کپی با بازخورد
+  document.querySelectorAll('.copy-btn').forEach(btn =>
+  {
+    btn.addEventListener('click', async () =>
+    {
+      try
+      {
+        await navigator.clipboard.writeText(btn.dataset.copy || '');
+        const old = btn.textContent;
+        btn.textContent = 'کپی شد ✓';
+        btn.disabled = true;
+        setTimeout(() =>
+        {
+          btn.textContent = old;
+          btn.disabled = false;
+        }, 1600);
+      } catch (e)
+      {
+        alert('کپی نشد. دستی کپی کنید 🙏');
+      }
+    });
+  });
+</script>
