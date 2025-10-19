@@ -33,16 +33,20 @@ permalink: /books/book1/index.html
       </div>
       <div class="donate-buttons">
         <button class="donate-btn" id="openDonate">💜 حمایت مالی از مترجم</button>
-
+ 
+        <!-- فایل اصلی با تول‌تیپ -->
         <div class="download-wrapper">
           <button class="donate-btn download" id="mainDownload"
             data-link="https://drive.google.com/uc?export=download&id=1XLbZ3ZBtykude7jQkphAjSPRnmrNUVBb">
             فایل اصلی
           </button>
-          <span class="tooltip-download" id="tooltipDownload">در حال آماده سازی...</span>
+          <span class="tooltip-download" id="tooltipDownload">در حال آماده‌سازی...</span>
         </div>
 
-        <button class="donate-btn downloadfa">فایل فارسی</button>
+        <!-- فایل فارسی -->
+        <button class="donate-btn downloadfa" id="faDownload" data-link="https://Gitab.ir.page">
+          فایل فارسی
+        </button>
       </div>
 
 
@@ -228,23 +232,22 @@ permalink: /books/book1/index.html
     });
   </script>
   <script>
+    // 🎯 تول‌تیپ برای فایل اصلی
     const downloadBtn = document.getElementById("mainDownload");
     const tooltip = document.getElementById("tooltipDownload");
 
     downloadBtn.addEventListener("click", (e) =>
     {
-      e.preventDefault(); // جلوگیری از پرش یا تغییر صفحه
+      e.preventDefault();
       const link = downloadBtn.dataset.link;
 
-      // نمایش تول‌تیپ
       tooltip.classList.add("show");
 
-      // بعد از ۳ ثانیه، دانلود شروع بشه و تول‌تیپ بسته شه
       setTimeout(() =>
       {
         tooltip.classList.remove("show");
 
-        // ساخت لینک دانلود و کلیک مصنوعی
+        // شروع دانلود
         const a = document.createElement("a");
         a.href = link;
         a.download = "";
@@ -252,6 +255,14 @@ permalink: /books/book1/index.html
         a.click();
         document.body.removeChild(a);
       }, 2000);
+    });
+
+    // 🎯 هدایت به صفحه پرداخت (فایل فارسی)
+    const faDownload = document.getElementById("faDownload");
+    faDownload.addEventListener("click", () =>
+    {
+      const link = faDownload.dataset.link;
+      window.open(link, "_blank"); // باز شدن در تب جدید
     });
   </script>
 

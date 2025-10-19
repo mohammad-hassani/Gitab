@@ -1315,7 +1315,26 @@ html[data-color-mode="light"] .social-links img {
     filter: drop-shadow(0 0 2px #fc6c32);
     cursor: pointer;
 }
-
+.owner-badge.star img {
+    filter: drop-shadow(0 0 2px #fce832);
+    cursor: pointer;
+}
+.owner-badge.star::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 245, 59, 0.95); /* رنگ تول‌تیپ */
+    color: #222;
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    border-radius: 8px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
 /* رنگ و استایل تول‌تیپ مخصوص همکار */
 .owner-badge.work::after {
     content: attr(data-tooltip);
@@ -1339,7 +1358,10 @@ html[data-color-mode="light"] .social-links img {
     opacity: 1;
     transform: translate(-50%, -4px);
 }
-
+.owner-badge.star:hover::after {
+    opacity: 1;
+    transform: translate(-50%, -4px);
+}
 .owner-badge.manager img {
     filter: drop-shadow(0 0 2px #7a01de);
     cursor: pointer;
@@ -1372,6 +1394,7 @@ html[data-color-mode="light"] .social-links img {
 .donate-btn.download {
     background: linear-gradient(135deg, #13c74f, #5ee47b);
     color: #0f172a;
+    font-family: "VazirFD";
 }
 .donate-btn.download:hover {
     box-shadow: 0 8px 20px rgba(92, 246, 110, 0.35);
@@ -1381,6 +1404,7 @@ html[data-color-mode="light"] .social-links img {
 .donate-btn.downloadfa {
     background: linear-gradient(135deg, #d59603, #fade3f);
     color: #0f172a;
+    font-family: "VazirFD";
 }
 .donate-btn.downloadfa:hover {
     box-shadow: 0 8px 20px rgba(245, 189, 23, 0.35);
@@ -1609,3 +1633,4 @@ html[data-color-mode="light"] .social-links img {
     opacity: 1;
     transform: translateX(-50%) scale(1);
 }
+

@@ -42,8 +42,11 @@ permalink: /books/book4/index.html
           </button>
           <span class="tooltip-download" id="tooltipDownload">در حال آماده سازی...</span>
         </div>
-
-        <button class="donate-btn downloadfa">فایل فارسی</button>
+        <div class="download-wrapper">
+          <button class="donate-btn downloadfa" id="faDownload" data-link="https://Gitab.ir.page">
+            فایل فارسی
+          </button>
+        </div>
       </div>
       <div id="donateModal" class="donate-modal">
         <div class="donate-overlay"></div>
@@ -193,23 +196,22 @@ permalink: /books/book4/index.html
     });
   </script>
   <script>
+    // 🎯 تول‌تیپ برای فایل اصلی
     const downloadBtn = document.getElementById("mainDownload");
     const tooltip = document.getElementById("tooltipDownload");
 
     downloadBtn.addEventListener("click", (e) =>
     {
-      e.preventDefault(); // جلوگیری از پرش یا تغییر صفحه
+      e.preventDefault();
       const link = downloadBtn.dataset.link;
 
-      // نمایش تول‌تیپ
       tooltip.classList.add("show");
 
-      // بعد از ۳ ثانیه، دانلود شروع بشه و تول‌تیپ بسته شه
       setTimeout(() =>
       {
         tooltip.classList.remove("show");
 
-        // ساخت لینک دانلود و کلیک مصنوعی
+        // شروع دانلود
         const a = document.createElement("a");
         a.href = link;
         a.download = "";
@@ -217,6 +219,14 @@ permalink: /books/book4/index.html
         a.click();
         document.body.removeChild(a);
       }, 2000);
+    });
+
+    // 🎯 هدایت به صفحه پرداخت (فایل فارسی)
+    const faDownload = document.getElementById("faDownload");
+    faDownload.addEventListener("click", () =>
+    {
+      const link = faDownload.dataset.link;
+      window.open(link, "_blank"); // باز شدن در تب جدید
     });
   </script>
 </body>
