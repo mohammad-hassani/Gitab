@@ -1252,22 +1252,28 @@ html[data-color-mode="light"] .social-links img {
     animation: glowPulse 2.5s ease-in-out infinite;
 }
 
-/* انیمیشن نور ملایم متن */
+/* تنظیمات برای موبایل */
+@media (max-width: 600px) {
+    .coming-soon h1 {
+        font-size: 2rem; /* کاهش سایز فونت برای موبایل */
+        letter-spacing: 1px; /* کاهش فاصله بین حروف */
+        text-shadow: 0 0 6px color-mix(in oklab, var(--brand) 60%, #000),
+            0 0 12px color-mix(in oklab, var(--brand) 40%, #000); /* کاهش شدت سایه */
+    }
+}
+/* انیمیشن برای جلوه‌دار کردن متن */
 @keyframes glowPulse {
     0% {
         text-shadow: 0 0 10px color-mix(in oklab, var(--brand) 60%, #000),
             0 0 20px color-mix(in oklab, var(--brand) 40%, #000);
-        transform: scale(1);
     }
     50% {
-        text-shadow: 0 0 20px color-mix(in oklab, var(--brand) 80%, #fff),
-            0 0 40px color-mix(in oklab, var(--brand) 70%, #fff);
-        transform: scale(1.05);
+        text-shadow: 0 0 20px color-mix(in oklab, var(--brand) 60%, #000),
+            0 0 40px color-mix(in oklab, var(--brand) 40%, #000);
     }
     100% {
         text-shadow: 0 0 10px color-mix(in oklab, var(--brand) 60%, #000),
             0 0 20px color-mix(in oklab, var(--brand) 40%, #000);
-        transform: scale(1);
     }
 }
 /* Tooltip اختصاصی */
@@ -1391,20 +1397,24 @@ html[data-color-mode="light"] .social-links img {
     transform: translate(-50%, -4px);
 }
 /* دکمه فایل اصلی */
+/* دکمه‌های خاص با رنگ متفاوت */
 .donate-btn.download {
     background: linear-gradient(135deg, #13c74f, #5ee47b);
-    color: #0f172a;
-    font-family: "VazirFD";
+}
+.donate-btn.downloadfa {
+    background: linear-gradient(135deg, #d59603, #fade3f);
+}
+.donate-btn.support {
+    background: linear-gradient(135deg, #8b5cf6, #7dd3fc);
+}
+
+/* افکت hover */
+.donate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.35);
 }
 .donate-btn.download:hover {
     box-shadow: 0 8px 20px rgba(92, 246, 110, 0.35);
-}
-
-/* دکمه فایل فارسی */
-.donate-btn.downloadfa {
-    background: linear-gradient(135deg, #d59603, #fade3f);
-    color: #0f172a;
-    font-family: "VazirFD";
 }
 .donate-btn.downloadfa:hover {
     box-shadow: 0 8px 20px rgba(245, 189, 23, 0.35);
@@ -1413,19 +1423,19 @@ html[data-color-mode="light"] .social-links img {
 @media (max-width: 600px) {
     .donate-buttons {
         flex-direction: column;
-        gap: 12px;
+        gap: 14px;
     }
     .donate-btn {
-        width: 80%;
-        max-width: 300px;
+        width: 30%;
+        max-width: 180px;
     }
 }
 .donate-buttons {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     gap: 16px;
-    flex-wrap: wrap; /* تا در موبایل خودش بره زیر هم */
+    flex-wrap: nowrap; /* تا در موبایل خودش بره زیر هم */
     margin: 30px auto;
     width: 100%;
     text-align: center;
@@ -1444,10 +1454,14 @@ html[data-color-mode="light"] .social-links img {
     cursor: pointer;
     transition: 0.25s;
     font-family: "VazirFD";
-    font-size: 14px;
-    min-width: 140px;
+    font-size: 13px;
+    max-width: 180px;
+    min-width: 160px; /* ← ثابت برای هر سه دکمه */
+    height: 46px; /* ← ارتفاع یکسان */
+    width: auto; /* ← عرض ثابت برای همه */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
 .donate-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(139, 92, 246, 0.35);
@@ -1634,3 +1648,39 @@ html[data-color-mode="light"] .social-links img {
     transform: translateX(-50%) scale(1);
 }
 
+/* --- تبلت (max-width: 900px) --- */
+@media (max-width: 900px) {
+    .nav-wrap {
+        grid-template-columns: 1fr auto auto;
+        gap: 8px;
+    }
+    .nav {
+        gap: 14px;
+    }
+    .nav a {
+        font-size: 0.9rem;
+    }
+    .nav-actions {
+        gap: 6px;
+    }
+    /* فوتر */
+    .footer {
+        padding: 14px 10px;
+        font-size: 1rem;
+    }
+}
+
+/* --- دسکتاپ (برای عرض‌های بزرگتر) --- */
+@media (min-width: 900px) {
+    .nav-wrap {
+        grid-template-columns: 1fr auto 1fr;
+        gap: 12px;
+    }
+    .nav {
+        gap: 22px;
+    }
+    .footer {
+        padding: 16px 20px;
+        font-size: 1rem;
+    }
+}

@@ -725,35 +725,33 @@ JUnit یکی از مشهورترین فریم‌ورک‌های Java است. ا�
     const root = document.documentElement;
     const btn = document.getElementById('themeToggle');
     const KEY = 'gitab-theme';
-    const media = window.matchMedia('(prefers-color-scheme: dark)');
-    const getEffective = s => (s === 'auto' ? (media.matches ? 'dark' : 'light') : s);
 
     function updateTheme(s) {
       root.setAttribute('data-theme', s);
-      const mode = getEffective(s);
+      const mode = s;  // فقط `dark` یا `light` خواهد بود
       root.dataset.colorMode = mode;
       btn.dataset.icon = mode === 'dark' ? 'moon' : 'sun';
     }
 
-    let saved = localStorage.getItem(KEY) || 'auto';
+    // وضعیت تم ذخیره شده از localStorage
+    let saved = localStorage.getItem(KEY) || 'light'; // پیش‌فرض روشن
     updateTheme(saved);
 
+    // تنظیم مجدد تم هنگام تغییر وضعیت دکمه
     btn.addEventListener('click', () => {
-      const current = localStorage.getItem(KEY) || 'auto';
-      const next = current === 'auto' ? 'dark' : current === 'dark' ? 'light' : 'auto';
+      const current = localStorage.getItem(KEY) || 'light';
+      const next = current === 'dark' ? 'light' : 'dark';  // فقط دو حالت: تاریک و روشن
       localStorage.setItem(KEY, next);
       updateTheme(next);
     });
 
-    media.addEventListener('change', () => {
-      if ((localStorage.getItem(KEY) || 'auto') === 'auto') updateTheme('auto');
-    });
-
+    // هنگام بارگذاری صفحه
     document.addEventListener('DOMContentLoaded', () => {
-      updateTheme(localStorage.getItem(KEY) || 'auto');
+      updateTheme(localStorage.getItem(KEY) || 'light');
     });
   })();
-  </script>
+</script>
+
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
   <script>hljs.highlightAll();</script>
